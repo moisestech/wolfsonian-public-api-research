@@ -7,6 +7,8 @@
 - Save raw records with retrieval timestamps and endpoint URLs.
 - Build a small seed corpus from thematic searches.
 
+**Status (2026-07-21):** URL builders and verification detection are in place. Live automated requests currently receive a Cloudflare Turnstile challenge (`/turnstile-challenge`) instead of JSON. Next step for 0.1 completion: obtain a browser session cookie locally (`WOLFSONIAN_COOKIE`) or an approved research route, then confirm one successful packet under `data/raw/`.
+
 ## 0.2 — Object packets
 
 - Normalize BibID, accession number, title, creator, date, material, format, subjects, and files.

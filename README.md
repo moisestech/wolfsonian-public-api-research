@@ -55,11 +55,29 @@ npm run seed -- --query propaganda --pages 3
 
 Raw and derived API responses are ignored by Git by default. This prevents the repository from accidentally republishing a growing data mirror before rights, scale, and research needs are clarified.
 
-## Public endpoint caveat
+## Live connectivity status (2026-07-21)
 
-The endpoints are publicly documented, but automated requests may encounter a human-verification page depending on network and session conditions. The client reports this condition explicitly and recommends retrying in a regular browser or discussing an approved research route, export, or session workflow with the technical team.
+**URL construction and offline tests work. Live automated requests do not yet return collection JSON.**
 
-This is treated as a technical research finding—not as a reason to bypass access controls.
+`npm run ping` reaches `digital.wolfsonian.org`, but every probe is redirected to a Cloudflare Turnstile challenge instead of machine-readable data:
+
+```text
+https://digital.wolfsonian.org/turnstile-challenge?destination=/engine/items/citation/json/WOLF037299
+```
+
+Observed probes (`citation`, `brief`, `search`, `random`) all fail the same way: HTTP 200, `text/html`, kind `verification-page`. The client detects this and exits with an explicit error rather than saving HTML as JSON.
+
+This is a technical research finding—not a reason to bypass access controls.
+
+### Path to a successful request
+
+1. Open a documented URL in a regular browser (for example the citation endpoint for `WOLF037299`) and complete the human-verification challenge.
+2. Copy the resulting session cookie into local `.env` as `WOLFSONIAN_COOKIE=...` (see `.env.example`). Do not commit `.env`.
+3. Re-run `npm run ping`, then `npm run item -- WOLF037299` or `npm run search -- --query "vase"`.
+4. Confirm a timestamped packet appears under `data/raw/` (gitignored by default).
+5. For sustained research, ask The Wolfsonian technical / Digital Labs team about an approved research route, export, or session workflow.
+
+Until step 1–3 or an approved institutional path succeeds, `search`, `item`, and `seed` will keep reporting the verification page.
 
 ## Research direction
 
@@ -85,4 +103,12 @@ Digital Labs overview: `https://labs.wolfsonian.org/`
 
 ## Status
 
-**Version 0.1:** endpoint mapping, provenance-first client, verification-page detection, CLI research scripts, and tests.
+**Version 0.1.1:** endpoint mapping, provenance-first client, verification-page detection, CLI research scripts, offline URL tests, and documented live Turnstile finding.
+
+| Milestone | State |
+|---|---|
+| Documented URL builders + offline tests | Done |
+| Ping / search / item / seed CLIs | Done |
+| Detect Turnstile instead of treating HTML as data | Done |
+| First successful live JSON packet in `data/raw/` | Blocked on verification or approved research access |
+| Roadmap 0.2 object-packet normalization | Next after live access works |
