@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+.env
+
+data/raw/*.json
+data/raw/*.html
+data/derived/*.json
+!data/raw/.gitkeep
+!data/derived/.gitkeep
