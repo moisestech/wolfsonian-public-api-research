@@ -1,6 +1,6 @@
 {
   "name": "wolfsonian-public-api-research",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": false,
   "description": "Independent research notebook for testing The Wolfsonian's publicly documented digital collection API.",
   "type": "module",

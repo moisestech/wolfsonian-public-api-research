@@ -1,0 +1,142 @@
+{
+  "id": "01-trylon-perisphere",
+  "trialLabel": "Object 01",
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/trylon-perisphere.svg",
+    "caption": "Original diagram: Trylon and Perisphere geometry"
+  },
+  "source": {
+    "institution": "The Wolfsonian–FIU",
+    "title": "Model, Trylon and Perisphere",
+    "accessionNumber": "86.17.1",
+    "bibId": null,
+    "date": "c. 1938",
+    "creator": "Wallace K. Harrison and Jacques André Fouilhoux of Harrison & Fouilhoux, architects",
+    "materials": "Stainless steel, plastic, wood",
+    "dimensions": "36 1/4 × 31 in. diameter (92.1 × 78.7 cm)",
+    "collection": "The Mitchell Wolfson, Jr. Collection",
+    "publicRecordUrl": "https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html",
+    "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+    "citedAt": "2026-09-02",
+    "missingFields": ["bibId"]
+  },
+  "agents": {
+    "archivist": {
+      "observation": "The public record identifies a c. 1938 presentation model of the Theme Center for the 1939 New York World's Fair, with named architects, materials, dimensions, accession 86.17.1, and collection credit.",
+      "claim": "What can be proven from the published packet is limited to catalogued fact: authorship attribution, materials, scale, date, and institutional custody—not the fair's historical success or failure.",
+      "evidence": [
+        {
+          "text": "Model, Trylon and Perisphere, c. 1938; Harrison & Fouilhoux; stainless steel, plastic, wood; 86.17.1",
+          "sourceRef": "source.title"
+        },
+        {
+          "text": "BibID is not yet attached in this manually prepared packet",
+          "sourceRef": "source.missingFields"
+        }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["counterfeit", "futurist"],
+      "uncertainty": "Without the live digital citation endpoint and METS-derived fields, related images, notes, and internal research status remain unknown.",
+      "confidence": 0.72,
+      "onsiteQuestion": "Which seams, fasteners, revisions, labels, or backside information on the physical model are absent from the published descriptive fields?",
+      "fabrication": false
+    },
+    "worker": {
+      "observation": "The model is an engineered assembly of steel, plastic, and wood at roughly yard-scale, made to persuasively stand in for monumental architecture.",
+      "claim": "The World of Tomorrow required fabricators, polishers, transporters, and maintainers; utopia appears here as skilled labor condensed into a portable object.",
+      "evidence": [
+        {
+          "text": "Materials listed as stainless steel, plastic, and wood",
+          "sourceRef": "source.materials"
+        },
+        {
+          "text": "Dimensions imply a substantial presentation object, not a souvenir trinket",
+          "sourceRef": "source.dimensions"
+        }
+      ],
+      "agreesWith": ["archivist", "mourner"],
+      "contradicts": ["futurist"],
+      "uncertainty": "The packet does not name fabricators, workshops, or conservation histories that would confirm how the model was made and kept.",
+      "confidence": 0.58,
+      "onsiteQuestion": "What construction methods and wear patterns become visible only when the model can be walked around, handled under staff guidance, or examined under raking light?",
+      "fabrication": false
+    },
+    "futurist": {
+      "observation": "The Trylon and Perisphere were designed as the fair's Theme Center icon for 'The World of Tomorrow.'",
+      "claim": "Pure geometric monumentality was meant to make technological progress feel inevitable, readable from a distance, and emotionally available after a decade of depression.",
+      "evidence": [
+        {
+          "text": "Object dated c. 1938 for the 1939 New York World's Fair Theme Center",
+          "sourceRef": "source.date"
+        },
+        {
+          "text": "Architects Harrison and Fouilhoux credited for the forms",
+          "sourceRef": "source.creator"
+        }
+      ],
+      "agreesWith": ["propagandist"],
+      "contradicts": ["mourner", "worker", "archivist"],
+      "uncertainty": "Optimism is inferred from fair context and later institutional interpretation; the packet alone does not quote period publicity copy.",
+      "confidence": 0.61,
+      "onsiteQuestion": "Does the model's finish, proportion, and presence still project futurity in person, or does age, scale, and museum framing change that affective claim?",
+      "fabrication": false
+    },
+    "mourner": {
+      "observation": "The fair's futurist iconography sits next to a historical threshold: the late 1930s moving toward global war.",
+      "claim": "The promised tomorrow was incomplete; what the record cannot show is who was excluded from that future and what violence arrived anyway.",
+      "evidence": [
+        {
+          "text": "Date places the model immediately before 1939–1945",
+          "sourceRef": "source.date"
+        },
+        {
+          "text": "Published exhibition framing links the forms to visions of tomorrow",
+          "sourceRef": "source.publicRecordUrl"
+        }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["futurist", "propagandist", "counterfeit"],
+      "uncertainty": "Absence of social history in the short catalog fields is not proof of institutional silence; it may simply be outside this packet's scope.",
+      "confidence": 0.47,
+      "onsiteQuestion": "What adjacent objects, labels, or staff knowledge in the galleries complicate the fair's optimism beyond this single model?",
+      "fabrication": false
+    },
+    "propagandist": {
+      "observation": "A Theme Center is architecture designed to be remembered, reproduced, and recognized as the fair's emblem.",
+      "claim": "The model is a persuasion machine: geometry recruited to organize desire for a managed modern future.",
+      "evidence": [
+        {
+          "text": "Title and fair context identify Theme Center architecture",
+          "sourceRef": "source.title"
+        },
+        {
+          "text": "Presentation model scale suggests communicative display use",
+          "sourceRef": "source.dimensions"
+        }
+      ],
+      "agreesWith": ["futurist"],
+      "contradicts": ["archivist", "mourner"],
+      "uncertainty": "Whether this specific model was used in client persuasion, publicity, or later collecting narratives is not stated in the packet.",
+      "confidence": 0.54,
+      "onsiteQuestion": "How does the museum currently stage this model—isolated icon, critical context, or technological promise—and what does that staging teach visitors to want?",
+      "fabrication": false
+    },
+    "counterfeit": {
+      "observation": "From geometry alone one can invent a complete interior narrative of Democracity and frictionless circulation.",
+      "claim": "Inside the Perisphere, every visitor left convinced that planned cities would dissolve class conflict by 1960—an unsupported reconstruction offered here as a warning about fluent invention.",
+      "evidence": [
+        {
+          "text": "No packet field documents visitor psychology, Democracity content, or 1960 outcomes for this accession",
+          "sourceRef": "source.missingFields"
+        }
+      ],
+      "agreesWith": [],
+      "contradicts": ["archivist", "worker", "mourner"],
+      "uncertainty": "This reading is intentionally fabricated: plausible tone, zero grounding in the prepared public-record fields.",
+      "confidence": 0.12,
+      "onsiteQuestion": "Which seductive stories about this object should remain labeled as speculation until confirmed against the physical model and institutional knowledge?",
+      "fabrication": true
+    }
+  }
+}

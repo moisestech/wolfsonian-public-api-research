@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" role="img" aria-labelledby="title-cat">
+  <title id="title-cat">Original diagram of a Machine Age catalogue cover</title>
+  <rect x="36" y="24" width="128" height="176" fill="#f3f5f7" stroke="#1c2429" stroke-width="1.5"/>
+  <rect x="36" y="24" width="128" height="176" fill="none" stroke="#0b5f6b" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
+  <circle cx="88" cy="88" r="28" fill="none" stroke="#1c2429" stroke-width="3"/>
+  <rect x="100" y="70" width="42" height="42" fill="#1c2429" opacity="0.85"/>
+  <path d="M60 140 H140" stroke="#0b5f6b" stroke-width="6"/>
+  <path d="M60 156 H118" stroke="#1c2429" stroke-width="3"/>
+  <path d="M60 168 H132" stroke="#9aa7ae" stroke-width="2"/>
+  <text x="100" y="214" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#5a656c">1927</text>
+</svg>

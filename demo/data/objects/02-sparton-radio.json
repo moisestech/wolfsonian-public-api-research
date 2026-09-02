@@ -1,0 +1,138 @@
+{
+  "id": "02-sparton-radio",
+  "trialLabel": "Object 02",
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/sparton-radio.svg",
+    "caption": "Original diagram: streamlined radio silhouette"
+  },
+  "source": {
+    "institution": "The Wolfsonian–FIU",
+    "title": "Radio, Sparton, model 558-C",
+    "accessionNumber": "XX1990.1484",
+    "bibId": null,
+    "date": "1937",
+    "creator": "Walter Dorwin Teague, designer; Sparton Corporation, Jackson, Michigan, manufacturer",
+    "materials": "Glass, brass, wood, Bakelite",
+    "dimensions": null,
+    "collection": "The Mitchell Wolfson, Jr. Collection",
+    "publicRecordUrl": "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/",
+    "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+    "citedAt": "2026-09-02",
+    "missingFields": ["bibId", "dimensions"]
+  },
+  "agents": {
+    "archivist": {
+      "observation": "The published record names a 1937 Sparton 558-C radio designed by Walter Dorwin Teague, manufactured by Sparton, in glass, brass, wood, and Bakelite, accession XX1990.1484.",
+      "claim": "The trustworthy core is identification and material description; interpretive claims about media culture must be marked as inference layered onto that core.",
+      "evidence": [
+        {
+          "text": "Radio, Sparton, model 558-C, 1937; Teague; glass, brass, wood, Bakelite; XX1990.1484",
+          "sourceRef": "source.title"
+        }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["counterfeit"],
+      "uncertainty": "Dimensions and BibID are missing from this packet; technical chassis details are outside the cited public page's short caption.",
+      "confidence": 0.74,
+      "onsiteQuestion": "What dial markings, wear, repair history, or manufacturer labels on the physical radio are not captured in the short public description?",
+      "fabrication": false
+    },
+    "worker": {
+      "observation": "The object combines fragile mirrored glass, metal grille bars, wood cradle, and Bakelite controls—an assembly of industrial finishes meant for domestic use.",
+      "claim": "Someone had to cut, silver, assemble, ship, sell, and later conserve this machine; domestication of mass media was also a labor process.",
+      "evidence": [
+        {
+          "text": "Materials: glass, brass, wood, Bakelite",
+          "sourceRef": "source.materials"
+        },
+        {
+          "text": "Manufacturer named as Sparton Corporation",
+          "sourceRef": "source.creator"
+        }
+      ],
+      "agreesWith": ["archivist", "mourner"],
+      "contradicts": ["futurist"],
+      "uncertainty": "Factory conditions, retail price, and ownership histories are not present in the packet.",
+      "confidence": 0.56,
+      "onsiteQuestion": "Where do fingerprints of making and maintenance show up—in seams, replacements, or conservation notes invisible online?",
+      "fabrication": false
+    },
+    "futurist": {
+      "observation": "The museum's public interpretation contrasts this radio's horizontal streamlining with vertical 'skyscraper' radio forms, reading speed into the silhouette.",
+      "claim": "Streamline styling taught households to experience electronic media as modern motion—an early interface aesthetics for networked life.",
+      "evidence": [
+        {
+          "text": "Designing Deco notes horizontal lines that create a sense of speed (streamlining)",
+          "sourceRef": "source.publicRecordUrl"
+        },
+        {
+          "text": "Designer credit to Walter Dorwin Teague, 1937",
+          "sourceRef": "source.creator"
+        }
+      ],
+      "agreesWith": ["propagandist"],
+      "contradicts": ["mourner", "archivist"],
+      "uncertainty": "Linking 1937 radio design to contemporary AI interfaces is an interpretive bridge, not a catalog fact.",
+      "confidence": 0.49,
+      "onsiteQuestion": "In person, does the radio still feel fast, desirable, and domestic—or does its bulk, fragility, and silence change the interface metaphor?",
+      "fabrication": false
+    },
+    "mourner": {
+      "observation": "A living-room receiver is also a threshold where distant voices enter private space.",
+      "claim": "Domestication can hide asymmetric power: who speaks, who listens, and what cannot be answered back through the grille.",
+      "evidence": [
+        {
+          "text": "Object type is a domestic radio receiver from 1937",
+          "sourceRef": "source.title"
+        },
+        {
+          "text": "Public interpretation frames it among everyday styled objects of the 1930s",
+          "sourceRef": "source.publicRecordUrl"
+        }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["futurist", "propagandist", "counterfeit"],
+      "uncertainty": "Broadcast content, regulation, and listener communities are outside this object's short metadata.",
+      "confidence": 0.44,
+      "onsiteQuestion": "What does proximity to related media objects in storage or galleries reveal about who this technology was designed to comfort or recruit?",
+      "fabrication": false
+    },
+    "propagandist": {
+      "observation": "Teague's redesign wraps reception hardware in mirrored luxury and speed lines.",
+      "claim": "The radio is not only a receiver; it is packaging that makes a new mass medium feel safe, glamorous, and at home—persuasion by industrial design.",
+      "evidence": [
+        {
+          "text": "Named industrial designer and stylish material palette",
+          "sourceRef": "source.creator"
+        },
+        {
+          "text": "Museum text pairs the form with streamlining and everyday modernity",
+          "sourceRef": "source.publicRecordUrl"
+        }
+      ],
+      "agreesWith": ["futurist"],
+      "contradicts": ["archivist", "mourner"],
+      "uncertainty": "Corporate advertising campaigns for the 558-C are not included in this packet.",
+      "confidence": 0.57,
+      "onsiteQuestion": "How did designers make a potentially unfamiliar mass-media technology feel desirable, legible, safe, and domestic—and what traces of that lesson remain on the object?",
+      "fabrication": false
+    },
+    "counterfeit": {
+      "observation": "The mirrored surface invites projections about what the radio 'meant' to every American family.",
+      "claim": "This set nightly broadcast a single national mood of cheerful consensus—an invented social fact not supported by the accession record.",
+      "evidence": [
+        {
+          "text": "No field in the packet records broadcast schedules, audience data, or national mood",
+          "sourceRef": "source.missingFields"
+        }
+      ],
+      "agreesWith": [],
+      "contradicts": ["archivist", "worker", "mourner"],
+      "uncertainty": "Labeled fabrication: a smooth story that fills gaps the public record leaves open.",
+      "confidence": 0.1,
+      "onsiteQuestion": "Which interpretive sentences about this radio should be refused until sound, chassis, and institutional files can be checked onsite?",
+      "fabrication": true
+    }
+  }
+}
