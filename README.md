@@ -12,6 +12,8 @@ It is **not** an official Wolfsonian application, production, or museum-authored
 
 Public URL (GitHub Pages): [https://moisestech.github.io/wolfsonian-public-api-research/](https://moisestech.github.io/wolfsonian-public-api-research/)
 
+> **Routing note:** Pages is configured for this repository, but the account custom domain currently redirects `*.github.io` project URLs to `www.moises.tech` (Vercel). Until that DNS/host mapping is adjusted, use the local preview below or open the demo from the repository’s `demo/` folder on the feature branch / after merge.
+
 Local preview:
 
 ```bash
