@@ -1,0 +1,41 @@
+{
+  "packet_id": "WOLF-008",
+  "entities": [
+    {
+      "label": "television as furniture",
+      "kind": "concept",
+      "relation": "domesticates"
+    },
+    {
+      "label": "broadcast modernity",
+      "kind": "concept",
+      "relation": "introduces"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "record:WOLF-008",
+      "to": "record:WOLF-002",
+      "type": "extends_domestication_of"
+    },
+    {
+      "from": "record:WOLF-008",
+      "to": "desire",
+      "type": "furnitureizes"
+    }
+  ],
+  "possible_pressures": [
+    "comfort",
+    "desire",
+    "domestication",
+    "authority"
+  ],
+  "open_questions": [
+    "How does furniture form recruit trust for a new medium?"
+  ],
+  "requires_physical_inspection": [
+    "cabinet joinery",
+    "screen condition",
+    "control layout"
+  ]
+}

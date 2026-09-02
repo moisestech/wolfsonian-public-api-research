@@ -1,0 +1,93 @@
+{
+  "id": "round-03",
+  "title": "Round 03 — World-making and contradiction ledger",
+  "summary": "Mappemonde and fair publicity force a contradiction between progress imagery and colonial/governance readings; residency questions accumulate.",
+  "claims": [
+    {
+      "id": "r3-c1",
+      "agent": "mourner",
+      "text": "The Mappemonde vase and fair iconography show progress entangled with exploration-as-power—not a neutral map of modernity.",
+      "kind": "inference",
+      "grounding": [
+        { "seedId": "WOLF-004", "field": "source_text" },
+        { "seedId": "WOLF-005", "field": "subjects" }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["futurist", "museum"],
+      "confidence": 0.57,
+      "whatWouldChangeMind": "A source framing that explicitly refuses colonial reading for these accessions.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": true,
+      "residencyQuestion": "How do staff and labels currently handle colonial display objects beside utopian fair materials?"
+    },
+    {
+      "id": "r3-c2",
+      "agent": "futurist",
+      "text": "Democracity and Futurama still articulate a coherent technological optimism across program and corporate booklet.",
+      "kind": "inference",
+      "grounding": [
+        { "seedId": "WOLF-006", "field": "source_text" },
+        { "seedId": "WOLF-007", "field": "source_text" }
+      ],
+      "agreesWith": ["propagandist", "museum"],
+      "contradicts": ["mourner", "worker"],
+      "confidence": 0.55,
+      "whatWouldChangeMind": "Evidence that these programs were received primarily as satire or threat.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": false,
+      "residencyQuestion": null
+    },
+    {
+      "id": "r3-c3",
+      "agent": "worker",
+      "text": "Futurama’s “automobiles for all” backgrounds the labor that built dioramas and highways; optimism is a management aesthetic.",
+      "kind": "inference",
+      "grounding": [
+        { "seedId": "WOLF-007", "field": "source_text" },
+        { "seedId": "WOLF-007", "field": "archival_does_not_know" }
+      ],
+      "agreesWith": ["mourner"],
+      "contradicts": ["futurist", "counterfeit"],
+      "confidence": 0.54,
+      "whatWouldChangeMind": "Named labor credits or construction documentation linked to Futurama materials.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": false,
+      "residencyQuestion": "What labor, construction, or corporate archive materials contextualize Futurama beyond the visitor booklet?"
+    },
+    {
+      "id": "r3-c4",
+      "agent": "archivist",
+      "text": "Contradiction remains unresolved: progress language is abundant in source_text; labor and colonial accountability are mostly missing_fields.",
+      "kind": "supported",
+      "grounding": [
+        { "seedId": "WOLF-004", "field": "missing_fields" },
+        { "seedId": "WOLF-007", "field": "missing_fields" }
+      ],
+      "agreesWith": ["worker", "mourner"],
+      "contradicts": ["counterfeit"],
+      "confidence": 0.74,
+      "whatWouldChangeMind": "Additional seeds that supply the missing documentary genres.",
+      "publicRecordEstablishes": true,
+      "requiresPhysicalObject": false,
+      "residencyQuestion": "Which document classes should the next twenty-two seeds prioritize to test this contradiction?"
+    },
+    {
+      "id": "r3-c5",
+      "agent": "museum",
+      "text": "I cannot yet say whether I am a museum of utopia, of persuasion, or of colonial modernity—only that this memory subset pulls me toward all three.",
+      "kind": "inference",
+      "grounding": [
+        { "seedId": "WOLF-001", "field": "cluster" },
+        { "seedId": "WOLF-004", "field": "cluster" },
+        { "seedId": "WOLF-008", "field": "cluster" }
+      ],
+      "agreesWith": [],
+      "contradicts": [],
+      "confidence": 0.4,
+      "whatWouldChangeMind": "Physical encounter and staff knowledge outside these eight packets.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": true,
+      "residencyQuestion": "When this artificial society confronts the institution that produced its memory, which self-description survives?"
+    }
+  ]
+}

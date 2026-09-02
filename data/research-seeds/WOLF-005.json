@@ -1,0 +1,58 @@
+{
+  "id": "WOLF-005",
+  "slug": "poster-in-1939",
+  "cluster": "utopia",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Poster, In 1939: The New York World’s Fair",
+  "accessionNumber": "85.4.72",
+  "bibId": null,
+  "date": "1937",
+  "creator": [
+    "Nembhard N. Culin"
+  ],
+  "materials": [
+    "offset lithograph"
+  ],
+  "subjects": [
+    "World's Fairs",
+    "publicity",
+    "Trylon and Perisphere",
+    "persuasion"
+  ],
+  "dimensions": "39 3/4 × 28 in.",
+  "collection": "The Mitchell Wolfson, Jr. Collection",
+  "source_urls": [
+    "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+  ],
+  "source_text": [
+    "Poster offering a bird's-eye night view of visitors lining up for the Trylon and Perisphere.",
+    "Published two years before the fair; designed by Nembhard N. Culin."
+  ],
+  "missing_fields": [
+    "bibId",
+    "print_run",
+    "distribution_channels"
+  ],
+  "archival_knows": [
+    "title",
+    "date",
+    "designer",
+    "publisher",
+    "medium",
+    "dimensions",
+    "accession"
+  ],
+  "archival_does_not_know": [
+    "audience demographics",
+    "conversion to attendance",
+    "censored alternatives"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/poster-in-1939.svg",
+    "caption": "Original diagram: fair publicity poster frame"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

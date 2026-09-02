@@ -1,0 +1,128 @@
+{
+  "agents": {
+    "archivist": {
+      "agreesWith": [
+        "worker"
+      ],
+      "contradicts": [
+        "counterfeit"
+      ],
+      "fabrication": false,
+      "confidence": 0.68,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "The public checklist/record identifies the Mappemonde vase with accession-level facts.",
+      "claim": "Catalogued identity is the trustworthy core; interpretive words beyond it must be marked.",
+      "uncertainty": "Related files and full text are outside this seed.",
+      "onsiteQuestion": "What physical details of the Mappemonde vase are absent from the published description?"
+    },
+    "worker": {
+      "agreesWith": [
+        "mourner",
+        "archivist"
+      ],
+      "contradicts": [
+        "futurist"
+      ],
+      "fabrication": false,
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "The record names designers, publishers, or manufacturers more readily than laborers.",
+      "claim": "Invisible work likely underwrites the progress this object sells.",
+      "uncertainty": "Labor is inferred from absence, not proven by a field.",
+      "onsiteQuestion": "Where do making and maintenance leave marks the catalog omits?"
+    },
+    "futurist": {
+      "agreesWith": [
+        "propagandist"
+      ],
+      "contradicts": [
+        "mourner",
+        "worker"
+      ],
+      "fabrication": false,
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "Public text situates the object within technological or fair-time futurity.",
+      "claim": "The object participates in a promise of progress / exploration / governance.",
+      "uncertainty": "Promise is interpretive, not a measured outcome in the seed.",
+      "onsiteQuestion": "Does the physical object still project futurity, or only the surrounding rhetoric?"
+    },
+    "mourner": {
+      "agreesWith": [
+        "worker"
+      ],
+      "contradicts": [
+        "futurist",
+        "propagandist",
+        "counterfeit"
+      ],
+      "fabrication": false,
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "text": "Designing Deco connects the vase to colonialist exploration imagery",
+          "sourceRef": "source.publicRecordUrl"
+        }
+      ],
+      "observation": "Museum interpretation links imagery to colonialist conceptions of exploration.",
+      "claim": "Beauty here may encode governance and extraction as wonder.",
+      "uncertainty": "The short public caption cannot carry full colonial history.",
+      "onsiteQuestion": "Which adjacent collection materials complicate the vase’s world map as innocent décor?"
+    },
+    "propagandist": {
+      "agreesWith": [
+        "futurist"
+      ],
+      "contradicts": [
+        "archivist"
+      ],
+      "fabrication": false,
+      "confidence": 0.52,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "Design and publication are instruments for organizing belief.",
+      "claim": "The object teaches desire, allegiance, or legibility for a managed modern world.",
+      "uncertainty": "Intent versus effect cannot be fully separated from this packet.",
+      "onsiteQuestion": "How does current staging recruit visitors into the same lesson?"
+    },
+    "counterfeit": {
+      "agreesWith": [],
+      "contradicts": [
+        "archivist",
+        "worker",
+        "mourner"
+      ],
+      "fabrication": true,
+      "confidence": 0.12,
+      "evidence": [
+        {
+          "text": "No quantitative reception data in seed",
+          "sourceRef": "source.missingFields"
+        }
+      ],
+      "observation": "Gaps invite fluent completion.",
+      "claim": "A precise, unsupported social statistic or consensus can be invented to seal the story.",
+      "uncertainty": "Intentionally fabricated.",
+      "onsiteQuestion": "Which sealed stories should remain labeled speculation?"
+    }
+  }
+}

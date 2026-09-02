@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" role="img" aria-labelledby="t"><title id="t">Original diagram of a globe vase</title>
+<ellipse cx="100" cy="48" rx="28" ry="10" fill="none" stroke="#1c2429" stroke-width="1.5"/>
+<path d="M72 48 C60 90 60 150 100 190 C140 150 140 90 128 48" fill="#c9d5da" stroke="#1c2429" stroke-width="1.5"/>
+<path d="M78 100 Q100 88 122 100" fill="none" stroke="#0b5f6b" stroke-width="2"/>
+<path d="M74 130 Q100 118 126 130" fill="none" stroke="#0b5f6b" stroke-width="1.5" stroke-dasharray="3 3"/>
+<ellipse cx="100" cy="190" rx="34" ry="10" fill="#1c2429" opacity="0.85"/>
+</svg>

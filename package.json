@@ -1,14 +1,17 @@
 {
   "name": "wolfsonian-public-api-research",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": false,
-  "description": "Independent research notebook for testing The Wolfsonian's publicly documented digital collection API.",
+  "description": "Independent research notebook exploring The Wolfsonian's public collection records through provenance-first institutional-memory simulation.",
   "type": "module",
   "scripts": {
     "ping": "node scripts/ping.mjs",
     "search": "node scripts/search.mjs",
     "item": "node scripts/item.mjs",
     "seed": "node scripts/seed-corpus.mjs",
+    "seed:corpus": "node scripts/seed-institutional-corpus.mjs",
+    "build:graph": "node scripts/build-institutional-graph.mjs",
+    "build:demo": "node scripts/compile-demo-packets.mjs && node scripts/build-institutional-graph.mjs",
     "test": "node --test"
   },
   "engines": {

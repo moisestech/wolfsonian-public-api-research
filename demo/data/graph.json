@@ -1,0 +1,1650 @@
+{
+  "generatedAt": "2026-09-02T23:12:59.840Z",
+  "generator": "scripts/build-institutional-graph.mjs",
+  "capacityNote": "Schema supports up to 30 research seeds; current corpus may be smaller.",
+  "counts": {
+    "records": 8,
+    "nodes": 97,
+    "edges": 128,
+    "sourceEdges": 66,
+    "interpretedEdges": 62
+  },
+  "nodes": [
+    {
+      "id": "record:WOLF-001",
+      "kind": "record",
+      "label": "Model, Trylon and Perisphere",
+      "seedId": "WOLF-001",
+      "accessionNumber": "86.17.1",
+      "date": "c. 1938",
+      "cluster": "utopia"
+    },
+    {
+      "id": "person:wallace-k-harrison",
+      "kind": "person",
+      "label": "Wallace K. Harrison"
+    },
+    {
+      "id": "person:jacques-andr-fouilhoux",
+      "kind": "person",
+      "label": "Jacques André Fouilhoux"
+    },
+    {
+      "id": "concept:material-stainless-steel",
+      "kind": "concept",
+      "label": "stainless steel",
+      "facet": "material"
+    },
+    {
+      "id": "concept:material-plastic",
+      "kind": "concept",
+      "label": "plastic",
+      "facet": "material"
+    },
+    {
+      "id": "concept:material-wood",
+      "kind": "concept",
+      "label": "wood",
+      "facet": "material"
+    },
+    {
+      "id": "concept:world-s-fairs",
+      "kind": "concept",
+      "label": "World's Fairs",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:technological-optimism",
+      "kind": "concept",
+      "label": "technological optimism",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:architecture",
+      "kind": "concept",
+      "label": "architecture",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:year-1938",
+      "kind": "concept",
+      "label": "1938",
+      "facet": "temporal"
+    },
+    {
+      "id": "concept:theme-center",
+      "kind": "concept",
+      "label": "Theme Center",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:world-of-tomorrow",
+      "kind": "concept",
+      "label": "World of Tomorrow",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:progress",
+      "kind": "concept",
+      "label": "progress",
+      "facet": "interpreted"
+    },
+    {
+      "id": "record:WOLF-005",
+      "kind": "record",
+      "label": "Poster, In 1939: The New York World’s Fair",
+      "seedId": "WOLF-005",
+      "accessionNumber": "85.4.72",
+      "date": "1937",
+      "cluster": "utopia"
+    },
+    {
+      "id": "concept:pressure-progress",
+      "kind": "concept",
+      "label": "progress",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-spectacle",
+      "kind": "concept",
+      "label": "spectacle",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-hope",
+      "kind": "concept",
+      "label": "hope",
+      "facet": "pressure"
+    },
+    {
+      "id": "record:WOLF-002",
+      "kind": "record",
+      "label": "Radio, Sparton, model 558-C",
+      "seedId": "WOLF-002",
+      "accessionNumber": "XX1990.1484",
+      "date": "1937",
+      "cluster": "media"
+    },
+    {
+      "id": "person:walter-dorwin-teague",
+      "kind": "person",
+      "label": "Walter Dorwin Teague"
+    },
+    {
+      "id": "concept:material-glass",
+      "kind": "concept",
+      "label": "glass",
+      "facet": "material"
+    },
+    {
+      "id": "concept:material-brass",
+      "kind": "concept",
+      "label": "brass",
+      "facet": "material"
+    },
+    {
+      "id": "concept:material-bakelite",
+      "kind": "concept",
+      "label": "Bakelite",
+      "facet": "material"
+    },
+    {
+      "id": "concept:industrial-design",
+      "kind": "concept",
+      "label": "industrial design",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:streamlining",
+      "kind": "concept",
+      "label": "streamlining",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:domestic-technology",
+      "kind": "concept",
+      "label": "domestic technology",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:mass-media",
+      "kind": "concept",
+      "label": "mass media",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:year-1937",
+      "kind": "concept",
+      "label": "1937",
+      "facet": "temporal"
+    },
+    {
+      "id": "concept:domestic-receiver",
+      "kind": "concept",
+      "label": "domestic receiver",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:desire",
+      "kind": "concept",
+      "label": "desire",
+      "facet": "interpreted"
+    },
+    {
+      "id": "record:WOLF-008",
+      "kind": "record",
+      "label": "Television, RCA Victor TRK 12",
+      "seedId": "WOLF-008",
+      "accessionNumber": "2012.6.1",
+      "date": "1939",
+      "cluster": "media"
+    },
+    {
+      "id": "concept:pressure-comfort",
+      "kind": "concept",
+      "label": "comfort",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-desire",
+      "kind": "concept",
+      "label": "desire",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-speed",
+      "kind": "concept",
+      "label": "speed",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-domestication",
+      "kind": "concept",
+      "label": "domestication",
+      "facet": "pressure"
+    },
+    {
+      "id": "record:WOLF-003",
+      "kind": "record",
+      "label": "Catalogue, Machine Age Exposition",
+      "seedId": "WOLF-003",
+      "accessionNumber": "XM1999.108.8",
+      "date": "1927",
+      "cluster": "machine-ideology"
+    },
+    {
+      "id": "person:fernand-l-ger",
+      "kind": "person",
+      "label": "Fernand Léger"
+    },
+    {
+      "id": "concept:modernism",
+      "kind": "concept",
+      "label": "modernism",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:mechanical-beauty",
+      "kind": "concept",
+      "label": "mechanical beauty",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:year-1927",
+      "kind": "concept",
+      "label": "1927",
+      "facet": "temporal"
+    },
+    {
+      "id": "concept:machine-age",
+      "kind": "concept",
+      "label": "Machine Age",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:labor",
+      "kind": "concept",
+      "label": "labor",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:pressure-obedience",
+      "kind": "concept",
+      "label": "obedience",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-taste",
+      "kind": "concept",
+      "label": "taste",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-industrial-force",
+      "kind": "concept",
+      "label": "industrial force",
+      "facet": "pressure"
+    },
+    {
+      "id": "record:WOLF-004",
+      "kind": "record",
+      "label": "Vase with lid, Mappemonde [Globe]",
+      "seedId": "WOLF-004",
+      "accessionNumber": "85.7.383a,b",
+      "date": "1932",
+      "cluster": "world-making"
+    },
+    {
+      "id": "person:henri-rapin",
+      "kind": "person",
+      "label": "Henri Rapin"
+    },
+    {
+      "id": "person:victor-menu",
+      "kind": "person",
+      "label": "Victor Menu"
+    },
+    {
+      "id": "person:adrien-leduc",
+      "kind": "person",
+      "label": "Adrien Leduc"
+    },
+    {
+      "id": "concept:material-glazed-soft-stoneware",
+      "kind": "concept",
+      "label": "glazed soft stoneware",
+      "facet": "material"
+    },
+    {
+      "id": "concept:world-fairs",
+      "kind": "concept",
+      "label": "world fairs",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:colonial-display",
+      "kind": "concept",
+      "label": "colonial display",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:national-manufacture",
+      "kind": "concept",
+      "label": "national manufacture",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:exploration-imagery",
+      "kind": "concept",
+      "label": "exploration imagery",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:year-1932",
+      "kind": "concept",
+      "label": "1932",
+      "facet": "temporal"
+    },
+    {
+      "id": "concept:exploration",
+      "kind": "concept",
+      "label": "exploration",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:governance",
+      "kind": "concept",
+      "label": "governance",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:pressure-exploration",
+      "kind": "concept",
+      "label": "exploration",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-governance",
+      "kind": "concept",
+      "label": "governance",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-beauty",
+      "kind": "concept",
+      "label": "beauty",
+      "facet": "pressure"
+    },
+    {
+      "id": "person:nembhard-n-culin",
+      "kind": "person",
+      "label": "Nembhard N. Culin"
+    },
+    {
+      "id": "concept:material-offset-lithograph",
+      "kind": "concept",
+      "label": "offset lithograph",
+      "facet": "material"
+    },
+    {
+      "id": "concept:publicity",
+      "kind": "concept",
+      "label": "publicity",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:trylon-and-perisphere",
+      "kind": "concept",
+      "label": "Trylon and Perisphere",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:persuasion",
+      "kind": "concept",
+      "label": "persuasion",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:fair-publicity",
+      "kind": "concept",
+      "label": "fair publicity",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:queue-of-desire",
+      "kind": "concept",
+      "label": "queue of desire",
+      "facet": "interpreted"
+    },
+    {
+      "id": "record:WOLF-006",
+      "kind": "record",
+      "label": "Program, Your World of Tomorrow",
+      "seedId": "WOLF-006",
+      "accessionNumber": "86.19.57",
+      "date": "1939",
+      "cluster": "utopia"
+    },
+    {
+      "id": "person:leslie-darrell-ragan",
+      "kind": "person",
+      "label": "Leslie Darrell Ragan"
+    },
+    {
+      "id": "person:gilbert-vivian-seldes",
+      "kind": "person",
+      "label": "Gilbert Vivian Seldes"
+    },
+    {
+      "id": "concept:democracity",
+      "kind": "concept",
+      "label": "Democracity",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:utopia",
+      "kind": "concept",
+      "label": "utopia",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:urban-planning",
+      "kind": "concept",
+      "label": "urban planning",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:year-1939",
+      "kind": "concept",
+      "label": "1939",
+      "facet": "temporal"
+    },
+    {
+      "id": "concept:regulated-utopia",
+      "kind": "concept",
+      "label": "regulated utopia",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:pressure-order",
+      "kind": "concept",
+      "label": "order",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-commerce",
+      "kind": "concept",
+      "label": "commerce",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-peace",
+      "kind": "concept",
+      "label": "peace",
+      "facet": "pressure"
+    },
+    {
+      "id": "record:WOLF-007",
+      "kind": "record",
+      "label": "Booklet, Futurama",
+      "seedId": "WOLF-007",
+      "accessionNumber": "XB1992.1640",
+      "date": "1940",
+      "cluster": "utopia"
+    },
+    {
+      "id": "person:general-motors-corporation",
+      "kind": "person",
+      "label": "General Motors Corporation"
+    },
+    {
+      "id": "concept:futurama",
+      "kind": "concept",
+      "label": "Futurama",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:automobility",
+      "kind": "concept",
+      "label": "automobility",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:corporate-utopia",
+      "kind": "concept",
+      "label": "corporate utopia",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:highways",
+      "kind": "concept",
+      "label": "highways",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:year-1940",
+      "kind": "concept",
+      "label": "1940",
+      "facet": "temporal"
+    },
+    {
+      "id": "concept:automobility-for-all",
+      "kind": "concept",
+      "label": "automobility for all",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:pressure-mobility",
+      "kind": "concept",
+      "label": "mobility",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-consumption",
+      "kind": "concept",
+      "label": "consumption",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-planning",
+      "kind": "concept",
+      "label": "planning",
+      "facet": "pressure"
+    },
+    {
+      "id": "person:john-vassos",
+      "kind": "person",
+      "label": "John Vassos"
+    },
+    {
+      "id": "concept:material-walnut",
+      "kind": "concept",
+      "label": "walnut",
+      "facet": "material"
+    },
+    {
+      "id": "concept:material-beech",
+      "kind": "concept",
+      "label": "beech",
+      "facet": "material"
+    },
+    {
+      "id": "concept:material-ebonized-veneer",
+      "kind": "concept",
+      "label": "ebonized veneer",
+      "facet": "material"
+    },
+    {
+      "id": "concept:material-metal",
+      "kind": "concept",
+      "label": "metal",
+      "facet": "material"
+    },
+    {
+      "id": "concept:television",
+      "kind": "concept",
+      "label": "television",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:television-as-furniture",
+      "kind": "concept",
+      "label": "television as furniture",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:broadcast-modernity",
+      "kind": "concept",
+      "label": "broadcast modernity",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:pressure-authority",
+      "kind": "concept",
+      "label": "authority",
+      "facet": "pressure"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-1",
+      "source": "person:wallace-k-harrison",
+      "target": "record:WOLF-001",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-2",
+      "source": "person:jacques-andr-fouilhoux",
+      "target": "record:WOLF-001",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-3",
+      "source": "record:WOLF-001",
+      "target": "concept:material-stainless-steel",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-4",
+      "source": "record:WOLF-001",
+      "target": "concept:material-plastic",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-5",
+      "source": "record:WOLF-001",
+      "target": "concept:material-wood",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-6",
+      "source": "record:WOLF-001",
+      "target": "concept:world-s-fairs",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-7",
+      "source": "record:WOLF-001",
+      "target": "concept:technological-optimism",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-8",
+      "source": "record:WOLF-001",
+      "target": "concept:architecture",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-9",
+      "source": "record:WOLF-001",
+      "target": "concept:year-1938",
+      "type": "dated",
+      "layer": "source",
+      "label": "date"
+    },
+    {
+      "id": "e-10",
+      "source": "record:WOLF-001",
+      "target": "concept:theme-center",
+      "type": "depicts",
+      "layer": "interpreted",
+      "label": "depicts"
+    },
+    {
+      "id": "e-11",
+      "source": "record:WOLF-001",
+      "target": "concept:world-of-tomorrow",
+      "type": "promises",
+      "layer": "interpreted",
+      "label": "promises"
+    },
+    {
+      "id": "e-12",
+      "source": "record:WOLF-001",
+      "target": "concept:progress",
+      "type": "figures",
+      "layer": "interpreted",
+      "label": "figures",
+      "via": "WOLF-001"
+    },
+    {
+      "id": "e-13",
+      "source": "record:WOLF-001",
+      "target": "record:WOLF-005",
+      "type": "icon_shared_with",
+      "layer": "interpreted",
+      "label": "icon_shared_with",
+      "via": "WOLF-001"
+    },
+    {
+      "id": "e-14",
+      "source": "record:WOLF-001",
+      "target": "concept:pressure-progress",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-15",
+      "source": "record:WOLF-001",
+      "target": "concept:pressure-spectacle",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-16",
+      "source": "record:WOLF-001",
+      "target": "concept:pressure-hope",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-17",
+      "source": "person:walter-dorwin-teague",
+      "target": "record:WOLF-002",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-18",
+      "source": "record:WOLF-002",
+      "target": "concept:material-glass",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-19",
+      "source": "record:WOLF-002",
+      "target": "concept:material-brass",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-20",
+      "source": "record:WOLF-002",
+      "target": "concept:material-wood",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-21",
+      "source": "record:WOLF-002",
+      "target": "concept:material-bakelite",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-22",
+      "source": "record:WOLF-002",
+      "target": "concept:industrial-design",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-23",
+      "source": "record:WOLF-002",
+      "target": "concept:streamlining",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-24",
+      "source": "record:WOLF-002",
+      "target": "concept:domestic-technology",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-25",
+      "source": "record:WOLF-002",
+      "target": "concept:mass-media",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-26",
+      "source": "record:WOLF-002",
+      "target": "concept:year-1937",
+      "type": "dated",
+      "layer": "source",
+      "label": "date"
+    },
+    {
+      "id": "e-27",
+      "source": "record:WOLF-002",
+      "target": "concept:streamlining",
+      "type": "styled_as",
+      "layer": "interpreted",
+      "label": "styled_as"
+    },
+    {
+      "id": "e-28",
+      "source": "record:WOLF-002",
+      "target": "concept:domestic-receiver",
+      "type": "functions_as",
+      "layer": "interpreted",
+      "label": "functions_as"
+    },
+    {
+      "id": "e-29",
+      "source": "record:WOLF-002",
+      "target": "concept:desire",
+      "type": "converts_technology_into",
+      "layer": "interpreted",
+      "label": "converts_technology_into",
+      "via": "WOLF-002"
+    },
+    {
+      "id": "e-30",
+      "source": "record:WOLF-002",
+      "target": "record:WOLF-008",
+      "type": "precedes_medium_of",
+      "layer": "interpreted",
+      "label": "precedes_medium_of",
+      "via": "WOLF-002"
+    },
+    {
+      "id": "e-31",
+      "source": "record:WOLF-002",
+      "target": "concept:pressure-comfort",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-32",
+      "source": "record:WOLF-002",
+      "target": "concept:pressure-desire",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-33",
+      "source": "record:WOLF-002",
+      "target": "concept:pressure-speed",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-34",
+      "source": "record:WOLF-002",
+      "target": "concept:pressure-domestication",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-35",
+      "source": "person:fernand-l-ger",
+      "target": "record:WOLF-003",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-36",
+      "source": "record:WOLF-003",
+      "target": "concept:modernism",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-37",
+      "source": "record:WOLF-003",
+      "target": "concept:mechanical-beauty",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-38",
+      "source": "record:WOLF-003",
+      "target": "concept:industrial-design",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-39",
+      "source": "record:WOLF-003",
+      "target": "concept:architecture",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-40",
+      "source": "record:WOLF-003",
+      "target": "concept:year-1927",
+      "type": "dated",
+      "layer": "source",
+      "label": "date"
+    },
+    {
+      "id": "e-41",
+      "source": "record:WOLF-003",
+      "target": "concept:mechanical-beauty",
+      "type": "teaches",
+      "layer": "interpreted",
+      "label": "teaches"
+    },
+    {
+      "id": "e-42",
+      "source": "record:WOLF-003",
+      "target": "concept:machine-age",
+      "type": "names",
+      "layer": "interpreted",
+      "label": "names"
+    },
+    {
+      "id": "e-43",
+      "source": "record:WOLF-003",
+      "target": "concept:labor",
+      "type": "aestheticizes_or_occludes",
+      "layer": "interpreted",
+      "label": "aestheticizes_or_occludes",
+      "via": "WOLF-003"
+    },
+    {
+      "id": "e-44",
+      "source": "record:WOLF-003",
+      "target": "concept:progress",
+      "type": "manifestos",
+      "layer": "interpreted",
+      "label": "manifestos",
+      "via": "WOLF-003"
+    },
+    {
+      "id": "e-45",
+      "source": "record:WOLF-003",
+      "target": "concept:pressure-progress",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-46",
+      "source": "record:WOLF-003",
+      "target": "concept:pressure-obedience",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-47",
+      "source": "record:WOLF-003",
+      "target": "concept:pressure-taste",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-48",
+      "source": "record:WOLF-003",
+      "target": "concept:pressure-industrial-force",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-49",
+      "source": "person:henri-rapin",
+      "target": "record:WOLF-004",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-50",
+      "source": "person:victor-menu",
+      "target": "record:WOLF-004",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-51",
+      "source": "person:adrien-leduc",
+      "target": "record:WOLF-004",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-52",
+      "source": "record:WOLF-004",
+      "target": "concept:material-glazed-soft-stoneware",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-53",
+      "source": "record:WOLF-004",
+      "target": "concept:world-fairs",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-54",
+      "source": "record:WOLF-004",
+      "target": "concept:colonial-display",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-55",
+      "source": "record:WOLF-004",
+      "target": "concept:national-manufacture",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-56",
+      "source": "record:WOLF-004",
+      "target": "concept:exploration-imagery",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-57",
+      "source": "record:WOLF-004",
+      "target": "concept:year-1932",
+      "type": "dated",
+      "layer": "source",
+      "label": "date"
+    },
+    {
+      "id": "e-58",
+      "source": "record:WOLF-004",
+      "target": "concept:colonial-display",
+      "type": "participates_in",
+      "layer": "interpreted",
+      "label": "participates_in"
+    },
+    {
+      "id": "e-59",
+      "source": "record:WOLF-004",
+      "target": "concept:national-manufacture",
+      "type": "demonstrates",
+      "layer": "interpreted",
+      "label": "demonstrates"
+    },
+    {
+      "id": "e-60",
+      "source": "record:WOLF-004",
+      "target": "concept:progress",
+      "type": "maps_as",
+      "layer": "interpreted",
+      "label": "maps_as",
+      "via": "WOLF-004"
+    },
+    {
+      "id": "e-61",
+      "source": "concept:exploration",
+      "target": "concept:governance",
+      "type": "entangles_with",
+      "layer": "interpreted",
+      "label": "entangles_with",
+      "via": "WOLF-004"
+    },
+    {
+      "id": "e-62",
+      "source": "record:WOLF-004",
+      "target": "concept:pressure-progress",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-63",
+      "source": "record:WOLF-004",
+      "target": "concept:pressure-exploration",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-64",
+      "source": "record:WOLF-004",
+      "target": "concept:pressure-governance",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-65",
+      "source": "record:WOLF-004",
+      "target": "concept:pressure-beauty",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-66",
+      "source": "person:nembhard-n-culin",
+      "target": "record:WOLF-005",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-67",
+      "source": "record:WOLF-005",
+      "target": "concept:material-offset-lithograph",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-68",
+      "source": "record:WOLF-005",
+      "target": "concept:world-s-fairs",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-69",
+      "source": "record:WOLF-005",
+      "target": "concept:publicity",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-70",
+      "source": "record:WOLF-005",
+      "target": "concept:trylon-and-perisphere",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-71",
+      "source": "record:WOLF-005",
+      "target": "concept:persuasion",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-72",
+      "source": "record:WOLF-005",
+      "target": "concept:year-1937",
+      "type": "dated",
+      "layer": "source",
+      "label": "date"
+    },
+    {
+      "id": "e-73",
+      "source": "record:WOLF-005",
+      "target": "concept:fair-publicity",
+      "type": "is",
+      "layer": "interpreted",
+      "label": "is"
+    },
+    {
+      "id": "e-74",
+      "source": "record:WOLF-005",
+      "target": "concept:queue-of-desire",
+      "type": "depicts",
+      "layer": "interpreted",
+      "label": "depicts"
+    },
+    {
+      "id": "e-75",
+      "source": "record:WOLF-005",
+      "target": "record:WOLF-001",
+      "type": "advertises",
+      "layer": "interpreted",
+      "label": "advertises",
+      "via": "WOLF-005"
+    },
+    {
+      "id": "e-76",
+      "source": "record:WOLF-005",
+      "target": "concept:desire",
+      "type": "organizes",
+      "layer": "interpreted",
+      "label": "organizes",
+      "via": "WOLF-005"
+    },
+    {
+      "id": "e-77",
+      "source": "record:WOLF-005",
+      "target": "concept:pressure-desire",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-78",
+      "source": "record:WOLF-005",
+      "target": "concept:pressure-spectacle",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-79",
+      "source": "record:WOLF-005",
+      "target": "concept:pressure-progress",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-80",
+      "source": "person:leslie-darrell-ragan",
+      "target": "record:WOLF-006",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-81",
+      "source": "person:gilbert-vivian-seldes",
+      "target": "record:WOLF-006",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-82",
+      "source": "record:WOLF-006",
+      "target": "concept:democracity",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-83",
+      "source": "record:WOLF-006",
+      "target": "concept:utopia",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-84",
+      "source": "record:WOLF-006",
+      "target": "concept:urban-planning",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-85",
+      "source": "record:WOLF-006",
+      "target": "concept:world-s-fairs",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-86",
+      "source": "record:WOLF-006",
+      "target": "concept:year-1939",
+      "type": "dated",
+      "layer": "source",
+      "label": "date"
+    },
+    {
+      "id": "e-87",
+      "source": "record:WOLF-006",
+      "target": "concept:democracity",
+      "type": "describes",
+      "layer": "interpreted",
+      "label": "describes"
+    },
+    {
+      "id": "e-88",
+      "source": "record:WOLF-006",
+      "target": "concept:regulated-utopia",
+      "type": "imagines",
+      "layer": "interpreted",
+      "label": "imagines"
+    },
+    {
+      "id": "e-89",
+      "source": "record:WOLF-006",
+      "target": "record:WOLF-001",
+      "type": "interprets_interior_of",
+      "layer": "interpreted",
+      "label": "interprets_interior_of",
+      "via": "WOLF-006"
+    },
+    {
+      "id": "e-90",
+      "source": "record:WOLF-006",
+      "target": "concept:progress",
+      "type": "scripts",
+      "layer": "interpreted",
+      "label": "scripts",
+      "via": "WOLF-006"
+    },
+    {
+      "id": "e-91",
+      "source": "record:WOLF-006",
+      "target": "concept:pressure-progress",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-92",
+      "source": "record:WOLF-006",
+      "target": "concept:pressure-order",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-93",
+      "source": "record:WOLF-006",
+      "target": "concept:pressure-commerce",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-94",
+      "source": "record:WOLF-006",
+      "target": "concept:pressure-peace",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-95",
+      "source": "person:general-motors-corporation",
+      "target": "record:WOLF-007",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-96",
+      "source": "record:WOLF-007",
+      "target": "concept:futurama",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-97",
+      "source": "record:WOLF-007",
+      "target": "concept:automobility",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-98",
+      "source": "record:WOLF-007",
+      "target": "concept:corporate-utopia",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-99",
+      "source": "record:WOLF-007",
+      "target": "concept:highways",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-100",
+      "source": "record:WOLF-007",
+      "target": "concept:year-1940",
+      "type": "dated",
+      "layer": "source",
+      "label": "date"
+    },
+    {
+      "id": "e-101",
+      "source": "record:WOLF-007",
+      "target": "concept:futurama",
+      "type": "documents",
+      "layer": "interpreted",
+      "label": "documents"
+    },
+    {
+      "id": "e-102",
+      "source": "record:WOLF-007",
+      "target": "concept:automobility-for-all",
+      "type": "promises",
+      "layer": "interpreted",
+      "label": "promises"
+    },
+    {
+      "id": "e-103",
+      "source": "record:WOLF-007",
+      "target": "concept:progress",
+      "type": "corporatizes",
+      "layer": "interpreted",
+      "label": "corporatizes",
+      "via": "WOLF-007"
+    },
+    {
+      "id": "e-104",
+      "source": "record:WOLF-007",
+      "target": "concept:labor",
+      "type": "backgrounds",
+      "layer": "interpreted",
+      "label": "backgrounds",
+      "via": "WOLF-007"
+    },
+    {
+      "id": "e-105",
+      "source": "record:WOLF-007",
+      "target": "concept:pressure-progress",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-106",
+      "source": "record:WOLF-007",
+      "target": "concept:pressure-mobility",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-107",
+      "source": "record:WOLF-007",
+      "target": "concept:pressure-consumption",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-108",
+      "source": "record:WOLF-007",
+      "target": "concept:pressure-planning",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-109",
+      "source": "person:john-vassos",
+      "target": "record:WOLF-008",
+      "type": "created",
+      "layer": "source",
+      "label": "creator"
+    },
+    {
+      "id": "e-110",
+      "source": "record:WOLF-008",
+      "target": "concept:material-walnut",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-111",
+      "source": "record:WOLF-008",
+      "target": "concept:material-beech",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-112",
+      "source": "record:WOLF-008",
+      "target": "concept:material-ebonized-veneer",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-113",
+      "source": "record:WOLF-008",
+      "target": "concept:material-bakelite",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-114",
+      "source": "record:WOLF-008",
+      "target": "concept:material-glass",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-115",
+      "source": "record:WOLF-008",
+      "target": "concept:material-metal",
+      "type": "made_of",
+      "layer": "source",
+      "label": "material"
+    },
+    {
+      "id": "e-116",
+      "source": "record:WOLF-008",
+      "target": "concept:television",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-117",
+      "source": "record:WOLF-008",
+      "target": "concept:domestic-technology",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-118",
+      "source": "record:WOLF-008",
+      "target": "concept:streamlining",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-119",
+      "source": "record:WOLF-008",
+      "target": "concept:world-s-fairs",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-120",
+      "source": "record:WOLF-008",
+      "target": "concept:year-1939",
+      "type": "dated",
+      "layer": "source",
+      "label": "date"
+    },
+    {
+      "id": "e-121",
+      "source": "record:WOLF-008",
+      "target": "concept:television-as-furniture",
+      "type": "domesticates",
+      "layer": "interpreted",
+      "label": "domesticates"
+    },
+    {
+      "id": "e-122",
+      "source": "record:WOLF-008",
+      "target": "concept:broadcast-modernity",
+      "type": "introduces",
+      "layer": "interpreted",
+      "label": "introduces"
+    },
+    {
+      "id": "e-123",
+      "source": "record:WOLF-008",
+      "target": "record:WOLF-002",
+      "type": "extends_domestication_of",
+      "layer": "interpreted",
+      "label": "extends_domestication_of",
+      "via": "WOLF-008"
+    },
+    {
+      "id": "e-124",
+      "source": "record:WOLF-008",
+      "target": "concept:desire",
+      "type": "furnitureizes",
+      "layer": "interpreted",
+      "label": "furnitureizes",
+      "via": "WOLF-008"
+    },
+    {
+      "id": "e-125",
+      "source": "record:WOLF-008",
+      "target": "concept:pressure-comfort",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-126",
+      "source": "record:WOLF-008",
+      "target": "concept:pressure-desire",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-127",
+      "source": "record:WOLF-008",
+      "target": "concept:pressure-domestication",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-128",
+      "source": "record:WOLF-008",
+      "target": "concept:pressure-authority",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    }
+  ]
+}

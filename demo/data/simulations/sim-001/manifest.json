@@ -1,0 +1,44 @@
+{
+  "id": "sim-001",
+  "title": "Institutional Memory Simulation 001",
+  "tagline": "The public archive becomes the memory of an artificial interpretive society.",
+  "model": "A",
+  "modelNote": "Documents are memory/evidence. Agents interpret through them. This is not a calibrated ABM and not a prediction engine.",
+  "agents": [
+    "archivist",
+    "worker",
+    "futurist",
+    "mourner",
+    "propagandist",
+    "counterfeit",
+    "museum"
+  ],
+  "seedIds": [
+    "WOLF-001",
+    "WOLF-002",
+    "WOLF-003",
+    "WOLF-004",
+    "WOLF-005",
+    "WOLF-006",
+    "WOLF-007",
+    "WOLF-008"
+  ],
+  "rounds": [
+    "round-01",
+    "round-02",
+    "round-03"
+  ],
+  "counts": {
+    "records": 8,
+    "agents": 7,
+    "rounds": 3,
+    "entities": 89,
+    "relationships": 128,
+    "unresolvedContradictions": 9,
+    "claims": 14
+  },
+  "capacity": {
+    "maxRecords": 30,
+    "shippedRecords": 8
+  }
+}

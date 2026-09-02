@@ -1,0 +1,41 @@
+{
+  "packet_id": "WOLF-007",
+  "entities": [
+    {
+      "label": "Futurama",
+      "kind": "concept",
+      "relation": "documents"
+    },
+    {
+      "label": "automobility for all",
+      "kind": "concept",
+      "relation": "promises"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "record:WOLF-007",
+      "to": "progress",
+      "type": "corporatizes"
+    },
+    {
+      "from": "record:WOLF-007",
+      "to": "labor",
+      "type": "backgrounds"
+    }
+  ],
+  "possible_pressures": [
+    "progress",
+    "mobility",
+    "consumption",
+    "planning"
+  ],
+  "open_questions": [
+    "What labor produced the diorama that sold freedom as highways?"
+  ],
+  "requires_physical_inspection": [
+    "booklet wear",
+    "image captions",
+    "corporate voice"
+  ]
+}
