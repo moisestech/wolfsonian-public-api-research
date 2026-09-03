@@ -283,6 +283,15 @@ a {
   min-width: 5.5rem;
 }
 
+.agent-node__portrait {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid rgba(28, 36, 41, 0.35);
+  box-shadow: 0 2px 6px rgba(28, 36, 41, 0.2);
+}
+
 .agent-node__label {
   font-family: var(--mono);
   font-size: 0.72rem;
@@ -302,6 +311,10 @@ a {
 
 .agent-node[aria-pressed="true"] .agent-node__voice {
   color: rgba(255, 255, 255, 0.85);
+}
+
+.agent-node[aria-pressed="true"] .agent-node__portrait {
+  border-color: rgba(255, 255, 255, 0.75);
 }
 
 .agent-node[data-agent="archivist"] { left: 16%; top: 20%; }
@@ -347,6 +360,16 @@ a {
 .panel__hint {
   color: var(--muted);
   margin: 0;
+}
+
+.agent-panel__portrait {
+  width: 3.25rem;
+  height: 3.25rem;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid rgba(28, 36, 41, 0.22);
+  box-shadow: 0 3px 10px rgba(28, 36, 41, 0.15);
+  margin: 0 0 0.75rem;
 }
 
 .panel__body {
@@ -566,15 +589,29 @@ a {
 }
 
 .graph-panel {
+  position: relative;
+  overflow: hidden;
   padding: 0.75rem;
 }
 
+.graph-backdrop {
+  position: absolute;
+  inset: 0.75rem 0.75rem 2.45rem 0.75rem;
+  width: calc(100% - 1.5rem);
+  height: calc(100% - 3.2rem);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.88;
+}
+
 .graph-canvas {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: auto;
   min-height: 360px;
   background:
-    linear-gradient(180deg, rgba(247, 249, 250, 0.95), rgba(238, 241, 244, 0.9));
+    linear-gradient(180deg, rgba(247, 249, 250, 0.76), rgba(238, 241, 244, 0.72));
 }
 
 .graph-edge {

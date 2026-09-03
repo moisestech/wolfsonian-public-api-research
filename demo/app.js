@@ -1,3 +1,5 @@
+import { createGraphBackdrop } from './three-backdrop.mjs';
+
 const VIEWS = [
   { id: 'archive', label: 'Archive' },
   { id: 'interpretation', label: 'Interpretation' },
@@ -17,6 +19,14 @@ const AGENT_POSITIONS = {
 };
 
 const CENTER = { x: 500, y: 250 };
+const AGENT_PORTRAITS = {
+  archivist: 'https://res.cloudinary.com/dck5rzi4h/image/upload/v1782901407/grants/wolfsonian/agents/archivist_enoxwd.png',
+  worker: 'https://res.cloudinary.com/dck5rzi4h/image/upload/v1782901403/grants/wolfsonian/agents/worker_ofjxn0.png',
+  futurist: 'https://res.cloudinary.com/dck5rzi4h/image/upload/v1782901408/grants/wolfsonian/agents/futurist_layjim.png',
+  mourner: 'https://res.cloudinary.com/dck5rzi4h/image/upload/v1782901407/grants/wolfsonian/agents/mourner_egkmra.png',
+  propagandist: 'https://res.cloudinary.com/dck5rzi4h/image/upload/v1782901419/grants/wolfsonian/agents/propagandist_uuwflg.png',
+  counterfeit: 'https://res.cloudinary.com/dck5rzi4h/image/upload/v1782901404/grants/wolfsonian/agents/counterfeit_oz5ee8.png'
+};
 
 const state = {
   trial: null,
@@ -44,6 +54,7 @@ const els = {
   simShell: document.getElementById('sim-shell'),
   shellDisclaimer: document.getElementById('shell-disclaimer'),
   viewTabs: document.getElementById('view-tabs'),
+  graphBackdrop: document.getElementById('graph-backdrop'),
   graphCanvas: document.getElementById('graph-canvas'),
   graphCaption: document.getElementById('graph-caption'),
   roundKicker: document.getElementById('round-kicker'),
@@ -78,9 +89,18 @@ const els = {
   onsiteList: document.getElementById('onsite-list')
 };
 
+let graphBackdropController = {
+  updateSelection() {},
+  destroy() {}
+};
+
 function voiceForAgent(agentId) {
   const match = state.trial.agents.find((agent) => agent.id === agentId);
   return match?.voice || '';
+}
+
+function portraitForAgent(agentId) {
+  return AGENT_PORTRAITS[agentId] || '';
 }
 
 function labelForAgent(agentId) {
@@ -350,6 +370,7 @@ function drawGraph() {
     ? ` Selected: ${selectedPacket.source.accessionNumber} — ${selectedPacket.source.title}.`
     : ' Click a numbered record node to select it.';
   els.graphCaption.textContent = `${captions[state.view]}${selectionNote}`;
+  graphBackdropController.updateSelection(state.selectedSeedId);
 }
 
 function renderRoundSwitch() {
@@ -584,6 +605,16 @@ function renderAgentPanel() {
   els.panelBody.replaceChildren();
   els.panel.className = `panel agent-panel agent-panel--${state.agentId}`;
 
+  const portrait = portraitForAgent(state.agentId);
+  if (portrait) {
+    const portraitImg = document.createElement('img');
+    portraitImg.className = 'agent-panel__portrait';
+    portraitImg.src = portrait;
+    portraitImg.alt = `${label} portrait`;
+    portraitImg.loading = 'lazy';
+    els.panelBody.append(portraitImg);
+  }
+
   if (voice) {
     const voiceLine = document.createElement('p');
     voiceLine.className = 'agent-voice';
@@ -732,6 +763,16 @@ function renderAgentNodes() {
     const label = document.createElement('span');
     label.className = 'agent-node__label';
     label.textContent = agent.label;
+    const portrait = portraitForAgent(agent.id);
+    if (portrait) {
+      const image = document.createElement('img');
+      image.className = 'agent-node__portrait';
+      image.src = portrait;
+      image.alt = '';
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      button.append(image);
+    }
     button.append(label);
     if (agent.voice) {
       const hint = document.createElement('span');
@@ -806,6 +847,10 @@ function openDeepRead() {
 async function init() {
   try {
     await loadAll();
+    graphBackdropController = await createGraphBackdrop(
+      els.graphBackdrop,
+      document.querySelector('.graph-panel')
+    );
     renderLanding();
     els.enterSim.addEventListener('click', enterSimulation);
     els.openDeepRead.addEventListener('click', openDeepRead);
