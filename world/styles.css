@@ -1,0 +1,372 @@
+:root {
+  --ink: #1c2429;
+  --muted: #5a656c;
+  --paper: #e8ece8;
+  --panel: #f7f6f1;
+  --accent: #0b5f6b;
+  --display: "Syne", sans-serif;
+  --serif: "Newsreader", "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --archivist: #2c3338;
+  --worker: #6b4a2b;
+  --futurist: #0b5f6b;
+  --propagandist: #8b3a2f;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(900px 420px at 80% -10%, rgba(11, 95, 107, 0.08), transparent 55%),
+    linear-gradient(180deg, #dfe6e2 0%, var(--paper) 100%);
+  font-family: var(--serif);
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.5rem 0.8rem;
+  z-index: 40;
+}
+
+.skip-link:focus {
+  left: 0.75rem;
+  top: 0.75rem;
+}
+
+.research-note {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  z-index: 20;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.research-note a {
+  color: var(--accent);
+}
+
+.hud {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.75rem;
+  align-items: baseline;
+  padding: 2.4rem 1.25rem 0.5rem;
+  width: min(1100px, calc(100% - 1.5rem));
+  margin: 0 auto;
+}
+
+.hud__kicker {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hud p {
+  margin: 0;
+}
+
+.hud strong {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.hud__hint {
+  flex: 1 1 16rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.stage-root {
+  width: min(1100px, calc(100% - 1.5rem));
+  margin: 0.4rem auto 0;
+}
+
+.world-canvas {
+  width: 100%;
+  height: min(62vh, 560px);
+  background: rgba(247, 246, 241, 0.55);
+  border: 1px solid rgba(28, 36, 41, 0.16);
+  overflow: hidden;
+  position: relative;
+}
+
+.speech-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.dom-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.dom-landmark,
+.dom-agent {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dom-landmark {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+}
+
+.dom-landmark img {
+  width: 7.5rem;
+  height: auto;
+  filter: drop-shadow(0 8px 18px rgba(28, 36, 41, 0.18));
+}
+
+.dom-landmark span {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.35;
+}
+
+.dom-agent {
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+  min-width: 4.5rem;
+}
+
+.dom-agent img {
+  width: 2.1rem;
+  height: 2.1rem;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  background: #f7f9fa;
+}
+
+.dom-agent--archivist { color: var(--archivist); }
+.dom-agent--worker { color: var(--worker); }
+.dom-agent--futurist { color: var(--futurist); }
+.dom-agent--propagandist { color: var(--propagandist); }
+
+.dom-agent__name {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.dom-agent__role {
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  color: var(--muted);
+  max-width: 12ch;
+  line-height: 1.2;
+}
+
+.dom-layer[data-stage="claim"],
+.dom-layer[data-stage="evidence"],
+.dom-layer[data-stage="residency"] {
+  opacity: 0.35;
+}
+
+.world-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.world-caption {
+  margin: 0.45rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stage-nav {
+  width: min(1100px, calc(100% - 1.5rem));
+  margin: 0.75rem auto 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.text-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.overlays {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(232, 236, 232, 0.88);
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+
+.overlays[hidden] {
+  display: none;
+}
+
+.inspector {
+  width: min(640px, 100%);
+  max-height: min(82vh, 720px);
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid rgba(28, 36, 41, 0.2);
+  box-shadow: 0 18px 50px rgba(28, 36, 41, 0.12);
+  padding: 1.25rem 1.35rem 1.5rem;
+}
+
+.inspector--research {
+  font-family: var(--mono);
+}
+
+.inspector h2 {
+  font-family: var(--display);
+  margin: 0 0 0.85rem;
+  font-size: 1.35rem;
+}
+
+.inspector dl {
+  margin: 0;
+}
+
+.inspector dt {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.7rem;
+}
+
+.inspector dd {
+  margin: 0.2rem 0 0;
+  font-family: var(--serif);
+  font-size: 1rem;
+}
+
+.inspector--research dd {
+  font-family: var(--mono);
+  font-size: 0.92rem;
+}
+
+.inspector__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.15rem;
+}
+
+.ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ledger li {
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid rgba(28, 36, 41, 0.12);
+}
+
+.ledger strong {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.claim-type {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.claim-type--inference {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.claim-type--source {
+  color: var(--ink);
+}
+
+.speech {
+  position: absolute;
+  pointer-events: auto;
+  max-width: 22rem;
+  padding: 0.45rem 0.6rem;
+  background: rgba(247, 246, 241, 0.94);
+  border: 1px dashed rgba(28, 36, 41, 0.28);
+  font-family: var(--display);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.speech[data-agent="archivist"] { border-color: var(--archivist); }
+.speech[data-agent="worker"] { border-color: var(--worker); }
+.speech[data-agent="futurist"] { border-color: var(--futurist); }
+.speech[data-agent="propagandist"] { border-color: var(--propagandist); }
+
+.speech small {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

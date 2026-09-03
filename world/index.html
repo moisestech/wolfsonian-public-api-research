@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="World 0.1 — Living Simulation vertical slice. Experimental; not the institutional Research Demo 001.">
+  <title>World 0.1 — Sparton district</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#hud">Skip to stage controls</a>
+
+  <aside class="research-note">
+    Experimental world · same research data as
+    <a href="../demo/">Research Demo 001</a>
+  </aside>
+
+  <header class="hud" id="hud">
+    <p class="hud__where"><span class="hud__kicker">Where am I?</span> <strong id="stage-name">WORLD</strong></p>
+    <p class="hud__language"><span class="hud__kicker">Language</span> <strong id="language-kind">LABEL</strong></p>
+    <p class="hud__hint" id="stage-hint">Watch who moves toward the radio.</p>
+  </header>
+
+  <main class="stage-root">
+    <div id="world-canvas" class="world-canvas" aria-label="Living simulation world"></div>
+    <p class="world-caption" id="world-caption">SPARTON RADIO · 1937</p>
+  </main>
+
+  <div id="overlays" class="overlays" hidden></div>
+
+  <nav class="stage-nav" aria-label="Stage navigation">
+    <button type="button" class="text-button" id="listen-btn" hidden>Listen</button>
+    <button type="button" class="text-button" id="back-btn" hidden>← Back</button>
+  </nav>
+
+  <script type="module" src="./src/main.mjs"></script>
+</body>
+</html>
