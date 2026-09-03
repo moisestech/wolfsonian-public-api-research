@@ -28,6 +28,7 @@ html {
 }
 
 body {
+  position: relative;
   margin: 0;
   color: var(--ink);
   background:
@@ -37,6 +38,21 @@ body {
   font-family: var(--serif);
   line-height: 1.5;
   min-height: 100vh;
+}
+
+.scene-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.42;
+}
+
+.landing,
+.sim-shell,
+.site-footer {
+  position: relative;
+  z-index: 1;
 }
 
 img,
@@ -601,7 +617,7 @@ a {
   height: calc(100% - 3.2rem);
   z-index: 0;
   pointer-events: none;
-  opacity: 0.88;
+  opacity: 1;
 }
 
 .graph-canvas {
@@ -611,7 +627,7 @@ a {
   height: auto;
   min-height: 360px;
   background:
-    linear-gradient(180deg, rgba(247, 249, 250, 0.76), rgba(238, 241, 244, 0.72));
+    linear-gradient(180deg, rgba(247, 249, 250, 0.42), rgba(238, 241, 244, 0.38));
 }
 
 .graph-edge {
@@ -653,7 +669,12 @@ a {
   fill: #c5dce0;
   stroke: var(--accent);
   stroke-width: 3.5;
-  filter: drop-shadow(0 0 0.35rem rgba(11, 95, 107, 0.45));
+  filter: drop-shadow(0 0 0.55rem rgba(11, 95, 107, 0.7));
+}
+
+.graph-node__spotlight {
+  fill: url(#graph-spotlight);
+  pointer-events: none;
 }
 
 .graph-node--record:hover {
@@ -1060,5 +1081,9 @@ a {
   .agent-node,
   .object-core__figure {
     transition: none;
+  }
+
+  .scene-backdrop {
+    opacity: 0.28;
   }
 }

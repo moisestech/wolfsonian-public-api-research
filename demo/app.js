@@ -55,6 +55,7 @@ const els = {
   shellDisclaimer: document.getElementById('shell-disclaimer'),
   viewTabs: document.getElementById('view-tabs'),
   graphBackdrop: document.getElementById('graph-backdrop'),
+  sceneBackdrop: document.getElementById('scene-backdrop'),
   graphCanvas: document.getElementById('graph-canvas'),
   graphCaption: document.getElementById('graph-caption'),
   roundKicker: document.getElementById('round-kicker'),
@@ -90,6 +91,10 @@ const els = {
 };
 
 let graphBackdropController = {
+  updateSelection() {},
+  destroy() {}
+};
+let sceneBackdropController = {
   updateSelection() {},
   destroy() {}
 };
@@ -239,6 +244,12 @@ function edgeVisible(edge) {
 function drawGraph() {
   const svg = els.graphCanvas;
   svg.replaceChildren();
+  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
+  gradient.setAttribute('id', 'graph-spotlight');
+  gradient.innerHTML = '<stop offset="0%" stop-color="#7fd4de" stop-opacity="0.55"/><stop offset="55%" stop-color="#0b5f6b" stop-opacity="0.16"/><stop offset="100%" stop-color="#0b5f6b" stop-opacity="0"/>';
+  defs.append(gradient);
+  svg.append(defs);
   const positions = layoutGraph();
   const claimSeeds = new Set(
     visibleClaims().flatMap((claim) => claim.grounding.map((g) => `record:${g.seedId}`))
@@ -277,6 +288,12 @@ function drawGraph() {
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     group.setAttribute('transform', `translate(${pos.x} ${pos.y})`);
     const isSelected = node.kind === 'record' && node.seedId === state.selectedSeedId;
+    if (isSelected) {
+      const spotlight = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      spotlight.setAttribute('r', '54');
+      spotlight.setAttribute('class', 'graph-node__spotlight');
+      group.append(spotlight);
+    }
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('r', node.kind === 'record' ? (isSelected ? '22' : '18') : '6');
     circle.setAttribute(
@@ -370,7 +387,12 @@ function drawGraph() {
     ? ` Selected: ${selectedPacket.source.accessionNumber} — ${selectedPacket.source.title}.`
     : ' Click a numbered record node to select it.';
   els.graphCaption.textContent = `${captions[state.view]}${selectionNote}`;
-  graphBackdropController.updateSelection(state.selectedSeedId);
+  const selectedPos = state.selectedSeedId ? positions.get(`record:${state.selectedSeedId}`) : null;
+  const ndc = selectedPos
+    ? { x: (selectedPos.x / 1000) * 2 - 1, y: -((selectedPos.y / 560) * 2 - 1) }
+    : null;
+  graphBackdropController.updateSelection(state.selectedSeedId, ndc);
+  sceneBackdropController.updateSelection(state.selectedSeedId, ndc);
 }
 
 function renderRoundSwitch() {
@@ -849,7 +871,13 @@ async function init() {
     await loadAll();
     graphBackdropController = await createGraphBackdrop(
       els.graphBackdrop,
-      document.querySelector('.graph-panel')
+      document.querySelector('.graph-panel'),
+      { intensity: 1.15, layerCount: 4 }
+    );
+    sceneBackdropController = await createGraphBackdrop(
+      els.sceneBackdrop,
+      document.body,
+      { intensity: 0.85, layerCount: 5 }
     );
     renderLanding();
     els.enterSim.addEventListener('click', enterSimulation);
