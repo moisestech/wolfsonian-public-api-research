@@ -1,0 +1,142 @@
+{
+  "id": "03-machine-age-catalogue",
+  "trialLabel": "Object 03",
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/machine-age-catalogue.svg",
+    "caption": "Original diagram: catalogue as machine-geometry page"
+  },
+  "source": {
+    "institution": "The Wolfsonian–FIU",
+    "title": "Catalogue, Machine Age Exposition",
+    "accessionNumber": "XM1999.108.8",
+    "bibId": null,
+    "date": "1927",
+    "creator": "Fernand Léger, cover designer; New York City",
+    "materials": null,
+    "dimensions": "11 × 8 3/4 in. (28 × 22 cm)",
+    "collection": "The Mitchell Wolfson, Jr. Collection",
+    "publicRecordUrl": "https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf",
+    "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+    "citedAt": "2026-09-02",
+    "missingFields": ["bibId", "materials"]
+  },
+  "agents": {
+    "archivist": {
+      "observation": "The public checklist records a 1927 Machine Age Exposition catalogue with Léger cover design, dimensions, accession XM1999.108.8, and collection credit.",
+      "claim": "This is a document about how machines were taught as culture; the packet supports bibliographic identity more than a full contents analysis.",
+      "evidence": [
+        {
+          "text": "Catalogue, Machine Age Exposition, 1927; Léger cover; XM1999.108.8",
+          "sourceRef": "source.title"
+        },
+        {
+          "text": "Checklist notes essays and an overview of European and American architecture and art",
+          "sourceRef": "source.publicRecordUrl"
+        }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["counterfeit"],
+      "uncertainty": "Full essay texts, exhibition checklist internals, and condition notes are not reproduced in this packet.",
+      "confidence": 0.7,
+      "onsiteQuestion": "What annotations, ownership marks, paper quality, or inserted ephemera appear only when the catalogue is handled as a library object?",
+      "fabrication": false
+    },
+    "worker": {
+      "observation": "The exposition placed machines, parts, photographs, and art in one pedagogical space; the catalogue is the portable script of that juxtaposition.",
+      "claim": "Mechanical beauty was not only aesthetic theory—it was a curriculum that trained eyes to admire industrial force and form.",
+      "evidence": [
+        {
+          "text": "Checklist describes embracing industrial technology's visual language in art, design, and architecture",
+          "sourceRef": "source.publicRecordUrl"
+        },
+        {
+          "text": "Object is a catalogue (library material), not a machine itself",
+          "sourceRef": "source.title"
+        }
+      ],
+      "agreesWith": ["archivist", "propagandist"],
+      "contradicts": ["futurist"],
+      "uncertainty": "Laborers who built the exhibited machines are not named in the short public description.",
+      "confidence": 0.53,
+      "onsiteQuestion": "Which plates or captions in the physical catalogue make labor visible, and which aestheticize machinery into pure form?",
+      "fabrication": false
+    },
+    "futurist": {
+      "observation": "Léger's cover translates mechanical parts into geometry, aligning painting with industrial modernity.",
+      "claim": "The catalogue argues that the machine age supplies a new formal language capable of organizing modern life—an early manifesto for technological aesthetics.",
+      "evidence": [
+        {
+          "text": "Cover designer Fernand Léger; 1927 New York exposition",
+          "sourceRef": "source.creator"
+        },
+        {
+          "text": "Checklist links the show to streamlined forms and mechanical beauty",
+          "sourceRef": "source.publicRecordUrl"
+        }
+      ],
+      "agreesWith": ["propagandist"],
+      "contradicts": ["mourner", "worker"],
+      "uncertainty": "Whether visitors accepted that manifesto cannot be read from accession metadata alone.",
+      "confidence": 0.55,
+      "onsiteQuestion": "Does the physical sequence of images still feel like a forward program, or does it read as a dated ideology of progress?",
+      "fabrication": false
+    },
+    "mourner": {
+      "observation": "Celebrating the machine as beautiful can displace the bodies and risks attached to industrial systems.",
+      "claim": "The catalogue's elegance may be a veil: admiration without account of injury, extraction, or coercion that machines also organized.",
+      "evidence": [
+        {
+          "text": "Public text emphasizes modernist ideas and mechanical beauty",
+          "sourceRef": "source.publicRecordUrl"
+        },
+        {
+          "text": "Date places the document in interwar industrial culture",
+          "sourceRef": "source.date"
+        }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["futurist", "propagandist", "counterfeit"],
+      "uncertainty": "Critical social history is an interpretive lens; it is not printed as a field in the accession note.",
+      "confidence": 0.42,
+      "onsiteQuestion": "Where in the volume—if anywhere—do war technologies, workplace danger, or unequal modernization appear beside aesthetic praise?",
+      "fabrication": false
+    },
+    "propagandist": {
+      "observation": "An exposition catalogue is a rhetorical instrument: it selects, sequences, and legitimates what counts as the Machine Age.",
+      "claim": "Léger's cover and the essays teach allegiance to industrial modernity as taste, not only as fact.",
+      "evidence": [
+        {
+          "text": "Checklist states the exposition discussed modernist ideas and mechanical beauty",
+          "sourceRef": "source.publicRecordUrl"
+        },
+        {
+          "text": "Cover attributed to a major modernist painter",
+          "sourceRef": "source.creator"
+        }
+      ],
+      "agreesWith": ["futurist", "worker"],
+      "contradicts": ["archivist", "mourner"],
+      "uncertainty": "Publisher Jane Heap's organizing politics are only lightly implied by secondary descriptions, not fully present here.",
+      "confidence": 0.58,
+      "onsiteQuestion": "How does the catalogue's typography, image hierarchy, and essay order persuade a reader to accept machines as cultural destiny?",
+      "fabrication": false
+    },
+    "counterfeit": {
+      "observation": "From the cover geometry one can invent a unified international consensus that art and industry had already reconciled.",
+      "claim": "Every contributor agreed that mechanical form abolished political conflict—an unsupported synthesis labeled here as fabrication.",
+      "evidence": [
+        {
+          "text": "Packet does not include full essay texts or attendee testimony proving consensus",
+          "sourceRef": "source.missingFields"
+        }
+      ],
+      "agreesWith": [],
+      "contradicts": ["archivist", "mourner", "worker"],
+      "uncertainty": "Intentionally unsupported: a tidy ending that real catalogues rarely provide.",
+      "confidence": 0.11,
+      "onsiteQuestion": "Which fluent totalizations about the Machine Age should stay quarantined until the pages and institutional context can contradict them?",
+      "fabrication": true
+    }
+  }
+}

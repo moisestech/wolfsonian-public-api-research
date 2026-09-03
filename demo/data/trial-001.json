@@ -1,0 +1,22 @@
+{
+  "id": "trial-001",
+  "title": "The Archive Dreams in Public",
+  "subtitle": "Research Trial 001",
+  "tagline": "An experimental research instrument for reading disagreement across public collection records.",
+  "disclaimer": "Independent prototype. Not an official Wolfsonian application, production system, or museum-authored dataset.",
+  "dataNote": "Public-record packets manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "representationNote": "Object figures are original diagrammatic forms, not collection photography.",
+  "objects": [
+    "01-trylon-perisphere",
+    "02-sparton-radio",
+    "03-machine-age-catalogue"
+  ],
+  "agents": [
+    { "id": "archivist", "label": "Archivist" },
+    { "id": "worker", "label": "Worker" },
+    { "id": "futurist", "label": "Futurist" },
+    { "id": "mourner", "label": "Mourner" },
+    { "id": "propagandist", "label": "Propagandist" },
+    { "id": "counterfeit", "label": "Counterfeit" }
+  ]
+}
