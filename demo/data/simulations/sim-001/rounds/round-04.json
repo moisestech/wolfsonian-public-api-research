@@ -1,0 +1,91 @@
+{
+  "id": "round-04",
+  "title": "Round 04 — Archivist challenges grounding",
+  "summary": "Archivist challenges interpretive verbs and Counterfeit fabrication; marks what the public record can and cannot establish.",
+  "claims": [
+    {
+      "id": "r4-c1",
+      "agent": "archivist",
+      "text": "Challenge: “persuasion,” “liberation,” and “colonial power” are interpretive verbs. The featured seeds establish titles, dates, makers, materials, and published captions—not social outcomes.",
+      "claimType": "SOURCE_SUPPORTED",
+      "grounding": [
+        { "seedId": "WOLF-001", "field": "research_status" },
+        { "seedId": "WOLF-002", "field": "research_status" },
+        { "seedId": "WOLF-004", "field": "source_text" }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["futurist", "propagandist", "counterfeit"],
+      "confidence": 0.82,
+      "whatWouldChangeMind": "Linked primary documents in the public record that explicitly assert those social outcomes for these accessions.",
+      "publicRecordEstablishes": true,
+      "requiresPhysicalObject": false,
+      "residencyQuestion": null,
+      "interactions": [
+        { "type": "CHALLENGES", "targetClaimIds": ["r1-c1", "r2-c1", "r3-c1"] },
+        { "type": "CONTRADICTS", "agentId": "counterfeit" },
+        { "type": "GROUNDED_BY", "seedId": "WOLF-001", "field": "research_status" }
+      ]
+    },
+    {
+      "id": "r4-c2",
+      "agent": "archivist",
+      "text": "Counterfeit’s leisure-time statistic is rejected as FABRICATION_TEST. No seed field supports a measured household effect.",
+      "claimType": "SOURCE_SUPPORTED",
+      "grounding": [
+        { "seedId": "WOLF-002", "field": "missing_fields" }
+      ],
+      "agreesWith": ["worker", "mourner"],
+      "contradicts": ["counterfeit"],
+      "confidence": 0.9,
+      "whatWouldChangeMind": "Any empirical source attached to these accessions—none present.",
+      "publicRecordEstablishes": true,
+      "requiresPhysicalObject": false,
+      "residencyQuestion": null,
+      "interactions": [
+        { "type": "CHALLENGES", "targetClaimIds": ["r1-c4"] },
+        { "type": "CONTRADICTS", "agentId": "counterfeit" }
+      ]
+    },
+    {
+      "id": "r4-c3",
+      "agent": "counterfeit",
+      "text": "Revised fabrication test: invent a unanimous visitor diary praising Democracity as classless—still unsupported.",
+      "claimType": "FABRICATION_TEST",
+      "grounding": [
+        { "seedId": "WOLF-006", "field": "missing_fields" }
+      ],
+      "agreesWith": [],
+      "contradicts": ["archivist", "worker", "mourner"],
+      "confidence": 0.05,
+      "whatWouldChangeMind": "Actual visitor testimony in the collection linked to this accession.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": false,
+      "residencyQuestion": "Which fluent consensus stories about Democracity should remain labeled fabrication until institutional files are checked?",
+      "interactions": [
+        { "type": "CONTRADICTS", "agentId": "archivist" },
+        { "type": "REQUIRES_ONSITE_RESEARCH", "question": "Which fluent consensus stories about Democracity should remain labeled fabrication until institutional files are checked?" }
+      ]
+    },
+    {
+      "id": "r4-c4",
+      "agent": "museum",
+      "text": "I am being challenged to separate what my public captions teach from what my accessions prove.",
+      "claimType": "UNCERTAIN",
+      "grounding": [
+        { "seedId": "WOLF-005", "field": "source_text" },
+        { "seedId": "WOLF-006", "field": "source_text" }
+      ],
+      "agreesWith": ["archivist"],
+      "contradicts": [],
+      "confidence": 0.48,
+      "whatWouldChangeMind": "Staff clarification of which captions are interpretive overlays vs catalog fact.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": false,
+      "residencyQuestion": "Where do institutional interpretive labels end and accession-level facts begin for these objects?",
+      "interactions": [
+        { "type": "AGREES_WITH", "agentId": "archivist" },
+        { "type": "REQUIRES_ONSITE_RESEARCH", "question": "Where do institutional interpretive labels end and accession-level facts begin for these objects?" }
+      ]
+    }
+  ]
+}

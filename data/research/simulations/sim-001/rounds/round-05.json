@@ -1,0 +1,110 @@
+{
+  "id": "round-05",
+  "title": "Round 05 — Unresolved residency questions",
+  "summary": "System consolidates contradictions into concrete onsite research questions and object-request rationale.",
+  "claims": [
+    {
+      "id": "r5-c1",
+      "agent": "worker",
+      "text": "Unresolved: technological optimism vs invisible labor across Theme Center, radio, and Machine Age catalogue.",
+      "claimType": "UNCERTAIN",
+      "grounding": [
+        { "seedId": "WOLF-001", "field": "missing_fields" },
+        { "seedId": "WOLF-002", "field": "archival_does_not_know" },
+        { "seedId": "WOLF-003", "field": "missing_fields" }
+      ],
+      "agreesWith": ["archivist", "mourner"],
+      "contradicts": ["futurist"],
+      "confidence": 0.6,
+      "whatWouldChangeMind": "Labor-related documents, manuals, or construction notes linked to these accessions.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": true,
+      "residencyQuestion": "Are there Wolfsonian documents, advertisements, manuals, or labor-related materials contextualizing how these technologies described efficiency or work?",
+      "interactions": [
+        { "type": "CONTRADICTS", "agentId": "futurist" },
+        { "type": "REQUIRES_ONSITE_RESEARCH", "question": "Are there Wolfsonian documents, advertisements, manuals, or labor-related materials contextualizing how these technologies described efficiency or work?" }
+      ]
+    },
+    {
+      "id": "r5-c2",
+      "agent": "mourner",
+      "text": "Unresolved: Mappemonde’s decorative geography vs colonial-display framing cannot be settled from accession fields alone.",
+      "claimType": "UNCERTAIN",
+      "grounding": [
+        { "seedId": "WOLF-004", "field": "source_text" },
+        { "seedId": "WOLF-004", "field": "missing_fields" }
+      ],
+      "agreesWith": ["worker"],
+      "contradicts": ["futurist", "propagandist"],
+      "confidence": 0.58,
+      "whatWouldChangeMind": "Staff knowledge and related colonial-exhibition materials.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": true,
+      "residencyQuestion": "How do staff and labels currently handle colonial display objects beside utopian fair materials?",
+      "interactions": [
+        { "type": "CONTRADICTS", "agentId": "futurist" },
+        { "type": "REQUIRES_ONSITE_RESEARCH", "question": "How do staff and labels currently handle colonial display objects beside utopian fair materials?" }
+      ]
+    },
+    {
+      "id": "r5-c3",
+      "agent": "futurist",
+      "text": "Physical encounter still needed: does the Trylon model’s construction, scale, and wear still project futurity when removed from publicity?",
+      "claimType": "UNCERTAIN",
+      "grounding": [
+        { "seedId": "WOLF-001", "field": "dimensions" },
+        { "seedId": "WOLF-005", "field": "source_text" }
+      ],
+      "agreesWith": [],
+      "contradicts": ["worker"],
+      "confidence": 0.45,
+      "whatWouldChangeMind": "Direct inspection of joins, surface, backside, and material transitions.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": true,
+      "residencyQuestion": "Examine joins, surface, construction method, rear/underside, material transitions, and any object information unavailable in the public representation of the Trylon and Perisphere model.",
+      "interactions": [
+        { "type": "REQUIRES_ONSITE_RESEARCH", "question": "Examine joins, surface, construction method, rear/underside, material transitions, and any object information unavailable in the public representation of the Trylon and Perisphere model." }
+      ]
+    },
+    {
+      "id": "r5-c4",
+      "agent": "propagandist",
+      "text": "Physical encounter still needed: how does radio/TV furniture form recruit trust for a new medium—only partly readable from captions.",
+      "claimType": "UNCERTAIN",
+      "grounding": [
+        { "seedId": "WOLF-002", "field": "source_text" }
+      ],
+      "agreesWith": ["futurist"],
+      "contradicts": ["archivist"],
+      "confidence": 0.5,
+      "whatWouldChangeMind": "Handling the object under staff guidance; related publicity in storage.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": true,
+      "residencyQuestion": "How did designers make a potentially unfamiliar mass-media technology feel desirable, legible, safe, and domestic—and what traces remain on the Sparton radio?",
+      "interactions": [
+        { "type": "REQUIRES_ONSITE_RESEARCH", "question": "How did designers make a potentially unfamiliar mass-media technology feel desirable, legible, safe, and domestic—and what traces remain on the Sparton radio?" }
+      ]
+    },
+    {
+      "id": "r5-c5",
+      "agent": "museum",
+      "text": "From six public records I cannot yet say whether I am a museum of utopia, persuasion, or colonial modernity—only that contradictions now specify what to request.",
+      "claimType": "UNCERTAIN",
+      "grounding": [
+        { "seedId": "WOLF-001", "field": "cluster" },
+        { "seedId": "WOLF-004", "field": "cluster" },
+        { "seedId": "WOLF-002", "field": "cluster" }
+      ],
+      "agreesWith": [],
+      "contradicts": [],
+      "confidence": 0.4,
+      "whatWouldChangeMind": "Physical encounter and staff knowledge outside these packets.",
+      "publicRecordEstablishes": false,
+      "requiresPhysicalObject": true,
+      "residencyQuestion": "When this artificial society confronts the institution that produced its memory, which self-description survives?",
+      "interactions": [
+        { "type": "REQUIRES_ONSITE_RESEARCH", "question": "When this artificial society confronts the institution that produced its memory, which self-description survives?" }
+      ]
+    }
+  ]
+}

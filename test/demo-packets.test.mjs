@@ -50,8 +50,8 @@ function assertAgent(agentId, agent, packetId) {
 
 test('trial manifest lists simulation corpus and interpretive agents', async () => {
   const trial = await readJson(join(demoData, 'trial-001.json'));
-  assert.equal(trial.id, 'sim-001');
-  assert.equal(trial.objects.length, 8);
+  assert.equal(trial.id, 'research-demo-001');
+  assert.equal(trial.objects.length, 6);
   const interpretive = trial.agents.filter((agent) => agent.id !== 'museum').map((agent) => agent.id);
   assert.deepEqual(interpretive, REQUIRED_AGENTS);
 });

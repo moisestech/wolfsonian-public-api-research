@@ -23,6 +23,7 @@ const state = {
   manifest: null,
   graph: null,
   rounds: [],
+  candidates: null,
   packets: new Map(),
   view: 'archive',
   roundIndex: 0,
@@ -113,7 +114,7 @@ function visibleClaims() {
     return claims.filter((claim) => claim.contradicts?.length);
   }
   if (state.view === 'unknown') {
-    return claims.filter((claim) => claim.kind === 'inference' || claim.publicRecordEstablishes === false);
+    return claims.filter((claim) => claim.claimType === 'INFERENCE' || claim.claimType === 'UNCERTAIN' || claim.publicRecordEstablishes === false);
   }
   if (state.view === 'residency') {
     return claims.filter((claim) => claim.residencyQuestion);
@@ -122,10 +123,11 @@ function visibleClaims() {
 }
 
 async function loadAll() {
-  const [trial, manifest, graph] = await Promise.all([
+  const [trial, manifest, graph, candidates] = await Promise.all([
     fetch('./data/trial-001.json').then((r) => r.json()),
     fetch('./data/simulations/sim-001/manifest.json').then((r) => r.json()),
-    fetch('./data/graph.json').then((r) => r.json())
+    fetch('./data/graph.json').then((r) => r.json()),
+    fetch('./data/object-request-candidates/sim-001.json').then((r) => r.json())
   ]);
 
   const rounds = await Promise.all(
@@ -142,6 +144,7 @@ async function loadAll() {
   state.trial = trial;
   state.manifest = manifest;
   state.graph = graph;
+  state.candidates = candidates;
   state.rounds = rounds;
   state.packets = new Map(packets);
   state.objectId = trial.objects[0];
@@ -304,8 +307,36 @@ function renderClaims() {
     els.roundTitle.textContent = state.rounds[state.roundIndex].title;
   } else if (state.view === 'archive' || state.view === 'interpretation') {
     els.roundTitle.textContent = 'Select a record node, then open deep-read';
+  } else if (state.view === 'residency') {
+    els.roundTitle.textContent = `${state.candidates?.candidates?.length || 0} object-request candidates · ${claims.length} onsite questions`;
   } else {
     els.roundTitle.textContent = `${claims.length} claims`;
+  }
+
+  if (state.view === 'residency' && state.candidates?.candidates?.length) {
+    for (const item of state.candidates.candidates) {
+      const li = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'claim-item claim-item--request';
+      button.innerHTML = `<span class="claim-agent">${item.accessionNumber}</span><span class="claim-text"><strong>${item.title}</strong><br>${item.whyRequest}</span>`;
+      button.addEventListener('click', () => {
+        state.selectedSeedId = item.seedId;
+        const packet = packetBySeed(item.seedId);
+        if (packet) {
+          state.objectId = packet.id;
+          els.openDeepRead.hidden = false;
+        }
+        renderRequestInterrogation(item);
+        drawGraph();
+      });
+      li.append(button);
+      els.claimList.append(li);
+    }
+    const divider = document.createElement('li');
+    divider.className = 'claim-empty';
+    divider.textContent = 'Onsite questions from simulation rounds:';
+    els.claimList.append(divider);
   }
 
   if ((state.view === 'archive' || state.view === 'interpretation') && !claims.length) {
@@ -321,8 +352,8 @@ function renderClaims() {
     const li = document.createElement('li');
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = `claim-item kind-${claim.kind}${state.selectedClaimId === claim.id ? ' is-selected' : ''}`;
-    button.innerHTML = `<span class="claim-agent">${labelForAgent(claim.agent)}</span><span class="claim-text">${claim.text}</span>`;
+    button.className = `claim-item kind-${claim.claimType}${state.selectedClaimId === claim.id ? ' is-selected' : ''}`;
+    button.innerHTML = `<span class="claim-agent">${labelForAgent(claim.agent)} · ${claim.claimType}</span><span class="claim-text">${claim.text}</span>`;
     button.addEventListener('click', () => {
       state.selectedClaimId = claim.id;
       state.selectedSeedId = claim.grounding[0]?.seedId || null;
@@ -339,22 +370,53 @@ function renderClaims() {
 
   const selected = claims.find((claim) => claim.id === state.selectedClaimId);
   if (selected) renderInterrogation(selected);
-  else {
-    els.interrogation.hidden = true;
+  else if (state.view !== 'residency') els.interrogation.hidden = true;
+}
+
+function renderRequestInterrogation(item) {
+  els.interrogation.hidden = false;
+  const rows = [
+    ['Object / document', `${item.title} (${item.accessionNumber})`],
+    ['Why see this in person?', item.whyRequest],
+    ['Generating contradiction', item.generatingContradiction],
+    ['Onsite research questions', item.onsiteQuestions.join(' | ')],
+    ['Source link', item.sourceUrl],
+    ['Chain', 'SOURCE → INTERPRETATION → UNCERTAINTY → ONSITE QUESTION']
+  ];
+  els.interrogationBody.replaceChildren();
+  for (const [dt, dd] of rows) {
+    const term = document.createElement('dt');
+    term.textContent = dt;
+    const def = document.createElement('dd');
+    if (dt === 'Source link') {
+      const a = document.createElement('a');
+      a.href = dd;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = dd;
+      def.append(a);
+    } else {
+      def.textContent = dd;
+    }
+    els.interrogationBody.append(term, def);
   }
 }
 
 function renderInterrogation(claim) {
   els.interrogation.hidden = false;
   const rows = [
-    ['What source made you believe this?', claim.grounding.map((g) => `${g.seedId}.${g.field}`).join('; ')],
-    ['Who disagrees with you?', claim.contradicts.map(labelForAgent).join(', ') || 'None named'],
-    ['Who agrees?', claim.agreesWith.map(labelForAgent).join(', ') || 'None named'],
-    ['What would change your mind?', claim.whatWouldChangeMind || '—'],
+    ['Object / document', claim.grounding.map((g) => g.seedId).join(', ')],
+    ['Agent', labelForAgent(claim.agent)],
+    ['Interpretive claim', claim.text],
+    ['Claim type', claim.claimType],
+    ['Evidence', claim.grounding.map((g) => `${g.seedId}.${g.field}`).join('; ')],
+    ['Who agrees', claim.agreesWith.map(labelForAgent).join(', ') || 'None named'],
+    ['Who contradicts', claim.contradicts.map(labelForAgent).join(', ') || 'None named'],
+    ['What would change this interpretation?', claim.whatWouldChangeMind || '—'],
     ['Can the public record establish this?', claim.publicRecordEstablishes ? 'Yes (within cited fields)' : 'Not from the cited public-record fields alone'],
-    ['Does this require seeing the physical object?', claim.requiresPhysicalObject ? 'Yes' : 'Not necessarily'],
-    ['Kind', claim.kind],
-    ['Residency question', claim.residencyQuestion || '—']
+    ['Why might this need to be seen in person?', claim.requiresPhysicalObject ? 'Physical qualities or staff knowledge may change the reading.' : 'Not necessarily required for this claim.'],
+    ['Onsite research question', claim.residencyQuestion || '—'],
+    ['Chain', 'SOURCE → INTERPRETATION → UNCERTAINTY → ONSITE QUESTION']
   ];
   els.interrogationBody.replaceChildren();
   for (const [dt, dd] of rows) {

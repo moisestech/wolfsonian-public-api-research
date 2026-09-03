@@ -359,8 +359,8 @@ const interpretations = {
 };
 
 async function main() {
-  const seedDir = join(root, 'data', 'research-seeds');
-  const interpDir = join(root, 'data', 'interpretations');
+  const seedDir = join(root, 'data', 'public', 'objects');
+  const interpDir = join(root, 'data', 'research', 'interpretations');
   await mkdir(seedDir, { recursive: true });
   await mkdir(interpDir, { recursive: true });
   for (const seed of seeds) {

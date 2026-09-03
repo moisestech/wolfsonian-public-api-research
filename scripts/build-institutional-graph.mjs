@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
  * Deterministic institutional-memory graph builder.
- * No LLM. Reads research-seeds + interpretations → demo/data/graph.json
+ * No LLM. Reads data/public/objects + data/research/interpretations → demo/data/graph.json
  */
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const seedsDir = join(root, 'data', 'research-seeds');
-const interpDir = join(root, 'data', 'interpretations');
+const seedsDir = join(root, 'data', 'public', 'objects');
+const interpDir = join(root, 'data', 'research', 'interpretations');
 const outPath = join(root, 'demo', 'data', 'graph.json');
 
 function slug(value) {
@@ -26,7 +26,6 @@ function addNode(map, id, node) {
     map.set(id, node);
     return id;
   }
-  // Prefer authoritative record nodes over concept stubs created by early relationships.
   if (existing.kind !== 'record' && node.kind === 'record') {
     map.set(id, node);
   }
@@ -39,8 +38,16 @@ function addEdge(edges, edge) {
 }
 
 async function main() {
-  const seedFiles = (await readdir(seedsDir)).filter((name) => name.endsWith('.json')).sort();
-  if (seedFiles.length === 0) throw new Error('No research seeds found');
+  const featuredPath = join(root, 'data', 'research', 'simulations', 'sim-001', 'manifest.json');
+  const manifest = JSON.parse(await readFile(featuredPath, 'utf8'));
+  const featured = new Set(manifest.seedIds || []);
+
+  const seedFiles = (await readdir(seedsDir))
+    .filter((name) => name.endsWith('.json'))
+    .sort()
+    .filter((name) => featured.size === 0 || featured.has(name.replace(/\.json$/, '')));
+
+  if (seedFiles.length === 0) throw new Error('No public object packets found for featured set');
 
   const nodes = new Map();
   const edges = new Map();
@@ -109,10 +116,9 @@ async function main() {
       }
     }
 
-    const interpPath = join(interpDir, `${seed.id}.json`);
     let interp = null;
     try {
-      interp = JSON.parse(await readFile(interpPath, 'utf8'));
+      interp = JSON.parse(await readFile(join(interpDir, `${seed.id}.json`), 'utf8'));
     } catch {
       interp = null;
     }
@@ -139,10 +145,20 @@ async function main() {
       const fromId = rel.from.startsWith('record:') ? rel.from : `concept:${slug(rel.from)}`;
       const toId = rel.to.startsWith('record:') ? rel.to : `concept:${slug(rel.to)}`;
       if (!nodes.has(fromId)) {
-        addNode(nodes, fromId, { id: fromId, kind: 'concept', label: rel.from.replace(/^record:/, ''), facet: 'interpreted' });
+        addNode(nodes, fromId, {
+          id: fromId,
+          kind: 'concept',
+          label: rel.from.replace(/^record:/, ''),
+          facet: 'interpreted'
+        });
       }
       if (!nodes.has(toId)) {
-        addNode(nodes, toId, { id: toId, kind: 'concept', label: rel.to.replace(/^record:/, ''), facet: 'interpreted' });
+        addNode(nodes, toId, {
+          id: toId,
+          kind: 'concept',
+          label: rel.to.replace(/^record:/, ''),
+          facet: 'interpreted'
+        });
       }
       addEdge(edges, {
         source: fromId,
@@ -175,7 +191,7 @@ async function main() {
   const graph = {
     generatedAt: new Date().toISOString(),
     generator: 'scripts/build-institutional-graph.mjs',
-    capacityNote: 'Schema supports up to 30 research seeds; current corpus may be smaller.',
+    capacityNote: 'Schema supports up to 30 research seeds; demo ships a featured subset.',
     counts: {
       records: [...nodes.values()].filter((node) => node.kind === 'record').length,
       nodes: nodes.size,

@@ -1,8 +1,8 @@
 {
-  "id": "sim-001",
+  "id": "research-demo-001",
   "title": "The Archive Dreams in Public",
   "subtitle": "Institutional Memory Simulation 001",
-  "tagline": "An experimental research instrument in which public collection records become the memory of an interpretive society.",
+  "tagline": "A research instrument for observing how competing interpretations emerge from public archival records.",
   "disclaimer": "Independent prototype. Not an official Wolfsonian application, production system, or museum-authored dataset. Not a calibrated agent-based model and not a prediction engine.",
   "dataNote": "Public-record packets manually prepared from Wolfsonian sources while automated API connectivity remains under investigation. Source packets and interpretation layers are stored separately.",
   "representationNote": "Object figures are original diagrammatic forms, not collection photography.",
@@ -12,9 +12,7 @@
     "03-machine-age-catalogue",
     "04-mappemonde-vase",
     "05-poster-in-1939",
-    "06-program-world-of-tomorrow",
-    "07-booklet-futurama",
-    "08-rca-television-trk12"
+    "06-program-world-of-tomorrow"
   ],
   "agents": [
     {

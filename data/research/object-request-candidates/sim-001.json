@@ -1,0 +1,85 @@
+{
+  "id": "sim-001-object-requests",
+  "title": "Preliminary object request list — Research Demo 001",
+  "methodDoc": "docs/object-selection-method.md",
+  "note": "Research aid generated from simulation contradictions and metadata gaps. Not an automatic ranking algorithm.",
+  "generatedFrom": "data/research/simulations/sim-001",
+  "candidates": [
+    {
+      "seedId": "WOLF-001",
+      "accessionNumber": "86.17.1",
+      "title": "Model, Trylon and Perisphere",
+      "sourceUrl": "https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html",
+      "whyRequest": "Two agents read its futuristic form as technological optimism while others question what physical construction, labor, materiality, and scale disappear from the digital representation.",
+      "generatingContradiction": "Futurist liberation/optimism vs Worker/Archivist insistence that liberation is not established by catalog fields.",
+      "onsiteQuestions": [
+        "Examine joins, surface, construction method, rear/underside, material transitions, and any object information unavailable in the public representation of the Trylon and Perisphere model.",
+        "Which seams, fasteners, revisions, labels, or backside information on the physical model are absent from the published descriptive fields?"
+      ],
+      "criteria": {
+        "interpretiveDisagreement": "high",
+        "metadataGaps": ["bibId", "fabricator", "ownership_history"],
+        "thematicRelevance": "utopia / technological optimism",
+        "valueOfPhysicalInspection": "high",
+        "staffExpertiseLikelyMaterial": true
+      }
+    },
+    {
+      "seedId": "WOLF-002",
+      "accessionNumber": "XX1990.1484",
+      "title": "Radio, Sparton, model 558-C",
+      "sourceUrl": "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/",
+      "whyRequest": "Propagandist and Futurist treat streamlining as domestication of mass media; Archivist requires advertising files; Worker/Mourner ask what labor and asymmetric listening the object holds.",
+      "generatingContradiction": "Persuasion-by-design inference vs source-supported identity-only reading; Counterfeit leisure statistic rejected.",
+      "onsiteQuestions": [
+        "How did designers make a potentially unfamiliar mass-media technology feel desirable, legible, safe, and domestic—and what traces remain on the Sparton radio?",
+        "What dial markings, wear, repair history, or manufacturer labels on the physical radio are not captured in the short public description?"
+      ],
+      "criteria": {
+        "interpretiveDisagreement": "high",
+        "metadataGaps": ["bibId", "dimensions", "broadcast_history", "owner"],
+        "thematicRelevance": "media / technological domestication",
+        "valueOfPhysicalInspection": "high",
+        "staffExpertiseLikelyMaterial": true
+      }
+    },
+    {
+      "seedId": "WOLF-004",
+      "accessionNumber": "85.7.383a,b",
+      "title": "Vase with lid, Mappemonde [Globe]",
+      "sourceUrl": "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/",
+      "whyRequest": "Museum-published colonial-display framing conflicts with Futurist progress readings; physical decoration and related materials are needed to test the contradiction.",
+      "generatingContradiction": "Mourner colonial-display reading vs Futurist/Propagandist progress/allegiance readings.",
+      "onsiteQuestions": [
+        "How do staff and labels currently handle colonial display objects beside utopian fair materials?",
+        "What maker marks, lid fit, and decorative zones become legible only in person?"
+      ],
+      "criteria": {
+        "interpretiveDisagreement": "high",
+        "metadataGaps": ["bibId", "dimensions", "commissioning_context_detail"],
+        "thematicRelevance": "world-making / colonial modernity",
+        "valueOfPhysicalInspection": "high",
+        "staffExpertiseLikelyMaterial": true
+      }
+    },
+    {
+      "seedId": "WOLF-003",
+      "accessionNumber": "XM1999.108.8",
+      "title": "Catalogue, Machine Age Exposition",
+      "sourceUrl": "https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf",
+      "whyRequest": "Machine ideology document spans aesthetic praise and possible occlusion of labor; handling the volume tests image hierarchy and essay order.",
+      "generatingContradiction": "Mechanical beauty as liberation curriculum vs Worker/Mourner occlusion-of-labor readings.",
+      "onsiteQuestions": [
+        "Which plates or captions in the physical catalogue make labor visible, and which aestheticize machinery into pure form?",
+        "What annotations, ownership marks, paper quality, or inserted ephemera appear only when the catalogue is handled as a library object?"
+      ],
+      "criteria": {
+        "interpretiveDisagreement": "medium",
+        "metadataGaps": ["bibId", "materials", "full_essay_text"],
+        "thematicRelevance": "machine ideology / labor",
+        "valueOfPhysicalInspection": "medium-high",
+        "staffExpertiseLikelyMaterial": true
+      }
+    }
+  ]
+}

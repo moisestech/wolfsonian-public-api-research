@@ -646,9 +646,19 @@ a {
   box-shadow: 0 0 0 2px var(--accent-soft);
 }
 
-.claim-item.kind-fabrication {
+.claim-item.kind-fabrication,
+.claim-item.kind-FABRICATION_TEST {
   border-style: dashed;
   border-color: var(--fabricate);
+}
+
+.claim-item.kind-UNCERTAIN {
+  border-style: dashed;
+  opacity: 0.92;
+}
+
+.claim-item--request {
+  border-left: 3px solid var(--accent);
 }
 
 .claim-agent {

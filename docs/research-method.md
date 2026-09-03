@@ -24,6 +24,6 @@ What kind of institutional world can be inferred from a museum's public digital 
 
 While automated requests to the public digital host encounter a human-verification layer, the public demo uses **manually prepared public-record packets**.
 
-**Dual-layer rule:** source identity lives in `data/research-seeds/`; interpretive entities, pressures, and open questions live in `data/interpretations/`. Never mix those objects. Delivery mechanism (static JSON) is separated from source claim (Wolfsonian public documentation).
+**Dual-layer rule:** source identity lives in `data/public/objects/`; interpretive entities, pressures, and open questions live in `data/research/interpretations/`. Never mix those objects.
 
 Interpretive agent text is labeled relative to evidence; Counterfeit readings are explicitly marked as unsupported fabrication. Precomputed simulation rounds are **not** a calibrated agent-based model and are **not** a prediction engine—they expose disagreement, grounding, and residency questions.
