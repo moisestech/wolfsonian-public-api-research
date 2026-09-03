@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-09-03T00:12:35.606Z",
+  "generatedAt": "2026-09-03T01:29:25.210Z",
   "generator": "scripts/build-institutional-graph.mjs",
   "capacityNote": "Schema supports up to 30 research seeds; demo ships a featured subset.",
   "counts": {
     "records": 6,
-    "nodes": 77,
-    "edges": 94,
-    "sourceEdges": 48,
-    "interpretedEdges": 46
+    "nodes": 78,
+    "edges": 93,
+    "sourceEdges": 44,
+    "interpretedEdges": 49
   },
   "nodes": [
     {
@@ -54,15 +54,15 @@
       "facet": "subject"
     },
     {
-      "id": "concept:technological-optimism",
-      "kind": "concept",
-      "label": "technological optimism",
-      "facet": "subject"
-    },
-    {
       "id": "concept:architecture",
       "kind": "concept",
       "label": "architecture",
+      "facet": "subject"
+    },
+    {
+      "id": "concept:theme-center",
+      "kind": "concept",
+      "label": "Theme Center",
       "facet": "subject"
     },
     {
@@ -70,12 +70,6 @@
       "kind": "concept",
       "label": "1938",
       "facet": "temporal"
-    },
-    {
-      "id": "concept:theme-center",
-      "kind": "concept",
-      "label": "Theme Center",
-      "facet": "interpreted"
     },
     {
       "id": "concept:world-of-tomorrow",
@@ -117,6 +111,12 @@
       "facet": "pressure"
     },
     {
+      "id": "concept:pressure-technological-optimism",
+      "kind": "concept",
+      "label": "technological optimism",
+      "facet": "pressure"
+    },
+    {
       "id": "record:WOLF-002",
       "kind": "record",
       "label": "Radio, Sparton, model 558-C",
@@ -149,27 +149,21 @@
       "facet": "material"
     },
     {
+      "id": "concept:radios",
+      "kind": "concept",
+      "label": "radios",
+      "facet": "subject"
+    },
+    {
       "id": "concept:industrial-design",
       "kind": "concept",
       "label": "industrial design",
       "facet": "subject"
     },
     {
-      "id": "concept:streamlining",
+      "id": "concept:art-deco",
       "kind": "concept",
-      "label": "streamlining",
-      "facet": "subject"
-    },
-    {
-      "id": "concept:domestic-technology",
-      "kind": "concept",
-      "label": "domestic technology",
-      "facet": "subject"
-    },
-    {
-      "id": "concept:mass-media",
-      "kind": "concept",
-      "label": "mass media",
+      "label": "Art Deco",
       "facet": "subject"
     },
     {
@@ -177,6 +171,12 @@
       "kind": "concept",
       "label": "1937",
       "facet": "temporal"
+    },
+    {
+      "id": "concept:streamlining",
+      "kind": "concept",
+      "label": "streamlining",
+      "facet": "interpreted"
     },
     {
       "id": "concept:domestic-receiver",
@@ -235,15 +235,15 @@
       "label": "Fernand Léger"
     },
     {
-      "id": "concept:modernism",
+      "id": "concept:machine-age-exposition",
       "kind": "concept",
-      "label": "modernism",
+      "label": "Machine Age Exposition",
       "facet": "subject"
     },
     {
-      "id": "concept:mechanical-beauty",
+      "id": "concept:modernism",
       "kind": "concept",
-      "label": "mechanical beauty",
+      "label": "modernism",
       "facet": "subject"
     },
     {
@@ -251,6 +251,12 @@
       "kind": "concept",
       "label": "1927",
       "facet": "temporal"
+    },
+    {
+      "id": "concept:mechanical-beauty",
+      "kind": "concept",
+      "label": "mechanical beauty",
+      "facet": "interpreted"
     },
     {
       "id": "concept:machine-age",
@@ -319,21 +325,15 @@
       "facet": "subject"
     },
     {
-      "id": "concept:colonial-display",
+      "id": "concept:s-vres",
       "kind": "concept",
-      "label": "colonial display",
+      "label": "Sèvres",
       "facet": "subject"
     },
     {
-      "id": "concept:national-manufacture",
+      "id": "concept:decorative-arts",
       "kind": "concept",
-      "label": "national manufacture",
-      "facet": "subject"
-    },
-    {
-      "id": "concept:exploration-imagery",
-      "kind": "concept",
-      "label": "exploration imagery",
+      "label": "decorative arts",
       "facet": "subject"
     },
     {
@@ -341,6 +341,18 @@
       "kind": "concept",
       "label": "1932",
       "facet": "temporal"
+    },
+    {
+      "id": "concept:colonial-display",
+      "kind": "concept",
+      "label": "colonial display",
+      "facet": "interpreted"
+    },
+    {
+      "id": "concept:national-manufacture",
+      "kind": "concept",
+      "label": "national manufacture",
+      "facet": "interpreted"
     },
     {
       "id": "concept:exploration",
@@ -384,21 +396,15 @@
       "facet": "material"
     },
     {
-      "id": "concept:publicity",
+      "id": "concept:posters",
       "kind": "concept",
-      "label": "publicity",
+      "label": "posters",
       "facet": "subject"
     },
     {
       "id": "concept:trylon-and-perisphere",
       "kind": "concept",
       "label": "Trylon and Perisphere",
-      "facet": "subject"
-    },
-    {
-      "id": "concept:persuasion",
-      "kind": "concept",
-      "label": "persuasion",
       "facet": "subject"
     },
     {
@@ -412,6 +418,12 @@
       "kind": "concept",
       "label": "queue of desire",
       "facet": "interpreted"
+    },
+    {
+      "id": "concept:pressure-persuasion",
+      "kind": "concept",
+      "label": "persuasion",
+      "facet": "pressure"
     },
     {
       "id": "record:WOLF-006",
@@ -436,18 +448,6 @@
       "id": "concept:democracity",
       "kind": "concept",
       "label": "Democracity",
-      "facet": "subject"
-    },
-    {
-      "id": "concept:utopia",
-      "kind": "concept",
-      "label": "utopia",
-      "facet": "subject"
-    },
-    {
-      "id": "concept:urban-planning",
-      "kind": "concept",
-      "label": "urban planning",
       "facet": "subject"
     },
     {
@@ -478,6 +478,12 @@
       "id": "concept:pressure-peace",
       "kind": "concept",
       "label": "peace",
+      "facet": "pressure"
+    },
+    {
+      "id": "concept:pressure-utopia",
+      "kind": "concept",
+      "label": "utopia",
       "facet": "pressure"
     }
   ],
@@ -533,7 +539,7 @@
     {
       "id": "e-7",
       "source": "record:WOLF-001",
-      "target": "concept:technological-optimism",
+      "target": "concept:architecture",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -541,7 +547,7 @@
     {
       "id": "e-8",
       "source": "record:WOLF-001",
-      "target": "concept:architecture",
+      "target": "concept:theme-center",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -614,6 +620,14 @@
     },
     {
       "id": "e-17",
+      "source": "record:WOLF-001",
+      "target": "concept:pressure-technological-optimism",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-18",
       "source": "person:walter-dorwin-teague",
       "target": "record:WOLF-002",
       "type": "created",
@@ -621,7 +635,7 @@
       "label": "creator"
     },
     {
-      "id": "e-18",
+      "id": "e-19",
       "source": "record:WOLF-002",
       "target": "concept:material-glass",
       "type": "made_of",
@@ -629,7 +643,7 @@
       "label": "material"
     },
     {
-      "id": "e-19",
+      "id": "e-20",
       "source": "record:WOLF-002",
       "target": "concept:material-brass",
       "type": "made_of",
@@ -637,7 +651,7 @@
       "label": "material"
     },
     {
-      "id": "e-20",
+      "id": "e-21",
       "source": "record:WOLF-002",
       "target": "concept:material-wood",
       "type": "made_of",
@@ -645,7 +659,7 @@
       "label": "material"
     },
     {
-      "id": "e-21",
+      "id": "e-22",
       "source": "record:WOLF-002",
       "target": "concept:material-bakelite",
       "type": "made_of",
@@ -653,17 +667,9 @@
       "label": "material"
     },
     {
-      "id": "e-22",
-      "source": "record:WOLF-002",
-      "target": "concept:industrial-design",
-      "type": "indexed_as",
-      "layer": "source",
-      "label": "subject"
-    },
-    {
       "id": "e-23",
       "source": "record:WOLF-002",
-      "target": "concept:streamlining",
+      "target": "concept:radios",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -671,7 +677,7 @@
     {
       "id": "e-24",
       "source": "record:WOLF-002",
-      "target": "concept:domestic-technology",
+      "target": "concept:industrial-design",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -679,7 +685,7 @@
     {
       "id": "e-25",
       "source": "record:WOLF-002",
-      "target": "concept:mass-media",
+      "target": "concept:art-deco",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -769,7 +775,7 @@
     {
       "id": "e-36",
       "source": "record:WOLF-003",
-      "target": "concept:modernism",
+      "target": "concept:machine-age-exposition",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -777,7 +783,7 @@
     {
       "id": "e-37",
       "source": "record:WOLF-003",
-      "target": "concept:mechanical-beauty",
+      "target": "concept:modernism",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -915,7 +921,7 @@
     {
       "id": "e-54",
       "source": "record:WOLF-004",
-      "target": "concept:colonial-display",
+      "target": "concept:s-vres",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -923,7 +929,7 @@
     {
       "id": "e-55",
       "source": "record:WOLF-004",
-      "target": "concept:national-manufacture",
+      "target": "concept:decorative-arts",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
@@ -931,21 +937,13 @@
     {
       "id": "e-56",
       "source": "record:WOLF-004",
-      "target": "concept:exploration-imagery",
-      "type": "indexed_as",
-      "layer": "source",
-      "label": "subject"
-    },
-    {
-      "id": "e-57",
-      "source": "record:WOLF-004",
       "target": "concept:year-1932",
       "type": "dated",
       "layer": "source",
       "label": "date"
     },
     {
-      "id": "e-58",
+      "id": "e-57",
       "source": "record:WOLF-004",
       "target": "concept:colonial-display",
       "type": "participates_in",
@@ -953,7 +951,7 @@
       "label": "participates_in"
     },
     {
-      "id": "e-59",
+      "id": "e-58",
       "source": "record:WOLF-004",
       "target": "concept:national-manufacture",
       "type": "demonstrates",
@@ -961,7 +959,7 @@
       "label": "demonstrates"
     },
     {
-      "id": "e-60",
+      "id": "e-59",
       "source": "record:WOLF-004",
       "target": "concept:progress",
       "type": "maps_as",
@@ -970,7 +968,7 @@
       "via": "WOLF-004"
     },
     {
-      "id": "e-61",
+      "id": "e-60",
       "source": "concept:exploration",
       "target": "concept:governance",
       "type": "entangles_with",
@@ -979,7 +977,7 @@
       "via": "WOLF-004"
     },
     {
-      "id": "e-62",
+      "id": "e-61",
       "source": "record:WOLF-004",
       "target": "concept:pressure-progress",
       "type": "pressured_by",
@@ -987,7 +985,7 @@
       "label": "pressure"
     },
     {
-      "id": "e-63",
+      "id": "e-62",
       "source": "record:WOLF-004",
       "target": "concept:pressure-exploration",
       "type": "pressured_by",
@@ -995,7 +993,7 @@
       "label": "pressure"
     },
     {
-      "id": "e-64",
+      "id": "e-63",
       "source": "record:WOLF-004",
       "target": "concept:pressure-governance",
       "type": "pressured_by",
@@ -1003,7 +1001,7 @@
       "label": "pressure"
     },
     {
-      "id": "e-65",
+      "id": "e-64",
       "source": "record:WOLF-004",
       "target": "concept:pressure-beauty",
       "type": "pressured_by",
@@ -1011,7 +1009,7 @@
       "label": "pressure"
     },
     {
-      "id": "e-66",
+      "id": "e-65",
       "source": "person:nembhard-n-culin",
       "target": "record:WOLF-005",
       "type": "created",
@@ -1019,7 +1017,7 @@
       "label": "creator"
     },
     {
-      "id": "e-67",
+      "id": "e-66",
       "source": "record:WOLF-005",
       "target": "concept:material-offset-lithograph",
       "type": "made_of",
@@ -1027,7 +1025,7 @@
       "label": "material"
     },
     {
-      "id": "e-68",
+      "id": "e-67",
       "source": "record:WOLF-005",
       "target": "concept:world-s-fairs",
       "type": "indexed_as",
@@ -1035,15 +1033,15 @@
       "label": "subject"
     },
     {
-      "id": "e-69",
+      "id": "e-68",
       "source": "record:WOLF-005",
-      "target": "concept:publicity",
+      "target": "concept:posters",
       "type": "indexed_as",
       "layer": "source",
       "label": "subject"
     },
     {
-      "id": "e-70",
+      "id": "e-69",
       "source": "record:WOLF-005",
       "target": "concept:trylon-and-perisphere",
       "type": "indexed_as",
@@ -1051,15 +1049,7 @@
       "label": "subject"
     },
     {
-      "id": "e-71",
-      "source": "record:WOLF-005",
-      "target": "concept:persuasion",
-      "type": "indexed_as",
-      "layer": "source",
-      "label": "subject"
-    },
-    {
-      "id": "e-72",
+      "id": "e-70",
       "source": "record:WOLF-005",
       "target": "concept:year-1937",
       "type": "dated",
@@ -1067,7 +1057,7 @@
       "label": "date"
     },
     {
-      "id": "e-73",
+      "id": "e-71",
       "source": "record:WOLF-005",
       "target": "concept:fair-publicity",
       "type": "is",
@@ -1075,7 +1065,7 @@
       "label": "is"
     },
     {
-      "id": "e-74",
+      "id": "e-72",
       "source": "record:WOLF-005",
       "target": "concept:queue-of-desire",
       "type": "depicts",
@@ -1083,7 +1073,7 @@
       "label": "depicts"
     },
     {
-      "id": "e-75",
+      "id": "e-73",
       "source": "record:WOLF-005",
       "target": "record:WOLF-001",
       "type": "advertises",
@@ -1092,7 +1082,7 @@
       "via": "WOLF-005"
     },
     {
-      "id": "e-76",
+      "id": "e-74",
       "source": "record:WOLF-005",
       "target": "concept:desire",
       "type": "organizes",
@@ -1101,7 +1091,7 @@
       "via": "WOLF-005"
     },
     {
-      "id": "e-77",
+      "id": "e-75",
       "source": "record:WOLF-005",
       "target": "concept:pressure-desire",
       "type": "pressured_by",
@@ -1109,7 +1099,7 @@
       "label": "pressure"
     },
     {
-      "id": "e-78",
+      "id": "e-76",
       "source": "record:WOLF-005",
       "target": "concept:pressure-spectacle",
       "type": "pressured_by",
@@ -1117,7 +1107,7 @@
       "label": "pressure"
     },
     {
-      "id": "e-79",
+      "id": "e-77",
       "source": "record:WOLF-005",
       "target": "concept:pressure-progress",
       "type": "pressured_by",
@@ -1125,7 +1115,15 @@
       "label": "pressure"
     },
     {
-      "id": "e-80",
+      "id": "e-78",
+      "source": "record:WOLF-005",
+      "target": "concept:pressure-persuasion",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-79",
       "source": "person:leslie-darrell-ragan",
       "target": "record:WOLF-006",
       "type": "created",
@@ -1133,7 +1131,7 @@
       "label": "creator"
     },
     {
-      "id": "e-81",
+      "id": "e-80",
       "source": "person:gilbert-vivian-seldes",
       "target": "record:WOLF-006",
       "type": "created",
@@ -1141,7 +1139,7 @@
       "label": "creator"
     },
     {
-      "id": "e-82",
+      "id": "e-81",
       "source": "record:WOLF-006",
       "target": "concept:democracity",
       "type": "indexed_as",
@@ -1149,23 +1147,7 @@
       "label": "subject"
     },
     {
-      "id": "e-83",
-      "source": "record:WOLF-006",
-      "target": "concept:utopia",
-      "type": "indexed_as",
-      "layer": "source",
-      "label": "subject"
-    },
-    {
-      "id": "e-84",
-      "source": "record:WOLF-006",
-      "target": "concept:urban-planning",
-      "type": "indexed_as",
-      "layer": "source",
-      "label": "subject"
-    },
-    {
-      "id": "e-85",
+      "id": "e-82",
       "source": "record:WOLF-006",
       "target": "concept:world-s-fairs",
       "type": "indexed_as",
@@ -1173,7 +1155,15 @@
       "label": "subject"
     },
     {
-      "id": "e-86",
+      "id": "e-83",
+      "source": "record:WOLF-006",
+      "target": "concept:theme-center",
+      "type": "indexed_as",
+      "layer": "source",
+      "label": "subject"
+    },
+    {
+      "id": "e-84",
       "source": "record:WOLF-006",
       "target": "concept:year-1939",
       "type": "dated",
@@ -1181,7 +1171,7 @@
       "label": "date"
     },
     {
-      "id": "e-87",
+      "id": "e-85",
       "source": "record:WOLF-006",
       "target": "concept:democracity",
       "type": "describes",
@@ -1189,7 +1179,7 @@
       "label": "describes"
     },
     {
-      "id": "e-88",
+      "id": "e-86",
       "source": "record:WOLF-006",
       "target": "concept:regulated-utopia",
       "type": "imagines",
@@ -1197,7 +1187,7 @@
       "label": "imagines"
     },
     {
-      "id": "e-89",
+      "id": "e-87",
       "source": "record:WOLF-006",
       "target": "record:WOLF-001",
       "type": "interprets_interior_of",
@@ -1206,7 +1196,7 @@
       "via": "WOLF-006"
     },
     {
-      "id": "e-90",
+      "id": "e-88",
       "source": "record:WOLF-006",
       "target": "concept:progress",
       "type": "scripts",
@@ -1215,7 +1205,7 @@
       "via": "WOLF-006"
     },
     {
-      "id": "e-91",
+      "id": "e-89",
       "source": "record:WOLF-006",
       "target": "concept:pressure-progress",
       "type": "pressured_by",
@@ -1223,7 +1213,7 @@
       "label": "pressure"
     },
     {
-      "id": "e-92",
+      "id": "e-90",
       "source": "record:WOLF-006",
       "target": "concept:pressure-order",
       "type": "pressured_by",
@@ -1231,7 +1221,7 @@
       "label": "pressure"
     },
     {
-      "id": "e-93",
+      "id": "e-91",
       "source": "record:WOLF-006",
       "target": "concept:pressure-commerce",
       "type": "pressured_by",
@@ -1239,9 +1229,17 @@
       "label": "pressure"
     },
     {
-      "id": "e-94",
+      "id": "e-92",
       "source": "record:WOLF-006",
       "target": "concept:pressure-peace",
+      "type": "pressured_by",
+      "layer": "interpreted",
+      "label": "pressure"
+    },
+    {
+      "id": "e-93",
+      "source": "record:WOLF-006",
+      "target": "concept:pressure-utopia",
       "type": "pressured_by",
       "layer": "interpreted",
       "label": "pressure"

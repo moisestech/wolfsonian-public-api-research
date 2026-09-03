@@ -74,8 +74,8 @@ async function main() {
         missingFields: seed.missing_fields || []
       },
       archivalActor: {
-        knows: seed.archival_knows || [],
-        doesNotKnow: seed.archival_does_not_know || seed.missing_fields || []
+        establishedInPublicPacket: seed.established_in_public_packet || [],
+        notEstablishedInPublicPacket: seed.not_established_in_public_packet || seed.missing_fields || []
       },
       agents: agents || {}
     };
@@ -115,9 +115,11 @@ async function main() {
     subtitle: 'Institutional Memory Simulation 001',
     tagline: 'A research instrument for observing how competing interpretations emerge from public archival records.',
     disclaimer:
-      'Independent prototype. Not an official Wolfsonian application, production system, or museum-authored dataset. Not a calibrated agent-based model and not a prediction engine.',
+      'Independent early research instrument—not an official Wolfsonian product, not a replacement for curatorial expertise, and not a historical truth engine. Public-record packets are manually prepared; interpretive agents are bounded lenses; contradictions are research signals that generate onsite questions.',
+    framingNote:
+      'Within a minute you should see: (1) public Wolfsonian source records, (2) six bounded interpretive agents, (3) interpretation kept separate from evidence, (4) contradictions treated as useful rather than AI errors, (5) uncertainty labeled, (6) Residency output as object-request candidates for onsite work.',
     dataNote:
-      'Public-record packets manually prepared from Wolfsonian sources while automated API connectivity remains under investigation. Source packets and interpretation layers are stored separately.',
+      'Public-record packets manually prepared from Wolfsonian sources while automated API connectivity remains under investigation. Source packets and interpretation layers are stored separately. Gaps mean “not established in this public packet,” not “the institution does not know.”',
     representationNote: 'Object figures are original diagrammatic forms, not collection photography.',
     objects: objectIds,
     agents: [

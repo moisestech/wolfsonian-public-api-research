@@ -14,9 +14,8 @@
   "materials": [],
   "subjects": [
     "Democracity",
-    "utopia",
-    "urban planning",
-    "World's Fairs"
+    "World's Fairs",
+    "Theme Center"
   ],
   "dimensions": "11 3/4 × 17 3/4 in. open",
   "collection": "The Mitchell Wolfson, Jr. Collection",
@@ -24,25 +23,25 @@
     "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
   ],
   "source_text": [
-    "Program related to the Trylon and Perisphere Theme Center.",
-    "Checklist describes Democracity as an imagined futurescape shaped by peaceful commerce."
+    "Program, Your World of Tomorrow, 1939. Related to the Trylon and Perisphere Theme Center in the cited checklist.",
+    "Cover illustrator Leslie Darrell Ragan; author Gilbert Vivian Seldes noted in checklist context. Accession 86.19.57."
   ],
   "missing_fields": [
     "bibId",
     "materials",
     "complete_program_text"
   ],
-  "archival_knows": [
+  "established_in_public_packet": [
     "title",
     "date",
     "cover illustrator",
     "author",
     "accession",
-    "theme-center context"
+    "Theme Center association in checklist"
   ],
-  "archival_does_not_know": [
-    "full visitor script",
-    "excluded populations in Democracity narrative"
+  "not_established_in_public_packet": [
+    "full visitor script of Democracity",
+    "how populations are included or excluded in the narrative"
   ],
   "representation": {
     "type": "original-svg",

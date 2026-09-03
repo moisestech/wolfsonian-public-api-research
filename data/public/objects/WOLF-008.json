@@ -20,8 +20,7 @@
   ],
   "subjects": [
     "television",
-    "domestic technology",
-    "streamlining",
+    "RCA",
     "World's Fairs"
   ],
   "dimensions": "40 × 34 × 20 1/2 in.",
@@ -30,28 +29,28 @@
     "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
   ],
   "source_text": [
-    "RCA Victor TRK 12 television designed by John Vassos; unveiled in consumer context at the New York World's Fair.",
-    "Checklist notes design intended to read as furniture rather than bare mechanism when not in use."
+    "Television, RCA Victor TRK 12, 1939. John Vassos, designer. Accession 2012.6.1.",
+    "Checklist associates the set with consumer presentation at the New York World's Fair."
   ],
   "missing_fields": [
     "bibId",
     "broadcast_receiver_history",
-    "owner"
+    "prior_ownership",
+    "collection"
   ],
-  "archival_knows": [
+  "established_in_public_packet": [
     "title",
     "date",
     "designer",
-    "manufacturer",
     "materials",
     "dimensions",
     "accession"
   ],
-  "archival_does_not_know": [
-    "household use",
-    "who watched",
+  "not_established_in_public_packet": [
+    "household use history",
+    "viewers of this set",
     "maintenance labor",
-    "signal politics"
+    "broadcast-signal politics"
   ],
   "representation": {
     "type": "original-svg",

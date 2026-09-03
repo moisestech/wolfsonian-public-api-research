@@ -7,7 +7,7 @@ This is **not** an automatic ranking algorithm. It is a method for turning simul
 - Featured source packets (`data/public/objects/`)
 - Interpretation overlays (`data/research/interpretations/`)
 - Simulation claims with `CONTRADICTS` / `REQUIRES_ONSITE_RESEARCH` / `FABRICATION_TEST` challenges
-- Explicit `missing_fields` and archival “I do not know” lists
+- Explicit `missing_fields` and `not_established_in_public_packet` lists (gaps in the current public representation—not claims about staff knowledge)
 
 ## Criteria (qualitative)
 

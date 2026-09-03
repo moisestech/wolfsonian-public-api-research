@@ -27,17 +27,17 @@
     ]
   },
   "archivalActor": {
-    "knows": [
+    "establishedInPublicPacket": [
       "title",
       "date",
       "cover illustrator",
       "author",
       "accession",
-      "theme-center context"
+      "Theme Center association in checklist"
     ],
-    "doesNotKnow": [
-      "full visitor script",
-      "excluded populations in Democracity narrative"
+    "notEstablishedInPublicPacket": [
+      "full visitor script of Democracity",
+      "how populations are included or excluded in the narrative"
     ]
   },
   "agents": {

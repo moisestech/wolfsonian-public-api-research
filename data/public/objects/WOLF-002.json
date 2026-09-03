@@ -17,10 +17,9 @@
     "Bakelite"
   ],
   "subjects": [
+    "radios",
     "industrial design",
-    "streamlining",
-    "domestic technology",
-    "mass media"
+    "Art Deco"
   ],
   "dimensions": null,
   "collection": "The Mitchell Wolfson, Jr. Collection",
@@ -28,28 +27,28 @@
     "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/"
   ],
   "source_text": [
-    "Sparton model 558-C radio designed by Walter Dorwin Teague.",
-    "Museum interpretation notes horizontal streamlining as creating a sense of speed."
+    "Radio, Sparton, model 558-C, 1937. Walter Dorwin Teague, designer. Sparton Corporation, Jackson, Michigan, manufacturer.",
+    "Glass, brass, wood, Bakelite. The Mitchell Wolfson, Jr. Collection, XX1990.1484."
   ],
   "missing_fields": [
     "bibId",
     "dimensions",
     "broadcast_history",
-    "owner"
+    "prior_ownership"
   ],
-  "archival_knows": [
+  "established_in_public_packet": [
     "title",
     "date",
     "designer",
-    "manufacturer context",
+    "manufacturer",
     "materials",
     "accession"
   ],
-  "archival_does_not_know": [
-    "who owned me",
-    "how I was used",
-    "how listeners felt",
-    "component labor"
+  "not_established_in_public_packet": [
+    "prior ownership",
+    "how the set was used in a household",
+    "listener experience",
+    "component fabrication labor"
   ],
   "representation": {
     "type": "original-svg",

@@ -7,3 +7,4 @@ data/raw/*.html
 data/derived/*.json
 !data/raw/.gitkeep
 !data/derived/.gitkeep
+.vercel

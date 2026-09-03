@@ -10,7 +10,7 @@
       "claimType": "UNCERTAIN",
       "grounding": [
         { "seedId": "WOLF-001", "field": "missing_fields" },
-        { "seedId": "WOLF-002", "field": "archival_does_not_know" },
+        { "seedId": "WOLF-002", "field": "not_established_in_public_packet" },
         { "seedId": "WOLF-003", "field": "missing_fields" }
       ],
       "agreesWith": ["archivist", "mourner"],

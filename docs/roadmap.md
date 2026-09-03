@@ -20,7 +20,8 @@ Bounded agents tableau preserved as record drill-down inside the simulation shel
 - Deterministic graph + 5 rounds
 - Claim types: SOURCE_SUPPORTED / INFERENCE / UNCERTAIN / FABRICATION_TEST
 - Residency mode + object-request candidates
-- GitHub Actions Pages workflow
+- Vercel static config for stable share URL; Pages workflow optional
+- Institution-safe gaps: `not_established_in_public_packet`
 - MiroFish conceptual comparison only (no AGPL code)
 
 ### External references
@@ -31,4 +32,4 @@ Bounded agents tableau preserved as record drill-down inside the simulation shel
 | 2 | MiroFish out-of-tree benchmark |
 | 3 | Possible OASIS evaluation later |
 
-Next: expand corpus toward 30; resolve Pages DNS; optional generative agents against this audited baseline.
+Next: share Luna URL via Vercel; expand corpus toward 30 only after onsite feedback; optional generative agents against this audited baseline.

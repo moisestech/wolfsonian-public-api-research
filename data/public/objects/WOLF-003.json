@@ -12,8 +12,8 @@
   ],
   "materials": [],
   "subjects": [
+    "Machine Age Exposition",
     "modernism",
-    "mechanical beauty",
     "industrial design",
     "architecture"
   ],
@@ -23,25 +23,25 @@
     "https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf"
   ],
   "source_text": [
-    "1927 Machine Age Exposition catalogue with cover by Fernand Léger.",
-    "Checklist notes modernist ideas, streamlined forms, and mechanical beauty."
+    "Catalogue, Machine Age Exposition, 1927. Cover associated with Fernand Léger in the cited checklist.",
+    "Dimensions listed as 11 × 8 3/4 in. Accession XM1999.108.8."
   ],
   "missing_fields": [
     "bibId",
     "materials",
     "full_essay_text"
   ],
-  "archival_knows": [
+  "established_in_public_packet": [
     "title",
     "date",
-    "cover designer",
+    "cover designer attribution in checklist",
     "dimensions",
     "accession"
   ],
-  "archival_does_not_know": [
-    "reader annotations",
-    "complete essay contents in this packet",
-    "labor behind exhibited machines"
+  "not_established_in_public_packet": [
+    "reader annotations on this copy",
+    "complete essay contents beyond the checklist citation",
+    "labor histories of machines shown in the exposition"
   ],
   "representation": {
     "type": "original-svg",

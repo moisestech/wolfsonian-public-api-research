@@ -18,8 +18,8 @@
   ],
   "subjects": [
     "World's Fairs",
-    "technological optimism",
-    "architecture"
+    "architecture",
+    "Theme Center"
   ],
   "dimensions": "36 1/4 × 31 in. diameter",
   "collection": "The Mitchell Wolfson, Jr. Collection",
@@ -28,15 +28,16 @@
     "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
   ],
   "source_text": [
-    "Presentation model of the Theme Center for the 1939 New York World's Fair.",
-    "Architects Harrison & Fouilhoux; stainless steel, plastic, wood."
+    "Model, Trylon and Perisphere, c. 1938. For the 1939 New York World's Fair.",
+    "Wallace K. Harrison and Jacques André Fouilhoux of Harrison & Fouilhoux, New York City, architects.",
+    "Stainless steel, plastic, wood; 36 1/4 x 31 in diameter. The Mitchell Wolfson, Jr. Collection, 86.17.1."
   ],
   "missing_fields": [
     "bibId",
     "fabricator",
     "ownership_history"
   ],
-  "archival_knows": [
+  "established_in_public_packet": [
     "title",
     "date",
     "architects",
@@ -45,10 +46,10 @@
     "accession",
     "collection"
   ],
-  "archival_does_not_know": [
+  "not_established_in_public_packet": [
     "who fabricated each part",
-    "tour history",
-    "visitor affective response"
+    "tour or display history beyond cited exhibition pages",
+    "visitor response"
   ],
   "representation": {
     "type": "original-svg",

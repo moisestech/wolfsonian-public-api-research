@@ -37,8 +37,8 @@
     "records": 6,
     "agents": 7,
     "rounds": 5,
-    "entities": 71,
-    "relationships": 94,
+    "entities": 72,
+    "relationships": 93,
     "unresolvedContradictions": 14,
     "claims": 23
   },

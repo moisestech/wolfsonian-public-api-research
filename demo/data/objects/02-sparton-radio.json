@@ -24,23 +24,23 @@
       "bibId",
       "dimensions",
       "broadcast_history",
-      "owner"
+      "prior_ownership"
     ]
   },
   "archivalActor": {
-    "knows": [
+    "establishedInPublicPacket": [
       "title",
       "date",
       "designer",
-      "manufacturer context",
+      "manufacturer",
       "materials",
       "accession"
     ],
-    "doesNotKnow": [
-      "who owned me",
-      "how I was used",
-      "how listeners felt",
-      "component labor"
+    "notEstablishedInPublicPacket": [
+      "prior ownership",
+      "how the set was used in a household",
+      "listener experience",
+      "component fabrication labor"
     ]
   },
   "agents": {

@@ -80,7 +80,7 @@
         },
         {
           "seedId": "WOLF-002",
-          "field": "archival_does_not_know"
+          "field": "not_established_in_public_packet"
         },
         {
           "seedId": "WOLF-003",
@@ -126,7 +126,7 @@
         {
           "type": "GROUNDED_BY",
           "seedId": "WOLF-002",
-          "field": "archival_does_not_know"
+          "field": "not_established_in_public_packet"
         },
         {
           "type": "GROUNDED_BY",

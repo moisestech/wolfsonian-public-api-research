@@ -17,9 +17,8 @@
   ],
   "subjects": [
     "world fairs",
-    "colonial display",
-    "national manufacture",
-    "exploration imagery"
+    "Sèvres",
+    "decorative arts"
   ],
   "dimensions": null,
   "collection": "The Mitchell Wolfson, Jr. Collection",
@@ -27,26 +26,28 @@
     "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/"
   ],
   "source_text": [
-    "Mappemonde vase from Sèvres, associated with world-fair / exposition culture of national display.",
-    "Museum interpretation connects imagery to a colonialist conception of exploration and progress."
+    "Vase with lid, Mappemonde [Globe], 1932. Henri Rapin, form designer; Victor Menu, décor designer; Adrien Leduc, decorator.",
+    "Manufacture nationale de Sèvres, France, manufacturer. Glazed soft stoneware. The Mitchell Wolfson, Jr. Collection, 85.7.383a,b."
   ],
   "missing_fields": [
     "bibId",
     "dimensions",
     "commissioning_context_detail"
   ],
-  "archival_knows": [
+  "established_in_public_packet": [
     "title",
     "date",
-    "designers/decorator",
+    "form designer",
+    "décor designer",
+    "decorator",
     "manufacturer",
     "material",
     "accession"
   ],
-  "archival_does_not_know": [
-    "specific exhibition placement",
-    "period reception",
-    "whose labor decorated each zone"
+  "not_established_in_public_packet": [
+    "specific historical exhibition placement of this vase",
+    "period reception of this object",
+    "workshop labor divisions beyond named roles"
   ],
   "representation": {
     "type": "original-svg",

@@ -15,9 +15,8 @@
   ],
   "subjects": [
     "World's Fairs",
-    "publicity",
-    "Trylon and Perisphere",
-    "persuasion"
+    "posters",
+    "Trylon and Perisphere"
   ],
   "dimensions": "39 3/4 × 28 in.",
   "collection": "The Mitchell Wolfson, Jr. Collection",
@@ -25,27 +24,26 @@
     "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
   ],
   "source_text": [
-    "Poster offering a bird's-eye night view of visitors lining up for the Trylon and Perisphere.",
-    "Published two years before the fair; designed by Nembhard N. Culin."
+    "Poster, In 1939: The New York World’s Fair, 1937. Designed by Nembhard N. Culin.",
+    "Checklist describes a bird's-eye night view of visitors lining up for the Trylon and Perisphere; published two years before the fair."
   ],
   "missing_fields": [
     "bibId",
     "print_run",
     "distribution_channels"
   ],
-  "archival_knows": [
+  "established_in_public_packet": [
     "title",
     "date",
     "designer",
-    "publisher",
     "medium",
     "dimensions",
     "accession"
   ],
-  "archival_does_not_know": [
-    "audience demographics",
-    "conversion to attendance",
-    "censored alternatives"
+  "not_established_in_public_packet": [
+    "audience demographics for this poster",
+    "whether it converted viewers into fair attendance",
+    "alternate rejected designs"
   ],
   "representation": {
     "type": "original-svg",

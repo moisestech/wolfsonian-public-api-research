@@ -155,8 +155,8 @@ function renderLanding() {
   els.landingTagline.textContent = state.manifest.tagline || state.trial.tagline;
   els.landingDisclaimer.textContent = state.trial.disclaimer;
   els.shellDisclaimer.textContent = state.trial.disclaimer;
-  els.landingStats.textContent = `${c.records} source records · ${c.entities} extracted entities · ${c.relationships} relationships · ${c.agents} interpretive agents · ${c.unresolvedContradictions} unresolved contradictions`;
-  els.landingNote.textContent = `${state.trial.dataNote} ${state.trial.representationNote} Capacity ${state.manifest.capacity.shippedRecords}/${state.manifest.capacity.maxRecords}.`;
+  els.landingStats.textContent = `${c.records} source records · ${c.entities} extracted entities · ${c.relationships} relationships · 6 interpretive agents (+ Museum in rounds) · ${c.unresolvedContradictions} unresolved contradictions`;
+  els.landingNote.textContent = `${state.trial.framingNote || ''} ${state.trial.dataNote} ${state.trial.representationNote} Capacity ${state.manifest.capacity.shippedRecords}/${state.manifest.capacity.maxRecords}.`.trim();
 }
 
 function renderViewTabs() {
@@ -379,7 +379,8 @@ function renderRequestInterrogation(item) {
     ['Object / document', `${item.title} (${item.accessionNumber})`],
     ['Why see this in person?', item.whyRequest],
     ['Generating contradiction', item.generatingContradiction],
-    ['Onsite research questions', item.onsiteQuestions.join(' | ')],
+    ['Onsite research questions', (item.onsiteQuestions || []).join(' | ')],
+    ['What the simulation could not resolve', (item.simulationCouldNotResolve || []).join('; ') || '—'],
     ['Source link', item.sourceUrl],
     ['Chain', 'SOURCE → INTERPRETATION → UNCERTAINTY → ONSITE QUESTION']
   ];
@@ -408,7 +409,7 @@ function renderInterrogation(claim) {
     ['Object / document', claim.grounding.map((g) => g.seedId).join(', ')],
     ['Agent', labelForAgent(claim.agent)],
     ['Interpretive claim', claim.text],
-    ['Claim type', claim.claimType],
+    ['Claim type', claim.claimType === 'FABRICATION_TEST' ? 'FABRICATION_TEST (intentionally unsupported — not a source fact)' : claim.claimType],
     ['Evidence', claim.grounding.map((g) => `${g.seedId}.${g.field}`).join('; ')],
     ['Who agrees', claim.agreesWith.map(labelForAgent).join(', ') || 'None named'],
     ['Who contradicts', claim.contradicts.map(labelForAgent).join(', ') || 'None named'],
@@ -475,7 +476,7 @@ function renderAgentPanel() {
   if (agent.fabrication) {
     const banner = document.createElement('p');
     banner.className = 'badge badge--fabricate';
-    banner.textContent = 'Unsupported reconstruction · fabrication';
+    banner.textContent = 'FABRICATION_TEST · unsupported reconstruction (not a source fact)';
     els.panelBody.append(banner);
   }
 
@@ -503,7 +504,7 @@ function renderAgentPanel() {
   for (const id of agent.agreesWith) {
     const badge = document.createElement('span');
     badge.className = 'badge badge--agree';
-    badge.textContent = labelForAgent(id);
+    badge.textContent = `Agrees: ${labelForAgent(id)}`;
     agreeRow.append(badge);
   }
   if (!agent.agreesWith.length) agreeRow.textContent = 'None named';
@@ -514,7 +515,7 @@ function renderAgentPanel() {
   for (const id of agent.contradicts) {
     const badge = document.createElement('span');
     badge.className = 'badge badge--contradict';
-    badge.textContent = labelForAgent(id);
+    badge.textContent = `Contradicts: ${labelForAgent(id)}`;
     contradictRow.append(badge);
   }
   if (!agent.contradicts.length) contradictRow.textContent = 'None named';
@@ -551,12 +552,15 @@ function drawRelations() {
   const ground = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   ground.setAttribute('class', 'agree-path');
   ground.setAttribute('d', curvePath(origin, CENTER, 20));
+  ground.setAttribute('aria-label', 'Grounded to object');
+  ground.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'title')).textContent = 'Grounded to object';
   svg.append(ground);
   for (const otherId of agent.agreesWith) {
     if (!AGENT_POSITIONS[otherId]) continue;
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('class', 'agree-path');
     path.setAttribute('d', curvePath(origin, AGENT_POSITIONS[otherId], 55));
+    path.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'title')).textContent = `Agreement with ${labelForAgent(otherId)}`;
     svg.append(path);
   }
   for (const otherId of agent.contradicts) {
@@ -564,6 +568,7 @@ function drawRelations() {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('class', 'contradict-path');
     path.setAttribute('d', curvePath(origin, AGENT_POSITIONS[otherId], -35));
+    path.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'title')).textContent = `Contradiction with ${labelForAgent(otherId)}`;
     svg.append(path);
   }
 }
@@ -619,9 +624,10 @@ async function renderObject() {
   els.sourceLink.href = packet.source.publicRecordUrl;
   els.sourceLink.textContent = `Public source for ${packet.source.accessionNumber}`;
 
-  const knows = packet.archivalActor?.knows || [];
-  const unknown = packet.archivalActor?.doesNotKnow || [];
-  els.archivalActor.innerHTML = `<p><strong>I know:</strong> ${knows.join(', ') || '—'}</p><p><strong>I do not know:</strong> ${unknown.join(', ') || '—'}</p>`;
+  const established = packet.archivalActor?.establishedInPublicPacket || packet.archivalActor?.knows || [];
+  const notEstablished =
+    packet.archivalActor?.notEstablishedInPublicPacket || packet.archivalActor?.doesNotKnow || [];
+  els.archivalActor.innerHTML = `<p><strong>Established in this public packet:</strong> ${established.join(', ') || '—'}</p><p><strong>Not established in this public packet:</strong> ${notEstablished.join(', ') || '—'}</p><p class="archival-note">This describes limits of the current representation, not what museum staff know.</p>`;
 
   els.onsiteList.replaceChildren();
   for (const agent of state.trial.agents.filter((item) => item.id !== 'museum')) {

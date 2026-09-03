@@ -736,6 +736,13 @@ a {
   margin: 0.2rem 0;
 }
 
+.archival-actor .archival-note {
+  margin-top: 0.55rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--body, inherit);
+}
+
 @media (max-width: 900px) {
   .sim-main {
     grid-template-columns: 1fr;

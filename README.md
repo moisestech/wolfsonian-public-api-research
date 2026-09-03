@@ -8,15 +8,20 @@ It is **not** an official Wolfsonian application, production system, or museum-a
 
 **The Archive Dreams in Public — Institutional Memory Simulation**
 
-Intended public URL: [https://moisestech.github.io/wolfsonian-public-api-research/](https://moisestech.github.io/wolfsonian-public-api-research/)
+**Public demo URL (preferred):** [https://wolfsonian-research.vercel.app](https://wolfsonian-research.vercel.app)  
+(GitHub remains the canonical research repository. GitHub Pages remains optional; see hosting note below.)
 
-### Manual Pages setup (required once)
+### What to notice in under a minute
 
-1. Repo **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-2. After merge (or on this feature branch via workflow_dispatch), the [pages workflow](.github/workflows/pages.yml) deploys `demo/`.
-3. **DNS caveat:** if `*.github.io` redirects to `www.moises.tech` (Vercel), remove or adjust the user/org Pages custom domain so project Pages resolve on GitHub—or add a Vercel rewrite. Until then, use local preview.
+1. These are **public** Wolfsonian source records (manually prepared packets).
+2. Agents are **bounded interpretive lenses**, not oracles.
+3. **Interpretation is separated** from evidence.
+4. Contradictions are **useful research signals**, not “AI errors.”
+5. **Uncertainty is visible** (`UNCERTAIN` / gaps).
+6. Output includes **onsite questions** and object-request candidates (Residency).
+7. This is an **early research instrument**, not a finished museum product or truth engine.
 
-Local preview:
+### Local preview
 
 ```bash
 npm run build:demo
@@ -25,20 +30,38 @@ npx --yes serve .
 # open /demo/
 ```
 
-### What Luna should see
+### Data layout (source of truth vs build output)
 
-- **6 verified public-record packets** (capacity 30)
+| Path | Role |
+|---|---|
+| [`data/public/objects/`](data/public/objects/) | Layer A — public source packets (edit here) |
+| [`data/research/`](data/research/) | Layer B — interpretations, simulations, object-request candidates |
+| [`demo/data/`](demo/data/) | **Committed build output** of `npm run build:demo` for static hosting |
+
+Do not hand-edit `demo/data` as authoritative; regenerate after changing Layer A/B.
+
+### Hosting
+
+**Vercel (recommended for Luna):** separate project `wolfsonian-research`, production from `main` once the PR stack merges (or from this feature branch for preview). Config: [`vercel.json`](vercel.json). Do not attach `moises.tech`.
+
+Manual Vercel steps if CLI is unavailable:
+
+1. Import `moisestech/wolfsonian-public-api-research` into Vercel.
+2. Framework preset: Other. Build command: `npm run build:demo`. Output directory: `.`
+3. Project name: `wolfsonian-research` → `https://wolfsonian-research.vercel.app`
+4. Confirm the deploy serves `/demo/` and contains no collection photography.
+
+**GitHub Pages (optional):** [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds and deploys on `main`. Account-level `*.github.io` → `www.moises.tech` redirects can still break project Pages; fixing that DNS is separate from this research repo and can destabilize the personal site—prefer Vercel for the shareable demo URL.
+
+### Corpus shipped in the demo
+
+- **6 verified public-record packets** (schema capacity 30; WOLF-007/008 remain as corpus extras)
 - Deterministic graph + **5 simulation rounds**
 - Six bounded agents + The Museum (in rounds)
 - Views: Archive / Interpretation / Simulation / Contradictions / Unknown / **Residency**
-- Residency lists **object-request candidates** generated from contradictions
+- Residency lists **object-request candidates** from contradictions
 - Counterfeit claims labeled `FABRICATION_TEST` and challenged by Archivist
 - No live API, no LLM, no museum photography
-
-Data layout:
-
-- Source: [`data/public/objects/`](data/public/objects/)
-- Interpretation / simulations / requests: [`data/research/`](data/research/)
 
 Docs: [`docs/demo-methodology.md`](docs/demo-methodology.md) · [`docs/simulation-architecture.md`](docs/simulation-architecture.md) · [`docs/object-selection-method.md`](docs/object-selection-method.md) · [`docs/mirofish-comparison.md`](docs/mirofish-comparison.md)
 
@@ -75,14 +98,26 @@ Automated requests to `digital.wolfsonian.org` may receive Cloudflare Turnstile.
 
 ## Status
 
-**Version 0.4.0 — Research Demo 001**
+**Version 0.4.0 — Research Demo 001 (Luna-share hardening)**
 
 | Milestone | State |
 |---|---|
 | CLI URL builders + Turnstile detection | Done |
 | Dual-layer public/research data | Done |
 | Research Demo 001 (6 seeds, 5 rounds, Residency requests) | Done |
-| GitHub Actions Pages workflow | Done (DNS may still need manual fix) |
+| Institution-safe packet language (`not_established_in_public_packet`) | Done |
+| Vercel static config for stable demo URL | Done (project connect may be manual) |
+| GitHub Actions Pages workflow | Optional secondary path |
 | Live API packet under `data/raw/` | Blocked on verification / approved access |
-| Expand toward 30 seeds | Next |
+| Expand toward 30 seeds | Later |
 | Generative LLM agents | Later (deterministic baseline first) |
+
+## Recommended merge sequence (do not skip order)
+
+Stacked PRs should land as:
+
+1. PR #1 `feature/research-demo-v0` → `main`
+2. Retarget PR #2 to `main`, then merge
+3. Retarget PR #3 to `main`, then merge
+
+Do not merge #3 onto `main` before #1 and #2.

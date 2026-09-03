@@ -65,7 +65,7 @@
         },
         {
           "seedId": "WOLF-005",
-          "field": "archival_does_not_know"
+          "field": "not_established_in_public_packet"
         }
       ],
       "agreesWith": [
@@ -102,7 +102,7 @@
         {
           "type": "GROUNDED_BY",
           "seedId": "WOLF-005",
-          "field": "archival_does_not_know"
+          "field": "not_established_in_public_packet"
         },
         {
           "type": "REQUIRES_ONSITE_RESEARCH",
