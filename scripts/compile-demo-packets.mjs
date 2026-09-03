@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Compile research-seeds (+ optional demo agent overlays) into demo/data packets
- * and copy simulation artifacts for static Pages serving.
+ * Compile featured public objects (+ demo overlays) into demo/data packets
+ * and copy simulation + object-request artifacts for static Pages serving.
  */
 import { cp, mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -14,12 +14,25 @@ async function readJson(path) {
 }
 
 async function main() {
-  const seedsDir = join(root, 'data', 'research-seeds');
-  const overlayDir = join(root, 'data', 'demo-overlays');
+  const seedsDir = join(root, 'data', 'public', 'objects');
+  const overlayDir = join(root, 'data', 'research', 'demo-overlays');
+  const manifest = await readJson(join(root, 'data', 'research', 'simulations', 'sim-001', 'manifest.json'));
+  const featured = new Set(manifest.seedIds);
   const outObjects = join(root, 'demo', 'data', 'objects');
   await mkdir(outObjects, { recursive: true });
 
-  const seedFiles = (await readdir(seedsDir)).filter((name) => name.endsWith('.json')).sort();
+  // Clear old compiled objects
+  for (const name of await readdir(outObjects)) {
+    if (name.endsWith('.json')) {
+      await writeFile(join(outObjects, name), ''); // placeholder; replace below
+    }
+  }
+
+  const seedFiles = (await readdir(seedsDir))
+    .filter((name) => name.endsWith('.json'))
+    .sort()
+    .filter((name) => featured.has(name.replace(/\.json$/, '')));
+
   const objectIds = [];
 
   for (const [index, file] of seedFiles.entries()) {
@@ -61,8 +74,8 @@ async function main() {
         missingFields: seed.missing_fields || []
       },
       archivalActor: {
-        knows: seed.archival_knows || [],
-        doesNotKnow: seed.archival_does_not_know || seed.missing_fields || []
+        establishedInPublicPacket: seed.established_in_public_packet || [],
+        notEstablishedInPublicPacket: seed.not_established_in_public_packet || seed.missing_fields || []
       },
       agents: agents || {}
     };
@@ -70,7 +83,15 @@ async function main() {
     await writeFile(join(outObjects, outName), `${JSON.stringify(packet, null, 2)}\n`, 'utf8');
   }
 
-  const simSrc = join(root, 'data', 'simulations', 'sim-001');
+  // Remove non-featured compiled leftovers
+  for (const name of await readdir(outObjects)) {
+    if (name.endsWith('.json') && !objectIds.includes(name.replace(/\.json$/, ''))) {
+      const { unlink } = await import('node:fs/promises');
+      await unlink(join(outObjects, name));
+    }
+  }
+
+  const simSrc = join(root, 'data', 'research', 'simulations', 'sim-001');
   const simDest = join(root, 'demo', 'data', 'simulations', 'sim-001');
   await mkdir(join(simDest, 'rounds'), { recursive: true });
   await cp(join(simSrc, 'manifest.json'), join(simDest, 'manifest.json'));
@@ -79,13 +100,26 @@ async function main() {
     await cp(join(simSrc, 'rounds', round), join(simDest, 'rounds', round));
   }
 
+  const candidatesSrc = join(root, 'data', 'research', 'object-request-candidates', 'sim-001.json');
+  const candidatesDest = join(root, 'demo', 'data', 'object-request-candidates');
+  await mkdir(candidatesDest, { recursive: true });
+  try {
+    await cp(candidatesSrc, join(candidatesDest, 'sim-001.json'));
+  } catch {
+    // optional until Phase 4
+  }
+
   const trial = {
-    id: 'sim-001',
+    id: 'research-demo-001',
     title: 'The Archive Dreams in Public',
     subtitle: 'Institutional Memory Simulation 001',
-    tagline: 'An experimental research instrument in which public collection records become the memory of an interpretive society.',
-    disclaimer: 'Independent prototype. Not an official Wolfsonian application, production system, or museum-authored dataset. Not a calibrated agent-based model and not a prediction engine.',
-    dataNote: 'Public-record packets manually prepared from Wolfsonian sources while automated API connectivity remains under investigation. Source packets and interpretation layers are stored separately.',
+    tagline: 'A research instrument for observing how competing interpretations emerge from public archival records.',
+    disclaimer:
+      'Independent early research instrument—not an official Wolfsonian product, not a replacement for curatorial expertise, and not a historical truth engine. Public-record packets are manually prepared; interpretive agents are bounded lenses; contradictions are research signals that generate onsite questions.',
+    framingNote:
+      'Within a minute you should see: (1) public Wolfsonian source records, (2) six bounded interpretive agents, (3) interpretation kept separate from evidence, (4) contradictions treated as useful rather than AI errors, (5) uncertainty labeled, (6) Residency output as object-request candidates for onsite work.',
+    dataNote:
+      'Public-record packets manually prepared from Wolfsonian sources while automated API connectivity remains under investigation. Source packets and interpretation layers are stored separately. Gaps mean “not established in this public packet,” not “the institution does not know.”',
     representationNote: 'Object figures are original diagrammatic forms, not collection photography.',
     objects: objectIds,
     agents: [
@@ -99,7 +133,7 @@ async function main() {
     ]
   };
   await writeFile(join(root, 'demo', 'data', 'trial-001.json'), `${JSON.stringify(trial, null, 2)}\n`, 'utf8');
-  console.log(`Compiled ${objectIds.length} demo packets and copied simulation artifacts`);
+  console.log(`Compiled ${objectIds.length} featured demo packets and copied simulation artifacts`);
 }
 
 main().catch((error) => {

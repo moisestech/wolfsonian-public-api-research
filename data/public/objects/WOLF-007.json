@@ -1,0 +1,53 @@
+{
+  "id": "WOLF-007",
+  "slug": "booklet-futurama",
+  "cluster": "utopia",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Booklet, Futurama",
+  "accessionNumber": "XB1992.1640",
+  "bibId": null,
+  "date": "1940",
+  "creator": [
+    "General Motors Corporation"
+  ],
+  "materials": [],
+  "subjects": [
+    "Futurama",
+    "automobility",
+    "highways",
+    "General Motors"
+  ],
+  "dimensions": "7 × 8 1/4 in. closed",
+  "collection": "The Mitchell Wolfson, Jr. Collection",
+  "source_urls": [
+    "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+  ],
+  "source_text": [
+    "Booklet, Futurama, 1940. General Motors Corporation. Accession XB1992.1640.",
+    "Cited worlds-fairs checklist associates the booklet with the Futurama exhibit."
+  ],
+  "missing_fields": [
+    "bibId",
+    "materials",
+    "designer_credit_on_object_record"
+  ],
+  "established_in_public_packet": [
+    "title",
+    "date",
+    "publisher",
+    "accession",
+    "Futurama exhibit association in checklist"
+  ],
+  "not_established_in_public_packet": [
+    "labor that built the diorama",
+    "how ‘automobiles for all’ was delimited socially"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/futurama-booklet.svg",
+    "caption": "Original diagram: Futurama booklet mark"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

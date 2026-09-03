@@ -1,0 +1,60 @@
+{
+  "id": "WOLF-004",
+  "slug": "mappemonde-vase",
+  "cluster": "world-making",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Vase with lid, Mappemonde [Globe]",
+  "accessionNumber": "85.7.383a,b",
+  "bibId": null,
+  "date": "1932",
+  "creator": [
+    "Henri Rapin",
+    "Victor Menu",
+    "Adrien Leduc"
+  ],
+  "materials": [
+    "glazed soft stoneware"
+  ],
+  "subjects": [
+    "world fairs",
+    "Sèvres",
+    "decorative arts"
+  ],
+  "dimensions": null,
+  "collection": "The Mitchell Wolfson, Jr. Collection",
+  "source_urls": [
+    "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/"
+  ],
+  "source_text": [
+    "Vase with lid, Mappemonde [Globe], 1932. Henri Rapin, form designer; Victor Menu, décor designer; Adrien Leduc, decorator.",
+    "Manufacture nationale de Sèvres, France, manufacturer. Glazed soft stoneware. The Mitchell Wolfson, Jr. Collection, 85.7.383a,b."
+  ],
+  "missing_fields": [
+    "bibId",
+    "dimensions",
+    "commissioning_context_detail"
+  ],
+  "established_in_public_packet": [
+    "title",
+    "date",
+    "form designer",
+    "décor designer",
+    "decorator",
+    "manufacturer",
+    "material",
+    "accession"
+  ],
+  "not_established_in_public_packet": [
+    "specific historical exhibition placement of this vase",
+    "period reception of this object",
+    "workshop labor divisions beyond named roles"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/mappemonde-vase.svg",
+    "caption": "Original diagram: globe-vase geometry"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

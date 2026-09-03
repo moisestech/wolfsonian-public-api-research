@@ -1,0 +1,61 @@
+{
+  "id": "WOLF-002",
+  "slug": "sparton-radio",
+  "cluster": "media",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Radio, Sparton, model 558-C",
+  "accessionNumber": "XX1990.1484",
+  "bibId": null,
+  "date": "1937",
+  "creator": [
+    "Walter Dorwin Teague"
+  ],
+  "materials": [
+    "glass",
+    "brass",
+    "wood",
+    "Bakelite"
+  ],
+  "subjects": [
+    "radios",
+    "industrial design",
+    "Art Deco"
+  ],
+  "dimensions": null,
+  "collection": "The Mitchell Wolfson, Jr. Collection",
+  "source_urls": [
+    "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/"
+  ],
+  "source_text": [
+    "Radio, Sparton, model 558-C, 1937. Walter Dorwin Teague, designer. Sparton Corporation, Jackson, Michigan, manufacturer.",
+    "Glass, brass, wood, Bakelite. The Mitchell Wolfson, Jr. Collection, XX1990.1484."
+  ],
+  "missing_fields": [
+    "bibId",
+    "dimensions",
+    "broadcast_history",
+    "prior_ownership"
+  ],
+  "established_in_public_packet": [
+    "title",
+    "date",
+    "designer",
+    "manufacturer",
+    "materials",
+    "accession"
+  ],
+  "not_established_in_public_packet": [
+    "prior ownership",
+    "how the set was used in a household",
+    "listener experience",
+    "component fabrication labor"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/sparton-radio.svg",
+    "caption": "Original diagram: streamlined radio silhouette"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

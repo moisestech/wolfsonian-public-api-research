@@ -1,0 +1,62 @@
+{
+  "id": "WOLF-001",
+  "slug": "trylon-perisphere",
+  "cluster": "utopia",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Model, Trylon and Perisphere",
+  "accessionNumber": "86.17.1",
+  "bibId": null,
+  "date": "c. 1938",
+  "creator": [
+    "Wallace K. Harrison",
+    "Jacques André Fouilhoux"
+  ],
+  "materials": [
+    "stainless steel",
+    "plastic",
+    "wood"
+  ],
+  "subjects": [
+    "World's Fairs",
+    "architecture",
+    "Theme Center"
+  ],
+  "dimensions": "36 1/4 × 31 in. diameter",
+  "collection": "The Mitchell Wolfson, Jr. Collection",
+  "source_urls": [
+    "https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html",
+    "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+  ],
+  "source_text": [
+    "Model, Trylon and Perisphere, c. 1938. For the 1939 New York World's Fair.",
+    "Wallace K. Harrison and Jacques André Fouilhoux of Harrison & Fouilhoux, New York City, architects.",
+    "Stainless steel, plastic, wood; 36 1/4 x 31 in diameter. The Mitchell Wolfson, Jr. Collection, 86.17.1."
+  ],
+  "missing_fields": [
+    "bibId",
+    "fabricator",
+    "ownership_history"
+  ],
+  "established_in_public_packet": [
+    "title",
+    "date",
+    "architects",
+    "materials",
+    "dimensions",
+    "accession",
+    "collection"
+  ],
+  "not_established_in_public_packet": [
+    "who fabricated each part",
+    "tour or display history beyond cited exhibition pages",
+    "visitor response"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/trylon-perisphere.svg",
+    "caption": "Original diagram: Trylon and Perisphere geometry"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

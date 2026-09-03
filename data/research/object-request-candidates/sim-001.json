@@ -1,0 +1,77 @@
+{
+  "id": "sim-001-object-requests",
+  "title": "Preliminary object request list — Research Demo 001",
+  "methodDoc": "docs/object-selection-method.md",
+  "note": "Research aid generated from simulation contradictions and gaps in the current public packets. Not an automatic ranking algorithm and not a claim that institutional metadata is deficient.",
+  "generatedFrom": "data/research/simulations/sim-001",
+  "candidates": [
+    {
+      "seedId": "WOLF-001",
+      "accessionNumber": "86.17.1",
+      "title": "Model, Trylon and Perisphere",
+      "sourceUrl": "https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html",
+      "whyRequest": "Competing readings treat the model as either technological optimism or as a form that leaves construction, labor, and scale unresolved. Physical inspection is needed to test what the public packet cannot establish.",
+      "generatingContradiction": "Futurist optimism vs Worker/Archivist insistence that liberation is not established by the cited catalog fields.",
+      "simulationCouldNotResolve": [
+        "fabricator of parts",
+        "joins / underside / labels not visible in public description",
+        "whether “optimism” is warranted by the object itself"
+      ],
+      "onsiteQuestions": [
+        "What construction details (joins, fasteners, underside, labels) are visible on the physical model but absent from the public packet?",
+        "Which material transitions or revisions become clear only in person?"
+      ]
+    },
+    {
+      "seedId": "WOLF-002",
+      "accessionNumber": "XX1990.1484",
+      "title": "Radio, Sparton, model 558-C",
+      "sourceUrl": "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/",
+      "whyRequest": "Interpretive agents disagree whether streamlining domesticates mass media or whether only identity fields are secure. A Counterfeit leisure statistic was rejected as FABRICATION_TEST; wear and manufacturer marks may clarify what styling claims leave open.",
+      "generatingContradiction": "Persuasion-by-design inference vs source-supported identity-only reading; fabrication challenged by Archivist.",
+      "simulationCouldNotResolve": [
+        "household use history",
+        "whether streamlining functions as persuasion on this object",
+        "repair / wear evidence"
+      ],
+      "onsiteQuestions": [
+        "What dial markings, wear, repairs, or manufacturer labels are present on the radio but not captured in the short public description?",
+        "What physical cues would help staff and researchers test claims about domestication of the technology?"
+      ]
+    },
+    {
+      "seedId": "WOLF-004",
+      "accessionNumber": "85.7.383a,b",
+      "title": "Vase with lid, Mappemonde [Globe]",
+      "sourceUrl": "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/",
+      "whyRequest": "A museum-published Designing Deco reading frames colonial display; other agents read progress or national craft. The object packet keeps identity fields only—physical decoration is needed to ground the disagreement.",
+      "generatingContradiction": "Museum-page colonial-display framing (Layer B) vs Futurist/Propagandist progress readings.",
+      "simulationCouldNotResolve": [
+        "how decorative zones read in person",
+        "maker marks and lid relationship",
+        "how this object sits beside utopian fair materials in practice"
+      ],
+      "onsiteQuestions": [
+        "What maker marks, lid fit, and decorative zones become legible only when the vase is handled?",
+        "What related files or labels would help test competing progress vs colonial-display readings?"
+      ]
+    },
+    {
+      "seedId": "WOLF-003",
+      "accessionNumber": "XM1999.108.8",
+      "title": "Catalogue, Machine Age Exposition",
+      "sourceUrl": "https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf",
+      "whyRequest": "Agents diverge on whether the catalogue aestheticizes machinery or also makes labor visible. Handling the volume tests image hierarchy and essay order beyond the checklist citation.",
+      "generatingContradiction": "Mechanical beauty as liberation curriculum vs Worker/Mourner occlusion-of-labor readings.",
+      "simulationCouldNotResolve": [
+        "full essay and plate sequence",
+        "annotations or ownership marks on this copy",
+        "where labor appears or disappears across pages"
+      ],
+      "onsiteQuestions": [
+        "In the physical catalogue, which plates or captions make labor visible, and which present machinery primarily as form?",
+        "What annotations, ownership marks, paper quality, or inserted ephemera appear only when the volume is handled?"
+      ]
+    }
+  ]
+}

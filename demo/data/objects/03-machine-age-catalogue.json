@@ -27,17 +27,17 @@
     ]
   },
   "archivalActor": {
-    "knows": [
+    "establishedInPublicPacket": [
       "title",
       "date",
-      "cover designer",
+      "cover designer attribution in checklist",
       "dimensions",
       "accession"
     ],
-    "doesNotKnow": [
-      "reader annotations",
-      "complete essay contents in this packet",
-      "labor behind exhibited machines"
+    "notEstablishedInPublicPacket": [
+      "reader annotations on this copy",
+      "complete essay contents beyond the checklist citation",
+      "labor histories of machines shown in the exposition"
     ]
   },
   "agents": {

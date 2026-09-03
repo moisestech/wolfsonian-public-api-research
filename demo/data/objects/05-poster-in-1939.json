@@ -27,19 +27,18 @@
     ]
   },
   "archivalActor": {
-    "knows": [
+    "establishedInPublicPacket": [
       "title",
       "date",
       "designer",
-      "publisher",
       "medium",
       "dimensions",
       "accession"
     ],
-    "doesNotKnow": [
-      "audience demographics",
-      "conversion to attendance",
-      "censored alternatives"
+    "notEstablishedInPublicPacket": [
+      "audience demographics for this poster",
+      "whether it converted viewers into fair attendance",
+      "alternate rejected designs"
     ]
   },
   "agents": {

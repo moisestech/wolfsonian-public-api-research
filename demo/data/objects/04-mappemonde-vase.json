@@ -27,18 +27,20 @@
     ]
   },
   "archivalActor": {
-    "knows": [
+    "establishedInPublicPacket": [
       "title",
       "date",
-      "designers/decorator",
+      "form designer",
+      "décor designer",
+      "decorator",
       "manufacturer",
       "material",
       "accession"
     ],
-    "doesNotKnow": [
-      "specific exhibition placement",
-      "period reception",
-      "whose labor decorated each zone"
+    "notEstablishedInPublicPacket": [
+      "specific historical exhibition placement of this vase",
+      "period reception of this object",
+      "workshop labor divisions beyond named roles"
     ]
   },
   "agents": {

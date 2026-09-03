@@ -23,6 +23,7 @@ const state = {
   manifest: null,
   graph: null,
   rounds: [],
+  candidates: null,
   packets: new Map(),
   view: 'archive',
   roundIndex: 0,
@@ -113,7 +114,7 @@ function visibleClaims() {
     return claims.filter((claim) => claim.contradicts?.length);
   }
   if (state.view === 'unknown') {
-    return claims.filter((claim) => claim.kind === 'inference' || claim.publicRecordEstablishes === false);
+    return claims.filter((claim) => claim.claimType === 'INFERENCE' || claim.claimType === 'UNCERTAIN' || claim.publicRecordEstablishes === false);
   }
   if (state.view === 'residency') {
     return claims.filter((claim) => claim.residencyQuestion);
@@ -122,10 +123,11 @@ function visibleClaims() {
 }
 
 async function loadAll() {
-  const [trial, manifest, graph] = await Promise.all([
+  const [trial, manifest, graph, candidates] = await Promise.all([
     fetch('./data/trial-001.json').then((r) => r.json()),
     fetch('./data/simulations/sim-001/manifest.json').then((r) => r.json()),
-    fetch('./data/graph.json').then((r) => r.json())
+    fetch('./data/graph.json').then((r) => r.json()),
+    fetch('./data/object-request-candidates/sim-001.json').then((r) => r.json())
   ]);
 
   const rounds = await Promise.all(
@@ -142,6 +144,7 @@ async function loadAll() {
   state.trial = trial;
   state.manifest = manifest;
   state.graph = graph;
+  state.candidates = candidates;
   state.rounds = rounds;
   state.packets = new Map(packets);
   state.objectId = trial.objects[0];
@@ -152,8 +155,8 @@ function renderLanding() {
   els.landingTagline.textContent = state.manifest.tagline || state.trial.tagline;
   els.landingDisclaimer.textContent = state.trial.disclaimer;
   els.shellDisclaimer.textContent = state.trial.disclaimer;
-  els.landingStats.textContent = `${c.records} source records · ${c.entities} extracted entities · ${c.relationships} relationships · ${c.agents} interpretive agents · ${c.unresolvedContradictions} unresolved contradictions`;
-  els.landingNote.textContent = `${state.trial.dataNote} ${state.trial.representationNote} Capacity ${state.manifest.capacity.shippedRecords}/${state.manifest.capacity.maxRecords}.`;
+  els.landingStats.textContent = `${c.records} source records · ${c.entities} extracted entities · ${c.relationships} relationships · 6 interpretive agents (+ Museum in rounds) · ${c.unresolvedContradictions} unresolved contradictions`;
+  els.landingNote.textContent = `${state.trial.framingNote || ''} ${state.trial.dataNote} ${state.trial.representationNote} Capacity ${state.manifest.capacity.shippedRecords}/${state.manifest.capacity.maxRecords}.`.trim();
 }
 
 function renderViewTabs() {
@@ -304,8 +307,36 @@ function renderClaims() {
     els.roundTitle.textContent = state.rounds[state.roundIndex].title;
   } else if (state.view === 'archive' || state.view === 'interpretation') {
     els.roundTitle.textContent = 'Select a record node, then open deep-read';
+  } else if (state.view === 'residency') {
+    els.roundTitle.textContent = `${state.candidates?.candidates?.length || 0} object-request candidates · ${claims.length} onsite questions`;
   } else {
     els.roundTitle.textContent = `${claims.length} claims`;
+  }
+
+  if (state.view === 'residency' && state.candidates?.candidates?.length) {
+    for (const item of state.candidates.candidates) {
+      const li = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'claim-item claim-item--request';
+      button.innerHTML = `<span class="claim-agent">${item.accessionNumber}</span><span class="claim-text"><strong>${item.title}</strong><br>${item.whyRequest}</span>`;
+      button.addEventListener('click', () => {
+        state.selectedSeedId = item.seedId;
+        const packet = packetBySeed(item.seedId);
+        if (packet) {
+          state.objectId = packet.id;
+          els.openDeepRead.hidden = false;
+        }
+        renderRequestInterrogation(item);
+        drawGraph();
+      });
+      li.append(button);
+      els.claimList.append(li);
+    }
+    const divider = document.createElement('li');
+    divider.className = 'claim-empty';
+    divider.textContent = 'Onsite questions from simulation rounds:';
+    els.claimList.append(divider);
   }
 
   if ((state.view === 'archive' || state.view === 'interpretation') && !claims.length) {
@@ -321,8 +352,8 @@ function renderClaims() {
     const li = document.createElement('li');
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = `claim-item kind-${claim.kind}${state.selectedClaimId === claim.id ? ' is-selected' : ''}`;
-    button.innerHTML = `<span class="claim-agent">${labelForAgent(claim.agent)}</span><span class="claim-text">${claim.text}</span>`;
+    button.className = `claim-item kind-${claim.claimType}${state.selectedClaimId === claim.id ? ' is-selected' : ''}`;
+    button.innerHTML = `<span class="claim-agent">${labelForAgent(claim.agent)} · ${claim.claimType}</span><span class="claim-text">${claim.text}</span>`;
     button.addEventListener('click', () => {
       state.selectedClaimId = claim.id;
       state.selectedSeedId = claim.grounding[0]?.seedId || null;
@@ -339,22 +370,54 @@ function renderClaims() {
 
   const selected = claims.find((claim) => claim.id === state.selectedClaimId);
   if (selected) renderInterrogation(selected);
-  else {
-    els.interrogation.hidden = true;
+  else if (state.view !== 'residency') els.interrogation.hidden = true;
+}
+
+function renderRequestInterrogation(item) {
+  els.interrogation.hidden = false;
+  const rows = [
+    ['Object / document', `${item.title} (${item.accessionNumber})`],
+    ['Why see this in person?', item.whyRequest],
+    ['Generating contradiction', item.generatingContradiction],
+    ['Onsite research questions', (item.onsiteQuestions || []).join(' | ')],
+    ['What the simulation could not resolve', (item.simulationCouldNotResolve || []).join('; ') || '—'],
+    ['Source link', item.sourceUrl],
+    ['Chain', 'SOURCE → INTERPRETATION → UNCERTAINTY → ONSITE QUESTION']
+  ];
+  els.interrogationBody.replaceChildren();
+  for (const [dt, dd] of rows) {
+    const term = document.createElement('dt');
+    term.textContent = dt;
+    const def = document.createElement('dd');
+    if (dt === 'Source link') {
+      const a = document.createElement('a');
+      a.href = dd;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = dd;
+      def.append(a);
+    } else {
+      def.textContent = dd;
+    }
+    els.interrogationBody.append(term, def);
   }
 }
 
 function renderInterrogation(claim) {
   els.interrogation.hidden = false;
   const rows = [
-    ['What source made you believe this?', claim.grounding.map((g) => `${g.seedId}.${g.field}`).join('; ')],
-    ['Who disagrees with you?', claim.contradicts.map(labelForAgent).join(', ') || 'None named'],
-    ['Who agrees?', claim.agreesWith.map(labelForAgent).join(', ') || 'None named'],
-    ['What would change your mind?', claim.whatWouldChangeMind || '—'],
+    ['Object / document', claim.grounding.map((g) => g.seedId).join(', ')],
+    ['Agent', labelForAgent(claim.agent)],
+    ['Interpretive claim', claim.text],
+    ['Claim type', claim.claimType === 'FABRICATION_TEST' ? 'FABRICATION_TEST (intentionally unsupported — not a source fact)' : claim.claimType],
+    ['Evidence', claim.grounding.map((g) => `${g.seedId}.${g.field}`).join('; ')],
+    ['Who agrees', claim.agreesWith.map(labelForAgent).join(', ') || 'None named'],
+    ['Who contradicts', claim.contradicts.map(labelForAgent).join(', ') || 'None named'],
+    ['What would change this interpretation?', claim.whatWouldChangeMind || '—'],
     ['Can the public record establish this?', claim.publicRecordEstablishes ? 'Yes (within cited fields)' : 'Not from the cited public-record fields alone'],
-    ['Does this require seeing the physical object?', claim.requiresPhysicalObject ? 'Yes' : 'Not necessarily'],
-    ['Kind', claim.kind],
-    ['Residency question', claim.residencyQuestion || '—']
+    ['Why might this need to be seen in person?', claim.requiresPhysicalObject ? 'Physical qualities or staff knowledge may change the reading.' : 'Not necessarily required for this claim.'],
+    ['Onsite research question', claim.residencyQuestion || '—'],
+    ['Chain', 'SOURCE → INTERPRETATION → UNCERTAINTY → ONSITE QUESTION']
   ];
   els.interrogationBody.replaceChildren();
   for (const [dt, dd] of rows) {
@@ -413,7 +476,7 @@ function renderAgentPanel() {
   if (agent.fabrication) {
     const banner = document.createElement('p');
     banner.className = 'badge badge--fabricate';
-    banner.textContent = 'Unsupported reconstruction · fabrication';
+    banner.textContent = 'FABRICATION_TEST · unsupported reconstruction (not a source fact)';
     els.panelBody.append(banner);
   }
 
@@ -441,7 +504,7 @@ function renderAgentPanel() {
   for (const id of agent.agreesWith) {
     const badge = document.createElement('span');
     badge.className = 'badge badge--agree';
-    badge.textContent = labelForAgent(id);
+    badge.textContent = `Agrees: ${labelForAgent(id)}`;
     agreeRow.append(badge);
   }
   if (!agent.agreesWith.length) agreeRow.textContent = 'None named';
@@ -452,7 +515,7 @@ function renderAgentPanel() {
   for (const id of agent.contradicts) {
     const badge = document.createElement('span');
     badge.className = 'badge badge--contradict';
-    badge.textContent = labelForAgent(id);
+    badge.textContent = `Contradicts: ${labelForAgent(id)}`;
     contradictRow.append(badge);
   }
   if (!agent.contradicts.length) contradictRow.textContent = 'None named';
@@ -489,12 +552,15 @@ function drawRelations() {
   const ground = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   ground.setAttribute('class', 'agree-path');
   ground.setAttribute('d', curvePath(origin, CENTER, 20));
+  ground.setAttribute('aria-label', 'Grounded to object');
+  ground.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'title')).textContent = 'Grounded to object';
   svg.append(ground);
   for (const otherId of agent.agreesWith) {
     if (!AGENT_POSITIONS[otherId]) continue;
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('class', 'agree-path');
     path.setAttribute('d', curvePath(origin, AGENT_POSITIONS[otherId], 55));
+    path.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'title')).textContent = `Agreement with ${labelForAgent(otherId)}`;
     svg.append(path);
   }
   for (const otherId of agent.contradicts) {
@@ -502,6 +568,7 @@ function drawRelations() {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('class', 'contradict-path');
     path.setAttribute('d', curvePath(origin, AGENT_POSITIONS[otherId], -35));
+    path.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'title')).textContent = `Contradiction with ${labelForAgent(otherId)}`;
     svg.append(path);
   }
 }
@@ -557,9 +624,10 @@ async function renderObject() {
   els.sourceLink.href = packet.source.publicRecordUrl;
   els.sourceLink.textContent = `Public source for ${packet.source.accessionNumber}`;
 
-  const knows = packet.archivalActor?.knows || [];
-  const unknown = packet.archivalActor?.doesNotKnow || [];
-  els.archivalActor.innerHTML = `<p><strong>I know:</strong> ${knows.join(', ') || '—'}</p><p><strong>I do not know:</strong> ${unknown.join(', ') || '—'}</p>`;
+  const established = packet.archivalActor?.establishedInPublicPacket || packet.archivalActor?.knows || [];
+  const notEstablished =
+    packet.archivalActor?.notEstablishedInPublicPacket || packet.archivalActor?.doesNotKnow || [];
+  els.archivalActor.innerHTML = `<p><strong>Established in this public packet:</strong> ${established.join(', ') || '—'}</p><p><strong>Not established in this public packet:</strong> ${notEstablished.join(', ') || '—'}</p><p class="archival-note">This describes limits of the current representation, not what museum staff know.</p>`;
 
   els.onsiteList.replaceChildren();
   for (const agent of state.trial.agents.filter((item) => item.id !== 'museum')) {

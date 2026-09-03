@@ -27,7 +27,7 @@
     ]
   },
   "archivalActor": {
-    "knows": [
+    "establishedInPublicPacket": [
       "title",
       "date",
       "architects",
@@ -36,10 +36,10 @@
       "accession",
       "collection"
     ],
-    "doesNotKnow": [
+    "notEstablishedInPublicPacket": [
       "who fabricated each part",
-      "tour history",
-      "visitor affective response"
+      "tour or display history beyond cited exhibition pages",
+      "visitor response"
     ]
   },
   "agents": {

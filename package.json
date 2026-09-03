@@ -1,8 +1,8 @@
 {
   "name": "wolfsonian-public-api-research",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": false,
-  "description": "Independent research notebook exploring The Wolfsonian's public collection records through provenance-first institutional-memory simulation.",
+  "description": "Independent research notebook and Research Demo 001 for Wolfsonian public-record institutional-memory simulation.",
   "type": "module",
   "scripts": {
     "ping": "node scripts/ping.mjs",

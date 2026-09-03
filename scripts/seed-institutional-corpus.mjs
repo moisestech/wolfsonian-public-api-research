@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+/**
+ * Optional re-seeder. Authoritative packets live in data/public/objects/*.json
+ * (and data/research/interpretations/). Prefer editing those files directly.
+ */
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,7 +24,7 @@ const seeds = [
     date: 'c. 1938',
     creator: ['Wallace K. Harrison', 'Jacques André Fouilhoux'],
     materials: ['stainless steel', 'plastic', 'wood'],
-    subjects: ["World's Fairs", 'technological optimism', 'architecture'],
+    subjects: ["World's Fairs", 'architecture', 'Theme Center'],
     dimensions: '36 1/4 × 31 in. diameter',
     collection: 'The Mitchell Wolfson, Jr. Collection',
     source_urls: [
@@ -28,12 +32,12 @@ const seeds = [
       'https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf'
     ],
     source_text: [
-      'Presentation model of the Theme Center for the 1939 New York World\'s Fair.',
+      'Model, Trylon and Perisphere, c. 1938. For the 1939 New York World\'s Fair.',
       'Architects Harrison & Fouilhoux; stainless steel, plastic, wood.'
     ],
     missing_fields: ['bibId', 'fabricator', 'ownership_history'],
-    archival_knows: ['title', 'date', 'architects', 'materials', 'dimensions', 'accession', 'collection'],
-    archival_does_not_know: ['who fabricated each part', 'tour history', 'visitor affective response'],
+    established_in_public_packet: ['title', 'date', 'architects', 'materials', 'dimensions', 'accession', 'collection'],
+    not_established_in_public_packet: ['who fabricated each part', 'tour or display history beyond cited exhibition pages', 'visitor response'],
     representation: {
       type: 'original-svg',
       src: '../assets/objects/trylon-perisphere.svg',
@@ -51,17 +55,17 @@ const seeds = [
     date: '1937',
     creator: ['Walter Dorwin Teague'],
     materials: ['glass', 'brass', 'wood', 'Bakelite'],
-    subjects: ['industrial design', 'streamlining', 'domestic technology', 'mass media'],
+    subjects: ['radios', 'industrial design', 'Art Deco'],
     dimensions: null,
     collection: 'The Mitchell Wolfson, Jr. Collection',
     source_urls: ['https://wolfsonian.org/whats-on/digital-experiences/designing-deco/'],
     source_text: [
-      'Sparton model 558-C radio designed by Walter Dorwin Teague.',
-      'Museum interpretation notes horizontal streamlining as creating a sense of speed.'
+      'Radio, Sparton, model 558-C, 1937. Walter Dorwin Teague, designer. Sparton Corporation, manufacturer.',
+      'Glass, brass, wood, Bakelite. The Mitchell Wolfson, Jr. Collection, XX1990.1484.'
     ],
-    missing_fields: ['bibId', 'dimensions', 'broadcast_history', 'owner'],
-    archival_knows: ['title', 'date', 'designer', 'manufacturer context', 'materials', 'accession'],
-    archival_does_not_know: ['who owned me', 'how I was used', 'how listeners felt', 'component labor'],
+    missing_fields: ['bibId', 'dimensions', 'broadcast_history', 'prior_ownership'],
+    established_in_public_packet: ['title', 'date', 'designer', 'manufacturer', 'materials', 'accession'],
+    not_established_in_public_packet: ['prior ownership', 'how the set was used in a household', 'listener experience', 'component fabrication labor'],
     representation: {
       type: 'original-svg',
       src: '../assets/objects/sparton-radio.svg',
@@ -88,8 +92,8 @@ const seeds = [
       'Checklist notes modernist ideas, streamlined forms, and mechanical beauty.'
     ],
     missing_fields: ['bibId', 'materials', 'full_essay_text'],
-    archival_knows: ['title', 'date', 'cover designer', 'dimensions', 'accession'],
-    archival_does_not_know: ['reader annotations', 'complete essay contents in this packet', 'labor behind exhibited machines'],
+    established_in_public_packet: ['title', 'date', 'cover designer', 'dimensions', 'accession'],
+    not_established_in_public_packet: ['reader annotations', 'complete essay contents in this packet', 'labor behind exhibited machines'],
     representation: {
       type: 'original-svg',
       src: '../assets/objects/machine-age-catalogue.svg',
@@ -116,8 +120,8 @@ const seeds = [
       'Museum interpretation connects imagery to a colonialist conception of exploration and progress.'
     ],
     missing_fields: ['bibId', 'dimensions', 'commissioning_context_detail'],
-    archival_knows: ['title', 'date', 'designers/decorator', 'manufacturer', 'material', 'accession'],
-    archival_does_not_know: ['specific exhibition placement', 'period reception', 'whose labor decorated each zone'],
+    established_in_public_packet: ['title', 'date', 'designers/decorator', 'manufacturer', 'material', 'accession'],
+    not_established_in_public_packet: ['specific exhibition placement', 'period reception', 'whose labor decorated each zone'],
     representation: {
       type: 'original-svg',
       src: '../assets/objects/mappemonde-vase.svg',
@@ -144,8 +148,8 @@ const seeds = [
       'Published two years before the fair; designed by Nembhard N. Culin.'
     ],
     missing_fields: ['bibId', 'print_run', 'distribution_channels'],
-    archival_knows: ['title', 'date', 'designer', 'publisher', 'medium', 'dimensions', 'accession'],
-    archival_does_not_know: ['audience demographics', 'conversion to attendance', 'censored alternatives'],
+    established_in_public_packet: ['title', 'date', 'designer', 'publisher', 'medium', 'dimensions', 'accession'],
+    not_established_in_public_packet: ['audience demographics', 'conversion to attendance', 'censored alternatives'],
     representation: {
       type: 'original-svg',
       src: '../assets/objects/poster-in-1939.svg',
@@ -172,8 +176,8 @@ const seeds = [
       'Checklist describes Democracity as an imagined futurescape shaped by peaceful commerce.'
     ],
     missing_fields: ['bibId', 'materials', 'complete_program_text'],
-    archival_knows: ['title', 'date', 'cover illustrator', 'author', 'accession', 'theme-center context'],
-    archival_does_not_know: ['full visitor script', 'excluded populations in Democracity narrative'],
+    established_in_public_packet: ['title', 'date', 'cover illustrator', 'author', 'accession', 'theme-center context'],
+    not_established_in_public_packet: ['full visitor script', 'excluded populations in Democracity narrative'],
     representation: {
       type: 'original-svg',
       src: '../assets/objects/program-tomorrow.svg',
@@ -200,8 +204,8 @@ const seeds = [
       'Checklist notes Norman Bel Geddes’s exhibit vision of an egalitarian America in 1960 with automobiles for all.'
     ],
     missing_fields: ['bibId', 'materials', 'designer_credit_on_object_record'],
-    archival_knows: ['title', 'date', 'publisher', 'accession', 'Futurama exhibit context'],
-    archival_does_not_know: ['labor that built the diorama', 'who was excluded from “automobiles for all”'],
+    established_in_public_packet: ['title', 'date', 'publisher', 'accession', 'Futurama exhibit context'],
+    not_established_in_public_packet: ['labor that built the diorama', 'who was excluded from “automobiles for all”'],
     representation: {
       type: 'original-svg',
       src: '../assets/objects/futurama-booklet.svg',
@@ -228,8 +232,8 @@ const seeds = [
       'Checklist notes design intended to read as furniture rather than bare mechanism when not in use.'
     ],
     missing_fields: ['bibId', 'broadcast_receiver_history', 'owner'],
-    archival_knows: ['title', 'date', 'designer', 'manufacturer', 'materials', 'dimensions', 'accession'],
-    archival_does_not_know: ['household use', 'who watched', 'maintenance labor', 'signal politics'],
+    established_in_public_packet: ['title', 'date', 'designer', 'manufacturer', 'materials', 'dimensions', 'accession'],
+    not_established_in_public_packet: ['household use', 'who watched', 'maintenance labor', 'signal politics'],
     representation: {
       type: 'original-svg',
       src: '../assets/objects/rca-television.svg',
@@ -359,8 +363,8 @@ const interpretations = {
 };
 
 async function main() {
-  const seedDir = join(root, 'data', 'research-seeds');
-  const interpDir = join(root, 'data', 'interpretations');
+  const seedDir = join(root, 'data', 'public', 'objects');
+  const interpDir = join(root, 'data', 'research', 'interpretations');
   await mkdir(seedDir, { recursive: true });
   await mkdir(interpDir, { recursive: true });
   for (const seed of seeds) {

@@ -2,47 +2,34 @@
 
 ## 0.1 — Connectivity and provenance
 
-- Validate documented endpoint URL construction.
-- Detect machine-verification pages instead of saving HTML as JSON.
-- Save raw records with retrieval timestamps and endpoint URLs.
-- Build a small seed corpus from thematic searches.
-
-**Status:** URL builders and verification detection are in place. Live automated requests currently receive Cloudflare Turnstile. CLI path remains available; simulation Track B does not depend on it.
+CLI URL builders, verification-page detection, raw packet saving. Live Turnstile remains a Track A issue; Track B demo is independent.
 
 ## 0.2 — Object packets
 
-- Normalize BibID, accession number, title, creator, date, material, format, subjects, and files.
-- Track missing fields and record-level uncertainty.
-- Add citation-ready source references.
+Dual-layer schema: `data/public/objects/` (source) and `data/research/interpretations/` (derived).
 
-**Status:** Dual-layer schema ships under `data/research-seeds/` (source) and `data/interpretations/` (derived). Live API-normalized packets remain blocked on connectivity.
+## 0.3 — Research demo (object deep-read)
 
-## 0.3 — Research demo
+Bounded agents tableau preserved as record drill-down inside the simulation shell.
 
-- Select a few objects around labor, domestic modernity, propaganda, and technological optimism.
-- Give agents bounded interpretive roles.
-- Visualize agreement, contradiction, uncertainty, and source grounding.
-- Produce a revision ledger for later onsite research.
+## 0.4 — Institutional memory / Research Demo 001
 
-**Status:** Trial 001 object deep-read remains available inside the simulation shell (record drill-down).
+**Status:** Implemented on `feature/research-simulation-demo`.
 
-## 0.4 — Institutional memory simulation (Level 1)
+- Featured 6 public records (capacity 30)
+- Deterministic graph + 5 rounds
+- Claim types: SOURCE_SUPPORTED / INFERENCE / UNCERTAIN / FABRICATION_TEST
+- Residency mode + object-request candidates
+- Vercel static config for stable share URL; Pages workflow optional
+- Institution-safe gaps: `not_established_in_public_packet`
+- MiroFish conceptual comparison only (no AGPL code)
 
-- Capacity for 30 research seeds; Luna ship with 8 curated public-record packets.
-- Deterministic institutional-memory graph (source vs interpreted edges).
-- Precomputed interpretive rounds (Model A: documents as memory).
-- View modes: Archive / Interpretation / Simulation / Contradictions / Unknown / Residency.
-- Claim interrogation (not free chat).
-- MiroFish as out-of-tree AGPL benchmark only (`experiments/mirofish/`).
-
-**Status (2026-09-02):** Simulation 001 implemented on branch `feature/institutional-memory-v0`.
-
-### External references (not dependencies)
+### External references
 
 | Level | Approach |
 |---|---|
-| 1 (now) | MiroFish-inspired architecture; our lightweight MIT engine |
-| 2 (soon) | Run MiroFish locally as comparative research |
-| 3 (later) | Evaluate OASIS (Apache-2.0) if persistent multi-agent runtime is needed |
+| 1 (now) | Deterministic MIT engine |
+| 2 | MiroFish out-of-tree benchmark |
+| 3 | Possible OASIS evaluation later |
 
-Next corpus expansion: grow toward 30 seeds across utopia / media / machine ideology / world-making clusters (e.g. more Futurama/labor/colonial-adjacent public records).
+Next: share Luna URL via Vercel; expand corpus toward 30 only after onsite feedback; optional generative agents against this audited baseline.

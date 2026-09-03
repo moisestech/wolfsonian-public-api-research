@@ -1,0 +1,63 @@
+{
+  "id": "WOLF-008",
+  "slug": "rca-television-trk12",
+  "cluster": "media",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Television, RCA Victor TRK 12",
+  "accessionNumber": "2012.6.1",
+  "bibId": null,
+  "date": "1939",
+  "creator": [
+    "John Vassos"
+  ],
+  "materials": [
+    "walnut",
+    "beech",
+    "ebonized veneer",
+    "Bakelite",
+    "glass",
+    "metal"
+  ],
+  "subjects": [
+    "television",
+    "RCA",
+    "World's Fairs"
+  ],
+  "dimensions": "40 × 34 × 20 1/2 in.",
+  "collection": null,
+  "source_urls": [
+    "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+  ],
+  "source_text": [
+    "Television, RCA Victor TRK 12, 1939. John Vassos, designer. Accession 2012.6.1.",
+    "Checklist associates the set with consumer presentation at the New York World's Fair."
+  ],
+  "missing_fields": [
+    "bibId",
+    "broadcast_receiver_history",
+    "prior_ownership",
+    "collection"
+  ],
+  "established_in_public_packet": [
+    "title",
+    "date",
+    "designer",
+    "materials",
+    "dimensions",
+    "accession"
+  ],
+  "not_established_in_public_packet": [
+    "household use history",
+    "viewers of this set",
+    "maintenance labor",
+    "broadcast-signal politics"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/rca-television.svg",
+    "caption": "Original diagram: early television cabinet"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

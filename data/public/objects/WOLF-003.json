@@ -1,0 +1,54 @@
+{
+  "id": "WOLF-003",
+  "slug": "machine-age-catalogue",
+  "cluster": "machine-ideology",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Catalogue, Machine Age Exposition",
+  "accessionNumber": "XM1999.108.8",
+  "bibId": null,
+  "date": "1927",
+  "creator": [
+    "Fernand Léger"
+  ],
+  "materials": [],
+  "subjects": [
+    "Machine Age Exposition",
+    "modernism",
+    "industrial design",
+    "architecture"
+  ],
+  "dimensions": "11 × 8 3/4 in.",
+  "collection": "The Mitchell Wolfson, Jr. Collection",
+  "source_urls": [
+    "https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf"
+  ],
+  "source_text": [
+    "Catalogue, Machine Age Exposition, 1927. Cover associated with Fernand Léger in the cited checklist.",
+    "Dimensions listed as 11 × 8 3/4 in. Accession XM1999.108.8."
+  ],
+  "missing_fields": [
+    "bibId",
+    "materials",
+    "full_essay_text"
+  ],
+  "established_in_public_packet": [
+    "title",
+    "date",
+    "cover designer attribution in checklist",
+    "dimensions",
+    "accession"
+  ],
+  "not_established_in_public_packet": [
+    "reader annotations on this copy",
+    "complete essay contents beyond the checklist citation",
+    "labor histories of machines shown in the exposition"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/machine-age-catalogue.svg",
+    "caption": "Original diagram: catalogue as machine-geometry page"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}
