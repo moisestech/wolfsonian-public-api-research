@@ -12,6 +12,13 @@ It is **not** an official Wolfsonian application, production system, or museum-a
 
 Canonical research repository: [github.com/moisestech/wolfsonian-public-api-research](https://github.com/moisestech/wolfsonian-public-api-research)
 
+![Simulation overview — graph, agents, and claim panel](docs/images/demo-overview.png)
+
+![Residency view — 4 object-request candidates](docs/images/residency-view.png)
+*Contradictions and gaps become candidates for physical collection research.*
+
+![Deep-read provenance view — SOURCE → INTERPRETATION → UNCERTAINTY → ONSITE QUESTION](docs/images/claim-provenance.png)
+
 ### What to notice in under a minute
 
 1. These are **public** Wolfsonian source records (manually prepared packets).
