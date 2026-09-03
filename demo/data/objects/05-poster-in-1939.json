@@ -1,0 +1,171 @@
+{
+  "id": "05-poster-in-1939",
+  "seedId": "WOLF-005",
+  "trialLabel": "Record 05",
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/poster-in-1939.svg",
+    "caption": "Original diagram: fair publicity poster frame"
+  },
+  "source": {
+    "institution": "The Wolfsonian–FIU",
+    "title": "Poster, In 1939: The New York World’s Fair",
+    "accessionNumber": "85.4.72",
+    "bibId": null,
+    "date": "1937",
+    "creator": "Nembhard N. Culin",
+    "materials": "offset lithograph",
+    "dimensions": "39 3/4 × 28 in.",
+    "collection": "The Mitchell Wolfson, Jr. Collection",
+    "publicRecordUrl": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+    "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+    "citedAt": "2026-09-02",
+    "missingFields": [
+      "bibId",
+      "print_run",
+      "distribution_channels"
+    ]
+  },
+  "archivalActor": {
+    "knows": [
+      "title",
+      "date",
+      "designer",
+      "publisher",
+      "medium",
+      "dimensions",
+      "accession"
+    ],
+    "doesNotKnow": [
+      "audience demographics",
+      "conversion to attendance",
+      "censored alternatives"
+    ]
+  },
+  "agents": {
+    "archivist": {
+      "agreesWith": [
+        "worker"
+      ],
+      "contradicts": [
+        "counterfeit"
+      ],
+      "fabrication": false,
+      "confidence": 0.68,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "The public checklist/record identifies the 1937 fair poster with accession-level facts.",
+      "claim": "Catalogued identity is the trustworthy core; interpretive words beyond it must be marked.",
+      "uncertainty": "Related files and full text are outside this seed.",
+      "onsiteQuestion": "What physical details of the 1937 fair poster are absent from the published description?"
+    },
+    "worker": {
+      "agreesWith": [
+        "mourner",
+        "archivist"
+      ],
+      "contradicts": [
+        "futurist"
+      ],
+      "fabrication": false,
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "The record names designers, publishers, or manufacturers more readily than laborers.",
+      "claim": "Invisible work likely underwrites the desire this object sells.",
+      "uncertainty": "Labor is inferred from absence, not proven by a field.",
+      "onsiteQuestion": "Where do making and maintenance leave marks the catalog omits?"
+    },
+    "futurist": {
+      "agreesWith": [
+        "propagandist"
+      ],
+      "contradicts": [
+        "mourner",
+        "worker"
+      ],
+      "fabrication": false,
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "Public text situates the object within technological or fair-time futurity.",
+      "claim": "The object participates in a promise of desire / spectacle.",
+      "uncertainty": "Promise is interpretive, not a measured outcome in the seed.",
+      "onsiteQuestion": "Does the physical object still project futurity, or only the surrounding rhetoric?"
+    },
+    "mourner": {
+      "agreesWith": [
+        "worker"
+      ],
+      "contradicts": [
+        "futurist",
+        "propagandist",
+        "counterfeit"
+      ],
+      "fabrication": false,
+      "confidence": 0.46,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "Optimistic framing sits beside historical violence, exclusion, or omitted bodies.",
+      "claim": "What the record celebrates may depend on what it does not name.",
+      "uncertainty": "Absence is not automatic proof of institutional silence.",
+      "onsiteQuestion": "What adjacent records would complicate this object’s optimistic reading?"
+    },
+    "propagandist": {
+      "agreesWith": [
+        "futurist"
+      ],
+      "contradicts": [
+        "archivist"
+      ],
+      "fabrication": false,
+      "confidence": 0.52,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "Design and publication are instruments for organizing belief.",
+      "claim": "The object teaches desire, allegiance, or legibility for a managed modern world.",
+      "uncertainty": "Intent versus effect cannot be fully separated from this packet.",
+      "onsiteQuestion": "How does current staging recruit visitors into the same lesson?"
+    },
+    "counterfeit": {
+      "agreesWith": [],
+      "contradicts": [
+        "archivist",
+        "worker",
+        "mourner"
+      ],
+      "fabrication": true,
+      "confidence": 0.12,
+      "evidence": [
+        {
+          "text": "No quantitative reception data in seed",
+          "sourceRef": "source.missingFields"
+        }
+      ],
+      "observation": "Gaps invite fluent completion.",
+      "claim": "A precise, unsupported social statistic or consensus can be invented to seal the story.",
+      "uncertainty": "Intentionally fabricated.",
+      "onsiteQuestion": "Which sealed stories should remain labeled speculation?"
+    }
+  }
+}

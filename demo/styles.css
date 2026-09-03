@@ -482,6 +482,260 @@ a {
   font-size: 0.78rem;
 }
 
+.landing {
+  width: min(820px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 4rem 0 3rem;
+}
+
+.landing__stats {
+  font-family: var(--mono);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 1.5rem 0;
+  max-width: 54ch;
+}
+
+.landing__note {
+  color: var(--muted);
+  font-size: 0.92rem;
+  max-width: 60ch;
+  margin-top: 1.25rem;
+}
+
+.site-header--compact {
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.site-header--compact h1 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  max-width: none;
+}
+
+.disclaimer.compact {
+  margin-top: 0.4rem;
+}
+
+.view-modes {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto 1rem;
+}
+
+.view-modes__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sim-main {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto 1.5rem;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1rem;
+}
+
+.graph-panel,
+.claim-panel {
+  background: var(--panel);
+  border: 1px solid rgba(28, 36, 41, 0.16);
+  box-shadow: var(--shadow);
+}
+
+.graph-panel {
+  padding: 0.75rem;
+}
+
+.graph-canvas {
+  width: 100%;
+  height: auto;
+  min-height: 360px;
+  background:
+    linear-gradient(180deg, rgba(247, 249, 250, 0.95), rgba(238, 241, 244, 0.9));
+}
+
+.graph-edge {
+  fill: none;
+  stroke-width: 1.25;
+  opacity: 0.55;
+}
+
+.graph-edge--source {
+  stroke: var(--ink);
+}
+
+.graph-edge--interpreted {
+  stroke: var(--accent);
+  stroke-dasharray: 5 4;
+}
+
+.graph-node {
+  fill: var(--panel);
+  stroke: var(--ink);
+  stroke-width: 1.25;
+}
+
+.graph-node--record {
+  fill: #dfe7ea;
+}
+
+.graph-node--concept {
+  fill: #f3f5f7;
+  stroke: var(--muted);
+}
+
+.graph-node.is-active {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.graph-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  fill: var(--muted);
+}
+
+.graph-caption {
+  margin: 0.5rem 0.25rem 0.25rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.claim-panel {
+  padding: 1rem 1.1rem 1.25rem;
+  max-height: 640px;
+  overflow: auto;
+}
+
+.round-switch {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.claim-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.claim-empty {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.claim-item {
+  width: 100%;
+  text-align: left;
+  appearance: none;
+  border: 1px solid rgba(28, 36, 41, 0.18);
+  background: #fff;
+  padding: 0.7rem 0.75rem;
+  cursor: pointer;
+  display: grid;
+  gap: 0.35rem;
+  font: inherit;
+  color: inherit;
+}
+
+.claim-item.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.claim-item.kind-fabrication {
+  border-style: dashed;
+  border-color: var(--fabricate);
+}
+
+.claim-agent {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.claim-text {
+  font-size: 0.95rem;
+}
+
+.interrogation {
+  margin-top: 1rem;
+  border-top: 1px solid rgba(28, 36, 41, 0.12);
+  padding-top: 0.85rem;
+}
+
+.interrogation h3 {
+  margin: 0 0 0.65rem;
+  font-family: var(--display);
+  font-size: 1.1rem;
+}
+
+.interrogation dl {
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.interrogation dt {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.interrogation dd {
+  margin: 0.15rem 0 0;
+  font-size: 0.95rem;
+}
+
+.text-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 0.9rem;
+  text-decoration: underline;
+}
+
+.deep-read {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(28, 36, 41, 0.16);
+}
+
+.archival-actor {
+  margin-top: 0.65rem;
+  text-align: left;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  line-height: 1.4;
+}
+
+.archival-actor p {
+  margin: 0.2rem 0;
+}
+
+@media (max-width: 900px) {
+  .sim-main {
+    grid-template-columns: 1fr;
+  }
+
+  .claim-panel {
+    max-height: none;
+  }
+}
+
 @media (max-width: 900px) {
   .tableau {
     grid-template-columns: 1fr;

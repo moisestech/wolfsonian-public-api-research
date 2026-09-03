@@ -7,7 +7,7 @@
 - Save raw records with retrieval timestamps and endpoint URLs.
 - Build a small seed corpus from thematic searches.
 
-**Status (2026-07-21):** URL builders and verification detection are in place. Live automated requests currently receive a Cloudflare Turnstile challenge (`/turnstile-challenge`) instead of JSON. Next step for live 0.1 completion: obtain a browser session cookie locally (`WOLFSONIAN_COOKIE`) or an approved research route, then confirm one successful packet under `data/raw/`.
+**Status:** URL builders and verification detection are in place. Live automated requests currently receive Cloudflare Turnstile. CLI path remains available; simulation Track B does not depend on it.
 
 ## 0.2 — Object packets
 
@@ -15,7 +15,7 @@
 - Track missing fields and record-level uncertainty.
 - Add citation-ready source references.
 
-**Status (2026-09-02):** Trial 001 seeds this schema with three **manually prepared** public-record packets under `demo/data/objects/`. Live API-normalized packets remain blocked on connectivity. Missing fields (including BibID where unknown) are tracked explicitly.
+**Status:** Dual-layer schema ships under `data/research-seeds/` (source) and `data/interpretations/` (derived). Live API-normalized packets remain blocked on connectivity.
 
 ## 0.3 — Research demo
 
@@ -24,11 +24,25 @@
 - Visualize agreement, contradiction, uncertainty, and source grounding.
 - Produce a revision ledger for later onsite research.
 
-**Status (2026-09-02):** Research Trial 001 ships as a static GitHub Pages demo:
+**Status:** Trial 001 object deep-read remains available inside the simulation shell (record drill-down).
 
-- Objects: Trylon and Perisphere model (`86.17.1`), Sparton radio 558-C (`XX1990.1484`), Machine Age Exposition catalogue (`XM1999.108.8`)
-- Agents: Archivist, Worker, Futurist, Mourner, Propagandist, Counterfeit
-- No live API dependency; original SVG representations only
-- Ledger + “Why see this object in person?” onsite prompt
+## 0.4 — Institutional memory simulation (Level 1)
 
-Next cluster candidate (not in Trial 001): Mappemonde vase (`85.7.383a,b`).
+- Capacity for 30 research seeds; Luna ship with 8 curated public-record packets.
+- Deterministic institutional-memory graph (source vs interpreted edges).
+- Precomputed interpretive rounds (Model A: documents as memory).
+- View modes: Archive / Interpretation / Simulation / Contradictions / Unknown / Residency.
+- Claim interrogation (not free chat).
+- MiroFish as out-of-tree AGPL benchmark only (`experiments/mirofish/`).
+
+**Status (2026-09-02):** Simulation 001 implemented on branch `feature/institutional-memory-v0`.
+
+### External references (not dependencies)
+
+| Level | Approach |
+|---|---|
+| 1 (now) | MiroFish-inspired architecture; our lightweight MIT engine |
+| 2 (soon) | Run MiroFish locally as comparative research |
+| 3 (later) | Evaluate OASIS (Apache-2.0) if persistent multi-agent runtime is needed |
+
+Next corpus expansion: grow toward 30 seeds across utopia / media / machine ideology / world-making clusters (e.g. more Futurama/labor/colonial-adjacent public records).

@@ -1,0 +1,172 @@
+{
+  "id": "08-rca-television-trk12",
+  "seedId": "WOLF-008",
+  "trialLabel": "Record 08",
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/rca-television.svg",
+    "caption": "Original diagram: early television cabinet"
+  },
+  "source": {
+    "institution": "The Wolfsonian–FIU",
+    "title": "Television, RCA Victor TRK 12",
+    "accessionNumber": "2012.6.1",
+    "bibId": null,
+    "date": "1939",
+    "creator": "John Vassos",
+    "materials": "walnut, beech, ebonized veneer, Bakelite, glass, metal",
+    "dimensions": "40 × 34 × 20 1/2 in.",
+    "collection": null,
+    "publicRecordUrl": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+    "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+    "citedAt": "2026-09-02",
+    "missingFields": [
+      "bibId",
+      "broadcast_receiver_history",
+      "owner"
+    ]
+  },
+  "archivalActor": {
+    "knows": [
+      "title",
+      "date",
+      "designer",
+      "manufacturer",
+      "materials",
+      "dimensions",
+      "accession"
+    ],
+    "doesNotKnow": [
+      "household use",
+      "who watched",
+      "maintenance labor",
+      "signal politics"
+    ]
+  },
+  "agents": {
+    "archivist": {
+      "agreesWith": [
+        "worker"
+      ],
+      "contradicts": [
+        "counterfeit"
+      ],
+      "fabrication": false,
+      "confidence": 0.68,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "The public checklist/record identifies the RCA TRK 12 television with accession-level facts.",
+      "claim": "Catalogued identity is the trustworthy core; interpretive words beyond it must be marked.",
+      "uncertainty": "Related files and full text are outside this seed.",
+      "onsiteQuestion": "What physical details of the RCA TRK 12 television are absent from the published description?"
+    },
+    "worker": {
+      "agreesWith": [
+        "mourner",
+        "archivist"
+      ],
+      "contradicts": [
+        "futurist"
+      ],
+      "fabrication": false,
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "The record names designers, publishers, or manufacturers more readily than laborers.",
+      "claim": "Invisible work likely underwrites the comfort this object sells.",
+      "uncertainty": "Labor is inferred from absence, not proven by a field.",
+      "onsiteQuestion": "Where do making and maintenance leave marks the catalog omits?"
+    },
+    "futurist": {
+      "agreesWith": [
+        "propagandist"
+      ],
+      "contradicts": [
+        "mourner",
+        "worker"
+      ],
+      "fabrication": false,
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "Public text situates the object within technological or fair-time futurity.",
+      "claim": "The object participates in a promise of comfort / domestication.",
+      "uncertainty": "Promise is interpretive, not a measured outcome in the seed.",
+      "onsiteQuestion": "Does the physical object still project futurity, or only the surrounding rhetoric?"
+    },
+    "mourner": {
+      "agreesWith": [
+        "worker"
+      ],
+      "contradicts": [
+        "futurist",
+        "propagandist",
+        "counterfeit"
+      ],
+      "fabrication": false,
+      "confidence": 0.46,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "Optimistic framing sits beside historical violence, exclusion, or omitted bodies.",
+      "claim": "What the record celebrates may depend on what it does not name.",
+      "uncertainty": "Absence is not automatic proof of institutional silence.",
+      "onsiteQuestion": "What adjacent records would complicate this object’s optimistic reading?"
+    },
+    "propagandist": {
+      "agreesWith": [
+        "futurist"
+      ],
+      "contradicts": [
+        "archivist"
+      ],
+      "fabrication": false,
+      "confidence": 0.52,
+      "evidence": [
+        {
+          "text": "See source packet fields",
+          "sourceRef": "source.title"
+        }
+      ],
+      "observation": "Design and publication are instruments for organizing belief.",
+      "claim": "The object teaches desire, allegiance, or legibility for a managed modern world.",
+      "uncertainty": "Intent versus effect cannot be fully separated from this packet.",
+      "onsiteQuestion": "How does current staging recruit visitors into the same lesson?"
+    },
+    "counterfeit": {
+      "agreesWith": [],
+      "contradicts": [
+        "archivist",
+        "worker",
+        "mourner"
+      ],
+      "fabrication": true,
+      "confidence": 0.12,
+      "evidence": [
+        {
+          "text": "No quantitative reception data in seed",
+          "sourceRef": "source.missingFields"
+        }
+      ],
+      "observation": "Gaps invite fluent completion.",
+      "claim": "A precise, unsupported social statistic or consensus can be invented to seal the story.",
+      "uncertainty": "Intentionally fabricated.",
+      "onsiteQuestion": "Which sealed stories should remain labeled speculation?"
+    }
+  }
+}

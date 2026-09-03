@@ -1,0 +1,53 @@
+{
+  "id": "WOLF-007",
+  "slug": "booklet-futurama",
+  "cluster": "utopia",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Booklet, Futurama",
+  "accessionNumber": "XB1992.1640",
+  "bibId": null,
+  "date": "1940",
+  "creator": [
+    "General Motors Corporation"
+  ],
+  "materials": [],
+  "subjects": [
+    "Futurama",
+    "automobility",
+    "corporate utopia",
+    "highways"
+  ],
+  "dimensions": "7 × 8 1/4 in. closed",
+  "collection": "The Mitchell Wolfson, Jr. Collection",
+  "source_urls": [
+    "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+  ],
+  "source_text": [
+    "General Motors Futurama booklet.",
+    "Checklist notes Norman Bel Geddes’s exhibit vision of an egalitarian America in 1960 with automobiles for all."
+  ],
+  "missing_fields": [
+    "bibId",
+    "materials",
+    "designer_credit_on_object_record"
+  ],
+  "archival_knows": [
+    "title",
+    "date",
+    "publisher",
+    "accession",
+    "Futurama exhibit context"
+  ],
+  "archival_does_not_know": [
+    "labor that built the diorama",
+    "who was excluded from “automobiles for all”"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/futurama-booklet.svg",
+    "caption": "Original diagram: Futurama booklet mark"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

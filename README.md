@@ -8,7 +8,7 @@ It is **not** an official Wolfsonian application, production, or museum-authored
 
 ## Research demo
 
-**The Archive Dreams in Public — Research Trial 001**
+**The Archive Dreams in Public — Institutional Memory Simulation 001**
 
 Public URL (GitHub Pages): [https://moisestech.github.io/wolfsonian-public-api-research/](https://moisestech.github.io/wolfsonian-public-api-research/)
 
@@ -17,13 +17,17 @@ Public URL (GitHub Pages): [https://moisestech.github.io/wolfsonian-public-api-r
 Local preview:
 
 ```bash
+npm run build:demo
+npm test
 npx --yes serve .
 # then open /demo/
 ```
 
-The demo uses **three manually curated static object packets** and **six bounded agents** (Archivist, Worker, Futurist, Mourner, Propagandist, Counterfeit). It does **not** call the live digital API. Object figures are original diagrammatic SVGs, not collection photography.
+Simulation 001 ships **8 curated public-record seeds** (capacity 30), a deterministic institutional-memory graph, **3 precomputed interpretive rounds**, six bounded agents plus The Museum in rounds, and view modes Archive / Interpretation / Simulation / Contradictions / Unknown / Residency. Claim interrogation asks what source supports a statement, who disagrees, and whether the physical object is required. Record deep-read preserves the Trial 001 agent tableau.
 
-Packets live in [`demo/data/`](demo/data/) and are covered by `npm test`.
+Source packets live in [`data/research-seeds/`](data/research-seeds/); interpretations in [`data/interpretations/`](data/interpretations/). The demo does **not** call the live digital API and does **not** republish collection photography.
+
+MiroFish is documented as an out-of-tree AGPL comparative experiment only: [`experiments/mirofish/`](experiments/mirofish/).
 
 ## Why this exists
 
@@ -33,7 +37,8 @@ The Wolfsonian Digital Labs describes its projects as prototypes and proofs of c
 
 ## Current capabilities
 
-- Browser research tableau for Trial 001 (static packets, no live API dependency).
+- Browser institutional-memory simulation (static packets, graph, rounds; no live API dependency).
+- Record deep-read tableau with six bounded agents and provenance ledger.
 - Build documented search, statistics, citation, brief-item, XML metadata, random-item, and thumbnail URLs.
 - Ping representative endpoints.
 - Detect a human-verification response instead of silently treating HTML as collection data.
@@ -123,14 +128,15 @@ Digital Labs overview: `https://labs.wolfsonian.org/`
 
 ## Status
 
-**Version 0.2.0:** Trial 001 static research demo, provenance packets, GitHub Pages entry, plus the 0.1 client/CLI notebook.
+**Version 0.3.0:** Institutional Memory Simulation 001 (8 seeds, graph, rounds, view modes) plus the 0.1 client/CLI notebook.
 
 | Milestone | State |
 |---|---|
 | Documented URL builders + offline tests | Done |
 | Ping / search / item / seed CLIs | Done |
 | Detect Turnstile instead of treating HTML as data | Done |
-| Research Trial 001 browser demo (static packets) | Done |
+| Dual-layer research seeds + interpretations | Done |
+| Institutional Memory Simulation 001 | Done |
 | First successful live JSON packet in `data/raw/` | Blocked on verification or approved research access |
-| Roadmap 0.2 live-normalized packets from API | Next after live access works |
-| Expand Trial clusters (e.g. Mappemonde) | Later |
+| Expand corpus toward 30 seeds | Next |
+| MiroFish comparative run (out of tree) | Documented, not vendored |

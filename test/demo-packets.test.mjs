@@ -48,15 +48,12 @@ function assertAgent(agentId, agent, packetId) {
   }
 }
 
-test('trial manifest lists three objects and six agents', async () => {
+test('trial manifest lists simulation corpus and interpretive agents', async () => {
   const trial = await readJson(join(demoData, 'trial-001.json'));
-  assert.equal(trial.id, 'trial-001');
-  assert.equal(trial.objects.length, 3);
-  assert.equal(trial.agents.length, 6);
-  assert.deepEqual(
-    trial.agents.map((agent) => agent.id),
-    REQUIRED_AGENTS
-  );
+  assert.equal(trial.id, 'sim-001');
+  assert.equal(trial.objects.length, 8);
+  const interpretive = trial.agents.filter((agent) => agent.id !== 'museum').map((agent) => agent.id);
+  assert.deepEqual(interpretive, REQUIRED_AGENTS);
 });
 
 test('each demo object packet matches provenance and agent schema', async () => {
@@ -65,7 +62,7 @@ test('each demo object packet matches provenance and agent schema', async () => 
   for (const objectId of trial.objects) {
     const packet = await readJson(join(demoData, 'objects', `${objectId}.json`));
     assert.equal(packet.id, objectId);
-    assert.ok(packet.trialLabel?.startsWith('Object'));
+    assert.ok(packet.trialLabel?.startsWith('Record'));
     assert.equal(packet.representation?.type, 'original-svg');
     assert.ok(packet.representation?.src?.endsWith('.svg'));
 

@@ -3,84 +3,102 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Research Trial 001 — The Archive Dreams in Public. An independent experimental instrument for reading agreement, contradiction, and uncertainty across Wolfsonian public-record packets.">
-  <title>The Archive Dreams in Public — Research Trial 001</title>
+  <meta name="description" content="Institutional Memory Simulation 001 — The Archive Dreams in Public.">
+  <title>Institutional Memory Simulation 001 — The Archive Dreams in Public</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#agent-panel">Skip to agent reading</a>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <p class="eyebrow" id="trial-subtitle">Research Trial 001</p>
-    <h1 id="trial-title">The Archive Dreams in Public</h1>
-    <p class="tagline" id="trial-tagline"></p>
-    <p class="disclaimer" id="trial-disclaimer"></p>
-  </header>
+  <section class="landing" id="landing" aria-labelledby="landing-title">
+    <p class="eyebrow">Institutional Memory Simulation 001</p>
+    <h1 id="landing-title">The Archive Dreams in Public</h1>
+    <p class="tagline" id="landing-tagline">The public archive becomes the memory of an artificial interpretive society.</p>
+    <p class="disclaimer" id="landing-disclaimer"></p>
+    <p class="landing__stats" id="landing-stats" aria-live="polite">Loading corpus…</p>
+    <button type="button" class="cta__button" id="enter-sim">Enter the simulation</button>
+    <p class="landing__note" id="landing-note"></p>
+  </section>
 
-  <nav class="object-switcher" aria-label="Object selection">
-    <div class="object-switcher__list" role="tablist" id="object-tabs"></div>
-  </nav>
+  <div id="sim-shell" class="sim-shell" hidden>
+    <header class="site-header site-header--compact">
+      <p class="eyebrow">Institutional Memory Simulation 001</p>
+      <h1>The Archive Dreams in Public</h1>
+      <p class="disclaimer compact" id="shell-disclaimer"></p>
+    </header>
 
-  <main class="tableau" id="tableau">
-    <section class="stage" aria-label="Research tableau">
-      <svg class="relation-layer" id="relation-layer" viewBox="0 0 1000 520" aria-hidden="true"></svg>
+    <nav class="view-modes" aria-label="Simulation views">
+      <div class="view-modes__list" role="tablist" id="view-tabs"></div>
+    </nav>
 
-      <div class="object-core" id="object-core">
-        <p class="object-core__label" id="object-label">Object</p>
-        <div class="object-core__figure" id="object-figure" aria-live="polite"></div>
-        <p class="object-core__title" id="object-title"></p>
-        <p class="object-core__meta" id="object-meta"></p>
+    <main class="sim-main" id="main">
+      <section class="graph-panel" aria-label="Institutional memory graph">
+        <svg class="graph-canvas" id="graph-canvas" viewBox="0 0 1000 560" role="img" aria-labelledby="graph-title">
+          <title id="graph-title">Institutional memory graph</title>
+        </svg>
+        <p class="graph-caption" id="graph-caption"></p>
+      </section>
+
+      <aside class="claim-panel" aria-label="Claims and interrogation">
+        <div class="claim-panel__header">
+          <p class="panel__kicker" id="round-kicker">Simulation</p>
+          <h2 class="panel__heading" id="round-title">Claims</h2>
+          <div class="round-switch" id="round-switch" hidden></div>
+        </div>
+        <ul class="claim-list" id="claim-list"></ul>
+        <div class="interrogation" id="interrogation" hidden>
+          <h3>Interrogate the claim</h3>
+          <dl id="interrogation-body"></dl>
+        </div>
+        <button type="button" class="text-button" id="open-deep-read" hidden>Open record deep-read</button>
+      </aside>
+    </main>
+
+    <section class="deep-read" id="deep-read" hidden aria-label="Record deep-read">
+      <button type="button" class="text-button" id="close-deep-read">← Back to simulation</button>
+      <nav class="object-switcher" aria-label="Record selection">
+        <div class="object-switcher__list" role="tablist" id="object-tabs"></div>
+      </nav>
+      <div class="tableau" id="tableau">
+        <section class="stage" aria-label="Research tableau">
+          <svg class="relation-layer" id="relation-layer" viewBox="0 0 1000 520" aria-hidden="true"></svg>
+          <div class="object-core" id="object-core">
+            <p class="object-core__label" id="object-label">Record</p>
+            <div class="object-core__figure" id="object-figure" aria-live="polite"></div>
+            <p class="object-core__title" id="object-title"></p>
+            <p class="object-core__meta" id="object-meta"></p>
+            <div class="archival-actor" id="archival-actor"></div>
+          </div>
+          <div class="agents" id="agent-nodes" role="group" aria-label="Bounded interpretive agents"></div>
+        </section>
+        <aside class="panel" id="agent-panel" aria-labelledby="panel-heading" tabindex="-1">
+          <p class="panel__kicker" id="panel-kicker">Select an agent</p>
+          <h2 class="panel__heading" id="panel-heading">Bounded reading</h2>
+          <p class="panel__hint" id="panel-empty">Choose an agent to expose observation, claim, evidence, agreement, contradiction, uncertainty, and an onsite question.</p>
+          <div class="panel__body" id="panel-body" hidden></div>
+        </aside>
       </div>
-
-      <div class="agents" id="agent-nodes" role="group" aria-label="Bounded interpretive agents"></div>
+      <section class="ledger" aria-label="Provenance ledger">
+        <ol class="ledger__steps">
+          <li><span class="ledger__key">Source</span><span class="ledger__value" id="ledger-source"></span></li>
+          <li><span class="ledger__key">Interpretation</span><span class="ledger__value" id="ledger-interpretation">Select an agent</span></li>
+          <li><span class="ledger__key">Uncertainty</span><span class="ledger__value" id="ledger-uncertainty">—</span></li>
+          <li><span class="ledger__key">Onsite question</span><span class="ledger__value" id="ledger-onsite">—</span></li>
+        </ol>
+        <p class="ledger__link"><a id="source-link" href="#" rel="noopener noreferrer" target="_blank">Public source record</a></p>
+      </section>
+      <section class="cta" aria-label="Onsite research prompt">
+        <button type="button" class="cta__button" id="onsite-cta" aria-expanded="false" aria-controls="onsite-list">Why see this object in person?</button>
+        <ul class="cta__list" id="onsite-list" hidden></ul>
+      </section>
     </section>
-
-    <aside class="panel" id="agent-panel" aria-labelledby="panel-heading" tabindex="-1">
-      <p class="panel__kicker" id="panel-kicker">Select an agent</p>
-      <h2 class="panel__heading" id="panel-heading">Bounded reading</h2>
-      <p class="panel__hint" id="panel-empty">Choose an agent to expose observation, claim, evidence, agreement, contradiction, uncertainty, and an onsite question.</p>
-      <div class="panel__body" id="panel-body" hidden></div>
-    </aside>
-  </main>
-
-  <section class="ledger" aria-label="Provenance ledger">
-    <ol class="ledger__steps">
-      <li>
-        <span class="ledger__key">Source</span>
-        <span class="ledger__value" id="ledger-source"></span>
-      </li>
-      <li>
-        <span class="ledger__key">Interpretation</span>
-        <span class="ledger__value" id="ledger-interpretation">Select an agent</span>
-      </li>
-      <li>
-        <span class="ledger__key">Uncertainty</span>
-        <span class="ledger__value" id="ledger-uncertainty">—</span>
-      </li>
-      <li>
-        <span class="ledger__key">Onsite question</span>
-        <span class="ledger__value" id="ledger-onsite">—</span>
-      </li>
-    </ol>
-    <p class="ledger__link">
-      <a id="source-link" href="#" rel="noopener noreferrer" target="_blank">Public source record</a>
-    </p>
-    <p class="ledger__note" id="data-note"></p>
-    <p class="ledger__note" id="representation-note"></p>
-  </section>
-
-  <section class="cta" aria-label="Onsite research prompt">
-    <button type="button" class="cta__button" id="onsite-cta" aria-expanded="false" aria-controls="onsite-list">
-      Why see this object in person?
-    </button>
-    <ul class="cta__list" id="onsite-list" hidden></ul>
-  </section>
+  </div>
 
   <footer class="site-footer">
-    <p>Independent research notebook · <a href="https://github.com/moisestech/wolfsonian-public-api-research">Source repository</a></p>
+    <p>Independent research notebook · MIT · <a href="https://github.com/moisestech/wolfsonian-public-api-research">Source repository</a></p>
   </footer>
 
   <script type="module" src="./app.js"></script>

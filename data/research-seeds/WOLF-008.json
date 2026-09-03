@@ -1,0 +1,64 @@
+{
+  "id": "WOLF-008",
+  "slug": "rca-television-trk12",
+  "cluster": "media",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Television, RCA Victor TRK 12",
+  "accessionNumber": "2012.6.1",
+  "bibId": null,
+  "date": "1939",
+  "creator": [
+    "John Vassos"
+  ],
+  "materials": [
+    "walnut",
+    "beech",
+    "ebonized veneer",
+    "Bakelite",
+    "glass",
+    "metal"
+  ],
+  "subjects": [
+    "television",
+    "domestic technology",
+    "streamlining",
+    "World's Fairs"
+  ],
+  "dimensions": "40 × 34 × 20 1/2 in.",
+  "collection": null,
+  "source_urls": [
+    "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+  ],
+  "source_text": [
+    "RCA Victor TRK 12 television designed by John Vassos; unveiled in consumer context at the New York World's Fair.",
+    "Checklist notes design intended to read as furniture rather than bare mechanism when not in use."
+  ],
+  "missing_fields": [
+    "bibId",
+    "broadcast_receiver_history",
+    "owner"
+  ],
+  "archival_knows": [
+    "title",
+    "date",
+    "designer",
+    "manufacturer",
+    "materials",
+    "dimensions",
+    "accession"
+  ],
+  "archival_does_not_know": [
+    "household use",
+    "who watched",
+    "maintenance labor",
+    "signal politics"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/rca-television.svg",
+    "caption": "Original diagram: early television cabinet"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

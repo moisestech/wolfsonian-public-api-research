@@ -1,48 +1,4 @@
 {
-  "id": "02-sparton-radio",
-  "seedId": "WOLF-002",
-  "trialLabel": "Record 02",
-  "representation": {
-    "type": "original-svg",
-    "src": "../assets/objects/sparton-radio.svg",
-    "caption": "Original diagram: streamlined radio silhouette"
-  },
-  "source": {
-    "institution": "The Wolfsonian–FIU",
-    "title": "Radio, Sparton, model 558-C",
-    "accessionNumber": "XX1990.1484",
-    "bibId": null,
-    "date": "1937",
-    "creator": "Walter Dorwin Teague",
-    "materials": "glass, brass, wood, Bakelite",
-    "dimensions": null,
-    "collection": "The Mitchell Wolfson, Jr. Collection",
-    "publicRecordUrl": "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/",
-    "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
-    "citedAt": "2026-09-02",
-    "missingFields": [
-      "bibId",
-      "dimensions",
-      "broadcast_history",
-      "owner"
-    ]
-  },
-  "archivalActor": {
-    "knows": [
-      "title",
-      "date",
-      "designer",
-      "manufacturer context",
-      "materials",
-      "accession"
-    ],
-    "doesNotKnow": [
-      "who owned me",
-      "how I was used",
-      "how listeners felt",
-      "component labor"
-    ]
-  },
   "agents": {
     "archivist": {
       "observation": "The published record names a 1937 Sparton 558-C radio designed by Walter Dorwin Teague, manufactured by Sparton, in glass, brass, wood, and Bakelite, accession XX1990.1484.",

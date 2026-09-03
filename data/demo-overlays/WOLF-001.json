@@ -1,47 +1,4 @@
 {
-  "id": "01-trylon-perisphere",
-  "seedId": "WOLF-001",
-  "trialLabel": "Record 01",
-  "representation": {
-    "type": "original-svg",
-    "src": "../assets/objects/trylon-perisphere.svg",
-    "caption": "Original diagram: Trylon and Perisphere geometry"
-  },
-  "source": {
-    "institution": "The Wolfsonian–FIU",
-    "title": "Model, Trylon and Perisphere",
-    "accessionNumber": "86.17.1",
-    "bibId": null,
-    "date": "c. 1938",
-    "creator": "Wallace K. Harrison; Jacques André Fouilhoux",
-    "materials": "stainless steel, plastic, wood",
-    "dimensions": "36 1/4 × 31 in. diameter",
-    "collection": "The Mitchell Wolfson, Jr. Collection",
-    "publicRecordUrl": "https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html",
-    "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
-    "citedAt": "2026-09-02",
-    "missingFields": [
-      "bibId",
-      "fabricator",
-      "ownership_history"
-    ]
-  },
-  "archivalActor": {
-    "knows": [
-      "title",
-      "date",
-      "architects",
-      "materials",
-      "dimensions",
-      "accession",
-      "collection"
-    ],
-    "doesNotKnow": [
-      "who fabricated each part",
-      "tour history",
-      "visitor affective response"
-    ]
-  },
   "agents": {
     "archivist": {
       "observation": "The public record identifies a c. 1938 presentation model of the Theme Center for the 1939 New York World's Fair, with named architects, materials, dimensions, accession 86.17.1, and collection credit.",

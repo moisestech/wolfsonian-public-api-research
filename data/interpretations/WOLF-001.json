@@ -1,0 +1,41 @@
+{
+  "packet_id": "WOLF-001",
+  "entities": [
+    {
+      "label": "Theme Center",
+      "kind": "concept",
+      "relation": "depicts"
+    },
+    {
+      "label": "World of Tomorrow",
+      "kind": "concept",
+      "relation": "promises"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "record:WOLF-001",
+      "to": "progress",
+      "type": "figures"
+    },
+    {
+      "from": "record:WOLF-001",
+      "to": "record:WOLF-005",
+      "type": "icon_shared_with"
+    }
+  ],
+  "possible_pressures": [
+    "progress",
+    "spectacle",
+    "hope"
+  ],
+  "open_questions": [
+    "What does the physical model reveal that publicity images flatten?"
+  ],
+  "requires_physical_inspection": [
+    "seams",
+    "fasteners",
+    "backside labels",
+    "wear"
+  ]
+}

@@ -20,6 +20,10 @@ What kind of institutional world can be inferred from a museum's public digital 
 - Treat missing metadata as an open research condition, not proof of absence.
 - Avoid visitor profiling or personal-data collection.
 
-## Demo packets (Trial 001)
+## Demo packets (Trial 001 / Simulation 001)
 
-While automated requests to the public digital host encounter a human-verification layer, Research Trial 001 uses **manually prepared public-record packets** committed under `demo/data/`. Delivery mechanism (static JSON) is separated from source claim (Wolfsonian public documentation). Packets retain accession numbers, preparation notes, missing-field lists, and links to the public pages used for citation. Interpretive agent text is labeled relative to that evidence; Counterfeit readings are explicitly marked as unsupported fabrication.
+While automated requests to the public digital host encounter a human-verification layer, the public demo uses **manually prepared public-record packets**.
+
+**Dual-layer rule:** source identity lives in `data/research-seeds/`; interpretive entities, pressures, and open questions live in `data/interpretations/`. Never mix those objects. Delivery mechanism (static JSON) is separated from source claim (Wolfsonian public documentation).
+
+Interpretive agent text is labeled relative to evidence; Counterfeit readings are explicitly marked as unsupported fabrication. Precomputed simulation rounds are **not** a calibrated agent-based model and are **not** a prediction engine—they expose disagreement, grounding, and residency questions.

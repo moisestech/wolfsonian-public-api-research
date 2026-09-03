@@ -1,3 +1,12 @@
+const VIEWS = [
+  { id: 'archive', label: 'Archive' },
+  { id: 'interpretation', label: 'Interpretation' },
+  { id: 'simulation', label: 'Simulation' },
+  { id: 'contradictions', label: 'Contradictions' },
+  { id: 'unknown', label: 'Unknown' },
+  { id: 'residency', label: 'Residency' }
+];
+
 const AGENT_POSITIONS = {
   archivist: { x: 140, y: 114 },
   futurist: { x: 500, y: 62 },
@@ -11,22 +20,46 @@ const CENTER = { x: 500, y: 250 };
 
 const state = {
   trial: null,
+  manifest: null,
+  graph: null,
+  rounds: [],
   packets: new Map(),
+  view: 'archive',
+  roundIndex: 0,
+  selectedClaimId: null,
+  selectedSeedId: null,
   objectId: null,
   agentId: null,
   onsiteOpen: false
 };
 
 const els = {
-  title: document.getElementById('trial-title'),
-  subtitle: document.getElementById('trial-subtitle'),
-  tagline: document.getElementById('trial-tagline'),
-  disclaimer: document.getElementById('trial-disclaimer'),
+  landing: document.getElementById('landing'),
+  landingTagline: document.getElementById('landing-tagline'),
+  landingDisclaimer: document.getElementById('landing-disclaimer'),
+  landingStats: document.getElementById('landing-stats'),
+  landingNote: document.getElementById('landing-note'),
+  enterSim: document.getElementById('enter-sim'),
+  simShell: document.getElementById('sim-shell'),
+  shellDisclaimer: document.getElementById('shell-disclaimer'),
+  viewTabs: document.getElementById('view-tabs'),
+  graphCanvas: document.getElementById('graph-canvas'),
+  graphCaption: document.getElementById('graph-caption'),
+  roundKicker: document.getElementById('round-kicker'),
+  roundTitle: document.getElementById('round-title'),
+  roundSwitch: document.getElementById('round-switch'),
+  claimList: document.getElementById('claim-list'),
+  interrogation: document.getElementById('interrogation'),
+  interrogationBody: document.getElementById('interrogation-body'),
+  openDeepRead: document.getElementById('open-deep-read'),
+  deepRead: document.getElementById('deep-read'),
+  closeDeepRead: document.getElementById('close-deep-read'),
   objectTabs: document.getElementById('object-tabs'),
   objectLabel: document.getElementById('object-label'),
   objectFigure: document.getElementById('object-figure'),
   objectTitle: document.getElementById('object-title'),
   objectMeta: document.getElementById('object-meta'),
+  archivalActor: document.getElementById('archival-actor'),
   objectCore: document.getElementById('object-core'),
   agentNodes: document.getElementById('agent-nodes'),
   relationLayer: document.getElementById('relation-layer'),
@@ -40,8 +73,6 @@ const els = {
   ledgerUncertainty: document.getElementById('ledger-uncertainty'),
   ledgerOnsite: document.getElementById('ledger-onsite'),
   sourceLink: document.getElementById('source-link'),
-  dataNote: document.getElementById('data-note'),
-  representationNote: document.getElementById('representation-note'),
   onsiteCta: document.getElementById('onsite-cta'),
   onsiteList: document.getElementById('onsite-list')
 };
@@ -55,108 +86,290 @@ function currentPacket() {
   return state.packets.get(state.objectId);
 }
 
+function packetBySeed(seedId) {
+  return [...state.packets.values()].find((packet) => packet.seedId === seedId);
+}
+
 function assetUrl(relativeFromObjectJson) {
-  // representation.src is authored as ../assets/objects/....svg from demo/data/objects/
   return relativeFromObjectJson.replace(/^\.\.\//, './');
 }
 
-async function loadTrial() {
-  const trial = await fetch('./data/trial-001.json').then((response) => {
-    if (!response.ok) throw new Error(`Failed to load trial manifest (${response.status})`);
-    return response.json();
-  });
+function allClaims() {
+  return state.rounds.flatMap((round) =>
+    round.claims.map((claim) => ({ ...claim, roundId: round.id, roundTitle: round.title }))
+  );
+}
+
+function visibleClaims() {
+  const claims = allClaims();
+  if (state.view === 'simulation') {
+    return state.rounds[state.roundIndex].claims.map((claim) => ({
+      ...claim,
+      roundId: state.rounds[state.roundIndex].id,
+      roundTitle: state.rounds[state.roundIndex].title
+    }));
+  }
+  if (state.view === 'contradictions') {
+    return claims.filter((claim) => claim.contradicts?.length);
+  }
+  if (state.view === 'unknown') {
+    return claims.filter((claim) => claim.kind === 'inference' || claim.publicRecordEstablishes === false);
+  }
+  if (state.view === 'residency') {
+    return claims.filter((claim) => claim.residencyQuestion);
+  }
+  return [];
+}
+
+async function loadAll() {
+  const [trial, manifest, graph] = await Promise.all([
+    fetch('./data/trial-001.json').then((r) => r.json()),
+    fetch('./data/simulations/sim-001/manifest.json').then((r) => r.json()),
+    fetch('./data/graph.json').then((r) => r.json())
+  ]);
+
+  const rounds = await Promise.all(
+    manifest.rounds.map((id) => fetch(`./data/simulations/sim-001/rounds/${id}.json`).then((r) => r.json()))
+  );
 
   const packets = await Promise.all(
     trial.objects.map(async (id) => {
-      const packet = await fetch(`./data/objects/${id}.json`).then((response) => {
-        if (!response.ok) throw new Error(`Failed to load packet ${id}`);
-        return response.json();
-      });
+      const packet = await fetch(`./data/objects/${id}.json`).then((r) => r.json());
       return [id, packet];
     })
   );
 
   state.trial = trial;
+  state.manifest = manifest;
+  state.graph = graph;
+  state.rounds = rounds;
   state.packets = new Map(packets);
   state.objectId = trial.objects[0];
 }
 
-function renderHeader() {
-  els.title.textContent = state.trial.title;
-  els.subtitle.textContent = state.trial.subtitle;
-  els.tagline.textContent = state.trial.tagline;
-  els.disclaimer.textContent = state.trial.disclaimer;
-  els.dataNote.textContent = state.trial.dataNote;
-  els.representationNote.textContent = state.trial.representationNote;
+function renderLanding() {
+  const c = state.manifest.counts;
+  els.landingTagline.textContent = state.manifest.tagline || state.trial.tagline;
+  els.landingDisclaimer.textContent = state.trial.disclaimer;
+  els.shellDisclaimer.textContent = state.trial.disclaimer;
+  els.landingStats.textContent = `${c.records} source records · ${c.entities} extracted entities · ${c.relationships} relationships · ${c.agents} interpretive agents · ${c.unresolvedContradictions} unresolved contradictions`;
+  els.landingNote.textContent = `${state.trial.dataNote} ${state.trial.representationNote} Capacity ${state.manifest.capacity.shippedRecords}/${state.manifest.capacity.maxRecords}.`;
 }
 
-function renderObjectTabs() {
-  els.objectTabs.replaceChildren();
-  for (const id of state.trial.objects) {
-    const packet = state.packets.get(id);
+function renderViewTabs() {
+  els.viewTabs.replaceChildren();
+  for (const view of VIEWS) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'object-tab';
-    button.id = `tab-${id}`;
     button.setAttribute('role', 'tab');
-    button.setAttribute('aria-selected', String(id === state.objectId));
-    button.setAttribute('aria-controls', 'object-core');
-    button.textContent = packet.trialLabel;
-    button.addEventListener('click', () => selectObject(id));
-    els.objectTabs.append(button);
+    button.setAttribute('aria-selected', String(view.id === state.view));
+    button.textContent = view.label;
+    button.addEventListener('click', () => {
+      state.view = view.id;
+      state.selectedClaimId = null;
+      renderViewTabs();
+      renderSim();
+    });
+    els.viewTabs.append(button);
   }
 }
 
-function renderAgentNodes() {
-  els.agentNodes.replaceChildren();
-  for (const agent of state.trial.agents) {
+function layoutGraph() {
+  const records = state.graph.nodes.filter((node) => node.kind === 'record');
+  const concepts = state.graph.nodes.filter((node) => node.kind !== 'record');
+  const positions = new Map();
+  const cx = 500;
+  const cy = 280;
+  records.forEach((node, index) => {
+    const angle = (Math.PI * 2 * index) / records.length - Math.PI / 2;
+    positions.set(node.id, {
+      x: cx + Math.cos(angle) * 210,
+      y: cy + Math.sin(angle) * 160
+    });
+  });
+  concepts.forEach((node, index) => {
+    const angle = (Math.PI * 2 * index) / Math.max(concepts.length, 1);
+    const radius = 70 + (index % 5) * 18;
+    positions.set(node.id, {
+      x: cx + Math.cos(angle) * radius,
+      y: cy + Math.sin(angle) * radius * 0.75
+    });
+  });
+  return positions;
+}
+
+function edgeVisible(edge) {
+  if (state.view === 'archive') return edge.layer === 'source';
+  if (state.view === 'interpretation') return edge.layer === 'interpreted';
+  if (state.view === 'simulation' || state.view === 'contradictions' || state.view === 'unknown' || state.view === 'residency') {
+    return true;
+  }
+  return true;
+}
+
+function drawGraph() {
+  const svg = els.graphCanvas;
+  svg.replaceChildren();
+  const positions = layoutGraph();
+  const claimSeeds = new Set(
+    visibleClaims().flatMap((claim) => claim.grounding.map((g) => `record:${g.seedId}`))
+  );
+
+  for (const edge of state.graph.edges) {
+    if (!edgeVisible(edge)) continue;
+    const from = positions.get(edge.source);
+    const to = positions.get(edge.target);
+    if (!from || !to) continue;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const midX = (from.x + to.x) / 2;
+    const midY = (from.y + to.y) / 2 - 18;
+    path.setAttribute('d', `M ${from.x} ${from.y} Q ${midX} ${midY} ${to.x} ${to.y}`);
+    path.setAttribute('class', edge.layer === 'source' ? 'graph-edge graph-edge--source' : 'graph-edge graph-edge--interpreted');
+    svg.append(path);
+  }
+
+  for (const node of state.graph.nodes) {
+    const pos = positions.get(node.id);
+    if (!pos) continue;
+    if (node.kind !== 'record' && (state.view === 'archive' || state.view === 'residency')) {
+      // keep concept marks lighter in archive/residency
+    }
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('transform', `translate(${pos.x} ${pos.y})`);
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('r', node.kind === 'record' ? '18' : '6');
+    circle.setAttribute(
+      'class',
+      `graph-node graph-node--${node.kind}${claimSeeds.has(node.id) ? ' is-active' : ''}`
+    );
+    group.append(circle);
+    if (node.kind === 'record') {
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('y', '32');
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('class', 'graph-label');
+      text.textContent = node.seedId.replace('WOLF-', '');
+      group.append(text);
+      group.style.cursor = 'pointer';
+      group.addEventListener('click', () => {
+        state.selectedSeedId = node.seedId;
+        const packet = packetBySeed(node.seedId);
+        if (packet) {
+          state.objectId = packet.id;
+          els.openDeepRead.hidden = false;
+        }
+        renderClaims();
+      });
+    }
+    svg.append(group);
+  }
+
+  const captions = {
+    archive: 'Archive view — relationships established by source metadata only.',
+    interpretation: 'Interpretation view — inferred entities, pressures, and cross-record links.',
+    simulation: 'Simulation view — active round claims grounded in selected records.',
+    contradictions: 'Contradictions — disagreement edges and opposing claims.',
+    unknown: 'Unknown — inferences and claims the public record cannot yet establish.',
+    residency: 'Residency — questions that require physical objects or institutional knowledge.'
+  };
+  els.graphCaption.textContent = captions[state.view];
+}
+
+function renderRoundSwitch() {
+  const show = state.view === 'simulation';
+  els.roundSwitch.hidden = !show;
+  els.roundSwitch.replaceChildren();
+  if (!show) return;
+  state.rounds.forEach((round, index) => {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'agent-node';
-    button.dataset.agent = agent.id;
-    button.setAttribute('aria-pressed', String(agent.id === state.agentId));
-    button.setAttribute('aria-controls', 'agent-panel');
-    button.textContent = agent.label;
-    if (agent.id === 'counterfeit') button.classList.add('is-fabricated');
-    button.addEventListener('click', () => selectAgent(agent.id));
-    els.agentNodes.append(button);
+    button.className = 'object-tab';
+    button.setAttribute('aria-selected', String(index === state.roundIndex));
+    button.textContent = `R${index + 1}`;
+    button.addEventListener('click', () => {
+      state.roundIndex = index;
+      state.selectedClaimId = null;
+      renderSim();
+    });
+    els.roundSwitch.append(button);
+  });
+}
+
+function renderClaims() {
+  const claims = visibleClaims();
+  els.claimList.replaceChildren();
+  els.roundKicker.textContent = state.view;
+  if (state.view === 'simulation') {
+    els.roundTitle.textContent = state.rounds[state.roundIndex].title;
+  } else if (state.view === 'archive' || state.view === 'interpretation') {
+    els.roundTitle.textContent = 'Select a record node, then open deep-read';
+  } else {
+    els.roundTitle.textContent = `${claims.length} claims`;
+  }
+
+  if ((state.view === 'archive' || state.view === 'interpretation') && !claims.length) {
+    const li = document.createElement('li');
+    li.className = 'claim-empty';
+    li.textContent = 'Graph shows source vs interpreted memory. Use Simulation / Contradictions / Unknown / Residency for claims, or open a record deep-read.';
+    els.claimList.append(li);
+    els.interrogation.hidden = true;
+    return;
+  }
+
+  for (const claim of claims) {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `claim-item kind-${claim.kind}${state.selectedClaimId === claim.id ? ' is-selected' : ''}`;
+    button.innerHTML = `<span class="claim-agent">${labelForAgent(claim.agent)}</span><span class="claim-text">${claim.text}</span>`;
+    button.addEventListener('click', () => {
+      state.selectedClaimId = claim.id;
+      state.selectedSeedId = claim.grounding[0]?.seedId || null;
+      const packet = packetBySeed(state.selectedSeedId);
+      if (packet) state.objectId = packet.id;
+      els.openDeepRead.hidden = !packet;
+      renderClaims();
+      renderInterrogation(claim);
+      drawGraph();
+    });
+    li.append(button);
+    els.claimList.append(li);
+  }
+
+  const selected = claims.find((claim) => claim.id === state.selectedClaimId);
+  if (selected) renderInterrogation(selected);
+  else {
+    els.interrogation.hidden = true;
   }
 }
 
-async function renderObject() {
-  const packet = currentPacket();
-  els.objectLabel.textContent = packet.trialLabel;
-  els.objectTitle.textContent = packet.source.title;
-  els.objectMeta.textContent = `${packet.source.accessionNumber} · ${packet.source.date || 'date unknown'}`;
-
-  els.ledgerSource.textContent = `${packet.source.institution} · ${packet.source.accessionNumber} · ${packet.source.title}`;
-  els.sourceLink.href = packet.source.publicRecordUrl;
-  els.sourceLink.textContent = `Public source for ${packet.source.accessionNumber}`;
-
-  for (const button of els.objectTabs.querySelectorAll('.object-tab')) {
-    button.setAttribute('aria-selected', String(button.id === `tab-${packet.id}`));
+function renderInterrogation(claim) {
+  els.interrogation.hidden = false;
+  const rows = [
+    ['What source made you believe this?', claim.grounding.map((g) => `${g.seedId}.${g.field}`).join('; ')],
+    ['Who disagrees with you?', claim.contradicts.map(labelForAgent).join(', ') || 'None named'],
+    ['Who agrees?', claim.agreesWith.map(labelForAgent).join(', ') || 'None named'],
+    ['What would change your mind?', claim.whatWouldChangeMind || '—'],
+    ['Can the public record establish this?', claim.publicRecordEstablishes ? 'Yes (within cited fields)' : 'Not from the cited public-record fields alone'],
+    ['Does this require seeing the physical object?', claim.requiresPhysicalObject ? 'Yes' : 'Not necessarily'],
+    ['Kind', claim.kind],
+    ['Residency question', claim.residencyQuestion || '—']
+  ];
+  els.interrogationBody.replaceChildren();
+  for (const [dt, dd] of rows) {
+    const term = document.createElement('dt');
+    term.textContent = dt;
+    const def = document.createElement('dd');
+    def.textContent = dd;
+    els.interrogationBody.append(term, def);
   }
+}
 
-  renderOnsiteList();
-
-  if (state.agentId) {
-    renderAgentPanel();
-  } else {
-    clearAgentPanel();
-  }
-
-  const src = assetUrl(packet.representation.src);
-  const svg = await fetch(src).then((response) => {
-    if (!response.ok) throw new Error(`Missing representation ${src}`);
-    return response.text();
-  });
-  els.objectFigure.innerHTML = svg;
-  const svgEl = els.objectFigure.querySelector('svg');
-  if (svgEl) {
-    svgEl.setAttribute('aria-label', packet.representation.caption || packet.source.title);
-  }
-
-  drawRelations();
+function renderSim() {
+  renderRoundSwitch();
+  drawGraph();
+  renderClaims();
 }
 
 function clearAgentPanel() {
@@ -189,8 +402,8 @@ function fieldBlock(title, contentNode) {
 function renderAgentPanel() {
   const packet = currentPacket();
   const agent = packet.agents[state.agentId];
+  if (!agent) return;
   const label = labelForAgent(state.agentId);
-
   els.panelKicker.textContent = packet.trialLabel;
   els.panelHeading.textContent = label;
   els.panelEmpty.hidden = true;
@@ -204,13 +417,16 @@ function renderAgentPanel() {
     els.panelBody.append(banner);
   }
 
-  const observation = document.createElement('p');
-  observation.textContent = agent.observation;
-  els.panelBody.append(fieldBlock('Observation', observation));
-
-  const claim = document.createElement('p');
-  claim.textContent = agent.claim;
-  els.panelBody.append(fieldBlock('Interpretive claim', claim));
+  for (const [title, value] of [
+    ['Observation', agent.observation],
+    ['Interpretive claim', agent.claim],
+    ['Uncertainty', agent.uncertainty],
+    ['Onsite research question', agent.onsiteQuestion]
+  ]) {
+    const p = document.createElement('p');
+    p.textContent = value;
+    els.panelBody.append(fieldBlock(title, p));
+  }
 
   const evidenceList = document.createElement('ul');
   for (const item of agent.evidence) {
@@ -222,58 +438,25 @@ function renderAgentPanel() {
 
   const agreeRow = document.createElement('div');
   agreeRow.className = 'badge-row';
-  if (agent.agreesWith.length === 0) {
-    const none = document.createElement('span');
-    none.textContent = 'None named';
-    agreeRow.append(none);
-  } else {
-    for (const id of agent.agreesWith) {
-      const badge = document.createElement('span');
-      badge.className = 'badge badge--agree';
-      badge.textContent = labelForAgent(id);
-      agreeRow.append(badge);
-    }
+  for (const id of agent.agreesWith) {
+    const badge = document.createElement('span');
+    badge.className = 'badge badge--agree';
+    badge.textContent = labelForAgent(id);
+    agreeRow.append(badge);
   }
+  if (!agent.agreesWith.length) agreeRow.textContent = 'None named';
   els.panelBody.append(fieldBlock('Agreement(s)', agreeRow));
 
   const contradictRow = document.createElement('div');
   contradictRow.className = 'badge-row';
-  if (agent.contradicts.length === 0) {
-    const none = document.createElement('span');
-    none.textContent = 'None named';
-    contradictRow.append(none);
-  } else {
-    for (const id of agent.contradicts) {
-      const badge = document.createElement('span');
-      badge.className = 'badge badge--contradict';
-      badge.textContent = labelForAgent(id);
-      contradictRow.append(badge);
-    }
+  for (const id of agent.contradicts) {
+    const badge = document.createElement('span');
+    badge.className = 'badge badge--contradict';
+    badge.textContent = labelForAgent(id);
+    contradictRow.append(badge);
   }
+  if (!agent.contradicts.length) contradictRow.textContent = 'None named';
   els.panelBody.append(fieldBlock('Contradiction(s)', contradictRow));
-
-  const uncertainty = document.createElement('p');
-  uncertainty.textContent = agent.uncertainty;
-  els.panelBody.append(fieldBlock('Uncertainty', uncertainty));
-
-  const confidenceWrap = document.createElement('div');
-  confidenceWrap.className = 'confidence';
-  const track = document.createElement('div');
-  track.className = 'confidence__track';
-  const fill = document.createElement('div');
-  fill.className = 'confidence__fill';
-  if (agent.confidence < 0.35) fill.classList.add('is-low');
-  fill.style.width = `${Math.round(agent.confidence * 100)}%`;
-  track.append(fill);
-  const confLabel = document.createElement('span');
-  confLabel.className = 'badge';
-  confLabel.textContent = `${Math.round(agent.confidence * 100)}%`;
-  confidenceWrap.append(track, confLabel);
-  els.panelBody.append(fieldBlock('Confidence', confidenceWrap));
-
-  const onsite = document.createElement('p');
-  onsite.textContent = agent.onsiteQuestion;
-  els.panelBody.append(fieldBlock('Onsite research question', onsite));
 
   els.ledgerInterpretation.textContent = agent.claim;
   els.ledgerUncertainty.textContent = agent.uncertainty;
@@ -285,7 +468,6 @@ function renderAgentPanel() {
     node.classList.toggle('is-agreeing', agent.agreesWith.includes(id));
     node.classList.toggle('is-contradicting', agent.contradicts.includes(id));
   }
-
   els.objectCore.classList.toggle('is-split', agent.contradicts.length > 0);
   drawRelations();
 }
@@ -300,31 +482,23 @@ function drawRelations() {
   const svg = els.relationLayer;
   svg.replaceChildren();
   if (!state.agentId) return;
-
   const packet = currentPacket();
   const agent = packet.agents[state.agentId];
+  if (!agent) return;
   const origin = AGENT_POSITIONS[state.agentId];
-
-  const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  halo.setAttribute('class', 'uncertain-halo');
-  halo.setAttribute('cx', String(CENTER.x));
-  halo.setAttribute('cy', String(CENTER.y));
-  halo.setAttribute('r', String(78 + (1 - agent.confidence) * 36));
-  svg.append(halo);
-
   const ground = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   ground.setAttribute('class', 'agree-path');
   ground.setAttribute('d', curvePath(origin, CENTER, 20));
   svg.append(ground);
-
   for (const otherId of agent.agreesWith) {
+    if (!AGENT_POSITIONS[otherId]) continue;
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('class', 'agree-path');
     path.setAttribute('d', curvePath(origin, AGENT_POSITIONS[otherId], 55));
     svg.append(path);
   }
-
   for (const otherId of agent.contradicts) {
+    if (!AGENT_POSITIONS[otherId]) continue;
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('class', 'contradict-path');
     path.setAttribute('d', curvePath(origin, AGENT_POSITIONS[otherId], -35));
@@ -332,56 +506,113 @@ function drawRelations() {
   }
 }
 
-function renderOnsiteList() {
+function renderObjectTabs() {
+  els.objectTabs.replaceChildren();
+  for (const id of state.trial.objects) {
+    const packet = state.packets.get(id);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'object-tab';
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-selected', String(id === state.objectId));
+    button.textContent = packet.trialLabel;
+    button.addEventListener('click', () => {
+      state.objectId = id;
+      state.agentId = null;
+      state.onsiteOpen = false;
+      renderObjectTabs();
+      renderAgentNodes();
+      clearAgentPanel();
+      renderObject();
+    });
+    els.objectTabs.append(button);
+  }
+}
+
+function renderAgentNodes() {
+  els.agentNodes.replaceChildren();
+  for (const agent of state.trial.agents.filter((item) => item.id !== 'museum')) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'agent-node';
+    button.dataset.agent = agent.id;
+    button.setAttribute('aria-pressed', String(agent.id === state.agentId));
+    button.textContent = agent.label;
+    if (agent.id === 'counterfeit') button.classList.add('is-fabricated');
+    button.addEventListener('click', () => {
+      state.agentId = agent.id;
+      renderAgentPanel();
+      els.panel.focus({ preventScroll: false });
+    });
+    els.agentNodes.append(button);
+  }
+}
+
+async function renderObject() {
   const packet = currentPacket();
+  els.objectLabel.textContent = packet.trialLabel;
+  els.objectTitle.textContent = packet.source.title;
+  els.objectMeta.textContent = `${packet.source.accessionNumber} · ${packet.source.date || 'date unknown'}`;
+  els.ledgerSource.textContent = `${packet.source.institution} · ${packet.source.accessionNumber} · ${packet.source.title}`;
+  els.sourceLink.href = packet.source.publicRecordUrl;
+  els.sourceLink.textContent = `Public source for ${packet.source.accessionNumber}`;
+
+  const knows = packet.archivalActor?.knows || [];
+  const unknown = packet.archivalActor?.doesNotKnow || [];
+  els.archivalActor.innerHTML = `<p><strong>I know:</strong> ${knows.join(', ') || '—'}</p><p><strong>I do not know:</strong> ${unknown.join(', ') || '—'}</p>`;
+
   els.onsiteList.replaceChildren();
-  for (const agent of state.trial.agents) {
+  for (const agent of state.trial.agents.filter((item) => item.id !== 'museum')) {
     const reading = packet.agents[agent.id];
+    if (!reading) continue;
     const item = document.createElement('li');
     item.innerHTML = `<strong>${agent.label}:</strong> ${reading.onsiteQuestion}`;
     els.onsiteList.append(item);
   }
   els.onsiteList.hidden = !state.onsiteOpen;
   els.onsiteCta.setAttribute('aria-expanded', String(state.onsiteOpen));
+
+  if (state.agentId) renderAgentPanel();
+  else clearAgentPanel();
+
+  const src = assetUrl(packet.representation.src);
+  const svg = await fetch(src).then((response) => response.text());
+  els.objectFigure.innerHTML = svg;
 }
 
-function selectObject(objectId) {
-  state.objectId = objectId;
-  state.agentId = null;
-  state.onsiteOpen = false;
+function enterSimulation() {
+  els.landing.hidden = true;
+  els.simShell.hidden = false;
+  renderViewTabs();
+  renderSim();
+}
+
+function openDeepRead() {
+  els.deepRead.hidden = false;
   renderObjectTabs();
   renderAgentNodes();
   clearAgentPanel();
   renderObject();
-}
-
-function selectAgent(agentId) {
-  state.agentId = agentId;
-  renderAgentPanel();
-  els.panel.focus({ preventScroll: false });
-}
-
-function bindGlobalKeys() {
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && state.agentId) {
-      clearAgentPanel();
-    }
-  });
-
-  els.onsiteCta.addEventListener('click', () => {
-    state.onsiteOpen = !state.onsiteOpen;
-    renderOnsiteList();
-  });
+  els.deepRead.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 async function init() {
   try {
-    await loadTrial();
-    renderHeader();
-    renderObjectTabs();
-    renderAgentNodes();
-    bindGlobalKeys();
-    await renderObject();
+    await loadAll();
+    renderLanding();
+    els.enterSim.addEventListener('click', enterSimulation);
+    els.openDeepRead.addEventListener('click', openDeepRead);
+    els.closeDeepRead.addEventListener('click', () => {
+      els.deepRead.hidden = true;
+    });
+    els.onsiteCta.addEventListener('click', () => {
+      state.onsiteOpen = !state.onsiteOpen;
+      els.onsiteList.hidden = !state.onsiteOpen;
+      els.onsiteCta.setAttribute('aria-expanded', String(state.onsiteOpen));
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && state.agentId) clearAgentPanel();
+    });
   } catch (error) {
     document.body.innerHTML = `<main style="padding:2rem;font-family:serif"><h1>Demo failed to load</h1><p>${error.message}</p></main>`;
   }

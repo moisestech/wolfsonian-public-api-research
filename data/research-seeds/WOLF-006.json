@@ -1,0 +1,55 @@
+{
+  "id": "WOLF-006",
+  "slug": "program-world-of-tomorrow",
+  "cluster": "utopia",
+  "institution": "The Wolfsonian–FIU",
+  "title": "Program, Your World of Tomorrow",
+  "accessionNumber": "86.19.57",
+  "bibId": null,
+  "date": "1939",
+  "creator": [
+    "Leslie Darrell Ragan",
+    "Gilbert Vivian Seldes"
+  ],
+  "materials": [],
+  "subjects": [
+    "Democracity",
+    "utopia",
+    "urban planning",
+    "World's Fairs"
+  ],
+  "dimensions": "11 3/4 × 17 3/4 in. open",
+  "collection": "The Mitchell Wolfson, Jr. Collection",
+  "source_urls": [
+    "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+  ],
+  "source_text": [
+    "Program related to the Trylon and Perisphere Theme Center.",
+    "Checklist describes Democracity as an imagined futurescape shaped by peaceful commerce."
+  ],
+  "missing_fields": [
+    "bibId",
+    "materials",
+    "complete_program_text"
+  ],
+  "archival_knows": [
+    "title",
+    "date",
+    "cover illustrator",
+    "author",
+    "accession",
+    "theme-center context"
+  ],
+  "archival_does_not_know": [
+    "full visitor script",
+    "excluded populations in Democracity narrative"
+  ],
+  "representation": {
+    "type": "original-svg",
+    "src": "../assets/objects/program-tomorrow.svg",
+    "caption": "Original diagram: program spread mark"
+  },
+  "preparation": "Public-record packet manually prepared from Wolfsonian sources while automated API connectivity remains under investigation.",
+  "retrieved_at": "2026-09-02",
+  "research_status": "public-record-only"
+}

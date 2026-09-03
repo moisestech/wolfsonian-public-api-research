@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="t"><title id="t">Original diagram of a Futurama booklet</title>
+<rect x="40" y="36" width="120" height="130" fill="#e8ecef" stroke="#1c2429" stroke-width="1.5"/>
+<path d="M55 90 H145" stroke="#0b5f6b" stroke-width="3"/>
+<path d="M55 90 Q90 60 145 90" fill="none" stroke="#1c2429" stroke-width="2"/>
+<path d="M70 110 H130 M70 122 H118" stroke="#9aa7ae" stroke-width="2"/>
+<circle cx="100" cy="70" r="4" fill="#8b3a2f"/>
+</svg>
