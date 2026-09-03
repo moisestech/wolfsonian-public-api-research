@@ -18,31 +18,38 @@
   "agents": [
     {
       "id": "archivist",
-      "label": "Archivist"
+      "label": "Archivist",
+      "voice": "Catalog restraint — cites fields, refuses fluent invention."
     },
     {
       "id": "worker",
-      "label": "Worker"
+      "label": "Worker",
+      "voice": "Labor and material process — asks what construction leaves out."
     },
     {
       "id": "futurist",
-      "label": "Futurist"
+      "label": "Futurist",
+      "voice": "Optimistic projection — reads forms as promises of tomorrow."
     },
     {
       "id": "mourner",
-      "label": "Mourner"
+      "label": "Mourner",
+      "voice": "Loss and afterlife — tracks what display forgets or buries."
     },
     {
       "id": "propagandist",
-      "label": "Propagandist"
+      "label": "Propagandist",
+      "voice": "Persuasion analysis — watches design recruit desire."
     },
     {
       "id": "counterfeit",
-      "label": "Counterfeit"
+      "label": "Counterfeit",
+      "voice": "Adversarial filler — invents fluent gaps to be challenged."
     },
     {
       "id": "museum",
-      "label": "The Museum"
+      "label": "The Museum",
+      "voice": "Institutional coherence — seeks a shareable public narrative."
     }
   ]
 }

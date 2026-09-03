@@ -4,12 +4,13 @@ An independent research notebook exploring The Wolfsonian–FIU's publicly docum
 
 It is **not** an official Wolfsonian application, production system, or museum-authored dataset.
 
-## Research Demo 001
+## Research Demo 001 (on `main`)
 
 **The Archive Dreams in Public — Institutional Memory Simulation**
 
-**Public demo URL (preferred):** [https://wolfsonian-research.vercel.app](https://wolfsonian-research.vercel.app)  
-(GitHub remains the canonical research repository. GitHub Pages remains optional; see hosting note below.)
+**Live demo:** [https://wolfsonian-research.vercel.app/demo/](https://wolfsonian-research.vercel.app/demo/)
+
+Canonical research repository: [github.com/moisestech/wolfsonian-public-api-research](https://github.com/moisestech/wolfsonian-public-api-research)
 
 ### What to notice in under a minute
 
@@ -40,18 +41,37 @@ npx --yes serve .
 
 Do not hand-edit `demo/data` as authoritative; regenerate after changing Layer A/B.
 
+### Images & representations
+
+The demo ships **original diagrammatic SVGs only** (not museum collection photography):
+
+| File | Object |
+|---|---|
+| [`demo/assets/objects/trylon-perisphere.svg`](demo/assets/objects/trylon-perisphere.svg) | 86.17.1 Trylon and Perisphere |
+| [`demo/assets/objects/sparton-radio.svg`](demo/assets/objects/sparton-radio.svg) | XX1990.1484 Sparton 558-C |
+| [`demo/assets/objects/machine-age-catalogue.svg`](demo/assets/objects/machine-age-catalogue.svg) | XM1999.108.8 Machine Age catalogue |
+| [`demo/assets/objects/mappemonde-vase.svg`](demo/assets/objects/mappemonde-vase.svg) | 85.7.383a,b Mappemonde |
+| [`demo/assets/objects/poster-in-1939.svg`](demo/assets/objects/poster-in-1939.svg) | 85.4.72 Poster In 1939 |
+| [`demo/assets/objects/program-tomorrow.svg`](demo/assets/objects/program-tomorrow.svg) | 86.19.57 Your World of Tomorrow |
+| [`demo/assets/objects/futurama-booklet.svg`](demo/assets/objects/futurama-booklet.svg) | WOLF-007 corpus extra |
+| [`demo/assets/objects/rca-television.svg`](demo/assets/objects/rca-television.svg) | WOLF-008 corpus extra |
+| [`demo/assets/objects/generic-record.svg`](demo/assets/objects/generic-record.svg) | Fallback mark |
+
+**Do not add** collection photography, staff photos, or scraped Turnstile HTML images until rights are clarified with the institution.
+
+**Optional later (not required for sharing):** one original OG/social preview card (SVG or generated graphic—not a collection photo) for link unfurls.
+
 ### Hosting
 
-**Vercel (recommended for Luna):** separate project `wolfsonian-research`, production from `main` once the PR stack merges (or from this feature branch for preview). Config: [`vercel.json`](vercel.json). Do not attach `moises.tech`.
+**Vercel:** project `wolfsonian-research` → [https://wolfsonian-research.vercel.app](https://wolfsonian-research.vercel.app). Config: [`vercel.json`](vercel.json). Production should track **`main`**. Do not attach `moises.tech`.
 
-Manual Vercel steps if CLI is unavailable:
+If GitHub auto-deploy is not connected yet (requires a Vercel↔GitHub login connection in the dashboard), redeploy from this repo with:
 
-1. Import `moisestech/wolfsonian-public-api-research` into Vercel.
-2. Framework preset: Other. Build command: `npm run build:demo`. Output directory: `.`
-3. Project name: `wolfsonian-research` → `https://wolfsonian-research.vercel.app`
-4. Confirm the deploy serves `/demo/` and contains no collection photography.
+```bash
+npx vercel@latest --prod
+```
 
-**GitHub Pages (optional):** [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds and deploys on `main`. Account-level `*.github.io` → `www.moises.tech` redirects can still break project Pages; fixing that DNS is separate from this research repo and can destabilize the personal site—prefer Vercel for the shareable demo URL.
+**GitHub Pages (optional):** [`.github/workflows/pages.yml`](.github/workflows/pages.yml). Account-level `*.github.io` → `www.moises.tech` redirects can still break project Pages; prefer Vercel for the shareable URL.
 
 ### Corpus shipped in the demo
 
@@ -63,7 +83,7 @@ Manual Vercel steps if CLI is unavailable:
 - Counterfeit claims labeled `FABRICATION_TEST` and challenged by Archivist
 - No live API, no LLM, no museum photography
 
-Docs: [`docs/demo-methodology.md`](docs/demo-methodology.md) · [`docs/simulation-architecture.md`](docs/simulation-architecture.md) · [`docs/object-selection-method.md`](docs/object-selection-method.md) · [`docs/mirofish-comparison.md`](docs/mirofish-comparison.md)
+Docs: [`docs/demo-methodology.md`](docs/demo-methodology.md) · [`docs/simulation-architecture.md`](docs/simulation-architecture.md) · [`docs/object-selection-method.md`](docs/object-selection-method.md) · [`docs/mirofish-comparison.md`](docs/mirofish-comparison.md) · [`docs/future-simulation-tech.md`](docs/future-simulation-tech.md)
 
 ## Why this exists
 
@@ -98,26 +118,20 @@ Automated requests to `digital.wolfsonian.org` may receive Cloudflare Turnstile.
 
 ## Status
 
-**Version 0.4.0 — Research Demo 001 (Luna-share hardening)**
+**Version 0.4.0 — Research Demo 001 on `main`**
 
 | Milestone | State |
 |---|---|
 | CLI URL builders + Turnstile detection | Done |
 | Dual-layer public/research data | Done |
-| Research Demo 001 (6 seeds, 5 rounds, Residency requests) | Done |
+| Research Demo 001 (6 seeds, 5 rounds, Residency requests) | Done — merged to `main` |
 | Institution-safe packet language (`not_established_in_public_packet`) | Done |
-| Vercel static config for stable demo URL | Done (project connect may be manual) |
+| Vercel demo URL | Live |
 | GitHub Actions Pages workflow | Optional secondary path |
 | Live API packet under `data/raw/` | Blocked on verification / approved access |
-| Expand toward 30 seeds | Later |
-| Generative LLM agents | Later (deterministic baseline first) |
+| Satellite materials for each anchor (~12–16 request set) | Next research phase |
+| Generative LLM agents / crowd-sim visualization | Later — see [`docs/future-simulation-tech.md`](docs/future-simulation-tech.md) |
 
-## Recommended merge sequence (do not skip order)
+### Merge history (complete)
 
-Stacked PRs should land as:
-
-1. PR #1 `feature/research-demo-v0` → `main`
-2. Retarget PR #2 to `main`, then merge
-3. Retarget PR #3 to `main`, then merge
-
-Do not merge #3 onto `main` before #1 and #2.
+Stacked PRs #1 → #2 → #3 were merged to `main` in order (Trial 001 → Simulation 001 → Research Demo 001 hardening). No further stack retargeting required.

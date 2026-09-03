@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T01:29:25.210Z",
+  "generatedAt": "2026-09-03T15:43:46.579Z",
   "generator": "scripts/build-institutional-graph.mjs",
   "capacityNote": "Schema supports up to 30 research seeds; demo ships a featured subset.",
   "counts": {

@@ -123,13 +123,13 @@ async function main() {
     representationNote: 'Object figures are original diagrammatic forms, not collection photography.',
     objects: objectIds,
     agents: [
-      { id: 'archivist', label: 'Archivist' },
-      { id: 'worker', label: 'Worker' },
-      { id: 'futurist', label: 'Futurist' },
-      { id: 'mourner', label: 'Mourner' },
-      { id: 'propagandist', label: 'Propagandist' },
-      { id: 'counterfeit', label: 'Counterfeit' },
-      { id: 'museum', label: 'The Museum' }
+      { id: 'archivist', label: 'Archivist', voice: 'Catalog restraint — cites fields, refuses fluent invention.' },
+      { id: 'worker', label: 'Worker', voice: 'Labor and material process — asks what construction leaves out.' },
+      { id: 'futurist', label: 'Futurist', voice: 'Optimistic projection — reads forms as promises of tomorrow.' },
+      { id: 'mourner', label: 'Mourner', voice: 'Loss and afterlife — tracks what display forgets or buries.' },
+      { id: 'propagandist', label: 'Propagandist', voice: 'Persuasion analysis — watches design recruit desire.' },
+      { id: 'counterfeit', label: 'Counterfeit', voice: 'Adversarial filler — invents fluent gaps to be challenged.' },
+      { id: 'museum', label: 'The Museum', voice: 'Institutional coherence — seeks a shareable public narrative.' }
     ]
   };
   await writeFile(join(root, 'demo', 'data', 'trial-001.json'), `${JSON.stringify(trial, null, 2)}\n`, 'utf8');

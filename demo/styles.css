@@ -272,14 +272,36 @@ a {
   border: 1px solid var(--ink);
   background: rgba(247, 249, 250, 0.92);
   color: var(--ink);
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.55rem 0.75rem;
+  padding: 0.45rem 0.55rem;
   cursor: pointer;
   transform: translate(-50%, -50%);
   transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  display: grid;
+  gap: 0.15rem;
+  justify-items: center;
+  text-align: center;
+  min-width: 5.5rem;
+}
+
+.agent-node__label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.agent-node__voice {
+  font-family: var(--serif);
+  font-size: 0.62rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--muted);
+  max-width: 11ch;
+  line-height: 1.2;
+}
+
+.agent-node[aria-pressed="true"] .agent-node__voice {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .agent-node[data-agent="archivist"] { left: 16%; top: 20%; }
@@ -590,16 +612,186 @@ a {
   stroke-width: 2.5;
 }
 
+.graph-node.is-selected {
+  fill: #c5dce0;
+  stroke: var(--accent);
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 0.35rem rgba(11, 95, 107, 0.45));
+}
+
+.graph-node--record:hover {
+  stroke: var(--accent);
+  stroke-width: 2.25;
+}
+
 .graph-label {
   font-family: var(--mono);
   font-size: 11px;
   fill: var(--muted);
+  pointer-events: none;
+}
+
+.graph-label--id {
+  font-size: 10px;
+  font-weight: 500;
+  fill: var(--ink);
+}
+
+.graph-label--accession {
+  font-size: 9px;
+  fill: var(--muted);
+}
+
+.graph-label--accession.is-selected,
+.graph-label--title {
+  fill: var(--accent);
+  font-weight: 500;
+}
+
+.graph-label--title {
+  font-family: var(--serif);
+  font-size: 10px;
 }
 
 .graph-caption {
   margin: 0.5rem 0.25rem 0.25rem;
   color: var(--muted);
   font-size: 0.88rem;
+}
+
+.text-button.is-emphasized {
+  font-weight: 600;
+  color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+  padding: 0.35rem 0.5rem;
+}
+
+.claim-item.is-seed-related {
+  border-left: 3px solid var(--accent);
+}
+
+.claim-item.kind-SOURCE_SUPPORTED {
+  background: #f4f7f8;
+}
+
+.claim-item.kind-INFERENCE .claim-text,
+.claim-item.kind-UNCERTAIN .claim-text,
+.claim-text--interpretive {
+  font-family: var(--serif);
+}
+
+.claim-item.kind-SOURCE_SUPPORTED .claim-text,
+.claim-text--source,
+.evidence-list--source,
+.ledger__value--source,
+.field-copy--source {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+}
+
+.claim-text--fabricate {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--fabricate);
+}
+
+.claim-type--source {
+  color: var(--accent);
+}
+
+.claim-type--interpretive {
+  color: var(--muted);
+}
+
+.claim-type--fabricate {
+  color: var(--fabricate);
+}
+
+.field-copy--interpretive,
+.ledger__value--interpretive {
+  font-family: var(--serif);
+}
+
+.agent-voice {
+  margin: 0 0 0.85rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.agent-node--archivist {
+  border-color: rgba(28, 36, 41, 0.35);
+}
+
+.agent-node--futurist {
+  border-color: rgba(11, 95, 107, 0.45);
+  color: var(--accent);
+}
+
+.agent-node--futurist .agent-node__label {
+  font-family: var(--display);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 0.85rem;
+}
+
+.agent-node--worker .agent-node__label {
+  font-weight: 600;
+}
+
+.agent-node--mourner {
+  opacity: 0.92;
+}
+
+.agent-node--mourner .agent-node__label {
+  font-family: var(--serif);
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+.agent-node--propagandist .agent-node__label {
+  font-family: var(--display);
+  font-weight: 700;
+}
+
+.agent-node--counterfeit,
+.agent-node.is-fabricated {
+  border-style: dashed;
+  border-color: var(--fabricate);
+}
+
+.agent-panel--archivist .field-copy--interpretive {
+  font-family: var(--mono);
+  font-size: 0.92rem;
+}
+
+.agent-panel--futurist .field-copy--interpretive {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.agent-panel--worker .field-copy--interpretive {
+  font-family: var(--serif);
+  font-weight: 500;
+}
+
+.agent-panel--mourner .field-copy--interpretive {
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+.agent-panel--propagandist .field-copy--interpretive {
+  font-family: var(--display);
+  font-weight: 600;
+}
+
+.agent-panel--counterfeit .field-copy--interpretive {
+  font-family: var(--serif);
+  border-left: 2px dashed var(--fabricate);
+  padding-left: 0.55rem;
 }
 
 .claim-panel {
@@ -721,6 +913,21 @@ a {
   margin: 0 auto 2rem;
   padding-top: 1rem;
   border-top: 1px solid rgba(28, 36, 41, 0.16);
+}
+
+.deep-read.is-inspected {
+  animation: deepReadPulse 650ms ease-out;
+}
+
+@keyframes deepReadPulse {
+  from {
+    transform: translateY(6px);
+    box-shadow: 0 18px 50px rgba(28, 36, 41, 0.12);
+  }
+  to {
+    transform: translateY(0);
+    box-shadow: none;
+  }
 }
 
 .archival-actor {

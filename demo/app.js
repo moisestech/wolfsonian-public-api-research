@@ -78,6 +78,11 @@ const els = {
   onsiteList: document.getElementById('onsite-list')
 };
 
+function voiceForAgent(agentId) {
+  const match = state.trial.agents.find((agent) => agent.id === agentId);
+  return match?.voice || '';
+}
+
 function labelForAgent(agentId) {
   const match = state.trial.agents.find((agent) => agent.id === agentId);
   return match ? match.label : agentId;
@@ -219,6 +224,17 @@ function drawGraph() {
     visibleClaims().flatMap((claim) => claim.grounding.map((g) => `record:${g.seedId}`))
   );
 
+  const activeRecordId = state.selectedSeedId ? `record:${state.selectedSeedId}` : null;
+  const relatedNodeIds = new Set([...(activeRecordId ? [activeRecordId] : [])]);
+  if (activeRecordId) {
+    for (const edge of state.graph.edges) {
+      if (edge.source === activeRecordId || edge.target === activeRecordId) {
+        relatedNodeIds.add(edge.source);
+        relatedNodeIds.add(edge.target);
+      }
+    }
+  }
+
   for (const edge of state.graph.edges) {
     if (!edgeVisible(edge)) continue;
     const from = positions.get(edge.source);
@@ -229,40 +245,93 @@ function drawGraph() {
     const midY = (from.y + to.y) / 2 - 18;
     path.setAttribute('d', `M ${from.x} ${from.y} Q ${midX} ${midY} ${to.x} ${to.y}`);
     path.setAttribute('class', edge.layer === 'source' ? 'graph-edge graph-edge--source' : 'graph-edge graph-edge--interpreted');
+    const focused = !activeRecordId || edge.source === activeRecordId || edge.target === activeRecordId;
+    path.style.opacity = focused ? '1' : '0.14';
+    path.setAttribute('stroke-width', focused ? '2.4' : '0.95');
     svg.append(path);
   }
 
   for (const node of state.graph.nodes) {
     const pos = positions.get(node.id);
     if (!pos) continue;
-    if (node.kind !== 'record' && (state.view === 'archive' || state.view === 'residency')) {
-      // keep concept marks lighter in archive/residency
-    }
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     group.setAttribute('transform', `translate(${pos.x} ${pos.y})`);
+    const isSelected = node.kind === 'record' && node.seedId === state.selectedSeedId;
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('r', node.kind === 'record' ? '18' : '6');
+    circle.setAttribute('r', node.kind === 'record' ? (isSelected ? '22' : '18') : '6');
     circle.setAttribute(
       'class',
-      `graph-node graph-node--${node.kind}${claimSeeds.has(node.id) ? ' is-active' : ''}`
+      [
+        'graph-node',
+        `graph-node--${node.kind}`,
+        claimSeeds.has(node.id) ? 'is-active' : '',
+        isSelected ? 'is-selected' : ''
+      ]
+        .filter(Boolean)
+        .join(' ')
     );
     group.append(circle);
+
+    const shouldDim = Boolean(activeRecordId) && !relatedNodeIds.has(node.id);
+    group.style.opacity = shouldDim ? '0.22' : '1';
+
     if (node.kind === 'record') {
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('y', '32');
-      text.setAttribute('text-anchor', 'middle');
-      text.setAttribute('class', 'graph-label');
-      text.textContent = node.seedId.replace('WOLF-', '');
-      group.append(text);
+      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      title.textContent = `${node.label} · ${node.accessionNumber || node.seedId}`;
+      group.append(title);
+
+      const idText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      idText.setAttribute('y', '4');
+      idText.setAttribute('text-anchor', 'middle');
+      idText.setAttribute('class', 'graph-label graph-label--id');
+      idText.textContent = node.seedId.replace('WOLF-', '');
+      group.append(idText);
+
+      const accText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      accText.setAttribute('y', '34');
+      accText.setAttribute('text-anchor', 'middle');
+      accText.setAttribute('class', `graph-label graph-label--accession${isSelected ? ' is-selected' : ''}`);
+      accText.textContent = node.accessionNumber || node.seedId;
+      group.append(accText);
+
+      if (isSelected) {
+        const nameText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        nameText.setAttribute('y', '48');
+        nameText.setAttribute('text-anchor', 'middle');
+        nameText.setAttribute('class', 'graph-label graph-label--title');
+        const shortTitle = String(node.label || '')
+          .replace(/^Model,\s*/i, '')
+          .replace(/^Radio,\s*/i, '')
+          .replace(/^Catalogue,\s*/i, '')
+          .replace(/^Poster,\s*/i, '')
+          .replace(/^Program,\s*/i, '')
+          .replace(/^Vase with lid,\s*/i, '');
+        nameText.textContent = shortTitle.length > 28 ? `${shortTitle.slice(0, 26)}…` : shortTitle;
+        group.append(nameText);
+      }
+
+      group.setAttribute('tabindex', '0');
+      group.setAttribute('role', 'button');
+      group.setAttribute('aria-pressed', String(isSelected));
+      group.setAttribute('aria-label', `Select record ${node.accessionNumber || node.seedId}: ${node.label}`);
       group.style.cursor = 'pointer';
-      group.addEventListener('click', () => {
+      const select = () => {
         state.selectedSeedId = node.seedId;
         const packet = packetBySeed(node.seedId);
         if (packet) {
           state.objectId = packet.id;
           els.openDeepRead.hidden = false;
+          els.openDeepRead.classList.add('is-emphasized');
+          els.openDeepRead.textContent = `Open deep-read · ${node.accessionNumber || node.seedId}`;
         }
-        renderClaims();
+        renderSim();
+      };
+      group.addEventListener('click', select);
+      group.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          select();
+        }
       });
     }
     svg.append(group);
@@ -276,7 +345,11 @@ function drawGraph() {
     unknown: 'Unknown — inferences and claims the public record cannot yet establish.',
     residency: 'Residency — questions that require physical objects or institutional knowledge.'
   };
-  els.graphCaption.textContent = captions[state.view];
+  const selectedPacket = packetBySeed(state.selectedSeedId);
+  const selectionNote = selectedPacket
+    ? ` Selected: ${selectedPacket.source.accessionNumber} — ${selectedPacket.source.title}.`
+    : ' Click a numbered record node to select it.';
+  els.graphCaption.textContent = `${captions[state.view]}${selectionNote}`;
 }
 
 function renderRoundSwitch() {
@@ -352,8 +425,22 @@ function renderClaims() {
     const li = document.createElement('li');
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = `claim-item kind-${claim.claimType}${state.selectedClaimId === claim.id ? ' is-selected' : ''}`;
-    button.innerHTML = `<span class="claim-agent">${labelForAgent(claim.agent)} · ${claim.claimType}</span><span class="claim-text">${claim.text}</span>`;
+    button.className = `claim-item kind-${claim.claimType}${state.selectedClaimId === claim.id ? ' is-selected' : ''}${
+      claim.grounding?.some((g) => g.seedId === state.selectedSeedId) ? ' is-seed-related' : ''
+    }`;
+    const typeClass =
+      claim.claimType === 'SOURCE_SUPPORTED'
+        ? 'claim-type claim-type--source'
+        : claim.claimType === 'FABRICATION_TEST'
+          ? 'claim-type claim-type--fabricate'
+          : 'claim-type claim-type--interpretive';
+    const textTone =
+      claim.claimType === 'SOURCE_SUPPORTED'
+        ? 'source'
+        : claim.claimType === 'FABRICATION_TEST'
+          ? 'fabricate'
+          : 'interpretive';
+    button.innerHTML = `<span class="claim-agent">${labelForAgent(claim.agent)} · <span class="${typeClass}">${claim.claimType}</span></span><span class="claim-text claim-text--${textTone}">${claim.text}</span>`;
     button.addEventListener('click', () => {
       state.selectedClaimId = claim.id;
       state.selectedSeedId = claim.grounding[0]?.seedId || null;
@@ -442,15 +529,37 @@ function clearAgentPanel() {
   els.panelEmpty.hidden = false;
   els.panelBody.hidden = true;
   els.panelBody.replaceChildren();
+  els.panel.className = 'panel agent-panel';
   els.ledgerInterpretation.textContent = 'Select an agent';
+  els.ledgerInterpretation.className = 'ledger__value';
   els.ledgerUncertainty.textContent = '—';
+  els.ledgerUncertainty.className = 'ledger__value';
   els.ledgerOnsite.textContent = '—';
+  els.ledgerOnsite.className = 'ledger__value';
   els.objectCore.classList.remove('is-split');
   for (const node of els.agentNodes.querySelectorAll('.agent-node')) {
     node.setAttribute('aria-pressed', 'false');
     node.classList.remove('is-agreeing', 'is-contradicting');
   }
   drawRelations();
+}
+
+function resetScene() {
+  state.selectedClaimId = null;
+  state.selectedSeedId = null;
+  state.objectId = null;
+  state.agentId = null;
+  state.onsiteOpen = false;
+
+  els.deepRead.hidden = true;
+  els.deepRead.classList.remove('is-inspected');
+
+  els.openDeepRead.hidden = true;
+  els.onsiteList.hidden = true;
+  els.onsiteCta.setAttribute('aria-expanded', 'false');
+
+  clearAgentPanel();
+  renderSim();
 }
 
 function fieldBlock(title, contentNode) {
@@ -467,11 +576,20 @@ function renderAgentPanel() {
   const agent = packet.agents[state.agentId];
   if (!agent) return;
   const label = labelForAgent(state.agentId);
+  const voice = voiceForAgent(state.agentId);
   els.panelKicker.textContent = packet.trialLabel;
   els.panelHeading.textContent = label;
   els.panelEmpty.hidden = true;
   els.panelBody.hidden = false;
   els.panelBody.replaceChildren();
+  els.panel.className = `panel agent-panel agent-panel--${state.agentId}`;
+
+  if (voice) {
+    const voiceLine = document.createElement('p');
+    voiceLine.className = 'agent-voice';
+    voiceLine.textContent = voice;
+    els.panelBody.append(voiceLine);
+  }
 
   if (agent.fabrication) {
     const banner = document.createElement('p');
@@ -480,18 +598,20 @@ function renderAgentPanel() {
     els.panelBody.append(banner);
   }
 
-  for (const [title, value] of [
-    ['Observation', agent.observation],
-    ['Interpretive claim', agent.claim],
-    ['Uncertainty', agent.uncertainty],
-    ['Onsite research question', agent.onsiteQuestion]
+  for (const [title, value, tone] of [
+    ['Observation', agent.observation, 'interpretive'],
+    ['Interpretive claim', agent.claim, 'interpretive'],
+    ['Uncertainty', agent.uncertainty, 'interpretive'],
+    ['Onsite research question', agent.onsiteQuestion, 'interpretive']
   ]) {
     const p = document.createElement('p');
+    p.className = `field-copy field-copy--${tone}`;
     p.textContent = value;
     els.panelBody.append(fieldBlock(title, p));
   }
 
   const evidenceList = document.createElement('ul');
+  evidenceList.className = 'evidence-list evidence-list--source';
   for (const item of agent.evidence) {
     const li = document.createElement('li');
     li.textContent = `${item.text} (${item.sourceRef})`;
@@ -522,8 +642,12 @@ function renderAgentPanel() {
   els.panelBody.append(fieldBlock('Contradiction(s)', contradictRow));
 
   els.ledgerInterpretation.textContent = agent.claim;
+  els.ledgerInterpretation.className = 'ledger__value ledger__value--interpretive';
   els.ledgerUncertainty.textContent = agent.uncertainty;
+  els.ledgerUncertainty.className = 'ledger__value ledger__value--interpretive';
   els.ledgerOnsite.textContent = agent.onsiteQuestion;
+  els.ledgerOnsite.className = 'ledger__value ledger__value--interpretive';
+  els.ledgerSource.className = 'ledger__value ledger__value--source';
 
   for (const node of els.agentNodes.querySelectorAll('.agent-node')) {
     const id = node.dataset.agent;
@@ -601,10 +725,20 @@ function renderAgentNodes() {
   for (const agent of state.trial.agents.filter((item) => item.id !== 'museum')) {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'agent-node';
+    button.className = `agent-node agent-node--${agent.id}`;
     button.dataset.agent = agent.id;
     button.setAttribute('aria-pressed', String(agent.id === state.agentId));
-    button.textContent = agent.label;
+    button.title = agent.voice || agent.label;
+    const label = document.createElement('span');
+    label.className = 'agent-node__label';
+    label.textContent = agent.label;
+    button.append(label);
+    if (agent.voice) {
+      const hint = document.createElement('span');
+      hint.className = 'agent-node__voice';
+      hint.textContent = agent.voice.split('—')[0].trim();
+      button.append(hint);
+    }
     if (agent.id === 'counterfeit') button.classList.add('is-fabricated');
     button.addEventListener('click', () => {
       state.agentId = agent.id;
@@ -621,6 +755,7 @@ async function renderObject() {
   els.objectTitle.textContent = packet.source.title;
   els.objectMeta.textContent = `${packet.source.accessionNumber} · ${packet.source.date || 'date unknown'}`;
   els.ledgerSource.textContent = `${packet.source.institution} · ${packet.source.accessionNumber} · ${packet.source.title}`;
+  els.ledgerSource.className = 'ledger__value ledger__value--source';
   els.sourceLink.href = packet.source.publicRecordUrl;
   els.sourceLink.textContent = `Public source for ${packet.source.accessionNumber}`;
 
@@ -661,6 +796,10 @@ function openDeepRead() {
   renderAgentNodes();
   clearAgentPanel();
   renderObject();
+  els.deepRead.classList.remove('is-inspected');
+  // force layout so the animation reliably re-triggers
+  void els.deepRead.offsetWidth;
+  els.deepRead.classList.add('is-inspected');
   els.deepRead.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -672,6 +811,7 @@ async function init() {
     els.openDeepRead.addEventListener('click', openDeepRead);
     els.closeDeepRead.addEventListener('click', () => {
       els.deepRead.hidden = true;
+      els.deepRead.classList.remove('is-inspected');
     });
     els.onsiteCta.addEventListener('click', () => {
       state.onsiteOpen = !state.onsiteOpen;
@@ -679,7 +819,9 @@ async function init() {
       els.onsiteCta.setAttribute('aria-expanded', String(state.onsiteOpen));
     });
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && state.agentId) clearAgentPanel();
+      if (event.key !== 'Escape') return;
+      if (els.simShell.hidden) return;
+      resetScene();
     });
   } catch (error) {
     document.body.innerHTML = `<main style="padding:2rem;font-family:serif"><h1>Demo failed to load</h1><p>${error.message}</p></main>`;

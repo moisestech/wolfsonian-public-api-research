@@ -32,4 +32,4 @@ Bounded agents tableau preserved as record drill-down inside the simulation shel
 | 2 | MiroFish out-of-tree benchmark |
 | 3 | Possible OASIS evaluation later |
 
-Next: share Luna URL via Vercel; expand corpus toward 30 only after onsite feedback; optional generative agents against this audited baseline.
+Next: share Luna the live Vercel URL; grow satellite materials around the four anchors; optional generative agents / crowd-sim only after [`docs/future-simulation-tech.md`](future-simulation-tech.md).
