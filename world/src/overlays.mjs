@@ -7,6 +7,21 @@ function field(dt, dd) {
   return [term, def];
 }
 
+function listBlock(title, items, className) {
+  const wrap = document.createElement('div');
+  wrap.className = `evidence-block ${className || ''}`.trim();
+  const h = document.createElement('h3');
+  h.textContent = title;
+  const ul = document.createElement('ul');
+  for (const item of items) {
+    const li = document.createElement('li');
+    li.textContent = item;
+    ul.append(li);
+  }
+  wrap.append(h, ul);
+  return wrap;
+}
+
 export function createOverlays(root, world, handlers) {
   const speechLayer = document.createElement('div');
   speechLayer.className = 'speech-layer';
@@ -15,16 +30,18 @@ export function createOverlays(root, world, handlers) {
   function renderSpeech() {
     speechLayer.replaceChildren();
     if (world.stage !== 'conversation') return;
-    const visible = world.speakingOrder.slice(0, Math.max(1, world.spokenIndex + 1));
+    // Max two opposed fragments — never a four-person chat stack.
+    const visible = world.speakingOrder.slice(0, Math.max(1, world.spokenIndex + 1)).slice(0, 2);
     visible.forEach((id, index) => {
       const agent = world.agents.find((a) => a.id === id);
+      if (!agent) return;
       const bubble = document.createElement('button');
       bubble.type = 'button';
       bubble.className = 'speech';
       bubble.dataset.agent = id;
-      bubble.style.left = `${12 + (index % 2) * 46}%`;
-      bubble.style.top = `${10 + index * 18}%`;
-      bubble.innerHTML = `<small>${agent.label} · interpretation</small>${agent.conversationLine}`;
+      bubble.style.left = index === 0 ? '12%' : '52%';
+      bubble.style.top = index === 0 ? '12%' : '58%';
+      bubble.innerHTML = `<small>${agent.label} · INTERPRETATION</small>${agent.conversationLine}`;
       bubble.addEventListener('click', () => handlers.onLine(id));
       speechLayer.append(bubble);
     });
@@ -43,7 +60,9 @@ export function createOverlays(root, world, handlers) {
     panel.setAttribute('tabindex', '-1');
 
     if (world.stage === 'claim') {
-      const agent = world.agents.find((a) => a.id === world.activeClaimId) || world.agents.find((a) => a.id === 'futurist');
+      const agent =
+        world.agents.find((a) => a.id === world.activeClaimId) ||
+        world.agents.find((a) => a.id === 'futurist');
       const h2 = document.createElement('h2');
       h2.textContent = 'Claim';
       const type = document.createElement('p');
@@ -52,10 +71,9 @@ export function createOverlays(root, world, handlers) {
       const dl = document.createElement('dl');
       for (const [k, v] of [
         ['Statement', agent.claim],
-        ['Agent', agent.label],
+        ['Reader', agent.label],
         ['Grounding', world.record.title],
-        ['Agrees', agent.agreesWith.join(', ') || 'None named'],
-        ['Contradicts', agent.contradicts.join(', ') || 'None named'],
+        ['Contradicts', agent.contradicts.join(', ') || 'Worker reading'],
         ['Uncertainty', agent.uncertainty],
         ['What would change this claim?', agent.onsiteQuestion]
       ]) {
@@ -73,30 +91,41 @@ export function createOverlays(root, world, handlers) {
       res.className = 'text-button';
       res.textContent = 'What the simulation cannot resolve';
       res.addEventListener('click', handlers.onResidency);
-      actions.append(ev, res);
+      const back = document.createElement('button');
+      back.type = 'button';
+      back.className = 'text-button';
+      back.textContent = 'Return to encounter';
+      back.addEventListener('click', handlers.onReturnWorld);
+      actions.append(ev, res, back);
       panel.append(h2, type, dl, actions);
     }
 
     if (world.stage === 'evidence') {
-      const agent = world.agents.find((a) => a.id === world.activeClaimId) || world.agents.find((a) => a.id === 'futurist');
+      const agent =
+        world.agents.find((a) => a.id === world.activeClaimId) ||
+        world.agents.find((a) => a.id === 'futurist');
       const h2 = document.createElement('h2');
       h2.textContent = 'Evidence';
-      const list = document.createElement('ol');
-      list.className = 'ledger';
-      const rows = [
-        ['Source', `${world.record.accessionNumber} · ${world.record.creator} · ${world.record.date}`],
-        ['Established in this public packet', world.record.established.join(', ')],
-        ['Observation', agent.observation],
-        ['Interpretation', agent.claim],
-        ['Contradiction', agent.contradicts.join(', ') || '—'],
-        ['Not established in this public packet', world.record.notEstablished.join(', ')],
-        ['Research question', agent.onsiteQuestion]
-      ];
-      for (const [k, v] of rows) {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${k}</strong>${v}`;
-        list.append(li);
-      }
+      const accession = document.createElement('p');
+      accession.className = 'evidence-accession';
+      accession.textContent = `${world.record.accessionNumber} · ${world.record.creator} · ${world.record.date}`;
+
+      const established = listBlock(
+        'ESTABLISHED in this public packet',
+        world.record.established,
+        'evidence-block--established'
+      );
+      const inference = listBlock(
+        'INFERENCE (interpretive reading)',
+        [agent.claim],
+        'evidence-block--inference'
+      );
+      const unknown = listBlock(
+        'NOT ESTABLISHED in this public packet',
+        world.record.notEstablished,
+        'evidence-block--unknown'
+      );
+
       const link = document.createElement('p');
       const a = document.createElement('a');
       a.href = world.record.publicRecordUrl;
@@ -104,6 +133,7 @@ export function createOverlays(root, world, handlers) {
       a.rel = 'noopener noreferrer';
       a.textContent = 'Public source record';
       link.append(a);
+
       const actions = document.createElement('div');
       actions.className = 'inspector__actions';
       const res = document.createElement('button');
@@ -111,8 +141,13 @@ export function createOverlays(root, world, handlers) {
       res.className = 'text-button';
       res.textContent = 'Residency question';
       res.addEventListener('click', handlers.onResidency);
-      actions.append(res);
-      panel.append(h2, list, link, actions);
+      const back = document.createElement('button');
+      back.type = 'button';
+      back.className = 'text-button';
+      back.textContent = 'Return to encounter';
+      back.addEventListener('click', handlers.onReturnWorld);
+      actions.append(res, back);
+      panel.append(h2, accession, established, inference, unknown, link, actions);
     }
 
     if (world.stage === 'residency' && world.residency) {
@@ -136,7 +171,15 @@ export function createOverlays(root, world, handlers) {
       a.rel = 'noopener noreferrer';
       a.textContent = 'Official public source';
       link.append(a);
-      panel.append(h2, dl, link);
+      const actions = document.createElement('div');
+      actions.className = 'inspector__actions';
+      const back = document.createElement('button');
+      back.type = 'button';
+      back.className = 'text-button';
+      back.textContent = 'Return to encounter';
+      back.addEventListener('click', handlers.onReturnWorld);
+      actions.append(back);
+      panel.append(h2, dl, link, actions);
     }
 
     root.append(panel);

@@ -21,8 +21,8 @@ function separate(agents) {
     for (const b of agents) {
       if (a === b) continue;
       const d = dist(a, b);
-      if (d > 0 && d < 42) {
-        const push = (42 - d) * 0.08;
+      if (d > 0 && d < 56) {
+        const push = (56 - d) * 0.1;
         a.x -= ((b.x - a.x) / d) * push;
         a.y -= ((b.y - a.y) / d) * push;
       }
@@ -32,15 +32,29 @@ function separate(agents) {
 
 function wanderOffset(time, seed) {
   return {
-    x: Math.sin(time * 0.55 + seed) * 18,
-    y: Math.cos(time * 0.4 + seed * 1.7) * 12
+    x: Math.sin(time * 0.55 + seed) * 14,
+    y: Math.cos(time * 0.4 + seed * 1.7) * 10
   };
 }
+
+const WORLD_SEED = {
+  worker: 2.4,
+  futurist: 0.3
+};
+
+const SPEEDS = {
+  futurist: 76,
+  worker: 58
+};
+
+/** Silent opposition hold before contradiction becomes selectable. */
+const SILENT_HOLD_SECONDS = 6;
 
 export function tickSimulation(world, dt) {
   world.simulationTime += dt;
   const t = world.simulationTime;
   const radio = world.radio;
+  const frozen = world.stage === 'claim' || world.stage === 'evidence' || world.stage === 'residency';
 
   if (world.reducedMotion) {
     for (const agent of world.agents) {
@@ -50,71 +64,105 @@ export function tickSimulation(world, dt) {
       agent.state = 'observing';
       agent.attentionTarget = 'radio';
     }
-    if (world.stage === 'world' && t > 0.2) world.stage = 'encounter';
+    if (world.stage === 'world' && t > 0.15) world.stage = 'encounter';
+    if (!world.contradiction.active && t > 1.2) {
+      world.contradiction.active = true;
+      world.contradiction.formedAt = t;
+      world.contradiction.selectable = true;
+      world.archivistConstraint.tension = 1;
+    }
     return;
   }
 
-  const speeds = {
-    futurist: 78,
-    propagandist: 92,
-    worker: 62,
-    archivist: 48
-  };
-
-  for (const agent of world.agents) {
-    if (world.stage === 'claim' || world.stage === 'evidence' || world.stage === 'residency') {
+  if (frozen) {
+    for (const agent of world.agents) {
       agent.vx = 0;
       agent.vy = 0;
-      continue;
     }
+    return;
+  }
 
-    if (t < 2.2 && agent.id !== 'futurist') {
-      const home = wanderOffset(t, WORLD_SEED[agent.id]);
-      agent.destination = {
-        x: agent.x * 0 + (agent.id === 'worker' ? 120 : agent.id === 'archivist' ? 1020 : 960) + home.x,
-        y: (agent.id === 'worker' ? 500 : agent.id === 'archivist' ? 530 : 160) + home.y
-      };
-      agent.state = 'wandering';
-    } else if (agent.id === 'futurist') {
-      agent.destination = world.stations.futurist;
-      agent.state = t < 3.4 ? 'approaching' : 'observing';
-      agent.attentionTarget = 'radio';
-    } else if (agent.id === 'worker' && t > 2.4) {
-      agent.destination = world.stations.worker;
-      agent.state = t < 5 ? 'approaching' : 'observing';
-      agent.attentionTarget = 'radio';
-    } else if (agent.id === 'propagandist' && t > 3.1) {
-      agent.destination = world.stations.propagandist;
-      agent.state = t < 5.4 ? 'approaching' : 'observing';
-      agent.attentionTarget = 'radio';
-    } else if (agent.id === 'archivist') {
-      if (world.stage === 'conversation' || t > 7.2) {
-        agent.destination = world.stations.archivist;
-        agent.state = t < 9.2 ? 'challenging' : 'observing';
-        agent.attentionTarget = 'radio';
-      } else {
-        agent.destination = { x: 1040, y: 540 };
+  for (const agent of world.agents) {
+    if (agent.id === 'futurist') {
+      if (t < 1.4) {
+        const home = wanderOffset(t, WORLD_SEED.futurist);
+        agent.destination = { x: START_HOME.futurist.x + home.x, y: START_HOME.futurist.y + home.y };
         agent.state = 'wandering';
+      } else {
+        agent.destination = world.stations.futurist;
+        agent.state = dist(agent, world.stations.futurist) > 14 ? 'approaching' : 'observing';
+        agent.attentionTarget = 'radio';
       }
     }
 
-    const d = steerToward(agent, agent.destination, speeds[agent.id], dt);
+    if (agent.id === 'worker') {
+      if (t < 2.8) {
+        const home = wanderOffset(t, WORLD_SEED.worker);
+        agent.destination = { x: START_HOME.worker.x + home.x, y: START_HOME.worker.y + home.y };
+        agent.state = 'wandering';
+      } else {
+        agent.destination = world.stations.worker;
+        agent.state = dist(agent, world.stations.worker) > 14 ? 'approaching' : 'observing';
+        agent.attentionTarget = 'radio';
+      }
+    }
+
+    const d = steerToward(agent, agent.destination, SPEEDS[agent.id], dt);
     if (d < 10 && agent.state === 'approaching') agent.state = 'observing';
   }
 
   separate(world.agents);
 
-  if (world.stage === 'world') {
-    const futurist = world.agents.find((a) => a.id === 'futurist');
-    if (dist(futurist, radio) < 130) world.stage = 'encounter';
+  const futurist = world.agents.find((a) => a.id === 'futurist');
+  const worker = world.agents.find((a) => a.id === 'worker');
+  const bothObserving =
+    futurist?.state === 'observing' &&
+    worker?.state === 'observing' &&
+    dist(futurist, world.stations.futurist) < 20 &&
+    dist(worker, world.stations.worker) < 20;
+
+  if (world.stage === 'world' && futurist && dist(futurist, radio) < 160) {
+    world.stage = 'encounter';
+  }
+
+  if (bothObserving) {
+    if (!world._oppositionSince) world._oppositionSince = t;
+    const held = t - world._oppositionSince;
+    world.archivistConstraint.tension = Math.min(1, held / SILENT_HOLD_SECONDS);
+
+    if (!world.contradiction.active && held >= SILENT_HOLD_SECONDS) {
+      world.contradiction.active = true;
+      world.contradiction.formedAt = t;
+      world.contradiction.selectable = true;
+      world.archivistConstraint.tension = 1;
+      world.archivistConstraint.pulse = 1;
+    }
+  } else {
+    world._oppositionSince = null;
+    if (!world.contradiction.active) {
+      world.archivistConstraint.tension = Math.max(0, world.archivistConstraint.tension - dt * 0.2);
+    }
+  }
+
+  if (world.archivistConstraint.pulse > 0) {
+    world.archivistConstraint.pulse = Math.max(0, world.archivistConstraint.pulse - dt * 0.35);
+  }
+
+  // After contradiction holds briefly, unlock scarce conversation without a Listen tutorial.
+  if (
+    world.contradiction.active &&
+    world.stage === 'encounter' &&
+    world.contradiction.formedAt != null &&
+    t - world.contradiction.formedAt > 2.5
+  ) {
+    world.stage = 'conversation';
+    if (world.spokenIndex < 0) world.spokenIndex = 0;
   }
 }
 
-const WORLD_SEED = {
-  archivist: 1.2,
-  worker: 2.4,
-  futurist: 0.3,
-  propagandist: 3.1
+const START_HOME = {
+  futurist: { x: 280, y: 90 },
+  worker: { x: 920, y: 620 }
 };
 
 export function stepBack(world) {
@@ -125,6 +173,9 @@ export function stepBack(world) {
   if (world.stage === 'world' || world.stage === 'encounter') {
     world.activeClaimId = null;
     world.conversationLine = null;
+  }
+  if (world.stage === 'encounter' || world.stage === 'world') {
+    world.spokenIndex = -1;
   }
 }
 
