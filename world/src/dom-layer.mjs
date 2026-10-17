@@ -1,3 +1,11 @@
+function agentMark(agent) {
+  const initial = (agent.label || agent.id || '?').slice(0, 1).toUpperCase();
+  if (agent.portrait) {
+    return `<span class="dom-agent__disc" aria-hidden="true"><img src="${agent.portrait}" alt=""></span>`;
+  }
+  return `<span class="dom-agent__disc dom-agent__disc--fallback" aria-hidden="true">${initial}</span>`;
+}
+
 export function createDomLayer(host, world, handlers) {
   const layer = document.createElement('div');
   layer.className = 'dom-layer';
@@ -26,7 +34,8 @@ export function createDomLayer(host, world, handlers) {
     button.type = 'button';
     button.className = `dom-agent dom-agent--${agent.id}`;
     button.dataset.agent = agent.id;
-    button.innerHTML = `<img src="${agent.portrait}" alt=""><span class="dom-agent__name">${agent.label}</span><span class="dom-agent__role"></span>`;
+    button.setAttribute('aria-label', `${agent.label} reader`);
+    button.innerHTML = `${agentMark(agent)}<span class="dom-agent__name">${agent.label}</span><span class="dom-agent__role"></span>`;
     button.addEventListener('click', () => handlers.onAgent(agent.id));
     layer.append(button);
     tokens.set(agent.id, button);
@@ -53,6 +62,7 @@ export function createDomLayer(host, world, handlers) {
     if (world.contradiction?.selectable) {
       contradiction.style.left = `${radio.left}px`;
       contradiction.style.top = `${radio.top - 78}px`;
+      contradiction.tabIndex = 0;
     }
 
     for (const agent of world.agents) {
@@ -64,6 +74,10 @@ export function createDomLayer(host, world, handlers) {
       const role = el.querySelector('.dom-agent__role');
       role.textContent =
         world.stage === 'encounter' || world.stage === 'conversation' ? agent.attentionLabel : '';
+      el.setAttribute(
+        'aria-label',
+        role.textContent ? `${agent.label}: ${role.textContent}` : `${agent.label} reader`
+      );
     }
     layer.dataset.stage = world.stage;
     layer.dataset.embodied = String(world.agents.length);

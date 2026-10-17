@@ -1,3 +1,5 @@
+import { buildEvidenceViewModel } from './world-logic.mjs';
+
 function field(dt, dd) {
   const term = document.createElement('dt');
   term.textContent = dt;
@@ -30,7 +32,6 @@ export function createOverlays(root, world, handlers) {
   function renderSpeech() {
     speechLayer.replaceChildren();
     if (world.stage !== 'conversation') return;
-    // Max two opposed fragments — never a four-person chat stack.
     const visible = world.speakingOrder.slice(0, Math.max(1, world.spokenIndex + 1)).slice(0, 2);
     visible.forEach((id, index) => {
       const agent = world.agents.find((a) => a.id === id);
@@ -41,6 +42,7 @@ export function createOverlays(root, world, handlers) {
       bubble.dataset.agent = id;
       bubble.style.left = index === 0 ? '12%' : '52%';
       bubble.style.top = index === 0 ? '12%' : '58%';
+      bubble.setAttribute('aria-label', `${agent.label} interpretation: ${agent.conversationLine}`);
       bubble.innerHTML = `<small>${agent.label} · INTERPRETATION</small>${agent.conversationLine}`;
       bubble.addEventListener('click', () => handlers.onLine(id));
       speechLayer.append(bubble);
@@ -58,13 +60,17 @@ export function createOverlays(root, world, handlers) {
     const panel = document.createElement('section');
     panel.className = 'inspector inspector--research';
     panel.setAttribute('tabindex', '-1');
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
 
     if (world.stage === 'claim') {
       const agent =
         world.agents.find((a) => a.id === world.activeClaimId) ||
         world.agents.find((a) => a.id === 'futurist');
+      const model = buildEvidenceViewModel(world.record, agent);
       const h2 = document.createElement('h2');
       h2.textContent = 'Claim';
+      panel.setAttribute('aria-label', 'Claim inspector');
       const type = document.createElement('p');
       type.className = `claim-type claim-type--${agent.claimType === 'SOURCE_SUPPORTED' ? 'source' : 'inference'}`;
       type.textContent = agent.claimType;
@@ -73,12 +79,16 @@ export function createOverlays(root, world, handlers) {
         ['Statement', agent.claim],
         ['Reader', agent.label],
         ['Grounding', world.record.title],
-        ['Contradicts', agent.contradicts.join(', ') || 'Worker reading'],
+        ['Source identifier', world.record.accessionNumber],
+        ['Contradicts', agent.contradicts.join(', ') || 'Opposed reader'],
         ['Uncertainty', agent.uncertainty],
         ['What would change this claim?', agent.onsiteQuestion]
       ]) {
         dl.append(...field(k, v));
       }
+      const note = document.createElement('p');
+      note.className = 'evidence-note';
+      note.textContent = model.note;
       const actions = document.createElement('div');
       actions.className = 'inspector__actions';
       const ev = document.createElement('button');
@@ -97,42 +107,69 @@ export function createOverlays(root, world, handlers) {
       back.textContent = 'Return to encounter';
       back.addEventListener('click', handlers.onReturnWorld);
       actions.append(ev, res, back);
-      panel.append(h2, type, dl, actions);
+      panel.append(h2, type, dl, note, actions);
     }
 
     if (world.stage === 'evidence') {
       const agent =
         world.agents.find((a) => a.id === world.activeClaimId) ||
         world.agents.find((a) => a.id === 'futurist');
+      const model = buildEvidenceViewModel(world.record, agent);
       const h2 = document.createElement('h2');
       h2.textContent = 'Evidence';
+      panel.setAttribute('aria-label', 'Evidence inspector');
+
       const accession = document.createElement('p');
       accession.className = 'evidence-accession';
-      accession.textContent = `${world.record.accessionNumber} · ${world.record.creator} · ${world.record.date}`;
+      accession.textContent = model.accessionLine;
+
+      const meta = document.createElement('dl');
+      meta.className = 'evidence-meta';
+      if (model.materials) meta.append(...field('Materials', model.materials));
+      if (model.citedAt) meta.append(...field('Packet prepared / cited', model.citedAt));
+      meta.append(...field('Interpretive status', model.claimType || 'INFERENCE'));
 
       const established = listBlock(
         'ESTABLISHED in this public packet',
-        world.record.established,
+        model.established.length ? model.established : ['(none listed)'],
         'evidence-block--established'
       );
       const inference = listBlock(
         'INFERENCE (interpretive reading)',
-        [agent.claim],
+        model.inference.length ? model.inference : ['(no claim selected)'],
         'evidence-block--inference'
       );
+
+      const supportItems = model.supportingEvidence.length
+        ? model.supportingEvidence.map((row) =>
+            row.sourceRef ? `${row.text} (${row.sourceRef})` : row.text
+          )
+        : ['(no cited observations attached to this reading)'];
+      const support = listBlock(
+        'Supporting observations from packet fields',
+        supportItems,
+        'evidence-block--support'
+      );
+
       const unknown = listBlock(
         'NOT ESTABLISHED in this public packet',
-        world.record.notEstablished,
+        model.notEstablished.length ? model.notEstablished : ['(none listed)'],
         'evidence-block--unknown'
       );
 
+      const note = document.createElement('p');
+      note.className = 'evidence-note';
+      note.textContent = model.note;
+
       const link = document.createElement('p');
-      const a = document.createElement('a');
-      a.href = world.record.publicRecordUrl;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.textContent = 'Public source record';
-      link.append(a);
+      if (model.publicRecordUrl) {
+        const a = document.createElement('a');
+        a.href = model.publicRecordUrl;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = 'Public source record';
+        link.append(a);
+      }
 
       const actions = document.createElement('div');
       actions.className = 'inspector__actions';
@@ -147,13 +184,22 @@ export function createOverlays(root, world, handlers) {
       back.textContent = 'Return to encounter';
       back.addEventListener('click', handlers.onReturnWorld);
       actions.append(res, back);
-      panel.append(h2, accession, established, inference, unknown, link, actions);
+
+      panel.append(h2, accession, meta, established, inference, support, unknown, note);
+      if (model.onsiteQuestion) {
+        const q = document.createElement('p');
+        q.className = 'evidence-onsite';
+        q.innerHTML = `<strong>Onsite question</strong> ${model.onsiteQuestion}`;
+        panel.append(q);
+      }
+      panel.append(link, actions);
     }
 
     if (world.stage === 'residency' && world.residency) {
       const item = world.residency;
       const h2 = document.createElement('h2');
       h2.textContent = 'Residency';
+      panel.setAttribute('aria-label', 'Residency research question');
       const dl = document.createElement('dl');
       for (const [k, v] of [
         ['Object', `${item.title} (${item.accessionNumber})`],
@@ -191,3 +237,5 @@ export function createOverlays(root, world, handlers) {
     renderInspector
   };
 }
+
+export { buildEvidenceViewModel };

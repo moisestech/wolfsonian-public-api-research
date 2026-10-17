@@ -1,3 +1,5 @@
+import { SILENT_HOLD_SECONDS } from './world-logic.mjs';
+
 function dist(a, b) {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
@@ -47,8 +49,10 @@ const SPEEDS = {
   worker: 58
 };
 
-/** Silent opposition hold before contradiction becomes selectable. */
-const SILENT_HOLD_SECONDS = 6;
+const START_HOME = {
+  futurist: { x: 280, y: 90 },
+  worker: { x: 920, y: 620 }
+};
 
 export function tickSimulation(world, dt) {
   world.simulationTime += dt;
@@ -71,6 +75,7 @@ export function tickSimulation(world, dt) {
       world.contradiction.selectable = true;
       world.archivistConstraint.tension = 1;
     }
+    // Conversation is never auto-entered — contradiction click required.
     return;
   }
 
@@ -148,22 +153,13 @@ export function tickSimulation(world, dt) {
     world.archivistConstraint.pulse = Math.max(0, world.archivistConstraint.pulse - dt * 0.35);
   }
 
-  // After contradiction holds briefly, unlock scarce conversation without a Listen tutorial.
-  if (
-    world.contradiction.active &&
-    world.stage === 'encounter' &&
-    world.contradiction.formedAt != null &&
-    t - world.contradiction.formedAt > 2.5
-  ) {
-    world.stage = 'conversation';
-    if (world.spokenIndex < 0) world.spokenIndex = 0;
-  }
+  // Intentionally no auto-advance to conversation — stamp must be selected.
 }
 
-const START_HOME = {
-  futurist: { x: 280, y: 90 },
-  worker: { x: 920, y: 620 }
-};
+export function advanceWorld(world, dt) {
+  tickSimulation(world, dt);
+  return world;
+}
 
 export function stepBack(world) {
   const order = ['world', 'encounter', 'conversation', 'claim', 'evidence', 'residency'];

@@ -6,6 +6,7 @@ import {
   surfaceForStage
 } from './world-state.mjs';
 import { setStage, stepBack, tickSimulation } from './sim-loop.mjs';
+import { canEnterConversation, clampSimDt, requestStage } from './world-logic.mjs';
 import { createOverlays } from './overlays.mjs';
 import { createDomLayer } from './dom-layer.mjs';
 
@@ -60,6 +61,7 @@ async function tryCreateRenderer(world, handlers) {
     els.canvas.classList.add('world-canvas--dom-only');
     return {
       render() {},
+      resetCamera() {},
       destroy() {}
     };
   }
@@ -67,31 +69,43 @@ async function tryCreateRenderer(world, handlers) {
 
 async function init() {
   const world = await loadWorldState();
-  // Expose for local QA / Playwright probes (not a public API).
   window.__archiveDreamsWorld = world;
   let overlays;
   let lineClock = 0;
+  let pausedByVisibility = false;
 
   function enterClaim(id) {
+    const gate = requestStage(world, 'claim');
+    if (!gate.ok && world.stage !== 'conversation') return;
     world.activeClaimId = id || 'futurist';
     setStage(world, 'claim');
     refresh(world, overlays);
   }
 
+  function enterConversation() {
+    if (!canEnterConversation(world)) return false;
+    const gate = requestStage(world, 'conversation');
+    if (!gate.ok) return false;
+    setStage(world, 'conversation');
+    if (world.spokenIndex < 0) world.spokenIndex = 0;
+    refresh(world, overlays);
+    return true;
+  }
+
   const handlers = {
     onRadio() {
       if (world.stage === 'world') setStage(world, 'encounter');
-      else if (world.stage === 'encounter' && world.contradiction.selectable) {
-        setStage(world, 'conversation');
-        if (world.spokenIndex < 0) world.spokenIndex = 0;
+      else if (world.stage === 'encounter' && canEnterConversation(world)) {
+        enterConversation();
+        return;
       }
       refresh(world, overlays);
     },
     onAgent(id) {
       if (world.stage === 'world') setStage(world, 'encounter');
-      else if (world.stage === 'encounter' && world.contradiction.selectable) {
-        setStage(world, 'conversation');
-        if (world.spokenIndex < 0) world.spokenIndex = 0;
+      else if (world.stage === 'encounter' && canEnterConversation(world)) {
+        enterConversation();
+        return;
       } else if (world.stage === 'conversation') {
         enterClaim(id);
         return;
@@ -99,18 +113,17 @@ async function init() {
       refresh(world, overlays);
     },
     onContradiction() {
-      if (!world.contradiction.selectable) return;
+      if (!canEnterConversation(world)) return;
       if (world.stage === 'encounter') {
-        setStage(world, 'conversation');
-        if (world.spokenIndex < 0) world.spokenIndex = 0;
-        refresh(world, overlays);
+        enterConversation();
         return;
       }
-      enterClaim('futurist');
+      if (world.stage === 'conversation') {
+        enterClaim('futurist');
+      }
     }
   };
 
-  // DOM first: encounter must remain legible if WebGL/CDN stalls.
   const domLayer = createDomLayer(els.canvas, world, handlers);
   overlays = createOverlays(els.overlays, world, {
     onLine(id) {
@@ -135,25 +148,28 @@ async function init() {
 
   refresh(world, overlays);
 
-  // Start the sim loop immediately — do not wait on Pixi/CDN.
   let renderer = {
     render() {},
+    resetCamera() {},
     destroy() {}
   };
   tryCreateRenderer(world, handlers).then((r) => {
     renderer = r;
   });
 
+  function doRestart() {
+    resetWorldState(world);
+    lineClock = 0;
+    renderer.resetCamera?.();
+    refresh(world, overlays);
+  }
+
   els.back.addEventListener('click', () => {
     stepBack(world);
     refresh(world, overlays);
   });
 
-  els.restart.addEventListener('click', () => {
-    resetWorldState(world);
-    lineClock = 0;
-    refresh(world, overlays);
-  });
+  els.restart.addEventListener('click', doRestart);
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
@@ -162,20 +178,39 @@ async function init() {
     }
     if (event.key === 'r' || event.key === 'R') {
       if (event.target.closest('input, textarea, [contenteditable]')) return;
-      resetWorldState(world);
-      lineClock = 0;
-      refresh(world, overlays);
+      doRestart();
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      const target = event.target;
+      if (target?.classList?.contains('dom-contradiction')) {
+        event.preventDefault();
+        handlers.onContradiction();
+      }
+    }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      pausedByVisibility = true;
+    } else {
+      pausedByVisibility = false;
+      last = performance.now();
     }
   });
 
   let last = performance.now();
 
   function frame(now) {
-    // Allow larger steps when rAF is throttled (background / embedded browsers)
-    // so the guided dramaturgy still completes inside ~60–90s wall time.
-    const dt = Math.min(0.2, (now - last) / 1000);
+    if (pausedByVisibility || document.visibilityState === 'hidden') {
+      last = now;
+      requestAnimationFrame(frame);
+      return;
+    }
+
+    const dt = clampSimDt((now - last) / 1000);
     last = now;
-    tickSimulation(world, dt);
+    if (dt > 0) tickSimulation(world, dt);
+
     if (world.stage === 'conversation' && !world.reducedMotion) {
       lineClock += dt;
       const next = Math.min(1, Math.floor(lineClock / 2.2));

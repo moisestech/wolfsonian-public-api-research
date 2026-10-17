@@ -1,4 +1,4 @@
-import { Application, Assets, Container, Graphics, Sprite, Text, TextStyle } from 'https://cdn.jsdelivr.net/npm/pixi.js@8.8.1/+esm';
+import { Application, Assets, Container, Graphics, Sprite, Text, TextStyle } from '../vendor/pixi.min.mjs';
 
 const COLORS = {
   worker: 0x6b4a2b,
@@ -126,44 +126,22 @@ export async function createRenderer(host, world, handlers) {
     disc.fill(COLORS[agent.id]);
     g.addChild(disc);
 
-    try {
-      const tex = await Assets.load(agent.portrait);
-      const face = new Sprite(tex);
-      face.anchor.set(0.5);
-      face.width = 28;
-      face.height = 28;
-      g.addChild(face);
-    } catch {
-      /* token color is enough */
+    if (agent.portrait) {
+      try {
+        const tex = await Assets.load(agent.portrait);
+        const face = new Sprite(tex);
+        face.anchor.set(0.5);
+        face.width = 28;
+        face.height = 28;
+        g.addChild(face);
+      } catch {
+        /* token color is enough */
+      }
     }
 
-    const name = new Text({
-      text: agent.label.toUpperCase(),
-      style: new TextStyle({
-        fontFamily: 'IBM Plex Mono, monospace',
-        fontSize: 10,
-        letterSpacing: 1,
-        fill: 0x1c2429
-      })
-    });
-    name.anchor.set(0.5, 0);
-    name.position.set(0, 22);
-    g.addChild(name);
-
-    const role = new Text({
-      text: '',
-      style: new TextStyle({
-        fontFamily: 'Newsreader, serif',
-        fontSize: 11,
-        fill: 0x5a656c
-      })
-    });
-    role.anchor.set(0.5, 0);
-    role.position.set(0, 36);
-    g.addChild(role);
-
+    // Agent names/roles live in the DOM layer (a11y + no double labels).
     scene.addChild(g);
-    tokens.set(agent.id, { g, role });
+    tokens.set(agent.id, { g });
   }
 
   const camera = { x: WORLD_W / 2, y: WORLD_H / 2, scale: 0.82 };
@@ -236,6 +214,13 @@ export async function createRenderer(host, world, handlers) {
     });
   }
 
+  function resetCamera() {
+    camera.x = WORLD_W / 2;
+    camera.y = WORLD_H / 2 - 20;
+    camera.scale = 0.72;
+    scene.alpha = 1;
+  }
+
   function render() {
     fit();
     renderConstraint();
@@ -244,12 +229,10 @@ export async function createRenderer(host, world, handlers) {
       const token = tokens.get(agent.id);
       if (!token) continue;
       token.g.position.set(agent.x, agent.y);
-      const showRole = world.stage === 'encounter' || world.stage === 'conversation';
-      token.role.text = showRole ? agent.attentionLabel : '';
     }
   }
 
-  return { app, render, destroy: () => app.destroy(true) };
+  return { app, render, resetCamera, destroy: () => app.destroy(true) };
 }
 
 function drawIncompleteContour(g, cx, cy) {

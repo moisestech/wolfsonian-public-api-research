@@ -6,9 +6,10 @@ const ATTENTION_LABELS = {
   futurist: 'reading form as progress'
 };
 
+/** Optional progressive enhancement — critical path uses discs when unavailable. */
 const PORTRAITS = {
-  worker: 'https://res.cloudinary.com/dck5rzi4h/image/upload/v1782901403/grants/wolfsonian/agents/worker_ofjxn0.png',
-  futurist: 'https://res.cloudinary.com/dck5rzi4h/image/upload/v1782901408/grants/wolfsonian/agents/futurist_layjim.png'
+  worker: '',
+  futurist: ''
 };
 
 const CLAIM_TYPES = {
@@ -104,6 +105,7 @@ function createWorldFromPacket(packet, residency, reducedMotion) {
       creator: packet.source.creator,
       materials: packet.source.materials,
       publicRecordUrl: packet.source.publicRecordUrl,
+      citedAt: packet.source.citedAt || null,
       established: packet.archivalActor.establishedInPublicPacket,
       notEstablished: packet.archivalActor.notEstablishedInPublicPacket,
       x: RADIO.x,
@@ -144,7 +146,10 @@ export async function loadWorldState() {
   ]);
 
   const residency = (candidates.candidates || []).find((item) => item.seedId === 'WOLF-002');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reducedMotion =
+    typeof window !== 'undefined' && window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false;
   return createWorldFromPacket(packet, residency, reducedMotion);
 }
 
@@ -162,6 +167,7 @@ export {
   languageForStage,
   surfaceForStage,
   hintForStage,
+  createWorldFromPacket,
   EMBODIED_AGENTS,
   RADIO,
   STATIONS,
