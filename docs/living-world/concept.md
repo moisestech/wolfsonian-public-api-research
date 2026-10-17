@@ -1,33 +1,40 @@
-# Living Simulation World 0.1
+# Living Simulation World 0.1A
 
 Experimental visualization of the same research model used by Research Demo 001.
 
 **Research Demo 001** (`/demo/`) stays the institutional instrument.  
-**World 0.1** (`/world/`) asks: can the archive become a legible living district rather than a graph with panels?
+**World 0.1A** (`/world/`) asks: can two opposed readings of one archival object become legible through behavior before language explains them?
 
 ## North star
 
-The knowledge graph becomes geography, archival records become places, and interpretive agents become inhabitants whose disputes reveal the limits of the world they were given.
+Archival records become places; interpretive agents become forms of attention; encounters become disagreements; disagreements become inspectable claims.
 
-## Stages
+For October 26, the sprawling four-agent / 30-record roadmap is superseded by the Content Bible and GitHub issues #4–#7. Historical roadmap docs remain for context.
 
-1. **World** — labels only; movement and clustering.
-2. **Encounter** — who is attending the same record.
-3. **Conversation** — temporal agent language.
-4. **Claim** — structured assertion (not chat).
-5. **Evidence** — source → observation → interpretation → contradiction → uncertainty → question.
-6. **Residency** — what must leave the simulation and enter the museum.
+## Cast (differential ontology)
 
-## Text systems
+| Role | Status in 0.1A |
+|---|---|
+| Futurist | Embodied reader (form / progress) |
+| Worker | Embodied reader (labor / making) |
+| Archivist | Provenance constraint (ring / tether) — not a roaming token |
+| Propagandist | Deferred |
+| Mourner / Counterfeit / Museum-as-NPC | Deferred |
 
-| Kind | Where | Density |
-|---|---|---|
-| LABEL | World / Encounter | names, dates, short roles |
-| CONVERSATION | Conversation stage | spoken lines that appear and fade |
-| RESEARCH | Claim / Evidence / Residency | accession, claim type, citations |
+## Surfaces
 
-## World 0.1 slice
+- **WORLD** — approach, silent opposition, scarce conversation (≤2 fragments)
+- **RESEARCH** — claim → evidence → residency (microscope)
+
+HUD identifies `WORLD` or `RESEARCH`, not a six-stage progress bar.
+
+## Gap grammar
+
+Incomplete / dashed contour on the archival place = `not_established_in_public_packet`.  
+Not fog. Not buried treasure. Not museum secrecy.
+
+## World 0.1A slice
 
 One record: Sparton Radio (`XX1990.1484`).  
-Four agents: Archivist, Worker, Futurist, Propagandist.  
-No new claims. No LLM. No merge to `main` until the 60-second test passes.
+Two embodied readers + Archivist constraint.  
+No new claims. No LLM. No merge to `main` until the human test passes.
