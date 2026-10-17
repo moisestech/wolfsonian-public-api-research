@@ -7,7 +7,7 @@
 
 SHA is recorded at commit time in git history / PR #13. Update this line when freezing:
 
-`CAPTURE_SHA: (set on freeze commit)`
+`CAPTURE_SHA: 9a75f542d0222694ca2ca5e9593d790d39b59f99`
 
 ## Stills (committed)
 
