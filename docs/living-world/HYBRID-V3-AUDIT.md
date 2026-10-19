@@ -52,3 +52,15 @@ Query params for `/research-console/`:
 - `sceneCheckpoint` — optional opaque stage token
 
 Reject arbitrary paths, external URLs, and unknown IDs.
+
+## PR B research console (preview)
+
+Branch: `feat/wolfsonian-research-console`
+
+| Check | Result |
+| --- | --- |
+| Stack | Vite + React 18 + `@assistant-ui/react` LocalRuntime / ChatModelAdapter |
+| Live LLM | None — deterministic guided answers only |
+| Packet | `research-console/public/data/02-sparton-radio.json` |
+| Deploy path | `/research-console/` (built to `research-console/dist/`) |
+| Presentation | Preview only — see `FREEZE.md` |
