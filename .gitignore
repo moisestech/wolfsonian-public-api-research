@@ -1,5 +1,7 @@
 .DS_Store
 node_modules/
+research-console/node_modules/
+research-console/dist/
 .env
 
 data/raw/*.json

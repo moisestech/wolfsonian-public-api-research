@@ -10,6 +10,18 @@
     {
       "source": "/world",
       "destination": "/world/index.html"
+    },
+    {
+      "source": "/research-console",
+      "destination": "/research-console/dist/index.html"
+    },
+    {
+      "source": "/research-console/",
+      "destination": "/research-console/dist/index.html"
+    },
+    {
+      "source": "/research-console/(.*)",
+      "destination": "/research-console/dist/$1"
     }
   ],
   "headers": [

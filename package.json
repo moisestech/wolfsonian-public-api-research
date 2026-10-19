@@ -11,7 +11,8 @@
     "seed": "node scripts/seed-corpus.mjs",
     "seed:corpus": "node scripts/seed-institutional-corpus.mjs",
     "build:graph": "node scripts/build-institutional-graph.mjs",
-    "build:demo": "node scripts/compile-demo-packets.mjs && node scripts/build-institutional-graph.mjs",
+    "build:research-console": "npm --prefix research-console ci && npm --prefix research-console run build",
+    "build:demo": "node scripts/compile-demo-packets.mjs && node scripts/build-institutional-graph.mjs && npm run build:research-console",
     "test": "node --test"
   },
   "engines": {
