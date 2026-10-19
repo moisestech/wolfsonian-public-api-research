@@ -299,6 +299,18 @@ body {
   padding: 0;
 }
 
+.text-button--primary {
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(28, 36, 41, 0.04);
+}
+
+.text-button--primary:hover {
+  background: rgba(28, 36, 41, 0.08);
+}
+
 .overlays {
   position: fixed;
   inset: 0;

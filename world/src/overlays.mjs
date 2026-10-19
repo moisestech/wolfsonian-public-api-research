@@ -1,4 +1,5 @@
 import { buildEvidenceViewModel } from './world-logic.mjs';
+import { buildHandoffFromWorld, openResearchConsole } from './research-handoff.mjs';
 
 function field(dt, dd) {
   const term = document.createElement('dt');
@@ -24,6 +25,31 @@ function listBlock(title, items, className) {
   return wrap;
 }
 
+function makeTextButton(label, onClick, className = 'text-button') {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = className;
+  button.textContent = label;
+  button.addEventListener('click', onClick);
+  return button;
+}
+
+function appendExploreAction(actions, world) {
+  const explore = makeTextButton('Explore in research console', () => {
+    const handoff = buildHandoffFromWorld(world);
+    if (!handoff) {
+      console.warn('[world] Research console handoff unavailable for current claim.');
+      return;
+    }
+    const result = openResearchConsole(handoff, { preferNewTab: true });
+    if (!result.opened) {
+      console.warn('[world] Research console open failed:', result.reason || 'unknown');
+    }
+  }, 'text-button text-button--primary');
+  explore.setAttribute('data-action', 'explore-research-console');
+  actions.append(explore);
+}
+
 export function createOverlays(root, world, handlers) {
   const speechLayer = document.createElement('div');
   speechLayer.className = 'speech-layer';
@@ -43,7 +69,9 @@ export function createOverlays(root, world, handlers) {
       bubble.style.left = index === 0 ? '12%' : '52%';
       bubble.style.top = index === 0 ? '12%' : '58%';
       bubble.setAttribute('aria-label', `${agent.label} interpretation: ${agent.conversationLine}`);
-      bubble.innerHTML = `<small>${agent.label} · INTERPRETATION</small>${agent.conversationLine}`;
+      const small = document.createElement('small');
+      small.textContent = `${agent.label} · INTERPRETATION`;
+      bubble.append(small, document.createTextNode(agent.conversationLine));
       bubble.addEventListener('click', () => handlers.onLine(id));
       speechLayer.append(bubble);
     });
@@ -91,22 +119,12 @@ export function createOverlays(root, world, handlers) {
       note.textContent = model.note;
       const actions = document.createElement('div');
       actions.className = 'inspector__actions';
-      const ev = document.createElement('button');
-      ev.type = 'button';
-      ev.className = 'text-button';
-      ev.textContent = 'Inspect evidence';
-      ev.addEventListener('click', handlers.onEvidence);
-      const res = document.createElement('button');
-      res.type = 'button';
-      res.className = 'text-button';
-      res.textContent = 'What the simulation cannot resolve';
-      res.addEventListener('click', handlers.onResidency);
-      const back = document.createElement('button');
-      back.type = 'button';
-      back.className = 'text-button';
-      back.textContent = 'Return to encounter';
-      back.addEventListener('click', handlers.onReturnWorld);
-      actions.append(ev, res, back);
+      actions.append(
+        makeTextButton('Inspect evidence', handlers.onEvidence),
+        makeTextButton('What the simulation cannot resolve', handlers.onResidency)
+      );
+      appendExploreAction(actions, world);
+      actions.append(makeTextButton('Return to encounter', handlers.onReturnWorld));
       panel.append(h2, type, dl, note, actions);
     }
 
@@ -173,23 +191,17 @@ export function createOverlays(root, world, handlers) {
 
       const actions = document.createElement('div');
       actions.className = 'inspector__actions';
-      const res = document.createElement('button');
-      res.type = 'button';
-      res.className = 'text-button';
-      res.textContent = 'Residency question';
-      res.addEventListener('click', handlers.onResidency);
-      const back = document.createElement('button');
-      back.type = 'button';
-      back.className = 'text-button';
-      back.textContent = 'Return to encounter';
-      back.addEventListener('click', handlers.onReturnWorld);
-      actions.append(res, back);
+      actions.append(makeTextButton('Residency question', handlers.onResidency));
+      appendExploreAction(actions, world);
+      actions.append(makeTextButton('Return to encounter', handlers.onReturnWorld));
 
       panel.append(h2, accession, meta, established, inference, support, unknown, note);
       if (model.onsiteQuestion) {
         const q = document.createElement('p');
         q.className = 'evidence-onsite';
-        q.innerHTML = `<strong>Onsite question</strong> ${model.onsiteQuestion}`;
+        const strong = document.createElement('strong');
+        strong.textContent = 'Onsite question';
+        q.append(strong, document.createTextNode(` ${model.onsiteQuestion}`));
         panel.append(q);
       }
       panel.append(link, actions);
@@ -219,17 +231,16 @@ export function createOverlays(root, world, handlers) {
       link.append(a);
       const actions = document.createElement('div');
       actions.className = 'inspector__actions';
-      const back = document.createElement('button');
-      back.type = 'button';
-      back.className = 'text-button';
-      back.textContent = 'Return to encounter';
-      back.addEventListener('click', handlers.onReturnWorld);
-      actions.append(back);
+      appendExploreAction(actions, world);
+      actions.append(makeTextButton('Return to encounter', handlers.onReturnWorld));
       panel.append(h2, dl, link, actions);
     }
 
     root.append(panel);
-    panel.focus({ preventScroll: true });
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    panel.focus({ preventScroll: reduceMotion });
   }
 
   return {
