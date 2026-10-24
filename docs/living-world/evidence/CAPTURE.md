@@ -33,3 +33,23 @@ In person, which traces of making, repair, or use on the Sparton 558-C would mos
 ## Rights
 
 Original diagrammatic SVG only. No collection photographs. No internal records.
+
+---
+
+## 2026-10-24 release-audit recapture
+
+**Date/time:** 2026-10-24 16:38 America/New_York  
+**SHA tested:** `5d08bc8a6f79a5e3aa71829461fc79fb4a722757` (`origin/main`)  
+**Environment:** presenting laptop `Moisess-MacBook-Pro.local`; `python3 -m http.server 4175` → `/world/`; Cursor Chromium; viewport 1280×720  
+
+New stills (local only, not replacing committed A/B/C until artist review):
+
+| File | SHA-256 |
+|---|---|
+| `.tmp/oct24-baseline/oct24-A-world-before.png` | `f708566d967db9aa4a0237fff6cc8b05124050e92b96038598b8f4f836bb9c95` |
+| `.tmp/oct24-baseline/oct24-B-contradiction.png` | `ff9ef0d059b5d61dd129155d5c573e068a14047ef5d6d9fa84d8c4cf1c19c840` |
+| `.tmp/oct24-baseline/oct24-C-evidence-gate.png` | `b4f5a366e9b22dd184ff380da3afd7e20f481ac66bd883ab9ff40be57e2e47f3` |
+
+Walkthrough / fallback MP4: **NOT TESTED** — `ffmpeg` not present; no playable file was written. Do not treat planned `.tmp/world-mvp-*.mp4` names as existing media.
+
+Baseline manifest: [baseline-2026-10-24.json](./baseline-2026-10-24.json)
