@@ -10,3 +10,4 @@ data/derived/*.json
 !data/raw/.gitkeep
 !data/derived/.gitkeep
 .vercel
+.tmp/

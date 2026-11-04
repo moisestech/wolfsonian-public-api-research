@@ -1,0 +1,15 @@
+{
+  "name": "wolfsonian-lakehouse-readonly",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Isolated read-only Lakehouse research adapter. Not wired into demo/world production builds.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "probe": "node src/cli.mjs probe",
+    "anchors": "node src/cli.mjs anchors",
+    "test": "node --test test/*.test.mjs"
+  }
+}
