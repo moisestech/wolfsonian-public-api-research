@@ -1,0 +1,13 @@
+{
+  "_fixture_label": "TEST ONLY — synthetic Lakehouse-shaped payload; NOT a Wolfsonian API response",
+  "identifier": "TEST-XX1990.1484",
+  "accession_number": "XX1990.1484",
+  "title": "Radio, Sparton, model 558-C (TEST ONLY)",
+  "creators_with_roles": [{ "name": "Walter Dorwin Teague", "role": "designer" }],
+  "exhibit_label": null,
+  "exhibit_title": null,
+  "field_subject": ["radios"],
+  "has_ocr": false,
+  "ocr_snippet": null,
+  "source_system": "TEST_ONLY"
+}
