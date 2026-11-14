@@ -62,7 +62,7 @@ const fixedPoints=[[228,140],[540,116],[852,140],[228,514],[540,537],[852,514]];
 function fillSvg(el,arr){el.replaceChildren(...arr);}
 function renderPersonaRail(){
   E.personaList.replaceChildren();
-  const cards=CARDS.filter(p=>p.group===model.group);
+  const cards=CARDS.filter(p=>p.group===model.group || (model.group==='archive' && p.id==='worker'));
   for(const p of cards){
     const btn=element('button',undefined,'persona-item'+(model.lens===p.id?' active':''));
     btn.type='button';btn.style.setProperty('--persona-color',p.color);
