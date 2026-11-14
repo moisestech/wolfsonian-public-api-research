@@ -30,6 +30,8 @@ try{
  page.on('pageerror',error=>errors.push(error.message));
  await page.goto('http://127.0.0.1:'+port+'/demo/discovery-lab/',{waitUntil:'networkidle'});
  await page.locator('.object-node').first().waitFor();
+ await mkdir(join(root,'artifacts'),{recursive:true});
+ await page.screenshot({path:join(root,'artifacts','discovery-lab-invented-overview.png'),fullPage:true});
  assert.equal(await page.locator('.persona-item').count(),5,'Everyday personas should show 5');
  assert.ok((await page.locator('.object-node').count())>=3,'The graph should have multiple actual object cards');
  assert.ok((await page.locator('.edge-chip').count())>=1,'Edges should expose their tags');
@@ -53,6 +55,7 @@ try{
   'TEST2026.2,Invented railway poster,Germany,Montage,Travel / Transportation,Technology,,Trains,Speed'
  ].join('\n');
  await page.locator('#csv-import').setInputFiles({name:'private-demo.csv',mimeType:'text/csv',buffer:Buffer.from(sample)});
+ await page.waitForFunction(() => document.getElementById('data-chip')?.textContent.includes('2 RECORDS'), null, {timeout:5000});
  assert.match(await page.locator('#data-chip').textContent(),/2 RECORDS/);
  assert.ok((await page.locator('#data-status').textContent()).includes('No CSV contents'));
  await page.locator('#close-source').click();
