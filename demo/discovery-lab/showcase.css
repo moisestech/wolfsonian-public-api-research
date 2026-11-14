@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+/* Local system typography: the research lab does not depend on third-party font services. */
 :root{
   color-scheme:dark;
   --bg:#101820;--sidebar:#17232D;--surface:#1C2B36;--canvas:#111E2A;--line:#30444E;
   --ink:#F2F1E9;--muted:#C0D0CE;--soft:#91A6AE;
   --theme:#58C2B5;--motif:#E4A172;--style:#C0A4E4;--geography:#9AAEB9;--highlight:#F7C779;
-  --font:Manrope,"DM Sans",system-ui,-apple-system,sans-serif;
+  --font:"Avenir Next","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
 }
 *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;color:var(--ink);font:500 15px/1.5 var(--font);height:100dvh;overflow:hidden}
 button,textarea,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}
