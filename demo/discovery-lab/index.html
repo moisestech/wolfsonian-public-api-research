@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Private-browser CSV exploration of staff-assigned collection metadata. An independent conceptual research prototype.">
+  <title>Discovery Lab — Archive Dreams in Public</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip" href="#lab-main">Skip to lab</a>
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Archive Dreams in Public / Research Instrument 002</p>
+      <h1>Discovery Lab</h1>
+      <p>One object. Multiple pathways. Every connection explained.</p>
+    </div>
+    <a class="back" href="../">← Original research demo</a>
+  </header>
+  <div class="notice">
+    <strong>Independent artist prototype — not the Wolfsonian Discovery Wall.</strong>
+    The graph shows metadata coincidences and fictional interpretive viewpoints, not documented historical links.
+    Files are processed on this device and are never uploaded by this page.
+  </div>
+  <main id="lab-main">
+    <section class="import-panel" aria-label="Data source">
+      <div>
+        <h2>Source material</h2>
+        <p id="data-status" role="status">Using invented examples, not museum records.</p>
+        <p class="help">Choose an exported <code>.csv</code> from Mark's matrix to explore its original columns locally. Excel <code>.xlsx</code> must first be exported as CSV. Do not publish a copy of the working matrix without permission.</p>
+      </div>
+      <div class="import-actions">
+        <label class="file">Open CSV on this device <input id="csv-import" type="file" accept=".csv,text/csv"></label>
+        <button id="restore-demo" type="button" class="secondary">Return to invented examples</button>
+      </div>
+    </section>
+    <section class="workspace" aria-label="Network explorer">
+      <aside class="controls">
+        <h2>Follow a question</h2>
+        <label for="object-search">Find an object</label>
+        <input id="object-search" type="search" placeholder="Filter titles or accessions…" autocomplete="off">
+        <label for="object-select">Starting object</label>
+        <select id="object-select"></select>
+        <label for="lens-select">Interpretive archetype</label>
+        <select id="lens-select"></select>
+        <div id="lens-card" class="lens-card"></div>
+        <p id="graph-count" class="statline"></p>
+      </aside>
+      <section class="graph-card" aria-labelledby="network-title">
+        <div class="graph-heading"><h2 id="network-title">Local constellation</h2><span>6 nearest paths</span></div>
+        <svg id="network" viewBox="0 0 800 540" role="img" aria-label="Interactive radial network of a selected object and up to six metadata-related records"></svg>
+        <p class="legend"><span class="dot theme"></span> Theme <span class="dot motif"></span> Motif <span class="dot style"></span> Style <span class="dot geography"></span> Geography</p>
+        <p class="help">Select an edge or a title to inspect why it appears. Select a node to make it the new starting object. No links are historical claims.</p>
+      </section>
+      <aside class="inspector" aria-label="Connection inspector">
+        <h2>Why are these connected?</h2>
+        <div id="connection-details" aria-live="polite"></div>
+        <h3>Other possible paths</h3>
+        <ol id="neighbors"></ol>
+      </aside>
+    </section>
+  </main>
+  <footer>
+    Artistic interpretation is not evidence. Metadata tags were applied by people; personas are fictional lenses.
+    <a href="https://github.com/moisestech/wolfsonian-public-api-research">Source code</a>
+  </footer>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
