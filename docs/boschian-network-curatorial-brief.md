@@ -19,7 +19,7 @@ Do not commit the full staff workbook, interpretive captions, museum photographs
 ## Curated graph v0.1
 
 - **36 objects**: 6 existing public anchor packets + 30 staff-matrix candidates.
-- **20 candidate edges**: 8 metadata-based comparisons, 1 relationship bounded by existing public packets, 11 curatorial interpretations. None is an automatically authenticated historical causal link.
+- **22 candidate edges**: 9 metadata-based comparisons, 1 relationship bounded by existing public packets, 12 curatorial interpretations. None is an automatically authenticated historical causal link.
 - **Three overlapping landscapes** (not a moral sorting of objects):
   - **The Promise**: architectures, exhibitions, electricity, technological improvement and the labor of making.
   - **The Seduction**: domesticity, commercial imagery, luxury, leisure, mobility, hospitality.
@@ -86,7 +86,7 @@ Image projection: retain each Wolfsonian object in a bounded legible frame or ap
 
 **Audio:** any later ElevenLabs voices are explicitly AI-generated performances of authored interpretive lenses, not recorded historical voices. Default silent mode must remain fully usable.
 
-**Layout:** seed 2D coordinates by zone (x = promise left, desire center, consequences right), then use restrained force simulation *within* zones; preserve authored sightlines, labels and 16:9 projection. Depth parallax on the background is atmospheric, not a substitute for graph semantics. Never let 36 edges obstruct archival images.
+**Layout:** seed 2D coordinates by zone (x = promise left, desire center, consequences right), then use restrained force simulation *within* zones; preserve authored sightlines, labels and 16:9 projection. Depth parallax on the background is atmospheric, not a substitute for graph semantics. Never let a large volume of visible edges obstruct archival images.
 
 ## Implementation boundary / next steps
 
