@@ -27,6 +27,18 @@ jobs:
           node --check demo/discovery-lab/showcase.mjs
       - name: Run discovery tests
         run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
+      - name: Browser smoke and screenshots
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          node test/discovery-browser-smoke.mjs
+      - name: Save review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-lab-review
+          path: artifacts/discovery-lab-*.png
+          if-no-files-found: ignore
       - name: Ensure private matrix is not present in tracked files
         run: |
           if git ls-files | grep -Ei '(object.at.scale.*\.(csv|xlsx)|content.matrix.*\.(csv|xlsx))'; then
