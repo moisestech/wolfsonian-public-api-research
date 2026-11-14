@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Archive Dreams in Public: an explainable, interpretive object-network research instrument.">
+<title>Archive Dreams in Public · Discovery Lab 002</title>
+<link rel="stylesheet" href="./showcase.css">
+</head>
+<body>
+<a class="skip-link" href="#network-workspace">Skip to the network</a>
+<header class="topbar">
+  <div class="identity">
+    <div class="identity-mark" aria-hidden="true">AD</div>
+    <div><p class="overline">WOLFSONIAN FELLOWSHIP / INDEPENDENT ARTIST RESEARCH</p><h1>Archive Dreams <em>in Public</em></h1></div>
+  </div>
+  <nav class="topbar-actions" aria-label="Primary controls">
+    <span id="data-chip" class="source-chip">Invented demo records</span>
+    <button id="open-source" type="button" class="top-btn" aria-expanded="false" aria-controls="source-panel">Source &amp; images</button>
+    <button id="present" type="button" class="top-btn top-btn--primary">Present full-screen</button>
+    <a class="top-link" href="../">Research Demo 001</a>
+  </nav>
+</header>
+
+<section id="source-panel" class="source-panel" hidden aria-label="Local research data">
+  <div class="source-panel__intro">
+    <strong>Local-only data studio</strong>
+    <p>Import the working matrix as <code>.csv</code> only on a device authorized to hold it. Files remain in this browser session; nothing is sent to GitHub, a model, ElevenLabs, or Lakehouse.</p>
+  </div>
+  <div class="source-panel__controls">
+    <label class="upload">Open matrix CSV <input id="csv-import" type="file" accept=".csv,text/csv"></label>
+    <label class="upload">Match permitted PNG/JPG/WebP/SVG images <input id="image-import" type="file" accept=".png,.jpg,.jpeg,.webp,.svg,image/*" multiple></label>
+    <button id="restore-demo" type="button">Restore invented example</button>
+    <button id="close-source" type="button" aria-label="Close source panel">✕</button>
+  </div>
+  <p class="source-status" id="data-status" role="status">Invented examples are loaded. Real museum images are not included.</p>
+</section>
+
+<main class="workspace" id="network-workspace">
+  <aside class="persona-rail" aria-label="Interpretive persona library">
+    <div class="rail-head"><p class="overline">01 / WHO IS READING?</p><h2>Choose a perspective</h2><p>Different readers notice different paths. The record never changes.</p></div>
+    <div class="persona-tabs" role="group" aria-label="Persona group">
+      <button id="show-everyday" type="button" class="persona-tab active" aria-pressed="true">Everyday</button>
+      <button id="show-archive" type="button" class="persona-tab" aria-pressed="false">Archive Dreams</button>
+    </div>
+    <div id="persona-list" class="persona-list" role="group" aria-label="Select a perspective"></div>
+    <div class="persona-feature" id="persona-feature" aria-live="polite"></div>
+    <button id="reveal-prompt" type="button" class="prompt-trigger">Reveal complete archetype prompt <span aria-hidden="true">↗</span></button>
+  </aside>
+
+  <section class="graph-stage" aria-label="Interactive object network">
+    <div class="stage-toolbar">
+      <div><p class="overline">02 / THE RELATIONSHIP</p><h2 id="stage-title">A constellation of possibilities</h2></div>
+      <div class="stage-controls">
+        <label class="toggle-label"><input id="show-tags" type="checkbox" checked> Label edges</label>
+        <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+        <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+        <button id="reset-view" type="button">Reset</button>
+      </div>
+    </div>
+    <div class="graph-surface" id="graph-surface">
+      <svg id="network" viewBox="0 0 1080 650" preserveAspectRatio="xMidYMid meet"
+       role="img" aria-label="Objects are rectangular cards, category relationships are labeled lines. Select an object or line to inspect its metadata.">
+      </svg>
+      <div id="graph-empty" class="graph-empty" hidden>No matching records. Try another search or starting object.</div>
+    </div>
+    <div class="stage-bottom">
+      <div class="legend">
+        <span><i class="key key--object"></i> Object record</span>
+        <span><i class="key key--theme"></i> Theme</span>
+        <span><i class="key key--motif"></i> Symbol</span>
+        <span><i class="key key--style"></i> Style</span>
+        <span><i class="key key--geography"></i> Geography</span>
+      </div>
+      <p id="graph-count">Working from invented examples · Connections are suggestions, not historical facts</p>
+    </div>
+  </section>
+
+  <aside class="detail-rail" aria-label="Object and connection information">
+    <div class="detail-header">
+      <p class="overline">03 / MAKE THE REASON VISIBLE</p>
+      <div class="detail-tabs" role="group" aria-label="Details panel">
+        <button type="button" class="detail-tab active" data-detail="connection" aria-pressed="true">Connection</button>
+        <button type="button" class="detail-tab" data-detail="object" aria-pressed="false">Object</button>
+        <button type="button" class="detail-tab" data-detail="voice" aria-pressed="false">Dialogue</button>
+      </div>
+    </div>
+    <div class="record-picker">
+      <label for="object-search">Find a record</label>
+      <input id="object-search" type="search" placeholder="Search title or accession" autocomplete="off">
+      <label for="object-select">Center the network on</label>
+      <select id="object-select"></select>
+    </div>
+    <div class="detail-body">
+      <div id="connection-panel"></div>
+      <div id="object-panel" hidden></div>
+      <div id="voice-panel" hidden>
+        <div class="voice-disclaimer">Offline scripted interpretation · device text-to-speech · <strong>not ElevenLabs</strong> or live AI.</div>
+        <div id="dialogue"></div>
+        <div class="voice-actions">
+          <button id="play-voice" type="button">▶ Listen to the scene</button>
+          <button id="stop-voice" type="button">Stop</button>
+        </div>
+        <label for="object-question">Ask the object (typed prototype)</label>
+        <textarea id="object-question" rows="3" placeholder="Who made you? Where were you kept? Why are you connected?" spellcheck="true"></textarea>
+        <button id="ask-object" type="button">Ask this question</button>
+        <p id="object-answer" aria-live="polite"></p>
+      </div>
+    </div>
+    <footer class="detail-footer"><span class="evidence-dot"></span> <strong>Interpretation is not evidence.</strong> Shared tags do not prove historical relationships.</footer>
+  </aside>
+</main>
+
+<div id="prompt-modal" class="modal" hidden>
+  <div class="modal-backdrop" id="prompt-backdrop"></div>
+  <section role="dialog" aria-modal="true" aria-labelledby="prompt-title" class="modal-card">
+    <div class="modal-top"><div><p class="overline">ARCHETYPE TRANSPARENCY / ARTIST-AUTHORED</p><h2 id="prompt-title">Persona prompt</h2></div><button id="close-prompt" type="button" aria-label="Close persona prompt">✕</button></div>
+    <p id="prompt-description"></p>
+    <pre id="prompt-text"></pre>
+    <div class="modal-actions"><button id="copy-prompt" type="button">Copy prompt</button><p>These rules define a proposed lens; they are not evidence of a live LLM.</p></div>
+  </section>
+</div>
+
+<script type="module" src="./showcase.mjs"></script>
+</body></html>
