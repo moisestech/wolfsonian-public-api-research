@@ -4,7 +4,14 @@ on:
     branches: [main]
     paths:
       - 'demo/discovery-lab/**'
+      - 'demo/archive-society/**'
       - 'src/discovery-*.mjs'
+      - 'src/archive-*.mjs'
+      - 'server/archive-*.mjs'
+      - 'api/archive-society/**'
+      - 'scripts/*society*'
+      - 'test/archive-*.test.mjs'
+      - 'examples/archive-society*'
       - 'test/discovery-*.test.mjs'
       - '.github/workflows/discovery-checks.yml'
   workflow_dispatch:
@@ -18,26 +25,37 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Check JavaScript syntax
         run: |
           node --check src/discovery-graph.mjs
           node --check src/discovery-personas.mjs
           node --check src/discovery-dialogue.mjs
           node --check demo/discovery-lab/showcase.mjs
+          node --check demo/archive-society/society.mjs
+          node --check src/archive-society.mjs
+          node --check src/archive-evidence.mjs
+          node --check server/archive-services.mjs
+          node --check scripts/serve-archive-society.mjs
+          node --check scripts/check-society-browser.mjs
       - name: Run discovery tests
         run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
+      - name: Run archive society and service tests
+        run: npm run test:society
       - name: Browser smoke and screenshots
         run: |
           npm ci
           npx playwright install --with-deps chromium
           node test/discovery-browser-smoke.mjs
+          node scripts/check-society-browser.mjs
       - name: Save review screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: discovery-lab-review
-          path: artifacts/discovery-lab-*.png
+          path: |
+            artifacts/discovery-lab-*.png
+            artifacts/archive-society-*.png
           if-no-files-found: ignore
       - name: Ensure private matrix is not present in tracked files
         run: |

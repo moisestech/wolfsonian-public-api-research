@@ -3,6 +3,10 @@ node_modules/
 research-console/node_modules/
 research-console/dist/
 .env
+.env.*
+!.env.example
+.local-research/
+artifacts/
 
 data/raw/*.json
 data/raw/*.html

@@ -1,0 +1,10 @@
+.git
+.env
+.env.*
+**/*.csv
+**/*.xlsx
+**/*.xls
+data/raw/**
+data/derived/**
+artifacts/**
+.local-research/**
