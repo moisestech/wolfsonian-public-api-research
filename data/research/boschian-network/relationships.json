@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1",
   "policy": "An edge is not automatically a historical causal relationship. All interpreted edges must be labeled; never make simulation claims into source data.",
-  "count": 20,
+  "count": 22,
   "edgeLayers": {
     "metadata": "reported common institutional labels/creators, not historical causation",
     "public_packet": "two existing public source packets with matching subject",
@@ -246,6 +246,30 @@
       "basis": "Consumer fashion ↔ women's labor exhibition",
       "visitorQuestion": "How are femininity, labor and commercial desire differently framed?",
       "provenance": "independent curatorial hypothesis, not museum-catalog fact",
+      "status": "research_candidate",
+      "hasGeneratedDialogue": false
+    },
+    {
+      "id": "edge-21",
+      "source": "matrix:87.4.28",
+      "target": "matrix:84.21.10",
+      "relation": "shared_staff_themes",
+      "layer": "metadata",
+      "basis": "Technology; Industry",
+      "visitorQuestion": "What is omitted between the bright consumer promise of electricity and the worker making industrial objects?",
+      "provenance": "shared staff-supplied matrix metadata; requires Lakehouse cross-check",
+      "status": "research_candidate",
+      "hasGeneratedDialogue": false
+    },
+    {
+      "id": "edge-22",
+      "source": "record:WOLF-002",
+      "target": "record:WOLF-003",
+      "relation": "machine_aesthetic_enters_home",
+      "layer": "interpretation",
+      "basis": "1927 Machine Age Exposition catalogue ↔ 1937 Sparton domestic radio",
+      "visitorQuestion": "How might machine-age aesthetics change when brought into the private listening space of a household?",
+      "provenance": "independent curatorial hypothesis based on two existing public packets, not documented historical causal relation",
       "status": "research_candidate",
       "hasGeneratedDialogue": false
     }
