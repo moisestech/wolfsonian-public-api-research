@@ -36,7 +36,7 @@ try{
  assert.ok((await page.locator('.object-node').count())>=3,'The graph should have multiple actual object cards');
  assert.ok((await page.locator('.edge-chip').count())>=1,'Edges should expose their tags');
  await page.locator('#show-archive').click();
- assert.equal(await page.locator('.persona-item').count(),6,'Archive Dreams should show 6 original-role cards in this iteration');
+ assert.equal(await page.locator('.persona-item').count(),7,'Archive Dreams shows six core research roles plus the fictional Museum voice, including shared Worker');
  await page.locator('#reveal-prompt').click();
  assert.equal(await page.locator('#prompt-modal').isVisible(),true);
  assert.match(await page.locator('#prompt-text').textContent(),/ONLY USE:|NEVER:/);
