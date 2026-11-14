@@ -15,7 +15,7 @@ export const server=http.createServer(async(req,res)=>{
   try{path=decodeURIComponent(url.pathname);}catch{res.writeHead(400);return res.end();}
   if(path==='/')path='/demo/archive-society/';
   if(path.endsWith('/'))path+='index.html';
-  const allowed=path.startsWith('/demo/archive-society/')||/^\/src\/(archive-society|archive-evidence|discovery-graph)\.mjs$/.test(path)||['/docs/archive-society.md','/examples/archive-society.synthetic.csv'].includes(path);
+  const allowed=path.startsWith('/demo/archive-society/')||path.startsWith('/demo/discovery-lab/')||/^\/src\/(archive-society|archive-evidence|discovery-graph|discovery-personas|discovery-dialogue)\.mjs$/.test(path)||['/docs/archive-society.md','/examples/archive-society.synthetic.csv'].includes(path);
   if(!allowed||path.split('/').some(p=>p.startsWith('.'))){res.writeHead(404);return res.end('Not found');}
   try{
     const file=await realpath(resolve(root,'.'+path));

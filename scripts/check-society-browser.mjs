@@ -55,6 +55,8 @@ try {
   await page.locator('#fit').click();assert.match(await page.locator('#world').getAttribute('transform'),/scale\(1\)/);
   assert.equal((await page.request.get(base+'/.env.local')).status(),404);
   assert.equal((await page.request.get(base+'/server/archive-services.mjs')).status(),404);
+  assert.equal((await page.request.get(base+'/demo/discovery-lab/')).status(),200);
+  for(const box of await page.locator('.object-card .object-title').evaluateAll(nodes=>nodes.map(n=>{const b=n.getBBox();return {x:b.x,width:b.width};})))assert.ok(box.x+box.width<=226);
   await page.setViewportSize({width:390,height:844});await page.locator('#atlas-mode').uncheck();
   await page.screenshot({path:new URL('artifacts/archive-society-mobile.png',root).pathname,fullPage:true});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));

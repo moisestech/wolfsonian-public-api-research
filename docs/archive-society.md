@@ -10,7 +10,7 @@ npm run demo:society
 ```
 
 This uses Node's standard library, with no install or account needed for the graph.
-The isolated server binds to loopback and serves only the demo, its three source modules, this guide and the synthetic CSV example.
+The isolated server binds to loopback and serves only the atlas and linked Discovery Lab, their source modules, this guide and the synthetic CSV example.
 The existing Discovery Lab, Research Demo 001, /world/ and frozen source packets remain separate.
 
 ## A 4–6 minute walkthrough
