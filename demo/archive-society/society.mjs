@@ -1,9 +1,10 @@
 import { parseMatrixCsv } from '../../src/discovery-graph.mjs';
 import { inventedRecords, societyView, conversationFor, LENSES, photoKeys, imageKeys, WORLD } from '../../src/archive-society.mjs';
+import { applyLayers, buildAtlasGraph, recordsToAtlasInput } from '../../src/atlas-graph.mjs';
 import { reconcileLookup } from '../../src/archive-evidence.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
-const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,
+const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,
   photos:new Map(),urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
   playing:false,epoch:0,view:null,conversation:null,lookupBusy:false};
@@ -59,9 +60,25 @@ function renderGraph(){
     g.append(svg('path',{d,class:'edge-line'}),svg('path',{d,class:'hit'}));
     const label='◌ '+edge.reasons[0].value+' · 3 turns',width=Math.min(350,Math.max(165,label.length*8.2));
     g.append(svg('rect',{x:mx-width/2,y:my-62,width,height:36,rx:18,class:'chip'}),svg('text',{x:mx,y:my-38,'text-anchor':'middle'},label));
-    const select=()=>{stop();resetApproval();state.edge=edge.id;render();setPanel('conversation');};
+    const select=()=>{stop();resetApproval();state.edge=edge.id;state.identityEdge=null;render();setPanel('conversation');};
     g.addEventListener('click',select);g.addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();select();}});s.append(g);
   }
+  const layers=applyLayers(buildAtlasGraph(recordsToAtlasInput(state.view.nodes.map(n=>n.record)),{useSyntheticBoxes:$('layer-box-sim').checked}),{accession:$('layer-accession').checked,box:$('layer-box').checked});
+  state.layerView=layers;
+  const notice=$('layer-notice');
+  if($('layer-box').checked&&layers.boxNotice){notice.hidden=false;notice.textContent=layers.boxNotice;}else notice.hidden=true;
+  layers.relationships.forEach((edge,index)=>{
+    const origin=state.view.nodes.find(n=>n.record.accession===edge.source.replace(/^object:/,''));
+    if(!origin)return;
+    const x=origin.x+150,y=origin.y-70-(index%3)*28;
+    const d='M '+origin.x+' '+origin.y+' L '+x+' '+y;
+    const g=svg('g',{class:'identity-edge'+(edge.layer==='box'?' box':'')+(edge.id===state.edge?' selected':''),role:'button',tabindex:0,'data-edge':edge.id,'aria-label':edge.type+' '+edge.basis});
+    g.append(svg('path',{d,class:'edge-line'}),svg('path',{d,class:'hit'}));
+    g.append(svg('text',{x,y,class:'identity-label'},edge.layer==='box'?'BOX · '+edge.validationState:edge.validationState+' · '+edge.target.replace('accession:','')));
+    const select=()=>{stop();resetApproval();state.edge=edge.id;state.identityEdge=edge;render();setPanel('conversation');};
+    g.addEventListener('click',select);g.addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();select();}});
+    s.append(g);
+  });
   state.view.nodes.forEach((item,i)=>{
     const {record:r,x,y}=item,w=238,h=173;
     const g=svg('g',{class:'object-card'+(r.accession===state.seed?' selected':''),transform:'translate('+(x-w/2)+' '+(y-h/2)+')',role:'button',tabindex:0,'aria-label':r.title+' · '+r.accession,'data-accession':r.accession});
@@ -92,6 +109,11 @@ function renderGraph(){
 function renderConversation(){
   const edge=state.view.edges.find(e=>e.id===state.edge),box=$('conversation-content');box.replaceChildren();
   state.conversation=null;
+  if(state.identityEdge&&state.identityEdge.id===state.edge){
+    const identity=state.identityEdge;
+    box.append(node('span','SCRIPTED · '+identity.validationState,'evidence-type'),node('h2',identity.type.replaceAll('_',' ')),node('p',identity.basis),node('p','Hidden layers remove both the line and its hit target. This edge is not a historical relationship.','muted'));
+    $('voice-controls').hidden=true;$('play').disabled=true;return;
+  }
   if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
   const target=state.records.find(r=>r.accession===edge.target);
   const c=conversationFor(record(),target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
@@ -123,12 +145,18 @@ function renderSnapshot(){
 }
 function render(){
   state.view=societyView(state.records,state.seed,state.lens,{atlas:$('atlas-mode').checked,theme:$('theme').value});
-  if(!state.view.edges.some(e=>e.id===state.edge))state.edge=state.view.edges[0]?.id||null;
   const lens=LENSES.find(l=>l.id===state.lens);
   message('lens-question',lens.question);message('lens-limit',lens.limits);message('atlas-title',record().title);
-  message('counts',state.view.nodes.length+' visible objects · '+state.view.edges.length+' conversation paths · 0 historical claims inferred');
   message('source-status',record().source==='invented'?'Invented demonstration':'Local CSV · browser only');
-  renderGraph();renderConversation();renderRecord();
+  renderGraph();
+  const identityVisible=state.identityEdge&&state.layerView.relationships.some(edge=>edge.id===state.identityEdge.id);
+  if(!identityVisible){
+    state.identityEdge=null;
+    if(!state.view.edges.some(edge=>edge.id===state.edge))state.edge=state.view.edges[0]?.id||null;
+  }
+  const identityCount=state.layerView?.relationships.length||0;
+  message('counts',state.view.nodes.length+' visible objects · '+state.view.edges.length+' conversation paths · '+identityCount+' identity or storage lines · 0 historical claims inferred');
+  renderConversation();renderRecord();
 }
 async function service(path,options={}){
   const token=$('access-token').value;
@@ -178,7 +206,7 @@ $('lens').replaceChildren(...LENSES.map(p=>{const o=node('option',p.label);o.val
 $('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;state.edge=null;render();});
 $('seed').addEventListener('change',()=>changeSeed($('seed').value));
 $('search').addEventListener('input',()=>{stop();resetApproval();options();render();});
-for(const id of ['theme','atlas-mode'])$(id).addEventListener('change',()=>{stop();resetApproval();state.edge=null;render();});
+for(const id of ['theme','atlas-mode','layer-accession','layer-box','layer-box-sim'])$(id).addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();});
 $('veil').addEventListener('input',renderGraph);
 document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>setPanel(b.dataset.panel)));
 $('voice-mode').addEventListener('change',()=>{stop();resetApproval();$('approval-box').hidden=$('voice-mode').value!=='elevenlabs';});
@@ -212,9 +240,12 @@ $('check-services').addEventListener('click',async()=>{try{const r=await service
 $('zoom-in').addEventListener('click',()=>zoom(1.2));$('zoom-out').addEventListener('click',()=>zoom(1/1.2));$('fit').addEventListener('click',fit);
 $('present').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{message('voice-status','Full screen unavailable on this device.');}});
 let drag=null;
-$('network').addEventListener('pointerdown',e=>{if(e.target.closest('.object-card,.conversation-edge'))return;drag={x:e.clientX,y:e.clientY,px:state.panX,py:state.panY};$('network').setPointerCapture(e.pointerId);});
+$('network').addEventListener('pointerdown',e=>{if(e.target.closest('.object-card,.conversation-edge,.identity-edge'))return;drag={x:e.clientX,y:e.clientY,px:state.panX,py:state.panY};$('network').setPointerCapture(e.pointerId);});
 $('network').addEventListener('pointermove',e=>{if(!drag)return;const r=$('network').getBoundingClientRect();state.panX=drag.px+(e.clientX-drag.x)*2000/r.width;state.panY=drag.py+(e.clientY-drag.y)*1125/r.height;transform();});
 for(const event of ['pointerup','pointercancel'])$('network').addEventListener(event,()=>{drag=null;});
 $('network').addEventListener('wheel',e=>{if(e.ctrlKey||e.metaKey)return;e.preventDefault();zoom(e.deltaY<0?1.07:1/1.07);},{passive:false});
 window.addEventListener('beforeunload',()=>{stop();clearPhotos();});
+const requested=new URLSearchParams(location.search).get('accession');
+if(requested&&state.records.some(record=>record.accession===requested))state.seed=requested;
 categories();options();render();
+if(requested&&!state.records.some(record=>record.accession===requested))message('import-status','Requested accession is not in the loaded set. No identity was assumed.');

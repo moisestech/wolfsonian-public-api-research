@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { handleArchiveService } from '../server/archive-services.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const types={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml','.md':'text/plain; charset=utf-8','.csv':'text/csv; charset=utf-8'};
+const types={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml','.md':'text/plain; charset=utf-8','.csv':'text/csv; charset=utf-8'};
 export const server=http.createServer(async(req,res)=>{
   const url=new URL(req.url,'http://localhost');
   const api=/^\/api\/archive-society\/(status|lakehouse|voice)$/.exec(url.pathname);
@@ -15,7 +15,7 @@ export const server=http.createServer(async(req,res)=>{
   try{path=decodeURIComponent(url.pathname);}catch{res.writeHead(400);return res.end();}
   if(path==='/')path='/demo/archive-society/';
   if(path.endsWith('/'))path+='index.html';
-  const allowed=path.startsWith('/demo/archive-society/')||path.startsWith('/demo/discovery-lab/')||/^\/src\/(archive-society|archive-evidence|discovery-graph|discovery-personas|discovery-dialogue)\.mjs$/.test(path)||['/docs/archive-society.md','/examples/archive-society.synthetic.csv'].includes(path);
+  const allowed=path.startsWith('/demo/archive-society/')||path.startsWith('/demo/discovery-lab/')||path.startsWith('/demo/spatial-atlas/')||path.startsWith('/demo/object-lens/')||path==='/node_modules/three/build/three.module.js'||/^\/src\/(archive-society|archive-evidence|discovery-graph|discovery-personas|discovery-dialogue|atlas-graph|atlas-scripts)\.mjs$/.test(path)||['/docs/archive-society.md','/examples/archive-society.synthetic.csv'].includes(path);
   if(!allowed||path.split('/').some(p=>p.startsWith('.'))){res.writeHead(404);return res.end('Not found');}
   try{
     const file=await realpath(resolve(root,'.'+path));

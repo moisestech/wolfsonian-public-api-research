@@ -10,7 +10,7 @@
 <a class="skip" href="#atlas">Skip to the atlas</a>
 <header class="topbar">
   <a class="wordmark" href="../discovery-lab/"><span class="mark">AD</span><span>ARCHIVE DREAMS <em>in Public</em><small>THE CONVERSATIONAL ATLAS · INDEPENDENT ARTIST RESEARCH</small></span></a>
-  <div class="top-actions"><span id="source-status" class="source">Invented demonstration</span><button id="present">Full screen</button><a href="../discovery-lab/">Discovery Lab ↗</a></div>
+  <div class="top-actions"><span id="source-status" class="source">Invented demonstration</span><button id="present">Full screen</button><a href="../spatial-atlas/">Spatial Atlas ↗</a><a href="../object-lens/">Object Lens ↗</a><a href="../discovery-lab/">Discovery Lab ↗</a></div>
 </header>
 <main class="workspace">
 <aside class="reader-rail" aria-label="Readers and local sources">
@@ -21,6 +21,12 @@
   <label for="search">Find a title or accession</label><input id="search" type="search" placeholder="Start with one object…">
   <label for="seed">Center the conversation on</label><select id="seed"></select>
   <label for="theme">Shared thematic category</label><select id="theme"><option value="">All categories</option></select>
+  <fieldset class="layers"><legend>Relationships</legend>
+    <label class="check"><input id="layer-accession" type="checkbox" checked> Accession identity</label>
+    <label class="check"><input id="layer-box" type="checkbox"> Box / storage</label>
+    <label class="check"><input id="layer-box-sim" type="checkbox"> Simulated box fixture · not museum data</label>
+  </fieldset>
+  <p id="layer-notice" class="boundary" hidden></p>
   <label class="check"><input id="atlas-mode" type="checkbox"> Atlas overview · up to 24 objects</label>
   <details class="source-studio"><summary>Local sources &amp; photographs</summary>
     <p>Files stay in this browser session. Import the Object at Scale worksheet as CSV. Use photographs covered by your presentation permission.</p>

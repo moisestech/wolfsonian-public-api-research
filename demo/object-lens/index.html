@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,follow">
+  <title>Object Lens · Archive Dreams in Public</title>
+  <link rel="stylesheet" href="./lens.css">
+</head>
+<body>
+<header>
+  <p class="eyebrow">OBJECT LENS · CAMERA STAYS OFF UNTIL YOU ASK</p>
+  <h1>A possible identity, then a person confirms it.</h1>
+  <nav>
+    <a href="../archive-society/">Conversational Atlas</a>
+    <a href="../spatial-atlas/">Spatial Atlas</a>
+  </nav>
+</header>
+<main>
+  <section>
+    <video id="preview" playsinline autoplay muted hidden></video>
+    <p id="camera-status" role="status">Camera is off. No frames are stored.</p>
+    <button id="open-camera" type="button">Use the camera</button>
+    <button id="close-camera" type="button" hidden>Turn the camera off</button>
+    <p class="recognition">Image recognition is not configured. A picture is not treated as a match.</p>
+  </section>
+  <section>
+    <label for="accession">Accession, typed exactly</label>
+    <input id="accession" autocomplete="off" spellcheck="false" placeholder="XX1990.1484">
+    <button id="check" type="button">Check against the public packets</button>
+    <p id="result" role="status"></p>
+    <label class="confirm"><input id="confirm" type="checkbox" disabled> I confirm this is the object in front of me</label>
+    <a id="handoff" hidden href="../archive-society/">Return to the atlas</a>
+  </section>
+</main>
+<script type="module" src="./lens.mjs"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,follow">
+  <title>Spatial Atlas · Archive Dreams in Public</title>
+  <link rel="stylesheet" href="./atlas.css">
+</head>
+<body>
+<a class="skip" href="#stage">Skip to the atlas</a>
+<header>
+  <p class="eyebrow">SPATIAL ATLAS · PROGRESSIVE ENHANCEMENT</p>
+  <h1>The same records, read as a room.</h1>
+  <p>Six verified public packets. Accession identity is on. Box and storage stay empty until an authorized mapping is loaded.</p>
+  <nav>
+    <a href="../archive-society/">Conversational Atlas</a>
+    <a href="../object-lens/">Object Lens</a>
+    <a href="../discovery-lab/">Discovery Lab</a>
+  </nav>
+</header>
+<main>
+  <section class="controls" aria-label="Relationship layers">
+    <label><input id="layer-accession" type="checkbox" checked> Accession identity</label>
+    <label><input id="layer-box" type="checkbox"> Box / storage</label>
+    <p id="notice" role="status"></p>
+  </section>
+  <section id="stage" aria-label="Spatial atlas">
+    <canvas id="webgl" hidden></canvas>
+    <div id="fallback">
+      <svg id="map" viewBox="0 0 800 460" role="img" aria-label="Two-dimensional atlas of six public packets"></svg>
+    </div>
+    <p id="mode" class="mode"></p>
+  </section>
+  <aside id="evidence" aria-live="polite">
+    <h2>Evidence</h2>
+    <p>Select a packet. The script beside it is artist-authored and stays inside the public record.</p>
+  </aside>
+</main>
+<script type="module" src="./atlas.mjs"></script>
+</body>
+</html>
