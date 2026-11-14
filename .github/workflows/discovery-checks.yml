@@ -1,0 +1,37 @@
+name: Discovery Lab checks
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'demo/discovery-lab/**'
+      - 'src/discovery-*.mjs'
+      - 'test/discovery-*.test.mjs'
+      - '.github/workflows/discovery-checks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check JavaScript syntax
+        run: |
+          node --check src/discovery-graph.mjs
+          node --check src/discovery-personas.mjs
+          node --check src/discovery-dialogue.mjs
+          node --check demo/discovery-lab/showcase.mjs
+      - name: Run discovery tests
+        run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
+      - name: Ensure private matrix is not present in tracked files
+        run: |
+          if git ls-files | grep -Ei '(object.at.scale.*\.(csv|xlsx)|content.matrix.*\.(csv|xlsx))'; then
+            echo 'Museum working matrix must not be in the repository.' >&2
+            exit 1
+          fi
+          test -f demo/discovery-lab/index.html
+          test -f demo/discovery-lab/showcase.css
