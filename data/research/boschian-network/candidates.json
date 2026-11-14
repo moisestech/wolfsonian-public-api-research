@@ -84,38 +84,380 @@
   ],
   "candidates": [
     {
-      "id": "matrix:2014.6.11",
-      "accession": "2014.6.11",
-      "title": "International Utrecht Fair",
-      "date": "1930",
-      "zone": "promise",
+      "id": "matrix:XX1990.2870",
+      "accession": "XX1990.2870",
+      "title": "10th Utrecht Fair",
+      "date": "1924",
+      "zone": "consequence",
       "themes": [
-        "Cities",
+        "Colonialism",
         "Expositions and fairs",
-        "Architecture"
+        "Industry"
       ],
       "motifs": [
-        "Buildings",
-        "Logos"
+        "Ships",
+        "Water"
       ],
       "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
       "validation": "not_yet_matched_to_lakehouse_public_record",
       "imageStatus": "not_cleared"
     },
     {
-      "id": "matrix:XX1990.2931",
-      "accession": "XX1990.2931",
-      "title": "40th Utrecht Fair",
-      "date": "1939",
-      "zone": "promise",
+      "id": "matrix:TD1989.317.60",
+      "accession": "TD1989.317.60",
+      "title": "Colonial Exposition in Semarang 1914",
+      "date": "1914",
+      "zone": "consequence",
       "themes": [
+        "Colonialism",
         "Expositions and fairs",
-        "Technology",
+        "Domestic life"
+      ],
+      "motifs": [
+        "Clothes",
+        "Arches"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:XX1990.4087",
+      "accession": "XX1990.4087",
+      "title": "De Centrale. Workers' Insurance and Deposit Bank, The Hague",
+      "date": "1912",
+      "zone": "consequence",
+      "themes": [
+        "Labor",
+        "Industry",
+        "Trade / Commerce"
+      ],
+      "motifs": [
+        "Workers",
+        "Hands"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:2007.12.26",
+      "accession": "2007.12.26",
+      "title": "Don't Let that Shadow Touch Them. Buy War Bonds",
+      "date": "1942",
+      "zone": "consequence",
+      "themes": [
+        "War / Military",
+        "Propaganda",
+        "Domestic life"
+      ],
+      "motifs": [
+        "Flags",
+        "Children"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:87.997.4.1",
+      "accession": "87.997.4.1",
+      "title": "Furniture Makers, Forward with the Modern Union",
+      "date": "1927",
+      "zone": "consequence",
+      "themes": [
+        "Politics",
+        "Labor",
         "Industry"
       ],
       "motifs": [
-        "Gears",
-        "Buildings"
+        "Hands",
+        "Workers"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:TD1989.317.66",
+      "accession": "TD1989.317.66",
+      "title": "Lottery of the National Exhibition of Women's Labor",
+      "date": "1898",
+      "zone": "consequence",
+      "themes": [
+        "Politics",
+        "Propaganda",
+        "Labor"
+      ],
+      "motifs": [
+        "Mythological figures",
+        "Women"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:TD1990.123.6",
+      "accession": "TD1990.123.6",
+      "title": "Protect Your Hair Against Revolving Spindles",
+      "date": "1943",
+      "zone": "consequence",
+      "themes": [
+        "Safety / Health",
+        "Labor",
+        "Industry"
+      ],
+      "motifs": [
+        "Women",
+        "Machines"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:WC2011.06.4.1",
+      "accession": "WC2011.06.4.1",
+      "title": "Rome 1942 Year Twenty of the Fascist Revolution. Universal Exposition",
+      "date": "1939",
+      "zone": "consequence",
+      "themes": [
+        "Expositions and fairs",
+        "Architecture",
+        "Politics"
+      ],
+      "motifs": [
+        "Buildings",
+        "Monuments"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:TD1990.340.146",
+      "accession": "TD1990.340.146",
+      "title": "The East Indies Must Be Free! Work and Fight for it!",
+      "date": "1944",
+      "zone": "consequence",
+      "themes": [
+        "War / Military",
+        "Politics",
+        "Colonialism"
+      ],
+      "motifs": [
+        "Animals",
+        "Flags"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:TD1990.123.8",
+      "accession": "TD1990.123.8",
+      "title": "Unsafe Stamp Presses and Punches, etc.!! 546 Accidents per Year",
+      "date": "1940",
+      "zone": "consequence",
+      "themes": [
+        "Safety / Health",
+        "Industry",
+        "Labor"
+      ],
+      "motifs": [
+        "Hands",
+        "Machines"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:XX1990.4091",
+      "accession": "XX1990.4091",
+      "title": "Vote for the List of the Social Democratic Workers' Party",
+      "date": "1919",
+      "zone": "consequence",
+      "themes": [
+        "Labor",
+        "Politics",
+        "Industry"
+      ],
+      "motifs": [
+        "Banners",
+        "Factories"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:2009.5.1",
+      "accession": "2009.5.1",
+      "title": "Delft Salad Oil",
+      "date": "c. 1895",
+      "zone": "desire",
+      "themes": [
+        "Advertising",
+        "Domestic life",
+        "Trade / Commerce"
+      ],
+      "motifs": [
+        "Women",
+        "Hair"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:TD1989.287.1",
+      "accession": "TD1989.287.1",
+      "title": "Dutch Indies Special Return Tickets. 100 Days",
+      "date": "1939",
+      "zone": "desire",
+      "themes": [
+        "Travel / Transportation",
+        "Leisure / Entertainment",
+        "Advertising"
+      ],
+      "motifs": [
+        "Ships",
+        "Water"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:XX2017.207",
+      "accession": "XX2017.207",
+      "title": "International Exposition of Modern Decorative and Industrial Arts",
+      "date": "1923",
+      "zone": "desire",
+      "themes": [
+        "Expositions and fairs",
+        "Leisure / Entertainment",
+        "Luxury"
+      ],
+      "motifs": [
+        "Hair",
+        "Women"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:TD1991.212.2",
+      "accession": "TD1991.212.2",
+      "title": "KLM Fokker Douglas DC-2",
+      "date": "1937",
+      "zone": "desire",
+      "themes": [
+        "Travel / Transportation",
+        "Advertising",
+        "Luxury"
+      ],
+      "motifs": [
+        "Aircraft",
+        "Speed"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:XC2022.03.20",
+      "accession": "XC2022.03.20",
+      "title": "Moonlight in Havana",
+      "date": "1942",
+      "zone": "desire",
+      "themes": [
+        "Advertising",
+        "Leisure / Entertainment",
+        "Travel / Transportation"
+      ],
+      "motifs": [
+        "Dance",
+        "Women"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:XC2022.03.26.5",
+      "accession": "XC2022.03.26.5",
+      "title": "Pan-Americana",
+      "date": "1945",
+      "zone": "desire",
+      "themes": [
+        "Advertising",
+        "Leisure / Entertainment",
+        "Luxury"
+      ],
+      "motifs": [
+        "Dance",
+        "Women"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:XX1990.3277",
+      "accession": "XX1990.3277",
+      "title": "Pirelli Star Brand Heels",
+      "date": "c.1930",
+      "zone": "desire",
+      "themes": [
+        "Advertising",
+        "Domestic life",
+        "Trade / Commerce"
+      ],
+      "motifs": [
+        "Mythological figures",
+        "Animals"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:2018.16.1",
+      "accession": "2018.16.1",
+      "title": "The Delano Hotel",
+      "date": "c.1947",
+      "zone": "desire",
+      "themes": [
+        "Architecture",
+        "Luxury",
+        "Leisure / Entertainment"
+      ],
+      "motifs": [
+        "Buildings",
+        "Hotels"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:XX1990.2688",
+      "accession": "XX1990.2688",
+      "title": "To Florida and the South – Savannah Line",
+      "date": "c. 1900",
+      "zone": "desire",
+      "themes": [
+        "Advertising",
+        "Leisure / Entertainment",
+        "Travel / Transportation"
+      ],
+      "motifs": [
+        "Flowers / Plants",
+        "Ships"
       ],
       "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
       "validation": "not_yet_matched_to_lakehouse_public_record",
@@ -141,19 +483,57 @@
       "imageStatus": "not_cleared"
     },
     {
-      "id": "matrix:2010.22.1",
-      "accession": "2010.22.1",
-      "title": "Tropical Home",
-      "date": "1933",
+      "id": "matrix:XX1990.2931",
+      "accession": "XX1990.2931",
+      "title": "40th Utrecht Fair",
+      "date": "1939",
       "zone": "promise",
       "themes": [
-        "Architecture",
         "Expositions and fairs",
-        "Domestic life"
+        "Technology",
+        "Industry"
       ],
       "motifs": [
-        "Flowers / Plants",
-        "Water"
+        "Gears",
+        "Buildings"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:86.4.50",
+      "accession": "86.4.50",
+      "title": "Exhibition of Electricity in the Home and Handwork",
+      "date": "1907",
+      "zone": "promise",
+      "themes": [
+        "Technology",
+        "Electricity",
+        "Expositions and fairs"
+      ],
+      "motifs": [
+        "Workers",
+        "Buildings"
+      ],
+      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
+      "validation": "not_yet_matched_to_lakehouse_public_record",
+      "imageStatus": "not_cleared"
+    },
+    {
+      "id": "matrix:2014.6.11",
+      "accession": "2014.6.11",
+      "title": "International Utrecht Fair",
+      "date": "1930",
+      "zone": "promise",
+      "themes": [
+        "Cities",
+        "Expositions and fairs",
+        "Architecture"
+      ],
+      "motifs": [
+        "Buildings",
+        "Logos"
       ],
       "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
       "validation": "not_yet_matched_to_lakehouse_public_record",
@@ -198,37 +578,19 @@
       "imageStatus": "not_cleared"
     },
     {
-      "id": "matrix:87.4.28",
-      "accession": "87.4.28",
-      "title": "The Sun at Night: Philips Argenta",
-      "date": "1928",
+      "id": "matrix:2017.17.20",
+      "accession": "2017.17.20",
+      "title": "Paris 1937, Exposition Internationale",
+      "date": "1937",
       "zone": "promise",
       "themes": [
-        "Technology",
-        "Advertising",
-        "Industry"
+        "Expositions and fairs",
+        "Leisure / Entertainment",
+        "Architecture"
       ],
       "motifs": [
-        "Light bulbs"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:86.4.50",
-      "accession": "86.4.50",
-      "title": "Exhibition of Electricity in the Home and Handwork",
-      "date": "1907",
-      "zone": "promise",
-      "themes": [
-        "Technology",
-        "Electricity",
-        "Expositions and fairs"
-      ],
-      "motifs": [
-        "Workers",
-        "Buildings"
+        "National symbols",
+        "Smoke"
       ],
       "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
       "validation": "not_yet_matched_to_lakehouse_public_record",
@@ -254,398 +616,37 @@
       "imageStatus": "not_cleared"
     },
     {
-      "id": "matrix:2017.17.20",
-      "accession": "2017.17.20",
-      "title": "Paris 1937, Exposition Internationale",
-      "date": "1937",
+      "id": "matrix:87.4.28",
+      "accession": "87.4.28",
+      "title": "The Sun at Night: Philips Argenta",
+      "date": "1928",
       "zone": "promise",
       "themes": [
-        "Expositions and fairs",
-        "Leisure / Entertainment",
-        "Architecture"
-      ],
-      "motifs": [
-        "National symbols",
-        "Smoke"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:2009.5.1",
-      "accession": "2009.5.1",
-      "title": "Delft Salad Oil",
-      "date": "c. 1895",
-      "zone": "desire",
-      "themes": [
+        "Technology",
         "Advertising",
-        "Domestic life",
-        "Trade / Commerce"
+        "Industry"
       ],
       "motifs": [
-        "Women",
-        "Hair"
+        "Light bulbs"
       ],
       "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
       "validation": "not_yet_matched_to_lakehouse_public_record",
       "imageStatus": "not_cleared"
     },
     {
-      "id": "matrix:XX1990.3277",
-      "accession": "XX1990.3277",
-      "title": "Pirelli Star Brand Heels",
-      "date": "c.1930",
-      "zone": "desire",
-      "themes": [
-        "Advertising",
-        "Domestic life",
-        "Trade / Commerce"
-      ],
-      "motifs": [
-        "Mythological figures",
-        "Animals"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:XX2017.207",
-      "accession": "XX2017.207",
-      "title": "International Exposition of Modern Decorative and Industrial Arts",
-      "date": "1923",
-      "zone": "desire",
-      "themes": [
-        "Expositions and fairs",
-        "Leisure / Entertainment",
-        "Luxury"
-      ],
-      "motifs": [
-        "Hair",
-        "Women"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:2018.16.1",
-      "accession": "2018.16.1",
-      "title": "The Delano Hotel",
-      "date": "c.1947",
-      "zone": "desire",
+      "id": "matrix:2010.22.1",
+      "accession": "2010.22.1",
+      "title": "Tropical Home",
+      "date": "1933",
+      "zone": "promise",
       "themes": [
         "Architecture",
-        "Luxury",
-        "Leisure / Entertainment"
-      ],
-      "motifs": [
-        "Buildings",
-        "Hotels"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:XC2022.03.26.5",
-      "accession": "XC2022.03.26.5",
-      "title": "Pan-Americana",
-      "date": "1945",
-      "zone": "desire",
-      "themes": [
-        "Advertising",
-        "Leisure / Entertainment",
-        "Luxury"
-      ],
-      "motifs": [
-        "Dance",
-        "Women"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:XC2022.03.20",
-      "accession": "XC2022.03.20",
-      "title": "Moonlight in Havana",
-      "date": "1942",
-      "zone": "desire",
-      "themes": [
-        "Advertising",
-        "Leisure / Entertainment",
-        "Travel / Transportation"
-      ],
-      "motifs": [
-        "Dance",
-        "Women"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:XX1990.2688",
-      "accession": "XX1990.2688",
-      "title": "To Florida and the South – Savannah Line",
-      "date": "c. 1900",
-      "zone": "desire",
-      "themes": [
-        "Advertising",
-        "Leisure / Entertainment",
-        "Travel / Transportation"
+        "Expositions and fairs",
+        "Domestic life"
       ],
       "motifs": [
         "Flowers / Plants",
-        "Ships"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:TD1989.287.1",
-      "accession": "TD1989.287.1",
-      "title": "Dutch Indies Special Return Tickets. 100 Days",
-      "date": "1939",
-      "zone": "desire",
-      "themes": [
-        "Travel / Transportation",
-        "Leisure / Entertainment",
-        "Advertising"
-      ],
-      "motifs": [
-        "Ships",
         "Water"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:TD1991.212.2",
-      "accession": "TD1991.212.2",
-      "title": "KLM Fokker Douglas DC-2",
-      "date": "1937",
-      "zone": "desire",
-      "themes": [
-        "Travel / Transportation",
-        "Advertising",
-        "Luxury"
-      ],
-      "motifs": [
-        "Aircraft",
-        "Speed"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:XX1990.2628",
-      "accession": "XX1990.2628",
-      "title": "Vienna International Fair",
-      "date": "1921",
-      "zone": "desire",
-      "themes": [
-        "Expositions and fairs",
-        "Advertising",
-        "Trade / Commerce"
-      ],
-      "motifs": [
-        "Logos"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:TD1989.317.60",
-      "accession": "TD1989.317.60",
-      "title": "Colonial Exposition in Semarang 1914",
-      "date": "1914",
-      "zone": "consequence",
-      "themes": [
-        "Colonialism",
-        "Expositions and fairs",
-        "Domestic life"
-      ],
-      "motifs": [
-        "Clothes",
-        "Arches"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:XX1990.2870",
-      "accession": "XX1990.2870",
-      "title": "10th Utrecht Fair",
-      "date": "1924",
-      "zone": "consequence",
-      "themes": [
-        "Colonialism",
-        "Expositions and fairs",
-        "Industry"
-      ],
-      "motifs": [
-        "Ships",
-        "Water"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:XX1990.4091",
-      "accession": "XX1990.4091",
-      "title": "Vote for the List of the Social Democratic Workers' Party",
-      "date": "1919",
-      "zone": "consequence",
-      "themes": [
-        "Labor",
-        "Politics",
-        "Industry"
-      ],
-      "motifs": [
-        "Banners",
-        "Factories"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:XX1990.4087",
-      "accession": "XX1990.4087",
-      "title": "De Centrale. Workers' Insurance and Deposit Bank, The Hague",
-      "date": "1912",
-      "zone": "consequence",
-      "themes": [
-        "Labor",
-        "Industry",
-        "Trade / Commerce"
-      ],
-      "motifs": [
-        "Workers",
-        "Hands"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:87.997.4.1",
-      "accession": "87.997.4.1",
-      "title": "Furniture Makers, Forward with the Modern Union",
-      "date": "1927",
-      "zone": "consequence",
-      "themes": [
-        "Politics",
-        "Labor",
-        "Industry"
-      ],
-      "motifs": [
-        "Hands",
-        "Workers"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:TD1990.123.8",
-      "accession": "TD1990.123.8",
-      "title": "Unsafe Stamp Presses and Punches, etc.!! 546 Accidents per Year",
-      "date": "1940",
-      "zone": "consequence",
-      "themes": [
-        "Safety / Health",
-        "Industry",
-        "Labor"
-      ],
-      "motifs": [
-        "Hands",
-        "Machines"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:TD1990.123.6",
-      "accession": "TD1990.123.6",
-      "title": "Protect Your Hair Against Revolving Spindles",
-      "date": "1943",
-      "zone": "consequence",
-      "themes": [
-        "Safety / Health",
-        "Labor",
-        "Industry"
-      ],
-      "motifs": [
-        "Women",
-        "Machines"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:2007.12.26",
-      "accession": "2007.12.26",
-      "title": "Don't Let that Shadow Touch Them. Buy War Bonds",
-      "date": "1942",
-      "zone": "consequence",
-      "themes": [
-        "War / Military",
-        "Propaganda",
-        "Domestic life"
-      ],
-      "motifs": [
-        "Flags",
-        "Children"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:TD1990.340.146",
-      "accession": "TD1990.340.146",
-      "title": "The East Indies Must Be Free! Work and Fight for it!",
-      "date": "1944",
-      "zone": "consequence",
-      "themes": [
-        "War / Military",
-        "Politics",
-        "Colonialism"
-      ],
-      "motifs": [
-        "Animals",
-        "Flags"
-      ],
-      "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
-      "validation": "not_yet_matched_to_lakehouse_public_record",
-      "imageStatus": "not_cleared"
-    },
-    {
-      "id": "matrix:WC2011.06.4.1",
-      "accession": "WC2011.06.4.1",
-      "title": "Rome 1942 Year Twenty of the Fascist Revolution. Universal Exposition",
-      "date": "1939",
-      "zone": "consequence",
-      "themes": [
-        "Expositions and fairs",
-        "Architecture",
-        "Politics"
-      ],
-      "motifs": [
-        "Buildings",
-        "Monuments"
       ],
       "sourceKind": "candidate_from_staff_shared_object_at_scale_matrix",
       "validation": "not_yet_matched_to_lakehouse_public_record",
