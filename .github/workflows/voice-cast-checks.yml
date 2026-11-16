@@ -8,6 +8,7 @@ on:
       - 'test/visitor-guide.test.mjs'
       - 'demo/archive-society/index.html'
       - 'demo/archive-society/society.css'
+      - 'scripts/check-society-browser.mjs'
       - 'test/voice-cast.test.mjs'
       - 'demo/archive-society/society.mjs'
       - 'demo/spatial-atlas/atlas.mjs'
@@ -39,3 +40,18 @@ jobs:
       - name: Pure local casting and archive-contract tests
         run: |
           node --test test/visitor-guide.test.mjs test/voice-cast.test.mjs test/matrix-room.test.mjs test/archive-society.test.mjs test/discovery-showcase.test.mjs
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Install headless Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Check visitor journey at desktop and mobile
+        run: npm run check:society:browser
