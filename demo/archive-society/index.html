@@ -12,13 +12,13 @@
   <a class="wordmark" href="#atlas"><svg class="symbol" viewBox="0 0 32 32" aria-hidden="true"><rect x="2.5" y="2.5" width="27" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 23V13h4.5v10M14.5 23V8h5v15M21.5 23v-7H25v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>ARCHIVE DREAMS <em>in Public</em></span></a>
   <form class="finder" role="search">
     <label for="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14.5 14.5 20 20" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="sr-only">Find a title or accession</span></label>
-    <input id="search" type="search" placeholder="Title or accession" autocomplete="off">
+    <input id="search" type="search" placeholder="Search by object name or accession" autocomplete="off">
   </form>
   <div class="top-actions">
     <a class="icon-link" href="../spatial-atlas/" aria-label="Spatial Atlas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 14l5-4 4 3 3-2 6 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
     <a class="icon-link" href="../object-lens/" aria-label="Object Lens"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg></a>
     <button id="present" class="icon-button" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
-    <button id="admin-toggle" class="icon-button" type="button" aria-label="Admin tools" aria-expanded="false" aria-controls="admin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="7" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="12" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="17" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/></svg></button>
+    <button id="admin-toggle" class="icon-button" type="button" aria-label="Research and service settings" aria-expanded="false" aria-controls="admin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="7" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="12" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="17" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/></svg></button>
   </div>
 </header>
 <section id="admin" class="admin" hidden>
@@ -48,6 +48,23 @@
 </section>
 <main class="workspace">
 <section class="atlas-panel" id="atlas" aria-label="Interactive conversational atlas">
+  <section class="visitor-guide" aria-label="Start exploring the collection">
+    <div class="visitor-guide-copy">
+      <p class="eyebrow">ARCHIVE DREAMS · AN ARTIST-AUTHORED ENCOUNTER</p>
+      <h1>What could two objects say to each other?</h1>
+      <p>Follow a connection, listen to three fictional perspectives, and see what the records actually tell us.</p>
+      <ol class="visitor-path" aria-label="Three steps"><li>Meet an object</li><li>Hear a conversation</li><li>Check the evidence</li></ol>
+    </div>
+    <div class="visitor-guide-context">
+      <p id="visitor-source" class="visitor-source"></p>
+      <p id="visitor-object" class="visitor-object"></p>
+      <p id="visitor-connection" class="visitor-connection" aria-live="polite"></p>
+    </div>
+    <div class="visitor-guide-actions">
+      <button type="button" id="visitor-listen" class="visitor-primary">▶ Listen to this conversation</button>
+      <button type="button" id="visitor-evidence" class="visitor-secondary">What do we know?</button>
+    </div>
+  </section>
   <div class="atlas-toolbar"><h2 id="atlas-title">A constellation of possible readings</h2></div>
   <div class="canvas">
     <div id="stage" role="img" aria-label="Objects in a force graph"></div>
@@ -58,23 +75,26 @@
       <div class="reading">
         <button id="reading-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="reading-popover">
           <img id="reading-portrait" alt="" width="36" height="36">
-          <span class="sr-only"><small>Who is reading</small><strong id="reading-name">Family</strong></span>
+          <span class="reading-label"><small>Perspective</small><strong id="reading-name">Family</strong></span>
         </button>
         <div id="reading-popover" class="reading-popover" hidden role="dialog" aria-label="Choose a reading"></div>
         <select id="lens" class="lens-native" tabindex="-1" aria-hidden="true"></select>
       </div>
       <div class="tool" data-tool="seed">
-        <button id="seed-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="seed-popover" aria-label="Center object"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+        <button id="seed-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="seed-popover" aria-label="Center object"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="tool-label">Object</span></button>
         <div id="seed-popover" class="tool-popover" hidden role="dialog" aria-label="Center the conversation">
           <label for="seed">Center the conversation on</label><select id="seed"></select>
         </div>
       </div>
       <div class="tool" data-tool="theme">
-        <button id="theme-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-popover" aria-label="Theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 12h10M4 16h13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" fill="currentColor"/></svg></button>
+        <button id="theme-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-popover" aria-label="Theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 12h10M4 16h13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" fill="currentColor"/></svg><span class="tool-label">Theme</span></button>
         <div id="theme-popover" class="tool-popover" hidden role="dialog" aria-label="Shared thematic category">
           <label for="theme">Shared thematic category</label><select id="theme"><option value="">All categories</option></select>
         </div>
       </div>
+      <details class="advanced-map">
+        <summary>More map options</summary>
+        <div class="advanced-map-controls">
       <label class="icon-check" title="Accession identity"><input id="layer-accession" type="checkbox" checked aria-label="Accession identity"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.6"/></svg></label>
       <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
       <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
@@ -87,6 +107,8 @@
         <input id="zoom" type="range" min="0" max="100" value="0" aria-label="Zoom">
         <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
       </div>
+        </div>
+      </details>
     </div>
     <p id="layer-notice" class="boundary" hidden></p>
     <span id="counts"></span>
@@ -95,7 +117,7 @@
 </section>
 <aside class="evidence-rail" aria-label="Conversation, record and services">
   <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
-  <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
+  <div class="tabs" role="group" aria-label="Explore the connection"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">The record</button></div>
   <section id="conversation-panel"><div id="conversation-content"></div>
     <div id="voice-controls" class="audio-bar">
       <button id="play" class="play-round" type="button" aria-label="Play this conversation">▶</button>
@@ -106,7 +128,7 @@
     <p id="voice-status" class="muted" role="status">Artist-authored scripts · no live conversation model.</p>
   </section>
   <section id="record-panel" hidden><div id="record-content"></div></section>
-  <p class="evidence-footer"><strong>Interpretation is not evidence.</strong><br>These voices are fictional, not historical testimony or an official museum voice.</p>
+  <p class="evidence-footer"><strong>Interpretation is not evidence.</strong> The voices are fictional, not testimony or museum staff. A shared tag points toward a question; it does not prove a historical relationship.</p>
 </aside>
 </main>
 <script type="importmap">
