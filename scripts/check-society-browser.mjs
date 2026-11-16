@@ -21,6 +21,15 @@ try {
   assert.equal(await page.locator('#add-image, #add-images, #photos, #clear-images').count(),0);
   assert.equal(await page.getByText('Lakehouse lookup').count(),0);
   assert.ok(await page.locator('.conversation-edge').count()>0);
+  assert.match(await page.locator('.visitor-guide h1').innerText(),/What could two objects say/);
+  assert.match(await page.locator('#visitor-connection').innerText(),/not proof|No shared-tag conversation/);
+  assert.ok(await page.locator('#visitor-listen').isEnabled());
+  await page.locator('#visitor-evidence').click();
+  assert.equal(await page.locator('#record-panel').isVisible(),true);
+  await page.locator('[data-panel=conversation]').click();
+  assert.equal(await page.locator('#conversation-panel').isVisible(),true);
+  assert.equal(await page.locator('.advanced-map summary').innerText(),'More map options');
+  assert.equal(await page.locator('.advanced-map').evaluate(el=>el.open),false);
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await page.screenshot({path:new URL('artifacts/archive-society-overview.png',root).pathname,fullPage:true});
   await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
@@ -56,6 +65,8 @@ try {
   const about=await page.request.get(base+'/demo/about/');
   assert.equal(about.status(),200);
   assert.match(await about.text(),/Lakehouse lookup/);
+  await page.locator('.advanced-map summary').click();
+  assert.equal(await page.locator('.advanced-map').evaluate(el=>el.open),true);
   await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),100);
   const scaleOf=()=>page.locator('#stage').evaluate(el=>Number(el.dataset.scale));
   const fitted=await scaleOf();
