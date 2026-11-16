@@ -29,6 +29,7 @@
 .atlas-footer .zoom,.atlas-footer #counts{flex:1 1 100%}
 .zoom{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
 .zoom button{min-height:32px;padding:4px 8px;font-size:12px}
+#zoom-note{font:12px/1.2 system-ui,sans-serif;color:#d7d7d7;white-space:nowrap}
 .zoom button.on{background:var(--teal);color:#10211c}
 #zoom{width:100%;min-width:72px;max-width:180px;accent-color:var(--teal)}
 .conversation-edge .edge-halo{fill:none;stroke:#071410;stroke-width:16;stroke-linecap:round;opacity:.8}
@@ -59,7 +60,34 @@
 .atlas-footer{align-items:stretch;background:#142723}
 .atlas-footer .lens-question{margin:0;font-size:14px;color:var(--copper);font-family:Georgia,serif}
 .command{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.command .reading>button{width:42px;height:42px;min-height:42px;padding:0;background:#10201d}
+.command .reading>button{width:auto;min-width:42px;height:42px;min-height:42px;padding:0 10px 0 0;background:#10201d}
+.command .reading-label{text-align:left;font-size:12px;line-height:1.15;white-space:nowrap}
+.command .reading-label small{font:10px ui-monospace,monospace;letter-spacing:0;color:#c8c8c8}
+.command .reading-label strong{font-size:12px}
+.tool>button{width:auto;min-width:42px;padding:0 10px;display:flex;align-items:center;gap:6px}
+.command .tool-label{font-size:12px;font-weight:650}
+.advanced-map{min-width:155px;max-width:100%;flex:0 1 auto}
+.advanced-map>summary{display:flex;align-items:center;justify-content:center;padding:10px 13px;min-height:48px;border:1px solid #696969;border-radius:8px;font-size:12px;font-weight:650;color:#dedede;list-style:none}
+.advanced-map[open]{flex:1 1 100%}
+.advanced-map-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 0 4px}
+.visitor-guide{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) minmax(188px,.7fr);gap:18px;align-items:center;margin:12px 16px 6px;padding:16px 18px;border:1px solid #454545;border-radius:15px;background:#1d1d1d}
+.visitor-guide .eyebrow{color:#cecece;font-size:10px;letter-spacing:.075em;margin-bottom:6px}
+.visitor-guide h1{font-size:clamp(21px,2vw,27px);line-height:1.1;margin-bottom:5px}
+.visitor-guide-copy>p:not(.eyebrow){font-size:13px;line-height:1.45;color:#dedede;margin:0}
+.visitor-path{display:flex;gap:5px 17px;flex-wrap:wrap;margin:10px 0 0;padding-left:17px;font-size:12px;color:#c8c8c8}
+.visitor-guide-context{border-left:1px solid #555;padding:1px 0 1px 16px;align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.visitor-guide-context p{margin:0}
+.visitor-source{font:10px/1.45 ui-monospace,monospace;letter-spacing:.06em;color:#bdbdbd}
+.visitor-object{font:600 16px/1.2 Georgia,serif;color:#f4f4f4}
+.visitor-connection{font-size:13px;line-height:1.45;color:#d0d0d0}
+.visitor-guide-actions{display:flex;flex-direction:column;gap:8px}
+.visitor-guide-actions button{min-height:48px;width:100%;font-weight:650;font-size:13px;padding:9px 13px}
+.visitor-primary{background:#f4f4f4;color:#141414;border-color:#f4f4f4}
+.visitor-primary:hover{background:#dcdcdc;color:#111}
+.visitor-secondary{background:#242424;border-color:#777;color:#f3f3f3}
+.visitor-guide button:disabled{opacity:.65}
+@media (max-width:1150px){.visitor-guide{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.visitor-guide-actions{grid-column:1/-1;flex-direction:row}.visitor-guide-actions button{flex:1}}
+@media (max-width:720px){.visitor-guide{grid-template-columns:minmax(0,1fr);gap:12px;padding:15px;margin:10px 10px 4px}.visitor-guide h1{font-size:23px}.visitor-guide-context{padding:10px 0 0;border-left:0;border-top:1px solid #525252}.visitor-guide-actions{grid-column:auto;flex-wrap:wrap}.visitor-guide-actions button{flex:1 1 160px}}
 .command .reading img{width:36px;height:36px;border-radius:50%}
 .reading-popover,.tool-popover{top:auto;bottom:calc(100% + 8px);left:0;min-width:240px}
 .tool{position:relative}
@@ -70,13 +98,18 @@
 .icon-check:has(input:checked){background:var(--teal);color:#10211c;border-color:var(--teal)}
 .command .zoom{flex:1 1 280px}
 .zoom-stage{margin-bottom:12px}
-.zoom-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.zoom-pair .plate.persona{grid-column:1/-1}
+.zoom-pair{display:grid;grid-template-columns:1.4fr .8fr;gap:8px;align-items:stretch}
+.zoom-pair .plate.selected{grid-row:1 / span 2}
+.zoom-pair .plate.persona{grid-column:auto}
+.tag-key{display:flex;align-items:center;gap:8px;margin:0 0 8px;font:13px/1.3 system-ui,sans-serif}
+.tag-key i{width:14px;height:14px;border-radius:3px;flex:none}
 .zoom-stage .plate{margin:0;background:#10201d;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .zoom-pair .plate:not(.persona){border:3px solid var(--link,#f4f4f4)}
 .zoom-stage img{display:block;width:100%;height:168px;object-fit:cover;background:#20372e}
-.zoom-stage .object-shot{width:auto;height:auto;max-width:100%;max-height:min(42vh,340px);margin:0 auto;object-fit:contain;background:#0c0c0c}
-.zoom-stage figcaption{margin:0;padding:8px 10px 0;font-size:13px;font-weight:700}
+.zoom-stage .object-shot{width:auto;height:auto;max-width:100%;max-height:120px;margin:0 auto;object-fit:contain;background:#0c0c0c}
+.zoom-pair .plate.selected .object-shot{max-height:min(30vh,220px)}
+.zoom-pair .plate.persona img{height:88px;object-fit:cover}
+.zoom-stage figcaption{margin:0;padding:8px 10px 0;font-size:12px;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .zoom-stage .add-image{margin:8px 10px 10px;min-height:32px;padding:4px 8px;font-size:12px}
 .bubble .avatar{width:56px;height:56px}
 .object-card.preview .card{stroke:#111;stroke-width:6}
@@ -124,3 +157,11 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
   .zoom{flex-wrap:wrap;flex-shrink:1}
 }
 @media(max-width:800px){.workspace{display:flex;flex-direction:column}.evidence-rail{border-left:0}}
+.evidence-rail{display:flex;flex-direction:column;overflow:hidden}
+.rail-scroll{flex:1;min-height:0;overflow:auto}
+.evidence-rail .audio-bar{flex:none;margin-top:10px}
+#voice-status{margin:8px 0 0}
+@media(max-width:1100px){
+  .evidence-rail{display:flex;flex-direction:column;overflow:visible;max-height:none}
+  .rail-scroll{max-height:58vh;overflow:auto}
+}

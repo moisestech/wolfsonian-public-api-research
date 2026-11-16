@@ -56,6 +56,7 @@ try {
   const about=await page.request.get(base+'/demo/about/');
   assert.equal(about.status(),200);
   assert.match(await about.text(),/Lakehouse lookup/);
+  await page.locator('.advanced-map > summary').click();
   await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),100);
   const scaleOf=()=>page.locator('#stage').evaluate(el=>Number(el.dataset.scale));
   const fitted=await scaleOf();

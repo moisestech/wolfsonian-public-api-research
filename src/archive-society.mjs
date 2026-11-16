@@ -162,21 +162,30 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
     return {quote:clean(field.value).slice(0,120),pointer:field.pointer,sourceUrl:snapshot.sourceUrl||null,retrievedAt:snapshot.retrievedAt};
   };
   const aFact=fact(snapshots.source),bFact=fact(snapshots.target);
-  const aPrefix=aFact?'My matched Lakehouse record has a Date field reading “'+aFact.quote+'”. ':'';
-  const bPrefix=bFact?'My matched Lakehouse record has a Date field reading “'+bFact.quote+'”. ':'';
+  const aPrefix=aFact?'The matched record has a Date field reading “'+aFact.quote+'”. ':'';
+  const bPrefix=bFact?'My matched record has a Date field reading “'+bFact.quote+'”. ':'';
   return {
     id:edge.id+'::'+lens.id, authored:true, mode:'scripted_interpretation',
     source:source.accession,target:target.accession,lens:lens.id,
     classification:'shared_staff_metadata',historicalRelationshipEstablished:false,
     evidence:edge.reasons.map(r=>({...r})),
     turns:[
-      {role:'objectA',speaker:a,text:aPrefix+'Our records meet at the category “'+term+'”. What does that word invite a visitor to notice?',citations:aFact?[aFact]:[]},
-      {role:'objectB',speaker:b,text:bPrefix+'A shared label gives us a place to start, but does not show that our histories crossed. '+lens.question,citations:bFact?[bFact]:[]},
-      {role:'archivist',speaker:'Archivist · fictional reading protocol',text:'The connection comes from '+reason.sourceColumns.join(' / ')+' and '+reason.targetColumns.join(' / ')+'. Which document or human account could support, complicate or reject this reading?'}
+      {role:'objectA',speaker:lens.label,text:aPrefix+'The shared category “'+term+'” lets me offer a possible promise. '+lens.question+' That is a reading of the label, not a record of who lived with this object.',citations:aFact?[aFact]:[]},
+      {role:'objectB',speaker:b,text:bPrefix+'A shared label does not show that our histories crossed. '+lens.limits,citations:bFact?[bFact]:[]},
+      {role:'archivist',speaker:'Archivist',text:'The connection comes from '+reason.sourceColumns.join(' / ')+' and '+reason.targetColumns.join(' / ')+'. A researcher or the original document could support, complicate, or reject this reading. The record does not establish that these objects met.'}
     ],
     resourceLayer:aFact||bFact?'catalog_field_quotes':'no_matched_catalog_field',
     limits:lens.limits
   };
+}
+export function deviceCast(role, voices = []) {
+  const local = voices.filter(voice => voice.localService);
+  const english = local.filter(voice => /en/i.test(voice.lang || ''));
+  const pool = english.length ? english : local;
+  const pick = index => pool[Math.min(index, Math.max(0, pool.length - 1))] || null;
+  if (role === 'objectB') return { voice: pick(1), rate: 1.05, pitch: 1.16 };
+  if (role === 'archivist') return { voice: pick(pool.length > 2 ? 2 : 0), rate: 0.86, pitch: 0.94 };
+  return { voice: pick(0), rate: 0.9, pitch: 0.86 };
 }
 const base=name=>clean(name).replace(/\\/g,'/').split('/').pop().toLowerCase();
 export function photoKeys(record) {

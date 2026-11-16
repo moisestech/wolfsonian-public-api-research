@@ -5,6 +5,7 @@ import { buildDiscoveryIndex, recommendNeighbors } from './discovery-graph.mjs';
 import { conversationFor as scriptedConversation } from './archive-society.mjs';
 
 export { MATRIX_OBJECTS };
+export { ZOOM_STOPS } from './zoom-stops.mjs';
 
 export const LAYERS = Object.freeze([
   { id: 'geography', label: 'Place', field: 'geography' },
@@ -12,13 +13,6 @@ export const LAYERS = Object.freeze([
   { id: 'style', label: 'Look', field: 'style' },
   { id: 'theme', label: 'Theme', field: 'themes' },
   { id: 'motif', label: 'Symbol', field: 'motifs' },
-]);
-
-export const ZOOM_STOPS = Object.freeze([
-  { id: 'world', label: 'World', t: 0 },
-  { id: 'region', label: 'Region', t: 34 },
-  { id: 'street', label: 'Street', t: 67 },
-  { id: 'object', label: 'Object', t: 100 },
 ]);
 
 const READERS = {

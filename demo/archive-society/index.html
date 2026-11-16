@@ -48,6 +48,23 @@
 </section>
 <main class="workspace">
 <section class="atlas-panel" id="atlas" aria-label="Interactive conversational atlas">
+  <section class="visitor-guide" aria-label="Start with one object">
+    <div class="visitor-guide-copy">
+      <p class="eyebrow">ARCHIVE DREAMS · AN ARTIST-AUTHORED ENCOUNTER</p>
+      <h1>What could two objects say to each other?</h1>
+      <p>Follow a connection, listen to three fictional perspectives, and see what the record actually tells us.</p>
+      <ol class="visitor-path" aria-label="Three steps"><li>Meet an object</li><li>Hear a conversation</li><li>Check the evidence</li></ol>
+    </div>
+    <div class="visitor-guide-context">
+      <p id="visitor-source" class="visitor-source"></p>
+      <p id="visitor-object" class="visitor-object"></p>
+      <p id="visitor-connection" class="visitor-connection" aria-live="polite"></p>
+    </div>
+    <div class="visitor-guide-actions">
+      <button type="button" id="visitor-listen" class="visitor-primary">Listen to this conversation</button>
+      <button type="button" id="visitor-evidence" class="visitor-secondary">What do we know?</button>
+    </div>
+  </section>
   <div class="atlas-toolbar"><h2 id="atlas-title">A constellation of possible readings</h2></div>
   <div class="canvas">
     <div id="stage" role="img" aria-label="Objects in a force graph"></div>
@@ -58,35 +75,41 @@
       <div class="reading">
         <button id="reading-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="reading-popover">
           <img id="reading-portrait" alt="" width="36" height="36">
-          <span class="sr-only"><small>Who is reading</small><strong id="reading-name">Family</strong></span>
+          <span class="reading-label"><small>Perspective</small><strong id="reading-name">Family</strong></span>
         </button>
         <div id="reading-popover" class="reading-popover" hidden role="dialog" aria-label="Choose a reading"></div>
         <select id="lens" class="lens-native" tabindex="-1" aria-hidden="true"></select>
       </div>
       <div class="tool" data-tool="seed">
-        <button id="seed-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="seed-popover" aria-label="Center object"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+        <button id="seed-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="seed-popover" aria-label="Object"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="tool-label">Object</span></button>
         <div id="seed-popover" class="tool-popover" hidden role="dialog" aria-label="Center the conversation">
           <label for="seed">Center the conversation on</label><select id="seed"></select>
         </div>
       </div>
       <div class="tool" data-tool="theme">
-        <button id="theme-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-popover" aria-label="Theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 12h10M4 16h13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" fill="currentColor"/></svg></button>
+        <button id="theme-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-popover" aria-label="Theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 12h10M4 16h13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" fill="currentColor"/></svg><span class="tool-label">Theme</span></button>
         <div id="theme-popover" class="tool-popover" hidden role="dialog" aria-label="Shared thematic category">
           <label for="theme">Shared thematic category</label><select id="theme"><option value="">All categories</option></select>
         </div>
       </div>
+      <details class="advanced-map">
+        <summary>More map options</summary>
+        <div class="advanced-map-controls">
       <label class="icon-check" title="Accession identity"><input id="layer-accession" type="checkbox" checked aria-label="Accession identity"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.6"/></svg></label>
       <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
       <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
       <div class="zoom">
-        <button id="fit" type="button">World</button>
-        <button type="button" data-stop="34">Region</button>
-        <button type="button" data-stop="67">Street</button>
-        <button type="button" data-stop="100">Object</button>
+        <button id="fit" class="on" type="button" title="The whole set">Field</button>
+        <button type="button" data-stop="34" title="Objects in this conversation">Group</button>
+        <button type="button" data-stop="67" title="The two objects talking">Pair</button>
+        <button type="button" data-stop="100" title="This photograph">Object</button>
+        <span id="zoom-note">The whole set</span>
         <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
         <input id="zoom" type="range" min="0" max="100" value="0" aria-label="Zoom">
         <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
       </div>
+        </div>
+      </details>
     </div>
     <p id="layer-notice" class="boundary" hidden></p>
     <span id="counts"></span>
@@ -94,19 +117,19 @@
   <p class="landscape-credit">Fictional readings · <a href="../about/">About</a></p>
 </section>
 <aside class="evidence-rail" aria-label="Conversation, record and services">
-  <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
-  <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
-  <section id="conversation-panel"><div id="conversation-content"></div>
-    <div id="voice-controls" class="audio-bar">
-      <button id="play" class="play-round" type="button" aria-label="Play this conversation">▶</button>
-      <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span id="audio-elapsed">Turn 1 of 3</span>
-      <button id="stop" class="quiet" type="button">Stop</button>
-    </div>
-    <p id="voice-status" class="muted" role="status">Artist-authored scripts · no live conversation model.</p>
-  </section>
-  <section id="record-panel" hidden><div id="record-content"></div></section>
-  <p class="evidence-footer"><strong>Interpretation is not evidence.</strong><br>These voices are fictional, not historical testimony or an official museum voice.</p>
+  <div class="rail-scroll">
+    <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
+    <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">The record</button></div>
+    <section id="conversation-panel"><div id="conversation-content"></div></section>
+    <section id="record-panel" hidden><div id="record-content"></div></section>
+  </div>
+  <div id="voice-controls" class="audio-bar">
+    <button id="play" class="play-round" type="button" aria-label="Listen to this conversation">▶</button>
+    <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    <span id="audio-elapsed">Turn 1 of 3</span>
+    <button id="stop" class="quiet" type="button">Stop</button>
+  </div>
+  <p id="voice-status" class="muted" role="status" hidden></p>
 </aside>
 </main>
 <script type="importmap">
