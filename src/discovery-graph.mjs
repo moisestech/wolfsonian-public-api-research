@@ -150,5 +150,5 @@ export function recommendNeighbors(index, accession, personaId='open', limit=6) 
     reasons:item.reasons.sort((a,b)=>b.contribution-a.contribution || a.value.localeCompare(b.value)),
     provenance:'shared_staff_metadata', historicalRelationshipEstablished:false
   })).sort((a,b)=>b.score-a.score||a.record.accession.localeCompare(b.record.accession))
-    .slice(0,Math.max(0,Math.min(12,Math.floor(limit)||0)));
+    .slice(0,Math.max(0,Math.min(48,Math.floor(limit)||0)));
 }

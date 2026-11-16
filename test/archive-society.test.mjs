@@ -22,9 +22,25 @@ test('CSV categories remain exact and private data is not needed in the repo',as
 });
 test('filters and isolated objects do not manufacture edges',()=>{
   const records=inventedRecords();
+  assert.equal(records.length,100);
+  assert.equal(records[0].title,'Imagined domestic radio');
+  assert.equal(records[11].accession,'FICTION-12');
+  assert.equal(records[11].title,'Imagined collecting guide');
+  const themes=new Set(records.slice(0,12).flatMap(record=>record.tags.filter(tag=>tag.family==='theme').map(tag=>tag.value)));
+  const motifs=new Set(records.slice(0,12).flatMap(record=>record.tags.filter(tag=>tag.family==='motif').map(tag=>tag.value)));
+  assert.ok(records.every(record=>record.source==='invented'&&record.title.startsWith('Imagined ')));
+  assert.ok(records.every(record=>record.tags.filter(tag=>tag.family==='theme').every(tag=>themes.has(tag.value))));
+  assert.ok(records.every(record=>record.tags.filter(tag=>tag.family==='motif').every(tag=>motifs.has(tag.value))));
   assert.equal(societyView(records,'FICTION-01','family',{theme:'Does not exist'}).edges.length,0);
   assert.deepEqual(societyView(records,'missing').nodes,[]);
-  assert.ok(societyView(records,'FICTION-01','family',{atlas:true}).nodes.length<=24);
+  const focused=societyView(records,'FICTION-01','family');
+  const overview=societyView(records,'FICTION-01','family',{atlas:true});
+  assert.ok(focused.nodes.length<=7);
+  assert.equal(overview.nodes.length,100);
+  assert.ok(Math.max(...overview.nodes.map(node=>node.x))>2000);
+  assert.equal(overview.landmarks.personas.length,5);
+  assert.ok(overview.landmarks.categories.length>=6);
+  assert.deepEqual(focused.landmarks,{personas:[],categories:[]});
 });
 test('component punctuation is preserved and comma accession is never split',()=>{
   const payload=[{'Accession Number':'85.7.383a,b',Title:'Test only'}];

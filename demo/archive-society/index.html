@@ -9,69 +9,103 @@
 <body>
 <a class="skip" href="#atlas">Skip to the atlas</a>
 <header class="topbar">
-  <a class="wordmark" href="../discovery-lab/"><span class="mark">AD</span><span>ARCHIVE DREAMS <em>in Public</em><small>THE CONVERSATIONAL ATLAS · INDEPENDENT ARTIST RESEARCH</small></span></a>
-  <div class="top-actions"><span id="source-status" class="source">Invented demonstration</span><button id="present">Full screen</button><a href="../spatial-atlas/">Spatial Atlas ↗</a><a href="../object-lens/">Object Lens ↗</a><a href="../discovery-lab/">Discovery Lab ↗</a></div>
+  <a class="wordmark" href="#atlas"><svg class="symbol" viewBox="0 0 32 32" aria-hidden="true"><rect x="2.5" y="2.5" width="27" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 23V13h4.5v10M14.5 23V8h5v15M21.5 23v-7H25v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>ARCHIVE DREAMS <em>in Public</em></span></a>
+  <form class="finder" role="search">
+    <label for="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14.5 14.5 20 20" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="sr-only">Find a title or accession</span></label>
+    <input id="search" type="search" placeholder="Title or accession" autocomplete="off">
+  </form>
+  <div class="top-actions">
+    <a class="icon-link" href="../spatial-atlas/" aria-label="Spatial Atlas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 14l5-4 4 3 3-2 6 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
+    <a class="icon-link" href="../object-lens/" aria-label="Object Lens"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg></a>
+    <button id="present" class="icon-button" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+    <button id="admin-toggle" class="icon-button" type="button" aria-label="Admin tools" aria-expanded="false" aria-controls="admin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="7" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="12" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="17" r="2" fill="#142523" stroke="currentColor" stroke-width="1.6"/></svg></button>
+  </div>
 </header>
-<main class="workspace">
-<aside class="reader-rail" aria-label="Readers and local sources">
-  <p class="eyebrow">01 / CHOOSE A READING</p><h1>An archive becomes a society.</h1>
-  <p class="intro">Objects are the inhabitants. Conversations are the paths between them.</p>
-  <label for="lens">Who is reading?</label><select id="lens"></select>
-  <p id="lens-question" class="lens-question"></p><p id="lens-limit" class="muted"></p>
-  <label for="search">Find a title or accession</label><input id="search" type="search" placeholder="Start with one object…">
-  <label for="seed">Center the conversation on</label><select id="seed"></select>
-  <label for="theme">Shared thematic category</label><select id="theme"><option value="">All categories</option></select>
-  <fieldset class="layers"><legend>Relationships</legend>
-    <label class="check"><input id="layer-accession" type="checkbox" checked> Accession identity</label>
-    <label class="check"><input id="layer-box" type="checkbox"> Box / storage</label>
-    <label class="check"><input id="layer-box-sim" type="checkbox"> Simulated box fixture · not museum data</label>
-  </fieldset>
-  <p id="layer-notice" class="boundary" hidden></p>
-  <label class="check"><input id="atlas-mode" type="checkbox"> Atlas overview · up to 24 objects</label>
+<section id="admin" class="admin" hidden>
+  <p class="eyebrow">ADMIN</p>
+  <p id="source-status" class="source">Invented demonstration</p>
+  <label class="check"><input id="layer-box-sim" type="checkbox"> Simulated box fixture · not museum data</label>
   <details class="source-studio"><summary>Local sources &amp; photographs</summary>
     <p>Files stay in this browser session. Import the Object at Scale worksheet as CSV. Use photographs covered by your presentation permission.</p>
     <label class="file">Open CSV<input id="csv-file" type="file" accept=".csv,text/csv"></label>
     <label class="file">Match object photos<input id="photos" type="file" accept=".png,.jpg,.jpeg,.webp" multiple></label>
     <p class="muted">Match the CSV image filename or accession.png. TIFFs need a local browser-compatible copy.</p>
     <label class="file">Replace landscape<input id="background-file" type="file" accept=".png,.jpg,.jpeg,.webp"></label>
-    <label for="veil">Landscape clarity</label><input id="veil" type="range" min="20" max="80" value="44">
+    <label for="veil">Landscape clarity</label><input id="veil" type="range" min="20" max="80" value="68">
     <button id="restore" class="quiet">Restore invented example</button>
   </details>
   <p id="import-status" class="muted" role="status">No collection photographs are bundled.</p>
-  <p class="boundary">A category opens a question. It does not establish a shared history.</p>
-</aside>
+  <label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice</option><option value="elevenlabs">ElevenLabs · external service</option></select>
+  <div id="approval-box" hidden><p>Only the displayed transcript is sent. No photograph or full CSV is transmitted. Provider retention follows your account settings.</p><label class="check"><input id="external-approved" type="checkbox"> I have approval to send these displayed words to ElevenLabs.</label></div>
+  <button id="export" class="quiet">Save selected conversation JSON</button>
+  <details><summary>Lakehouse evidence</summary><p>A lookup is a separate source layer. It never changes the CSV tags.</p>
+    <button id="lookup">Look up this accession</button>
+    <label class="file">Open bounded lookup JSON<input id="snapshot-file" type="file" accept=".json,application/json"></label>
+    <div id="snapshot-content"></div>
+  </details>
+  <h2>Server</h2>
+  <label for="access-token">Private demo access token</label><input id="access-token" type="password" autocomplete="off" placeholder="Server access token, not a provider key">
+  <button id="check-services">Check server configuration</button><p id="service-status" class="muted" role="status">Services have not been checked.</p>
+  <a href="../discovery-lab/">Discovery Lab</a>
+  <a href="../../docs/archive-society.md">Setup &amp; evidence contract</a>
+</section>
+<main class="workspace">
 <section class="atlas-panel" id="atlas" aria-label="Interactive conversational atlas">
-  <div class="atlas-toolbar"><div><p class="eyebrow">02 / FOLLOW A CONVERSATION</p><h2 id="atlas-title">A constellation of possible readings</h2></div>
-    <div class="zoom"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="fit">Fit</button></div>
+  <div class="atlas-toolbar"><h2 id="atlas-title">A constellation of possible readings</h2></div>
+  <div class="canvas">
+    <svg id="network" viewBox="0 0 2000 1125" role="group" aria-label="Object cards and selectable conversation paths"></svg>
+    <svg class="aim" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3v9M24 36v9M3 24h9M36 24h9" fill="none" stroke="#142523" stroke-width="3.2" stroke-linecap="round"/><path d="M24 3v9M24 36v9M3 24h9M36 24h9" fill="none" stroke="#f6f4eb" stroke-width="1.4" stroke-linecap="round"/><circle cx="24" cy="24" r="7" fill="none" stroke="#142523" stroke-width="3"/><circle cx="24" cy="24" r="7" fill="none" stroke="#f6f4eb" stroke-width="1.4"/><circle cx="24" cy="24" r="1.5" fill="#f6f4eb" stroke="#142523"/></svg>
   </div>
-  <div class="canvas"><svg id="network" viewBox="0 0 2000 1125" role="group" aria-label="Object cards and selectable conversation paths"></svg></div>
-  <footer class="atlas-footer"><span><i class="legend-photo"></i> Object record</span><span><i class="legend-edge"></i> Scripted conversation</span><span id="counts"></span></footer>
+  <footer class="atlas-footer">
+    <p id="lens-question" class="lens-question"></p>
+    <div class="command">
+      <div class="reading">
+        <button id="reading-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="reading-popover">
+          <img id="reading-portrait" alt="" width="36" height="36">
+          <span class="sr-only"><small>Who is reading</small><strong id="reading-name">Family</strong></span>
+        </button>
+        <div id="reading-popover" class="reading-popover" hidden role="dialog" aria-label="Choose a reading"></div>
+        <select id="lens" class="lens-native" tabindex="-1" aria-hidden="true"></select>
+      </div>
+      <div class="tool" data-tool="seed">
+        <button id="seed-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="seed-popover" aria-label="Center object"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+        <div id="seed-popover" class="tool-popover" hidden role="dialog" aria-label="Center the conversation">
+          <label for="seed">Center the conversation on</label><select id="seed"></select>
+        </div>
+      </div>
+      <div class="tool" data-tool="theme">
+        <button id="theme-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-popover" aria-label="Theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 12h10M4 16h13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" fill="currentColor"/></svg></button>
+        <div id="theme-popover" class="tool-popover" hidden role="dialog" aria-label="Shared thematic category">
+          <label for="theme">Shared thematic category</label><select id="theme"><option value="">All categories</option></select>
+        </div>
+      </div>
+      <label class="icon-check" title="Accession identity"><input id="layer-accession" type="checkbox" checked aria-label="Accession identity"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.6"/></svg></label>
+      <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
+      <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
+      <div class="zoom">
+        <button id="fit" type="button">World</button>
+        <button type="button" data-stop="34">Region</button>
+        <button type="button" data-stop="67">Street</button>
+        <button type="button" data-stop="100">Object</button>
+        <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+        <input id="zoom" type="range" min="0" max="100" value="0" aria-label="Zoom">
+        <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+      </div>
+    </div>
+    <p id="layer-notice" class="boundary" hidden></p>
+    <span id="counts"></span>
+  </footer>
   <p class="landscape-credit">Generated allegorical landscape · fictional inhabitants · photographs, when supplied, are separate source images.</p>
 </section>
 <aside class="evidence-rail" aria-label="Conversation, record and services">
-  <p class="eyebrow">03 / HEAR IT. QUESTION IT.</p>
-  <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button><button data-panel="services" aria-pressed="false">Services</button></div>
+  <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
+  <input id="add-image" type="file" accept=".png,.jpg,.jpeg,.webp" hidden>
+  <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
   <section id="conversation-panel"><div id="conversation-content"></div>
-    <div id="voice-controls"><label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice</option><option value="elevenlabs">ElevenLabs · external service</option></select>
-    <div id="approval-box" hidden><p>Only the displayed transcript is sent. No photograph or full CSV is transmitted. Provider retention follows your account settings.</p><label class="check"><input id="external-approved" type="checkbox"> I have approval to send these displayed words to ElevenLabs.</label></div>
-    <div class="voice-buttons"><button id="play">Listen to this edge</button><button id="stop" class="quiet">Stop</button></div></div>
+    <div id="voice-controls"><div class="voice-buttons"><button id="play">Listen to this edge</button><button id="stop" class="quiet">Stop</button></div></div>
     <p id="voice-status" class="muted" role="status">Artist-authored scripts · no live conversation model.</p>
-    <button id="export" class="quiet">Save selected conversation JSON</button>
   </section>
-  <section id="record-panel" hidden><div id="record-content"></div>
-    <details><summary>Lakehouse evidence</summary><p>A lookup is a separate source layer. It never changes the CSV tags.</p>
-      <button id="lookup">Look up this accession</button>
-      <label class="file">Open bounded lookup JSON<input id="snapshot-file" type="file" accept=".json,application/json"></label>
-      <div id="snapshot-content"></div>
-    </details>
-  </section>
-  <section id="services-panel" hidden><h2>Connect only when needed.</h2><p>The graph, CSV, photographs and transcript work without a service account.</p>
-    <label for="access-token">Private demo access token</label><input id="access-token" type="password" autocomplete="off" placeholder="Server access token, not a provider key">
-    <button id="check-services">Check server configuration</button><p id="service-status" class="muted" role="status">Services have not been checked.</p>
-    <p>The token stays in memory. ElevenLabs keys and role voice IDs belong on the server.</p>
-    <p>Lakehouse must be reachable from the server running this demo. Home IP authorization does not transfer to a cloud deployment.</p>
-    <a href="../../docs/archive-society.md">Setup &amp; evidence contract ↗</a>
-  </section>
+  <section id="record-panel" hidden><div id="record-content"></div></section>
   <p class="evidence-footer"><strong>Interpretation is not evidence.</strong><br>These voices are fictional, not historical testimony or an official museum voice.</p>
 </aside>
 </main>
