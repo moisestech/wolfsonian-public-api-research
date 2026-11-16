@@ -3,6 +3,7 @@ import { focusedPairGraph } from '/src/force-graph-data.mjs';
 import { applyLakehouseFields } from '/src/lakehouse-matches.mjs';
 import { localImageUrl } from '/src/local-images.mjs';
 import { mountForceStage } from '../force-stage.mjs';
+import { castLocalConversation, waitForLocalEnglishVoices } from '/src/voice-cast.mjs';
 
 const $ = id => document.getElementById(id);
 const ns = 'http://www.w3.org/2000/svg';
@@ -182,6 +183,7 @@ async function speak(conversation) {
   const token = sessionStorage.getItem('archive-demo-token') || '';
   const status = $('voice-status');
   let aside = approved && !token ? 'Enter the demo token on the conversational atlas. Using the device voice.' : '';
+  let localCast = null;
   try {
     for (const [i, turn] of conversation.turns.entries()) {
       if (session !== playback) return;
@@ -224,13 +226,21 @@ async function speak(conversation) {
         }
       }
       if (!played) {
+        if (!localCast) localCast = castLocalConversation(
+          await waitForLocalEnglishVoices(window.speechSynthesis), conversation.turns);
+        if (!localCast.available) throw new Error(localCast.disclosure);
+        const cast = localCast.turns[i];
+        if (status) status.textContent = 'Speaking ' + (i + 1) + ' of ' + conversation.turns.length +
+          ' · ' + turn.speaker + ' · ' + cast.voiceName +
+          (localCast.distinctVoicesUsed === 1 ? ' · one local voice with varied pacing' : '');
         await new Promise((resolve, reject) => {
           if (!window.speechSynthesis) { reject(new Error('No device speech service. The written transcript remains available.')); return; }
           cancelDevice = resolve;
           const utterance = new SpeechSynthesisUtterance(turn.text);
-          utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.localService) || null;
-          utterance.rate = 0.92;
-          utterance.pitch = turn.role === 'objectA' ? 0.95 : turn.role === 'objectB' ? 1.08 : 1;
+          utterance.voice = cast.voice;
+          utterance.lang = cast.lang;
+          utterance.rate = cast.rate;
+          utterance.pitch = cast.pitch;
           utterance.onend = () => { cancelDevice = null; resolve(); };
           utterance.onerror = () => { cancelDevice = null; reject(new Error('Device speech stopped or unavailable.')); };
           window.speechSynthesis.speak(utterance);
