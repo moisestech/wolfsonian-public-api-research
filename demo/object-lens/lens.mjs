@@ -56,6 +56,7 @@ function checkAccession() {
 function confirm() {
   if (!$('confirm').checked || !match) {
     $('handoff').hidden = true;
+    $('force-handoff').hidden = true;
     return;
   }
   const link = $('handoff');
