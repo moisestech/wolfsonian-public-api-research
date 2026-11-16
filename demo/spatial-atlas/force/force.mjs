@@ -240,6 +240,8 @@ function loadForceScript(){
   });
 }
 function bind() {
+  $('zoom-in').addEventListener('click',()=>{distance*=0.80;cameraPosition();});
+  $('zoom-out').addEventListener('click',()=>{distance*=1.25;cameraPosition();});
   seed.addEventListener('change',()=>{state.seed=seed.value;updateControls();graphView();});
   for(const [id,key] of [['accession','showAccession'],['questions','showQuestions'],['box','showBox']]){
     $(id).addEventListener('change',()=>{state[key]=$(id).checked;updateControls();graphView();});
