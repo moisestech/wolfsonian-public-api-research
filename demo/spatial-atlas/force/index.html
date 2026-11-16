@@ -25,7 +25,7 @@
       <div class="canvas-host" id="canvas-host">
         <canvas id="graph" aria-label="3D constellation of archival object identities and artist-authored questions"></canvas>
         <p class="render-mode" id="render-mode" role="status">Preparing local 3D view…</p>
-        <div class="canvas-help">Drag to orbit · Scroll or pinch to zoom · Tap an object to inspect</div>
+        <div class="canvas-help">Drag to orbit · Use zoom controls or scroll · Tap an object to inspect</div>
       </div>
       <div class="controls">
         <label for="seed">Start with an object
@@ -37,6 +37,8 @@
           <label><input id="questions" type="checkbox" checked> Artist-authored questions</label>
           <label><input id="box" type="checkbox"> Box / container</label>
         </fieldset>
+        <button type="button" id="zoom-in" aria-label="Zoom in">Zoom +</button>
+        <button type="button" id="zoom-out" aria-label="Zoom out">Zoom −</button>
         <button type="button" id="reset">Reset view</button>
         <p id="status" class="small" role="status"></p>
         <p id="box-notice" class="small" role="status"></p>
