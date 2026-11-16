@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - 'src/voice-cast.mjs'
+      - 'src/visitor-guide.mjs'
+      - 'test/visitor-guide.test.mjs'
+      - 'demo/archive-society/index.html'
+      - 'demo/archive-society/society.css'
       - 'test/voice-cast.test.mjs'
       - 'demo/archive-society/society.mjs'
       - 'demo/spatial-atlas/atlas.mjs'
@@ -27,10 +31,11 @@ jobs:
       - name: JavaScript syntax checks
         run: |
           node --check src/voice-cast.mjs
+          node --check src/visitor-guide.mjs
           node --check demo/archive-society/society.mjs
           node --check demo/spatial-atlas/atlas.mjs
           node --check demo/discovery-lab/showcase.mjs
           node --check scripts/serve-archive-society.mjs
       - name: Pure local casting and archive-contract tests
         run: |
-          node --test test/voice-cast.test.mjs test/matrix-room.test.mjs test/archive-society.test.mjs test/discovery-showcase.test.mjs
+          node --test test/visitor-guide.test.mjs test/voice-cast.test.mjs test/matrix-room.test.mjs test/archive-society.test.mjs test/discovery-showcase.test.mjs
