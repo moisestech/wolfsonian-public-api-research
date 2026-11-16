@@ -40,3 +40,37 @@ Store a 2–3 minute capture of the full path at:
 `.tmp/world-mvp-fallback-YYYYMMDD.mp4`
 
 Document SHA of the freeze commit in the PR checklist.
+
+---
+
+## 2026-10-24 presenting-laptop run
+
+**Machine:** `Moisess-MacBook-Pro.local` (Darwin 27.0.0 arm64)  
+**SHA:** `5d08bc8a6f79a5e3aa71829461fc79fb4a722757`  
+**Browser:** Cursor IDE Chromium  
+**Local server:** `python3 -m http.server 4175 --bind 127.0.0.1` from repo root  
+
+### Mini-SOP (local World)
+
+```bash
+cd /path/to/wolfsonian-public-api-research
+python3 -m http.server 4175 --bind 127.0.0.1
+# open http://127.0.0.1:4175/world/
+# do not use file://
+```
+
+`npx serve .` is equivalent. World reads packets from `/demo/data/`.
+
+### Results
+
+| Check | Result |
+|---|---|
+| Wi-Fi off (`en0`) + curl local HTML/Pixi/packet/SVG/CSS/main | **PASS** (HTTP 200) |
+| Wi-Fi off + curl `google.com` / `wolfsonian.org` | **FAIL expected** (DNS) |
+| Wi-Fi restored after test | **PASS** (`en0` On) |
+| Chrome DevTools/CDP `Network.emulateNetworkConditions(offline)` | **FAIL** as a method — blocks localhost too (`chrome-error://`) |
+| Full interactive path + Restart ×2 on local HTTP (network on) | **PASS** |
+| Full interactive path in browser while OS Wi-Fi off | **NOT TESTED** (second OS Wi-Fi toggle blocked mid-session after the asset test already restored power) |
+| Fallback MP4 playback without wifi | **NOT TESTED** (no MP4 file exists) |
+
+Do not use DevTools Offline as a substitute for OS Wi-Fi off on this machine: it blackholes `127.0.0.1`.

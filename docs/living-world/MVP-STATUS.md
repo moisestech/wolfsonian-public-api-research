@@ -197,3 +197,29 @@ DO NOT: invent AFTER residency outcomes; do not reopen 30-record scope
 ## 8. Continuity note
 
 This file is the durable “deep report.” Update it only when a gate changes (freeze SHA, issue close, offline PASS). Prefer appending a dated subsection rather than rewriting history.
+
+---
+
+## 9. 2026-10-24 release audit (append; does not rewrite §1–8)
+
+**SHA on `origin/main`:** `5d08bc8a6f79a5e3aa71829461fc79fb4a722757` (PR #15 merged 2026-10-19). PRs #13/#14/#15 merged. No open PRs at audit start.
+
+**Tests:** `npm test` **25/25 PASS**, exit 0 (run 2026-10-24, not a reused count).
+
+**Build:** `npm run build:demo` **FAIL exit 2** — packets/graph compiled; `research-console` `tsc --noEmit` error `Cannot find type definition file for 'node'` on Node v20.19.4. World does not depend on this build.
+
+**Live URLs (Cursor Chromium):**
+
+- `/world/` **PASS** (Pixi canvas + Restart) — https://wolfsonian-research.vercel.app/world/
+- `/demo/` **PASS** — https://wolfsonian-research.vercel.app/demo/
+- `/research-console/` **FAIL** — production serves source `index.html` (`/src/main.tsx`), not `dist/`
+
+**World artistic QA:** full path + Restart ×2 + `R` + `Escape` **PASS**. Worker disc clips at 800×600 / early 1280×720 frames. Evidence panel reads as a documentation overlay. Console stays **PREVIEW / NOT IN TALK**.
+
+**Offline:** Wi-Fi-off local asset fetch **PASS**; DevTools Offline **not valid** (blocks localhost); fallback MP4 **NOT TESTED**.
+
+**Deck:** Google Slides/SOP 403 from this environment. Ten-slide deck + Luna PDF of Oct 21 is taken as given; issue #8 text (“nine slides / empty deck”) is stale. No Cursor edit/resend.
+
+**Do not close #7** until an interactive Wi-Fi-off browser run and a real fallback MP4 exist. **Do not close #8** from Cursor; remaining human gap is rehearsal timing and Slide 5 storyboard vs current still.
+
+**Next confirmed gates:** Sun Oct 25 4:00–5:00 PM equipment/talk rehearsal; Mon Oct 26 10:00–10:30 AM staff intro. Nov 9 start remains tentative.

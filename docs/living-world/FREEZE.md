@@ -2,6 +2,8 @@
 
 Freeze target: **2026-10-24** (presenter-guided default for Oct 26).
 
+Audit SHA 2026-10-24: `5d08bc8a6f79a5e3aa71829461fc79fb4a722757`. Research console remains **preview / not in talk** (production `/research-console/` serves Vite source, not `dist`). See `evidence/baseline-2026-10-24.json`.
+
 ## Frozen (presentation path)
 
 | Surface | Status | Notes |

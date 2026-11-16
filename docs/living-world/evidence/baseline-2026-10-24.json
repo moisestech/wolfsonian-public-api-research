@@ -1,0 +1,75 @@
+{
+  "capture_id": "world-0.1A-before-2026-10-24",
+  "timestamp": "2026-10-24T20:38:23-04:00",
+  "timezone": "America/New_York",
+  "repo_sha": "5d08bc8a6f79a5e3aa71829461fc79fb4a722757",
+  "deployed_sha": "unknown-vercel-does-not-expose-commit-on-page",
+  "app_version": "world-0.1A",
+  "object_id": "WOLF-002",
+  "accession": "XX1990.1484",
+  "source_ref": "demo/data/objects/02-sparton-radio.json",
+  "source_revision": "2026-09-02",
+  "claim_id": "futurist",
+  "reader_id": "futurist",
+  "public_status": "INFERENCE",
+  "claim_text": "Streamline styling taught households to experience electronic media as modern motion—an early interface aesthetics for networked life.",
+  "supported_evidence": [
+    "Designing Deco notes horizontal lines that create a sense of speed (streamlining) (source.publicRecordUrl)",
+    "Designer credit to Walter Dorwin Teague, 1937 (source.creator)"
+  ],
+  "unknown_not_established_text": [
+    "prior ownership",
+    "how the set was used in a household",
+    "listener experience",
+    "component fabrication labor"
+  ],
+  "onsiteQuestion": "In person, does the radio still feel fast, desirable, and domestic—or does its bulk, fragility, and silence change the interface metaphor?",
+  "media": [
+    {
+      "filename": "oct24-A-world-before.png",
+      "path": ".tmp/oct24-baseline/oct24-A-world-before.png",
+      "sha256": "f708566d967db9aa4a0237fff6cc8b05124050e92b96038598b8f4f836bb9c95",
+      "committed_compare": "docs/living-world/evidence/A-world-before.png",
+      "rights": "original diagrammatic SVG still; no collection photograph"
+    },
+    {
+      "filename": "oct24-B-contradiction.png",
+      "path": ".tmp/oct24-baseline/oct24-B-contradiction.png",
+      "sha256": "ff9ef0d059b5d61dd129155d5c573e068a14047ef5d6d9fa84d8c4cf1c19c840",
+      "committed_compare": "docs/living-world/evidence/B-contradiction.png",
+      "rights": "original diagrammatic SVG still; no collection photograph"
+    },
+    {
+      "filename": "oct24-C-evidence-gate.png",
+      "path": ".tmp/oct24-baseline/oct24-C-evidence-gate.png",
+      "sha256": "b4f5a366e9b22dd184ff380da3afd7e20f481ac66bd883ab9ff40be57e2e47f3",
+      "committed_compare": "docs/living-world/evidence/C-evidence-gate.png",
+      "rights": "original diagrammatic SVG still; no collection photograph"
+    }
+  ],
+  "walkthrough_mp4": null,
+  "fallback_mp4": null,
+  "rights_publication_status": "public-packet identification fields plus original SVG diagram only; no collection photographs; no internal records; no curator endorsement claimed",
+  "tester": "Cursor agent on presenting laptop Moisess-MacBook-Pro.local",
+  "environment": {
+    "machine": "Moisess-MacBook-Pro.local",
+    "os": "Darwin 27.0.0 arm64",
+    "browser": "Cursor IDE browser (Chromium)",
+    "local_server": "python3 -m http.server 4175 --bind 127.0.0.1",
+    "viewport": "1280x720 plus 800x600 check",
+    "wifi_device": "en0"
+  },
+  "test_results": {
+    "npm_test": "PASS 25/25 exit 0",
+    "build_demo": "FAIL exit 2 (research-console tsc: Cannot find type definition file for 'node')",
+    "world_live": "PASS https://wolfsonian-research.vercel.app/world/",
+    "demo_live": "PASS https://wolfsonian-research.vercel.app/demo/",
+    "research_console_live": "FAIL serves Vite source index.html (/src/main.tsx) not dist",
+    "world_full_path_restart_x2": "PASS",
+    "offline_wifi_off_local_assets": "PASS",
+    "offline_cdp_devtools_offline": "FAIL (blocks localhost)",
+    "offline_interactive_browser_while_wifi_off": "NOT TESTED",
+    "walkthrough_mp4": "NOT TESTED (ffmpeg not installed; no playable MP4 produced)",
+    "fallback_mp4": "NOT TESTED"
+  }
+}
