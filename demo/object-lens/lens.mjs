@@ -35,6 +35,7 @@ function resetConfirmation() {
   $('confirm').checked = false;
   $('confirm').disabled = true;
   $('handoff').hidden = true;
+  $('force-handoff').hidden = true;
 }
 
 function checkAccession() {
@@ -61,6 +62,9 @@ function confirm() {
   link.href = '../archive-society/?accession=' + encodeURIComponent(match.accession);
   link.hidden = false;
   link.textContent = 'Return to the atlas with ' + match.accession;
+  const forceLink = $('force-handoff');
+  forceLink.href = '../spatial-atlas/force/?accession=' + encodeURIComponent(match.accession);
+  forceLink.hidden = false;
 }
 
 $('open-camera').addEventListener('click', openCamera);
