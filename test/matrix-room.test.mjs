@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { MATRIX_OBJECTS, LAYERS, ZOOM_STOPS, layoutRoom, linksFor, conversationFor, zoomScale, detailFor, districtsOverlap, valuesOf } from '../src/matrix-room.mjs';
+import { MATRIX_OBJECTS, LAYERS, ZOOM_STOPS, layoutRoom, linksFor, conversationFor, objectConversation, zoomScale, detailFor, districtsOverlap, valuesOf } from '../src/matrix-room.mjs';
 
 test('matrix room keeps staff tags and drops photographs', () => {
   assert.equal(MATRIX_OBJECTS.length, 300);
@@ -42,4 +42,13 @@ test('zoom stops sit between the world view and a single object', () => {
   const scales = ZOOM_STOPS.map(stop => zoomScale(stop.t, fit));
   assert.deepEqual(scales.map((scale, i) => detailFor(scale, fit)), ['world', 'region', 'street', 'object']);
   assert.ok(scales[1] > scales[0] && scales[2] > scales[1] && scales[3] > scales[2]);
+});
+
+test('a clicked matrix object speaks with its strongest shared-tag neighbor', () => {
+  const talk = objectConversation(MATRIX_OBJECTS, '2009.5.1');
+  assert.equal(talk.turns.length, 3);
+  assert.equal(talk.historicalRelationshipEstablished, false);
+  assert.match(talk.turns[2].text, /Thematic Category|Symbols\/Motifs/);
+  assert.notEqual(talk.target, '2009.5.1');
+  assert.match(talk.limits, /not a historical|cannot|alone|not proof|not evidence|not a complete|cannot establish|does not|never asserts|not a statement/i);
 });

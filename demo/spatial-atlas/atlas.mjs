@@ -1,8 +1,13 @@
-import { MATRIX_OBJECTS, LAYERS, layoutRoom, linksFor, conversationFor, zoomScale, detailFor } from '/src/matrix-room.mjs';
+import { MATRIX_OBJECTS, LAYERS, layoutRoom, conversationFor, objectConversation, sharedTagLinks, conversationColor } from '/src/matrix-room.mjs';
+import { focusedPairGraph } from '/src/force-graph-data.mjs';
+import { applyLakehouseFields } from '/src/lakehouse-matches.mjs';
+import { localImageUrl } from '/src/local-images.mjs';
+import { mountForceStage } from '../force-stage.mjs';
 
 const $ = id => document.getElementById(id);
 const ns = 'http://www.w3.org/2000/svg';
-const state = { layer: 'theme', t: 0, scale: 1, fit: 1, panX: 0, panY: 0, room: null, selected: null };
+const state = { layer: 'theme', t: 0, scale: 1, fit: 1, panX: 0, panY: 0, room: null, selected: null, objects: MATRIX_OBJECTS };
+let playback = 0, currentAudio = null, cancelDevice = null;
 
 const svg = (tag, attrs) => {
   const node = document.createElementNS(ns, tag);
@@ -44,67 +49,40 @@ function plate(key, color) {
   return holder;
 }
 
-function worldPoint(clientX, clientY) {
-  const rect = $('map').getBoundingClientRect();
-  const vx = ((clientX - rect.left) / rect.width) * 1600;
-  const vy = ((clientY - rect.top) / rect.height) * 900;
-  return [800 + (vx - 800 - state.panX) / state.scale, 450 + (vy - 450 - state.panY) / state.scale];
-}
-
-function frame(x, y, t) {
-  state.t = t;
-  state.scale = zoomScale(t, state.fit);
-  state.panX = -(x - 800) * state.scale;
-  state.panY = -(y - 450) * state.scale;
-  syncZoom();
-}
-
 function setZoom(t) {
-  const prev = state.scale || state.fit;
-  const wx = 800 - state.panX / prev;
-  const wy = 450 - state.panY / prev;
   state.t = Math.min(100, Math.max(0, t));
-  state.scale = zoomScale(state.t, state.fit);
-  state.panX = -(wx - 800) * state.scale;
-  state.panY = -(wy - 450) * state.scale;
-  syncZoom();
-}
-
-function syncZoom() {
+  graph.setZoomT(state.t);
   $('zoom').value = String(Math.round(state.t));
-  const detail = detailFor(state.scale, state.fit);
-  $('map').dataset.detail = detail;
   for (const button of document.querySelectorAll('[data-stop]')) button.classList.toggle('on', Number(button.dataset.stop) === Math.round(state.t));
-  applyCamera();
-  paintMini();
 }
 
-function applyCamera() {
-  const camera = document.querySelector('#map .camera');
-  if (camera) camera.setAttribute('transform', 'translate(' + state.panX + ' ' + state.panY + ') translate(800 450) scale(' + state.scale + ') translate(-800 -450)');
-}
-
-function paintMini() {
-  const mini = $('mini');
-  const { bounds } = state.room;
-  mini.setAttribute('viewBox', bounds.minX + ' ' + bounds.minY + ' ' + bounds.maxX + ' ' + bounds.maxY);
-  mini.replaceChildren();
-  for (const district of state.room.districts) mini.append(svg('rect', { x: district.x, y: district.y, width: district.w, height: district.h, fill: district.color, opacity: 0.85 }));
-  const wx = 800 - state.panX / state.scale;
-  const wy = 450 - state.panY / state.scale;
-  mini.append(svg('rect', { class: 'viewport', x: wx - 800 / state.scale, y: wy - 450 / state.scale, width: 1600 / state.scale, height: 900 / state.scale }));
-  const arm = Math.max(bounds.maxX, bounds.maxY) * 0.025;
-  mini.append(svg('path', { d: 'M ' + (wx - arm) + ' ' + wy + ' H ' + (wx + arm) + ' M ' + wx + ' ' + (wy - arm) + ' V ' + (wy + arm), fill: 'none', stroke: '#142523', 'stroke-width': arm / 5 }));
+function stopTalk() {
+  playback++;
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  window.speechSynthesis?.cancel();
+  cancelDevice?.();
+  cancelDevice = null;
+  document.querySelectorAll('#card .turn.speaking').forEach(el => el.classList.remove('speaking'));
+  document.querySelector('#voice-controls')?.classList.remove('playing');
+  graph.setSpeaking('');
 }
 
 function showCard() {
+  stopTalk();
   const card = $('card');
   const selected = state.selected;
   if (!selected) { card.hidden = true; card.replaceChildren(); return; }
   card.hidden = false;
   card.replaceChildren();
   const head = document.createElement('header');
-  if (selected.kind === 'object') head.append(plate(selected.glyph, selected.color));
+  const shot = selected.kind === 'object' ? localImageUrl(selected.accession) : '';
+  if (shot) {
+    const img = document.createElement('img');
+    img.className = 'photo';
+    img.alt = 'Locally supplied image matched to ' + selected.accession;
+    img.src = shot;
+    head.append(img);
+  } else if (selected.kind === 'object') head.append(plate(selected.glyph, selected.color));
   const copy = document.createElement('div');
   const title = document.createElement('h2');
   title.textContent = selected.kind === 'object' ? selected.title : selected.label;
@@ -116,6 +94,65 @@ function showCard() {
   copy.append(title, meta);
   head.append(copy);
   card.append(head);
+  const talk = selected.kind === 'object' ? objectConversation(state.objects, selected.accession) : null;
+  if (talk) {
+    const linkColor = conversationColor(talk.evidence[0].value);
+    const pair = document.createElement('p');
+    pair.className = 'pair';
+    pair.style.borderLeft = '4px solid ' + linkColor;
+    pair.textContent = talk.turns[0].speaker + ' and ' + talk.turns[1].speaker + ' share ' + talk.evidence[0].value;
+    card.append(pair);
+    const sideColor = ['#2f6fed', '#e07a2f', linkColor];
+    for (const [index, turn] of talk.turns.entries()) {
+      const line = document.createElement('p');
+      line.className = 'turn side-' + ['a', 'b', 'guide'][index];
+      line.style.borderLeft = '4px solid ' + sideColor[index];
+      const who = document.createElement('b');
+      who.textContent = turn.speaker;
+      line.append(who, document.createTextNode(' ' + turn.text));
+      card.append(line);
+    }
+    const note = document.createElement('p');
+    note.className = 'hint';
+    note.textContent = 'A shared tag is not a historical relationship.';
+    const bar = document.createElement('div');
+    bar.id = 'voice-controls';
+    bar.className = 'audio-bar';
+    const listen = document.createElement('button');
+    listen.id = 'play';
+    listen.className = 'play-round';
+    listen.type = 'button';
+    listen.setAttribute('aria-label', 'Play this conversation');
+    listen.textContent = '▶';
+    const bars = document.createElement('span');
+    bars.className = 'bars';
+    bars.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < 12; i++) bars.append(document.createElement('i'));
+    const elapsed = document.createElement('span');
+    elapsed.id = 'audio-elapsed';
+    elapsed.textContent = 'Turn 1 of 3';
+    const halt = document.createElement('button');
+    halt.id = 'stop';
+    halt.type = 'button';
+    halt.textContent = 'Stop';
+    bar.append(listen, bars, elapsed, halt);
+    const controls = document.createElement('div');
+    controls.className = 'voice';
+    const approve = document.createElement('label');
+    const box = document.createElement('input');
+    box.type = 'checkbox';
+    box.id = 'voice-approved';
+    approve.append(box, document.createTextNode(' I have approval to send these displayed words to ElevenLabs.'));
+    const status = document.createElement('p');
+    status.id = 'voice-status';
+    status.className = 'hint';
+    status.textContent = 'Written transcript. Device voice unless ElevenLabs is enabled.';
+    listen.addEventListener('click', () => speak(talk));
+    halt.addEventListener('click', () => { stopTalk(); status.textContent = 'Playback stopped.'; });
+    controls.append(bar, approve, status);
+    card.append(note, controls);
+    return;
+  }
   const subject = selected.kind === 'object'
     ? { accession: selected.accession, concepts: selected.values }
     : { count: selected.count, concepts: [selected.label] };
@@ -123,13 +160,12 @@ function showCard() {
     const block = document.createElement('section');
     block.className = 'thread';
     const label = document.createElement('h3');
-    label.style.background = thread.color;
+    label.style.background = '#111';
     label.textContent = thread.layer + ' · ' + thread.concept;
     block.append(label);
     for (const turn of thread.turns) {
       const line = document.createElement('p');
       line.className = 'turn';
-      line.style.setProperty('--voice', turn.color);
       const who = document.createElement('b');
       who.textContent = turn.speaker;
       line.append(who, document.createTextNode(turn.text));
@@ -139,150 +175,149 @@ function showCard() {
   }
 }
 
-function selectDistrict(district) {
-  state.selected = { kind: 'district', ...district };
-  frame(district.x + district.w / 2, district.y + district.h / 2, Math.max(state.t, 34));
-  render();
+async function speak(conversation) {
+  stopTalk();
+  const session = playback;
+  const approved = $('voice-approved')?.checked;
+  const token = sessionStorage.getItem('archive-demo-token') || '';
+  const status = $('voice-status');
+  let aside = approved && !token ? 'Enter the demo token on the conversational atlas. Using the device voice.' : '';
+  try {
+    for (const [i, turn] of conversation.turns.entries()) {
+      if (session !== playback) return;
+      document.querySelectorAll('#card .turn').forEach((el, index) => el.classList.toggle('speaking', index === i));
+      document.querySelector('#voice-controls')?.classList.add('playing');
+      const elapsed = $('audio-elapsed');
+      if (elapsed) elapsed.textContent = 'Turn ' + (i + 1) + ' of ' + conversation.turns.length;
+      graph.setSpeaking(turn.role === 'objectA' ? conversation.source : turn.role === 'objectB' ? conversation.target : '');
+      if (status) status.textContent = ['Speaking ' + (i + 1) + ' of ' + conversation.turns.length + ' · ' + turn.speaker, aside].filter(Boolean).join(' ');
+      let played = false;
+      if (approved && token) {
+        const response = await fetch('/api/archive-society/voice', {
+          method: 'POST',
+          credentials: 'omit',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+          body: JSON.stringify({ text: turn.text, role: turn.role, confirmed: true }),
+        });
+        if (!response.ok && !aside) {
+          let detail = 'ElevenLabs is not available.';
+          try { detail = (await response.json()).message || detail; } catch { /* Keep the short fallback. */ }
+          aside = detail + ' Using the device voice.';
+          if (status) status.textContent = ['Speaking ' + (i + 1) + ' of ' + conversation.turns.length + ' · ' + turn.speaker, aside].join(' ');
+        }
+        if (response.ok) {
+          const url = URL.createObjectURL(await response.blob());
+          try {
+            if (session !== playback) return;
+            const audio = new Audio(url);
+            currentAudio = audio;
+            await new Promise((resolve, reject) => {
+              audio.onended = resolve;
+              audio.onerror = () => reject(new Error('Audio playback unavailable.'));
+              audio.play().catch(reject);
+            });
+            played = true;
+          } finally {
+            URL.revokeObjectURL(url);
+            currentAudio = null;
+          }
+        }
+      }
+      if (!played) {
+        await new Promise((resolve, reject) => {
+          if (!window.speechSynthesis) { reject(new Error('No device speech service. The written transcript remains available.')); return; }
+          cancelDevice = resolve;
+          const utterance = new SpeechSynthesisUtterance(turn.text);
+          utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.localService) || null;
+          utterance.rate = 0.92;
+          utterance.pitch = turn.role === 'objectA' ? 0.95 : turn.role === 'objectB' ? 1.08 : 1;
+          utterance.onend = () => { cancelDevice = null; resolve(); };
+          utterance.onerror = () => { cancelDevice = null; reject(new Error('Device speech stopped or unavailable.')); };
+          window.speechSynthesis.speak(utterance);
+        });
+      }
+    }
+    if (session === playback && status) status.textContent = 'Finished. This was a scripted interpretation, not historical testimony.';
+  } catch (error) {
+    if (session === playback && status) status.textContent = error.message;
+  } finally {
+    if (session === playback) {
+      document.querySelectorAll('#card .turn.speaking').forEach(el => el.classList.remove('speaking'));
+      document.querySelector('#voice-controls')?.classList.remove('playing');
+      graph.setSpeaking('');
+    }
+  }
 }
 
 function selectObject(node) {
   state.selected = { kind: 'object', ...node };
-  frame(node.x, node.y, Math.max(state.t, 67));
   render();
 }
 
 function render() {
   const room = state.room;
-  const map = $('map');
-  map.replaceChildren();
-  const camera = svg('g', { class: 'camera' });
-  const selectedDistrict = state.selected?.kind === 'district' ? state.selected.label : state.selected?.primary;
-  for (const district of room.districts) {
-    const on = district.label === selectedDistrict;
-    const group = svg('g', { class: 'district', role: 'button', tabindex: 0, 'aria-label': district.label + ', ' + district.count });
-    group.append(svg('rect', { class: 'territory' + (on ? ' on' : ''), x: district.x, y: district.y, width: district.w, height: district.h, rx: 18, fill: district.color, 'fill-opacity': on ? 0.28 : 0.14, stroke: district.color }));
-    const worldLabel = svg('text', { class: 'dlabel dlabel-world', x: district.x + district.w / 2, y: district.y + district.h / 2, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: district.color, stroke: '#f4f7f2', 'stroke-width': 8, 'paint-order': 'stroke', 'font-size': Math.max(28, Math.min(district.w / 9, 150)) });
-    worldLabel.textContent = district.label;
-    const nearLabel = svg('text', { class: 'dlabel dlabel-near', x: district.x + 18, y: district.y + 34, fill: district.color, 'font-size': 22 });
-    nearLabel.textContent = district.label + ' · ' + district.count;
-    group.append(worldLabel, nearLabel);
-    const open = () => selectDistrict(district);
-    group.addEventListener('click', event => { event.stopPropagation(); open(); });
-    group.addEventListener('keydown', event => { if (event.key === 'Enter') open(); });
-    camera.append(group);
-  }
-  if (state.selected?.kind === 'object') {
-    for (const link of linksFor(state.selected, room)) {
-      camera.append(svg('line', { class: 'link', x1: state.selected.x, y1: state.selected.y, x2: link.x, y2: link.y, stroke: link.color }));
-    }
-  }
+  const selected = state.selected?.kind === 'object' ? state.selected : null;
+  const talk = selected ? objectConversation(state.objects, selected.accession) : null;
+  const seen = new Set();
+  const nodes = [];
   for (const node of room.nodes) {
-    const on = state.selected?.id === node.id;
-    const group = svg('g', { class: 'node' + (on ? ' on' : ''), role: 'button', tabindex: 0, 'aria-label': node.title });
-    group.append(svg('circle', { class: 'node-dot', cx: node.x, cy: node.y, r: 7, fill: node.color }));
-    const card = svg('g', { class: 'node-card', transform: 'translate(' + (node.x - 56) + ' ' + (node.y - 54) + ')' });
-    card.append(svg('rect', { class: 'card', width: 112, height: 112, rx: 8, stroke: node.color }));
-    const icon = svg('g', { transform: 'translate(24 4) scale(0.9)' });
-    icon.append(glyph(node.glyph, node.color));
-    card.append(icon);
-    const acc = svg('text', { class: 'acc', x: 56, y: 78, 'text-anchor': 'middle' });
-    acc.textContent = node.accession;
-    const title = svg('text', { class: 'title', x: 56, y: 94, 'text-anchor': 'middle' });
-    const lines = [];
-    let line = '';
-    for (const word of node.title.split(' ')) {
-      const next = line ? line + ' ' + word : word;
-      if (next.length <= 16) line = next;
-      else {
-        if (line) lines.push(line);
-        line = word.slice(0, 16);
-        if (lines.length === 2) break;
-      }
-    }
-    if (line && lines.length < 2) lines.push(line);
-    lines.filter(Boolean).forEach((line, index) => {
-      const row = svg('tspan', { x: 56, dy: index === 0 ? 0 : 12 });
-      row.textContent = line;
-      title.append(row);
+    if (!node.accession || seen.has(node.accession)) continue;
+    seen.add(node.accession);
+    nodes.push({
+      id: node.accession,
+      label: node.title,
+      image: localImageUrl(node.accession),
+      color: node.color,
+      neighbor: Boolean(talk && node.accession === talk.target),
     });
-    card.append(acc, title);
-    group.append(card);
-    const open = () => selectObject(node);
-    group.addEventListener('click', event => { event.stopPropagation(); open(); });
-    group.addEventListener('keydown', event => { if (event.key === 'Enter') open(); });
-    camera.append(group);
   }
-  map.append(camera);
-  applyCamera();
+  const links = selected ? sharedTagLinks(state.objects, selected.accession, 6).map(link => ({ ...link, color: conversationColor(link.label || 'shared') })) : [];
+  const built = talk ? focusedPairGraph(nodes, links, talk.source, talk.target) : focusedPairGraph(nodes, links);
+  graph.setGraph(built.nodes, built.links);
+  if (talk) graph.focusPair(talk.source, talk.target);
   paintLegend();
   showCard();
-  paintMini();
 }
 
 function paintLegend() {
   const bar = $('legend');
   bar.replaceChildren();
   for (const district of state.room.districts) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.classList.toggle('on', state.selected?.label === district.label || state.selected?.primary === district.label);
+    const item = document.createElement('span');
     const swatch = document.createElement('span');
     swatch.className = 'swatch';
     swatch.style.background = district.color;
-    button.append(swatch, document.createTextNode(district.label));
-    button.addEventListener('click', () => selectDistrict(district));
-    bar.append(button);
+    item.append(swatch, document.createTextNode(district.label));
+    bar.append(item);
   }
 }
 
 function load(layer) {
   state.layer = layer;
   state.selected = null;
-  state.room = layoutRoom(MATRIX_OBJECTS, layer);
-  const { bounds } = state.room;
-  const fit = Math.min(1600 / bounds.maxX, 900 / bounds.maxY);
-  state.fit = fit;
+  state.room = layoutRoom(state.objects, layer);
   for (const button of document.querySelectorAll('[data-layer]')) button.setAttribute('aria-checked', String(button.dataset.layer === layer));
   $('count').textContent = state.room.nodes.length + ' · ' + state.room.layer.label;
-  frame((bounds.minX + bounds.maxX) / 2, (bounds.minY + bounds.maxY) / 2, 0);
+  graph.setSpeaking('');
+  setZoom(0);
   render();
 }
 
-const stage = $('map');
-let drag = null;
-let dragged = false;
-stage.addEventListener('pointerdown', event => {
-  if (event.target.closest('.node,.district')) return;
-  dragged = false;
-  drag = { x: event.clientX, y: event.clientY, px: state.panX, py: state.panY };
-  stage.setPointerCapture(event.pointerId);
+const graph = mountForceStage($('stage'), {
+  background: '#f3f3f3',
+  linkFocus: '#111111',
+  linkIdle: '#bdbdbd',
+  onSelect(id) {
+    const node = state.room?.nodes.find(item => item.accession === id);
+    if (node) selectObject(node);
+  },
 });
-stage.addEventListener('pointermove', event => {
-  if (!drag) return;
-  if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 4) dragged = true;
-  const rect = stage.getBoundingClientRect();
-  state.panX = drag.px + (event.clientX - drag.x) * (1600 / rect.width);
-  state.panY = drag.py + (event.clientY - drag.y) * (900 / rect.height);
-  applyCamera();
-  paintMini();
-});
-stage.addEventListener('pointerup', () => { drag = null; });
-stage.addEventListener('pointercancel', () => { drag = null; });
-stage.addEventListener('click', () => { if (dragged) return; state.selected = null; render(); });
-stage.addEventListener('wheel', event => {
-  event.preventDefault();
-  setZoom(state.t + (event.deltaY < 0 ? 4 : -4));
-}, { passive: false });
 $('zoom').addEventListener('input', () => setZoom(Number($('zoom').value)));
 for (const button of document.querySelectorAll('[data-stop]')) button.addEventListener('click', () => setZoom(Number(button.dataset.stop)));
 for (const button of document.querySelectorAll('[data-layer]')) button.addEventListener('click', () => load(button.dataset.layer));
-$('mini').addEventListener('click', event => {
-  const rect = $('mini').getBoundingClientRect();
-  const { bounds } = state.room;
-  const x = bounds.minX + ((event.clientX - rect.left) / rect.width) * bounds.maxX;
-  const y = bounds.minY + ((event.clientY - rect.top) / rect.height) * bounds.maxY;
-  frame(x, y, state.t);
-  render();
-});
 
+try {
+  const response = await fetch('/data/lakehouse/project-matches.json');
+  if (response.ok) state.objects = applyLakehouseFields(MATRIX_OBJECTS, await response.json());
+} catch { /* Unmatched matrix records stay in the room. */ }
 load('theme');

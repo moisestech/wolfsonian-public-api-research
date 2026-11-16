@@ -44,11 +44,16 @@ async function readBody(req) {
   try{return JSON.parse(text);}catch{fail(400,'INVALID_JSON','Expected a JSON request.');}
 }
 function json(res,status,body){res.statusCode=status;res.setHeader('Content-Type','application/json');res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.end(JSON.stringify(body));}
+function configuredVoice(env, role) {
+  const id = { objectA: env.ELEVENLABS_VOICE_A_ID, objectB: env.ELEVENLABS_VOICE_B_ID, archivist: env.ELEVENLABS_ARCHIVIST_VOICE_ID }[role];
+  return typeof id === 'string' && /^[A-Za-z0-9_-]{1,100}$/.test(id) ? id : '';
+}
 export async function handleArchiveService(kind,req,res,{env=process.env,fetchImpl=fetch}={}) {
   try {
     if(req.method!==(kind==='voice'?'POST':'GET')){res.setHeader('Allow',kind==='voice'?'POST':'GET');fail(405,'METHOD','Unsupported method.');}
     authorized(req,env);
     if(kind==='status')return json(res,200,{lakehouse:env.ARCHIVE_ENABLE_LAKEHOUSE==='1',elevenlabs:env.ARCHIVE_ENABLE_ELEVENLABS==='1'&&!!env.ELEVENLABS_API_KEY,
+      voices:{objectA:!!configuredVoice(env,'objectA'),objectB:!!configuredVoice(env,'objectB'),archivist:!!configuredVoice(env,'archivist')},
       mode:'internal-demo',liveConversationModel:false,requestBudget:'Per-process demo guard; not a durable public quota.'});
     if(kind==='lakehouse') {
       if(env.ARCHIVE_ENABLE_LAKEHOUSE!=='1')fail(503,'LAKEHOUSE_DISABLED','Lakehouse lookup is disabled on this server.');
@@ -79,8 +84,8 @@ export async function handleArchiveService(kind,req,res,{env=process.env,fetchIm
       if(body.confirmed!==true)fail(400,'EXTERNAL_APPROVAL_REQUIRED','Confirm approval to send the displayed words to ElevenLabs.');
       if(Object.keys(body).some(k=>!['text','role','confirmed'].includes(k)))fail(400,'VOICE_REQUEST','Unsupported voice request field.');
       if(typeof body.text!=='string'||body.text.trim().length<1||body.text.length>1000)fail(400,'TEXT_LENGTH','Speech text must contain 1–1000 characters.');
-      const voice={objectA:env.ELEVENLABS_VOICE_A_ID,objectB:env.ELEVENLABS_VOICE_B_ID,archivist:env.ELEVENLABS_ARCHIVIST_VOICE_ID}[body.role];
-      if(!voice||!/^[A-Za-z0-9_-]{1,100}$/.test(voice))fail(503,'VOICE_NOT_CONFIGURED','Configure this role’s server-side voice ID.');
+      const voice=configuredVoice(env,body.role);
+      if(!voice)fail(503,'VOICE_NOT_CONFIGURED','Configure this role’s server-side voice ID.');
       budget('voice');const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
       try {
         const upstream=await fetchImpl('https://api.elevenlabs.io/v1/text-to-speech/'+encodeURIComponent(voice)+'?output_format=mp3_44100_128',{

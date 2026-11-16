@@ -1,6 +1,8 @@
 /** One matrix column at a time. A shared tag is a path, not a history. */
 
 import { MATRIX_OBJECTS } from './matrix-objects.mjs';
+import { buildDiscoveryIndex, recommendNeighbors } from './discovery-graph.mjs';
+import { conversationFor as scriptedConversation } from './archive-society.mjs';
 
 export { MATRIX_OBJECTS };
 
@@ -46,11 +48,17 @@ export function valuesOf(object, layerId) {
   return list.map(value => String(value || '').trim()).filter(Boolean);
 }
 
+export function conversationColor(label) {
+  let hash = 2166136261;
+  for (const char of String(label)) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
+  return 'hsl(' + ((hash >>> 0) % 360) + ', 72%, 46%)';
+}
+
 export function conceptColor(label) {
   let hash = 2166136261;
   for (const char of String(label)) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
-  const hue = (hash >>> 0) % 360;
-  return `hsl(${hue} 52% 34%)`;
+  const light = 16 + ((hash >>> 0) % 46);
+  return `hsl(0 0% ${light}%)`;
 }
 
 export function glyphKey(object) {
@@ -129,6 +137,7 @@ export function layoutRoom(objects, layerId) {
         values: valuesOf(object, layerId),
         color,
         glyph: glyphKey(object),
+        confirmed: object.confirmed === true,
       });
     });
     cursorX += w + 120;
@@ -171,6 +180,69 @@ export function conversationFor(subject, layerId) {
       { speaker: reader, color: readerColor, text: ask(concept) },
       { speaker: 'Limit', color: '#5C5348', text: 'Shared matrix tag. Not a documented meeting.' },
     ],
+  }));
+}
+
+function tagList(family, values, column) {
+  return (values || []).map((value, index) => {
+    const clean = String(value || '').replace(/\s+/g, ' ').trim();
+    if (!clean) return null;
+    return { id: family + ':' + clean.toLowerCase(), family, value: clean, sourceColumns: [column + ' ' + (index + 1)] };
+  }).filter(Boolean);
+}
+
+export function matrixToRecords(objects) {
+  const seen = new Set();
+  const records = [];
+  for (const object of objects) {
+    if (!object?.accession || seen.has(object.accession)) continue;
+    seen.add(object.accession);
+    records.push({
+      accession: object.accession,
+      title: object.title || object.accession,
+      creator: object.creator || '',
+      date: object.date || '',
+      objectType: object.objectType || '',
+      source: 'matrix',
+      tags: [...tagList('theme', object.themes, 'Thematic Category'), ...tagList('motif', object.motifs, 'Symbols/Motifs')],
+    });
+  }
+  return records;
+}
+
+let recordIndex;
+function indexFor(objects) {
+  if (recordIndex?.objects !== objects) {
+    const records = matrixToRecords(objects);
+    recordIndex = { objects, index: buildDiscoveryIndex(records) };
+  }
+  return recordIndex.index;
+}
+
+export function objectConversation(objects, accession) {
+  const index = indexFor(objects);
+  const source = index.objects.get(accession);
+  if (!source) return null;
+  const neighbor = recommendNeighbors(index, accession, 'family', 1)[0];
+  if (!neighbor) return null;
+  return scriptedConversation(source, neighbor.record, {
+    id: accession + '::' + neighbor.record.accession,
+    source: accession,
+    target: neighbor.record.accession,
+    reasons: neighbor.reasons,
+    historicalRelationshipEstablished: false,
+  }, 'family');
+}
+
+export function sharedTagLinks(objects, accession, limit = 6) {
+  const index = indexFor(objects);
+  if (!index.objects.get(accession)) return [];
+  return recommendNeighbors(index, accession, 'family', limit).map((neighbor, order) => ({
+    source: accession,
+    target: neighbor.record.accession,
+    focused: order === 0,
+    label: neighbor.reasons?.[0]?.value || '',
+    historicalRelationshipEstablished: false,
   }));
 }
 

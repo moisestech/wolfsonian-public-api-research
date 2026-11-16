@@ -44,6 +44,14 @@ test('streaming byte cap works even without Content-Length',async()=>{
   const c=new AbortController(),response=new Response(new ReadableStream({start(s){s.enqueue(new Uint8Array(10));s.enqueue(new Uint8Array(10));s.close();}}));
   await assert.rejects(boundedBytes(response,15,c),/bounded/);assert.equal(c.signal.aborted,true);
 });
+test('status names which ElevenLabs roles are configured and hides the ids',async()=>{
+  const env={...base,ARCHIVE_ENABLE_ELEVENLABS:'1',ELEVENLABS_API_KEY:'TEST_ONLY_NOT_A_REAL_KEY',ELEVENLABS_VOICE_A_ID:'voice_a',ELEVENLABS_VOICE_B_ID:'',ELEVENLABS_ARCHIVIST_VOICE_ID:'bad id'};
+  const body=(await invoke('status',{env})).json();
+  assert.equal(body.elevenlabs,true);
+  assert.deepEqual(body.voices,{objectA:true,objectB:false,archivist:false});
+  assert.equal(JSON.stringify(body).includes('voice_a'),false);
+  assert.equal(JSON.stringify(body).includes('TEST_ONLY_NOT_A_REAL_KEY'),false);
+});
 test('voice has fixed server-owned role IDs and requires external approval',async()=>{
   const env={...base,ARCHIVE_ENABLE_ELEVENLABS:'1',ELEVENLABS_API_KEY:'TEST_ONLY_NOT_A_REAL_KEY',ELEVENLABS_VOICE_A_ID:'test_voice'};
   assert.equal((await invoke('voice',{env,body:{text:'TEST ONLY',role:'objectA'}})).json().error,'EXTERNAL_APPROVAL_REQUIRED');

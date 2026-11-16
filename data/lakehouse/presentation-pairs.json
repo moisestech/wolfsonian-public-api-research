@@ -1,0 +1,216 @@
+{
+  "openingAccession": "85.4.64.34",
+  "note": "A shared tag is not a historical relationship. Pairs are existing matrix objects with two local photographs and a saved lookup.",
+  "pairs": [
+    {
+      "source": "85.4.64.34",
+      "sourceTitle": "On Munitions: Skilled Work",
+      "target": "TD1989.317.66",
+      "targetTitle": "Loten van de Nationale Tentoonstelling van Vrouwenarbeid [Lottery of the National Exhibition of Women’s Labor]",
+      "tag": "Women",
+      "family": "motif",
+      "candidateCount": 3,
+      "score": 6.946
+    },
+    {
+      "source": "TD1990.340.141",
+      "sourceTitle": "Tentoonstelling de Vrouw 1813–1913 [Exhibition: The Woman 1813–1913]",
+      "target": "85.4.64.34",
+      "targetTitle": "On Munitions: Skilled Work",
+      "tag": "Women",
+      "family": "motif",
+      "candidateCount": 3,
+      "score": 6.946
+    },
+    {
+      "source": "84.4.66",
+      "sourceTitle": "Paul Robeson",
+      "target": "XX1991.13",
+      "targetTitle": "Untitled [House on a steep hillside] from the portfolio \"Fantasie di Architecttura\" [Architectural Fantasies]",
+      "tag": "Trees",
+      "family": "motif",
+      "candidateCount": 2,
+      "score": 4.803
+    },
+    {
+      "source": "85.4.64.43",
+      "sourceTitle": "Making the Engine",
+      "target": "TD1989.318.1",
+      "targetTitle": "Slijp veilig. Één splinter kan u een oog kosten [Grind Safely. One Splinter Can Cost You an Eye]",
+      "tag": "Machines",
+      "family": "motif",
+      "candidateCount": 2,
+      "score": 4.803
+    },
+    {
+      "source": "84.4.157",
+      "sourceTitle": "1939 A.D",
+      "target": "XX1990.2907",
+      "targetTitle": "Atlantik Wal: 1943 is geen 1918 [Atlantic Wall: 1943 is Not 1918]",
+      "tag": "Political symbols",
+      "family": "motif",
+      "candidateCount": 3,
+      "score": 3.656
+    },
+    {
+      "source": "XX1990.3843",
+      "sourceTitle": "Die Wirkung Unserer U Boote [The Effect of Our U-Boats]",
+      "target": "84.4.157",
+      "targetTitle": "1939 A.D",
+      "tag": "Political symbols",
+      "family": "motif",
+      "candidateCount": 3,
+      "score": 3.656
+    },
+    {
+      "source": "XX1990.4091",
+      "sourceTitle": "Stemt op de lijst der Soc. Dem. Arb. Partij [Vote for the List of the Social Democratic Workers’ Party]",
+      "target": "85.4.64.43",
+      "targetTitle": "Making the Engine",
+      "tag": "Factories",
+      "family": "motif",
+      "candidateCount": 3,
+      "score": 3.656
+    },
+    {
+      "source": "84.4.25.1",
+      "sourceTitle": "Biennale di Venezia: XIX Esposizione Internazionale d’Arte Contemporanea [Venice Biennial: XIX International Exhibition of Contemporary Art]",
+      "target": "XX1990.3275",
+      "targetTitle": "Elio Composto Colorante Superiore [Elio Superior Compound Dye]",
+      "tag": "Mythological figures",
+      "family": "motif",
+      "candidateCount": 4,
+      "score": 2.987
+    },
+    {
+      "source": "TD1990.340.146",
+      "sourceTitle": "Indie moet vrij! Werkt en vecht ervoor! [The East Indies Must Be Free! Work and Fight for It!]",
+      "target": "84.4.157",
+      "targetTitle": "1939 A.D",
+      "tag": "Flags",
+      "family": "motif",
+      "candidateCount": 4,
+      "score": 2.987
+    },
+    {
+      "source": "XX1990.2870",
+      "sourceTitle": "Xde Jaarbeurs Utrecht [10th Utrecht Fair]",
+      "target": "83.4.40",
+      "targetTitle": "Let the Living Rise",
+      "tag": "Water",
+      "family": "motif",
+      "candidateCount": 4,
+      "score": 2.987
+    },
+    {
+      "source": "XX1990.2880",
+      "sourceTitle": "La garra del invasor italiano pretende esclavizarnos [The Italian Invader’s Clutch Tries to Enslave Us]",
+      "target": "84.4.157",
+      "targetTitle": "1939 A.D",
+      "tag": "Flags",
+      "family": "motif",
+      "candidateCount": 4,
+      "score": 2.987
+    },
+    {
+      "source": "XX1990.3277",
+      "sourceTitle": "Tacchi Marca Stella Pirelli [Pirelli Star Brand Heels]",
+      "target": "84.4.25.1",
+      "targetTitle": "Biennale di Venezia: XIX Esposizione Internazionale d’Arte Contemporanea [Venice Biennial: XIX International Exhibition of Contemporary Art]",
+      "tag": "Mythological figures",
+      "family": "motif",
+      "candidateCount": 4,
+      "score": 2.987
+    }
+  ],
+  "missingPhotographs": [
+    {
+      "accession": "XX1989.122",
+      "title": "Do Not Enter"
+    },
+    {
+      "accession": "WX2015.2049",
+      "title": "Johannisthal Airfield"
+    },
+    {
+      "accession": "XC2022.03.26.15",
+      "title": "My Wedding Night"
+    },
+    {
+      "accession": "XC2002.11.4.385.1",
+      "title": "Sandra, the Woman of Fire"
+    },
+    {
+      "accession": "XC2002.11.4.390",
+      "title": "I Am the Man"
+    },
+    {
+      "accession": "XC2022.03.13",
+      "title": "Mambo"
+    },
+    {
+      "accession": "XC2022.03.26.3",
+      "title": "Cha-Cha-Cha Boom!"
+    },
+    {
+      "accession": "XC2022.03.26.5",
+      "title": "Pan-Americana"
+    },
+    {
+      "accession": "XC2022.03.20",
+      "title": "Moonlight in Havana"
+    },
+    {
+      "accession": "XC2002.11.4.389",
+      "title": "Affair in Havana"
+    },
+    {
+      "accession": "XC2022.03.26.4",
+      "title": "Rhythm of the Mambo"
+    },
+    {
+      "accession": "XC2002.11.4.366",
+      "title": "Holiday in Havana"
+    },
+    {
+      "accession": "WFIU-78",
+      "title": "General plan showing future development for the Florida East Coast Hotel Company, Palm Bea"
+    },
+    {
+      "accession": "WFIU–72",
+      "title": "Breakers Hotel, Palm Beach"
+    },
+    {
+      "accession": "WFIU–77",
+      "title": "Sherry-Netherland Hotel, New York"
+    },
+    {
+      "accession": "WFIU–139",
+      "title": "Hotel Pierre, New York"
+    },
+    {
+      "accession": "WFIU–18",
+      "title": "Hotel Pierre, New York"
+    },
+    {
+      "accession": "WFIU–105",
+      "title": "Perspective Looking South on Park Avenue, Waldorf-Astoria Hotel, New York"
+    },
+    {
+      "accession": "WFIU– 136",
+      "title": "Men’s Barber Shop, Waldorf-Astoria Hotel, New York"
+    },
+    {
+      "accession": "WFIU–69",
+      "title": "Detail of Park Avenue Entrance, Waldorf-Astoria Hotel, New York"
+    },
+    {
+      "accession": "WFIU–164",
+      "title": "Details of Tower Cupola, Sherry-Netherland Hotel, New York"
+    },
+    {
+      "accession": "XX1990.2501",
+      "title": "Jackhammer Operator, Douglas Dam"
+    }
+  ]
+}

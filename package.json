@@ -26,6 +26,8 @@
     "playwright": "^1.62.1"
   },
   "dependencies": {
-    "three": "^0.170.0"
+    "d3-force-3d": "^3.0.6",
+    "three": "^0.170.0",
+    "three-forcegraph": "^1.43.6"
   }
 }
