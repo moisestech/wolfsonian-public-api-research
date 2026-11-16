@@ -13,6 +13,9 @@ on:
       - 'test/archive-*.test.mjs'
       - 'examples/archive-society*'
       - 'test/discovery-*.test.mjs'
+      - 'src/force-atlas-data.mjs'
+      - 'demo/spatial-atlas/force/**'
+      - 'test/force-atlas-data.test.mjs'
       - '.github/workflows/discovery-checks.yml'
   workflow_dispatch:
 permissions:
@@ -38,10 +41,14 @@ jobs:
           node --check server/archive-services.mjs
           node --check scripts/serve-archive-society.mjs
           node --check scripts/check-society-browser.mjs
+          node --check src/force-atlas-data.mjs
+          node --check demo/spatial-atlas/force/force.mjs
       - name: Run discovery tests
         run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
       - name: Run archive society and service tests
         run: npm run test:society
+      - name: Force Atlas source/evidence tests
+        run: node --test test/force-atlas-data.test.mjs test/atlas-graph.test.mjs
       - name: Browser smoke and screenshots
         run: |
           npm ci
