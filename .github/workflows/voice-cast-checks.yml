@@ -1,0 +1,36 @@
+name: Local multivoice cast checks
+
+on:
+  pull_request:
+    paths:
+      - 'src/voice-cast.mjs'
+      - 'test/voice-cast.test.mjs'
+      - 'demo/archive-society/society.mjs'
+      - 'demo/spatial-atlas/atlas.mjs'
+      - 'demo/discovery-lab/showcase.mjs'
+      - 'scripts/serve-archive-society.mjs'
+      - '.github/workflows/voice-cast-checks.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax checks
+        run: |
+          node --check src/voice-cast.mjs
+          node --check demo/archive-society/society.mjs
+          node --check demo/spatial-atlas/atlas.mjs
+          node --check demo/discovery-lab/showcase.mjs
+          node --check scripts/serve-archive-society.mjs
+      - name: Pure local casting and archive-contract tests
+        run: |
+          node --test test/voice-cast.test.mjs test/matrix-room.test.mjs test/archive-society.test.mjs test/discovery-showcase.test.mjs

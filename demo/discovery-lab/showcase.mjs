@@ -1,6 +1,7 @@
 import { buildDiscoveryIndex, parseMatrixCsv, recommendNeighbors, FAMILIES } from '../../src/discovery-graph.mjs';
 import { CARDS, CARD_BY_ID, portraitUrl } from '../../src/discovery-personas.mjs';
 import { makeDialogue, replyToQuestion } from '../../src/discovery-dialogue.mjs';
+import { castLocalConversation, waitForLocalEnglishVoices } from '../../src/voice-cast.mjs';
 
 // Deliberately INVENTED source examples: never present these as museum objects.
 const EXAMPLES = [
@@ -282,16 +283,31 @@ function renderInspector(){
   renderObjectPanel();
   if(model.tab==='voice'){renderDialogue();E.answer.textContent='';}
 }
-function stopSpeech(){if('speechSynthesis' in window)window.speechSynthesis.cancel();}
-function playSpeech(){
+let speechSession=0;
+function stopSpeech(){
+  speechSession++;
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+}
+async function playSpeech(){
   stopSpeech();
   if(!('speechSynthesis' in window))return;
+  const session=speechSession;
   const src=record(),match=activeMatch()||candidates()[0];
   if(!src||!match)return;
   const lines=makeDialogue(src,match.record,match,card());
-  for(let i=0;i<lines.length;i++){
-    const utterance=new SpeechSynthesisUtterance(lines[i].text);
-    utterance.rate=.95;utterance.pitch=[.93,1.08,1][i];utterance.lang='en-US';
+  const cast=castLocalConversation(await waitForLocalEnglishVoices(window.speechSynthesis),lines);
+  if(session!==speechSession)return;
+  if(!cast.available){
+    E.answer.textContent=cast.disclosure;
+    return;
+  }
+  for(const [i,turn] of lines.entries()){
+    const role=cast.turns[i];
+    const utterance=new SpeechSynthesisUtterance(turn.text);
+    utterance.voice=role.voice;
+    utterance.rate=role.rate;
+    utterance.pitch=role.pitch;
+    utterance.lang=role.lang;
     window.speechSynthesis.speak(utterance);
   }
 }
