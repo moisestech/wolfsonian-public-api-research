@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Force Atlas · Archive Dreams in Public</title>
+  <link rel="stylesheet" href="./force.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <p class="eyebrow">ARCHIVE DREAMS IN PUBLIC / INDEPENDENT RESEARCH PROTOTYPE</p>
+      <h1>One object, many possible futures</h1>
+      <p class="subtitle">Three-dimensional relationships are paths for inquiry, not proof of historical contact.</p>
+    </div>
+    <nav aria-label="Alternate views">
+      <a href="../">2D Spatial Atlas</a>
+      <a href="../../archive-society/">Conversational Atlas</a>
+      <a href="../../object-lens/">Object Lens</a>
+    </nav>
+  </header>
+  <main>
+    <section class="visual" aria-label="Interactive three-dimensional relationship map">
+      <div class="canvas-host" id="canvas-host">
+        <canvas id="graph" aria-label="3D constellation of archival object identities and artist-authored questions"></canvas>
+        <p class="render-mode" id="render-mode" role="status">Preparing local 3D view…</p>
+        <div class="canvas-help">Drag to orbit · Use zoom controls or scroll · Tap an object to inspect</div>
+      </div>
+      <div class="controls">
+        <label for="seed">Start with an object
+          <select id="seed"></select>
+        </label>
+        <fieldset>
+          <legend>Evidence layers</legend>
+          <label><input id="accession" type="checkbox" checked> Accession identities</label>
+          <label><input id="questions" type="checkbox" checked> Artist-authored questions</label>
+          <label><input id="box" type="checkbox"> Box / container</label>
+        </fieldset>
+        <button type="button" id="zoom-in" aria-label="Zoom in">Zoom +</button>
+        <button type="button" id="zoom-out" aria-label="Zoom out">Zoom −</button>
+        <button type="button" id="reset">Reset view</button>
+        <p id="status" class="small" role="status"></p>
+        <p id="box-notice" class="small" role="status"></p>
+      </div>
+    </section>
+    <aside class="inspector" aria-labelledby="inspector-heading">
+      <p class="eyebrow">OBJECT / EVIDENCE / QUESTION</p>
+      <h2 id="inspector-heading">Select an object</h2>
+      <div id="inspector" aria-live="polite"></div>
+      <p class="source-notice">Source: existing public research packets. These are not live Lakehouse matches. All orange links are proposed questions, not documented associations. No museum photography or staff matrix is served here.</p>
+    </aside>
+  </main>
+  <footer>
+    <span>Archive Dreams in Public — artist-authored research view</span>
+    <a href="../">Return to the accessible 2D map</a>
+  </footer>
+  <noscript>This view requires JavaScript. The <a href="../">2D Atlas</a> remains available.</noscript>
+  <script type="module" src="./force.mjs"></script>
+</body>
+</html>
