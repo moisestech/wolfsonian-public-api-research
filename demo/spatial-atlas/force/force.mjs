@@ -4,7 +4,10 @@ import { makeForceAtlasGraph } from '/src/force-atlas-data.mjs';
 const $ = id => document.getElementById(id);
 const CANONICAL = 'https://cdn.jsdelivr.net/npm/three-forcegraph@1.43.6/dist/three-forcegraph.min.js';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const state = { seed:'XX1990.1484', showAccession:true, showQuestions:true, showBox:false };
+const incomingAccession=new URLSearchParams(location.search).get('accession') || '';
+const confirmedIncoming=PUBLIC_ANCHORS.find(o=>o.accession===incomingAccession);
+const state = { seed: confirmedIncoming?.accession || 'XX1990.1484',
+  showAccession:true, showQuestions:true, showBox:false };
 const canvas = $('graph'), host = $('canvas-host');
 const seed = $('seed');
 for (const object of PUBLIC_ANCHORS) {
