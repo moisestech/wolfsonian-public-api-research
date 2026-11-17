@@ -267,3 +267,30 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
   #stage{min-height:240px}
   #conversation-panel{scroll-margin-top:10px}
 }
+
+/* Final hierarchy: two active nodes live in the graph, not in a duplicate photo rail. */
+#zoom-stage{display:none}
+.evidence-rail .tabs{margin:2px 0 12px}
+.graph-dialogue-label{
+  position:absolute;top:14px;left:14px;z-index:5;pointer-events:none;
+  width:min(330px,calc(100% - 28px));padding:12px 15px;
+  background:rgba(14,16,16,.89);border:1px solid #454545;border-radius:11px;
+  box-shadow:0 12px 24px rgba(0,0,0,.23);backdrop-filter:blur(8px)
+}
+.graph-dialogue-label .eyebrow{margin-bottom:6px;color:#d0d0d0;font-size:9px}
+.graph-dialogue-label p{
+  margin:0 0 8px;font:600 14px/1.35 system-ui,sans-serif;
+  color:#f4f4f4;display:-webkit-box;-webkit-box-orient:vertical;
+  -webkit-line-clamp:2;line-clamp:2;overflow:hidden
+}
+.graph-dialogue-label strong{
+  display:block;font:700 11px/1.35 ui-monospace,monospace;
+  letter-spacing:.07em;color:#9cc7ff
+}
+.graph-dialogue-label[data-active-role="objectB"] strong{color:#ffc089}
+.graph-dialogue-label[data-active-role="archivist"] strong{color:#9ed9b4}
+@media(max-width:700px){
+  .graph-dialogue-label{top:7px;left:8px;width:min(270px,calc(100% - 16px));padding:8px 11px}
+  .graph-dialogue-label p{font-size:12px}
+  .graph-dialogue-label .eyebrow{font-size:8px}
+}
