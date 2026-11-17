@@ -4,6 +4,8 @@
  * No original catalogue page scanned/inspected or reproduced here; no museum images.
  * Artist-authored dialogue is a question, not historical testimony.
  */
+import {primaryPageLeadsFor} from './machine-age-primary-leads.mjs';
+
 export const MACHINE_AGE_RESEARCH = Object.freeze({
   "version": "1.0.0",
   "accession": "XM1999.108.8",
@@ -376,6 +378,10 @@ const byClaim = new Map(MACHINE_AGE_RESEARCH.claims.map(claim => [claim.id, clai
 const byQuestion = new Map(MACHINE_AGE_RESEARCH.questions.map(question => [question.id, question]));
 const readers = new Set(['futurist','worker','archivist']);
 const approvedState = new Set(['source_fact']);
+
+export function machineAgeResearchLeads(accession,questionId) {
+  return primaryPageLeadsFor(accession,questionId);
+}
 
 export function machineAgeQuestions(accession) {
   if(accession !== MACHINE_AGE_RESEARCH.accession)return [];
