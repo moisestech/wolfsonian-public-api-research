@@ -30,6 +30,26 @@ try {
   assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
   assert.ok(Number(await page.locator('#stage').getAttribute('data-zoom'))>20);
 
+  // Both authored tones run on the same source-backed edge with one Archivist.
+  assert.equal(await page.locator('#conversation-tone').inputValue(),'critical');
+  assert.equal(await page.locator('#archivist-voice-mode').inputValue(),'single');
+  const firstCritical=await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText();
+  const stableArchivist=await page.locator('#conversation-content .bubble.turn').nth(2).locator('p').innerText();
+  const originalEvidence=await page.locator('#conversation-content details').textContent();
+  const originalPair=await page.locator('#stage').getAttribute('data-pair');
+  await page.selectOption('#conversation-tone','poetic');
+  const firstPoetic=await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText();
+  assert.notEqual(firstPoetic,firstCritical);
+  assert.equal(await page.locator('#conversation-content .bubble.turn').nth(2).locator('p').innerText(),stableArchivist);
+  assert.equal(await page.locator('#conversation-content details').textContent(),originalEvidence);
+  assert.equal(await page.locator('#stage').getAttribute('data-pair'),originalPair);
+  assert.match(page.url(),/tone=poetic/);
+  await page.selectOption('#conversation-tone','critical');
+  assert.equal(await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText(),firstCritical);
+  assert.doesNotMatch(page.url(),/tone=poetic/);
+
+
+
   assert.equal(await page.locator('.conversation-edge').count(),6);
   for(let i=0;i<6;i++){
     await page.locator('.conversation-edge').nth(i).focus();
