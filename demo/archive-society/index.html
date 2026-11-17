@@ -96,7 +96,12 @@
 <aside class="evidence-rail" aria-label="Conversation, record and services">
   <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
   <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
-  <section id="conversation-panel"><div id="conversation-content"></div>
+  <section id="conversation-panel" aria-label="Object-to-object dialogue"><div id="conversation-content"></div>
+    <nav id="turn-navigation" class="turn-navigation" aria-label="Read dialogue one speaker at a time" hidden>
+      <button id="previous-turn" type="button" aria-label="Previous speaker">← Previous</button>
+      <p id="turn-progress" role="status" aria-live="polite" aria-atomic="true">Reading 1 of 3</p>
+      <button id="next-turn" type="button" aria-label="Next speaker">Next →</button>
+    </nav>
     <div id="voice-controls" class="audio-bar">
       <button id="play" class="play-round" type="button" aria-label="Play this conversation">▶</button>
       <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
