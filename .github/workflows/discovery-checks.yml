@@ -13,6 +13,7 @@ on:
       - 'scripts/*society*'
       - 'test/archive-*.test.mjs'
       - 'test/curated-edge-scenes.test.mjs'
+      - 'test/cold-visitor-orientation.test.mjs'
       - 'examples/archive-society*'
       - 'test/discovery-*.test.mjs'
       - '.github/workflows/discovery-checks.yml'
@@ -44,7 +45,9 @@ jobs:
       - name: Run discovery tests
         run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
       - name: Run archive society and service tests
-        run: npm run test:society
+        run: |
+          npm run test:society
+          node --test test/cold-visitor-orientation.test.mjs
       - name: Verify curated relationships and skeptical fallbacks
         run: node --test test/curated-edge-scenes.test.mjs
       - name: Browser smoke and screenshots
