@@ -163,6 +163,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
       mode:'CURATED_EDGE_SCENE',
       editorialStatus:curated.status,
       edgeMode:curated.mode,
+      scriptBasis:{family:curated.requires.family,value:curated.requires.value},
       dramaticArc:curated.arc,
       nextPrompt:curated.next,
       source:source.accession,target:target.accession,lens:lensId,
