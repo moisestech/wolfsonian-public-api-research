@@ -39,6 +39,19 @@
   </details>
   <p id="import-status" class="muted" role="status"></p>
   <label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice</option><option value="elevenlabs">ElevenLabs · external service</option></select>
+  <details id="voice-director-settings"><summary>Voice direction</summary>
+    <label for="archivist-voice-mode">Archivist identity</label>
+    <select id="archivist-voice-mode">
+      <option value="single">One consistent Archivist (default)</option>
+      <option value="plural">Multiple Archivists (experimental)</option>
+    </select>
+    <label for="voice-casting-style">Object voice identity</label>
+    <select id="voice-casting-style">
+      <option value="scene-variety">Vary between conversations</option>
+      <option value="continuity">Keep voice per object</option>
+    </select>
+    <p class="muted">These are fictional performances. The same historical evidence is shown in both tones.</p>
+  </details>
   <div id="approval-box" hidden><p>Only the displayed transcript is sent. No photograph or full CSV is transmitted. Provider retention follows your account settings.</p><label class="check"><input id="external-approved" type="checkbox"> I have approval to send these displayed words to ElevenLabs.</label></div>
   <button id="export" class="quiet">Save selected conversation JSON</button>
   <details><summary>Lakehouse evidence</summary><p>A lookup is a separate source layer. It never changes the CSV tags.</p>
@@ -152,7 +165,13 @@
       <p id="visitor-connection" class="visitor-connection" aria-live="polite"></p>
       <p class="landscape-credit">Fictional readings · <a href="../about/">About</a></p>
     </div>
-    <section id="conversation-panel"><div id="conversation-content"></div></section>
+    <section id="conversation-panel" aria-label="Object-to-object dialogue">
+      <div class="conversation-tone-selector">
+        <label for="conversation-tone">Conversation tone</label>
+        <select id="conversation-tone"><option value="critical">Argumentative / Critical</option><option value="poetic">Poetic / Uncanny</option></select>
+      </div>
+      <div id="conversation-content"></div>
+    </section>
     <section id="record-panel" hidden><div id="record-content"></div></section>
   </div>
   <div id="voice-controls" class="audio-bar">
