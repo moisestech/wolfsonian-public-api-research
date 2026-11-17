@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
 import {CURATED_EDGE_SCENES} from '../src/curated-edge-scenes.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
 import {directConversation,PERFORMANCE_SCORE,DELIVERY} from '../src/conversation-performance.mjs';
@@ -93,4 +94,9 @@ test('unknown metadata fallback is intentionally source-neutral and receives no 
   assert.equal(p.editorialQuestion,null);
   assert.equal(p.tension,null);
   assert.deepEqual(p.turns.map(t=>t.delivery),['observe','question','document']);
+});
+
+test('the local exhibition server serves the director module to the browser',async()=>{
+  const server=await readFile(new URL('../scripts/serve-archive-society.mjs',import.meta.url),'utf8');
+  assert.match(server,/conversation-performance/);
 });
