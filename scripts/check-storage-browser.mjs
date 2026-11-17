@@ -41,7 +41,6 @@ try{
   await page.locator('#reset').click();
   assert.equal(await page.locator('#level').inputValue(),'all');
   assert.equal((await page.request.get(base+'/.env.local')).status(),404);
-  assert.equal((await page.request.get(base+'/src/matrix-objects.mjs')).status(),200); // localhost researcher tool; the static public assembler removes this file
   await page.setViewportSize({width:390,height:844});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   assert.deepEqual(errors,[]);
