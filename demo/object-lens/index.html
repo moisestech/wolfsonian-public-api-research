@@ -1,37 +1,60 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,follow">
-  <title>Object Lens · Archive Dreams in Public</title>
-  <link rel="stylesheet" href="./lens.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<title>Object Lens · Archive Dreams in Public</title>
+<link rel="stylesheet" href="./lens.css">
 </head>
 <body>
+<a class="skip" href="#identify">Skip to object identification</a>
 <header>
-  <p class="eyebrow">OBJECT LENS · CAMERA STAYS OFF UNTIL YOU ASK</p>
-  <h1>A possible identity, then a person confirms it.</h1>
-  <nav>
-    <a href="../archive-society/">Conversational Atlas</a>
-    <a href="../spatial-atlas/">Spatial Atlas</a>
-  </nav>
+  <p class="eyebrow">OBJECT LENS · INDEPENDENT ARTIST RESEARCH</p>
+  <h1>Meet an object. Question its story.</h1>
+  <p>Identify one public research packet, choose a fictional perspective, then examine the evidence.</p>
+  <nav><a href="../archive-society/">Conversational Atlas</a><a href="../spatial-atlas/">Spatial Atlas</a></nav>
 </header>
 <main>
   <section>
+    <h2>1. Look closely</h2>
     <video id="preview" playsinline autoplay muted hidden></video>
     <p id="camera-status" role="status">Camera is off. No frames are stored.</p>
     <button id="open-camera" type="button">Use the camera</button>
     <button id="close-camera" type="button" hidden>Turn the camera off</button>
-    <p class="recognition">Image recognition is not configured. A picture is not treated as a match.</p>
+    <p class="recognition">Camera preview only: automatic image and label recognition is not enabled. A photograph is never silently treated as a catalog match.</p>
   </section>
-  <section>
-    <label for="accession">Accession, typed exactly</label>
-    <input id="accession" autocomplete="off" spellcheck="false" placeholder="XX1990.1484">
-    <button id="check" type="button">Check against the public packets</button>
+  <section id="identify">
+    <h2>2. Confirm an identity</h2>
+    <label for="accession">Exact accession on a label or prepared test card</label>
+    <input id="accession" spellcheck="false" autocomplete="off" placeholder="XM1999.108.8">
+    <button id="check" type="button">Check the six public research packets</button>
     <p id="result" role="status"></p>
-    <label class="confirm"><input id="confirm" type="checkbox" disabled> I confirm this is the object in front of me</label>
-    <a id="handoff" hidden href="../archive-society/">Return to the atlas</a>
+    <label class="confirm"><input id="confirm" type="checkbox" disabled> I confirm this is the research object I want to explore</label>
+  </section>
+  <section id="encounter" hidden>
+    <p class="eyebrow">3. FICTIONAL INTERPRETATIONS</p>
+    <h2 id="encounter-title"></h2>
+    <p id="encounter-question"></p>
+    <div id="reader-options" class="readers" role="group" aria-label="Choose interpretive reader"></div>
+    <div class="reading-panel">
+      <p class="eyebrow" id="reader-label"></p>
+      <p id="reader-script" aria-live="polite"></p>
+      <details><summary>Reveal reader prompt and blind spot</summary><p id="reader-prompt"></p><p id="reader-blindspot"></p></details>
+    </div>
+    <div class="button-row">
+      <button id="speak" type="button">Read aloud using a local voice</button>
+      <button id="stop-speech" type="button" class="secondary">Stop voice</button>
+    </div>
+    <p id="speech-status" class="small" role="status">Transcript is always visible. No external voice service.</p>
+    <h3>4. Check the evidence</h3>
+    <dl id="evidence-list"></dl>
+    <p class="small">Identity fields are not a full biography or evidence of direct relationships.</p>
+    <p id="source-link"></p>
+    <a id="handoff" href="../archive-society/">Explore this accession in the Atlas</a>
+    <p class="small">The Atlas may have no verified neighbors for this object. An isolated object is an honest result.</p>
   </section>
 </main>
+<footer><p>Interpretation is not evidence. Fictional readers; not an official Wolfsonian visitor app.</p></footer>
 <script type="module" src="./lens.mjs"></script>
 </body>
 </html>
