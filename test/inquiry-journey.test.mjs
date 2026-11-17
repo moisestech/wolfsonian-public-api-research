@@ -44,6 +44,16 @@ test('session paths follow unvisited inquiry movements and can cycle safely',()=
  trail=visit(trail,0,'interpret');assert.equal(suggestInquiryMove(trail,{accession:allowed[0]}),'observe');
  assert.equal(suggestInquiryMove(trail,{accession:allowed[1]}),'observe');
 });
+test('object-specific authored questions vary by exact accession without making unverified historical claims',()=>{
+ const radio=composeInquiryEpisode({accession:allowed[0],title:records[0].title},'systems');
+ const fair=composeInquiryEpisode({accession:allowed[1],title:records[1].title},'systems');
+ assert.notEqual(radio.turns[0].text,fair.turns[0].text);
+ assert.match(radio.turns[0].text,/voices heard through a radio/);
+ assert.match(fair.turns[0].text,/invited into the promise of tomorrow/);
+ assert.ok(radio.turns[0].text.endsWith('?'));
+ assert.ok(fair.turns[0].text.endsWith('?'));
+ assert.equal(radio.evidence,fair.evidence);
+});
 test('subsequent scripted dialogue explicitly bridges previous question and resists invented object contact',()=>{
  const first=composeInquiryEpisode({accession:allowed[0],title:records[0].title},'observe');
  assert.equal(first.turns.length,7);
