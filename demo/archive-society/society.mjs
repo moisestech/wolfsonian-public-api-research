@@ -152,6 +152,12 @@ document.querySelectorAll('[data-voice-role]').forEach(selector=>
   })
 );
 window.speechSynthesis?.addEventListener?.('voiceschanged',renderLocalVoiceChoices);
+$('voice-casting-style').addEventListener('change',()=>{
+  stop();
+  message('voice-status',$('voice-casting-style').value==='continuity'
+    ?'Object identity mode: the same installed voice is reused for each accession across scenes.'
+    :'Scene variation mode: voices follow the dramatic context of each conversation.');
+});
 renderLocalVoiceChoices();
 
 function options(){
