@@ -138,6 +138,8 @@ export function conversationRecords(packet) {
       date: clean(row.Date) || matrix.date || '',
       objectType: matrix.objectType || clean(row.Genre) || '',
       catalogSubject: clean(row.Subject),
+      catalogDescription: clean(row.Description),
+      geography: clean(row['Geographic Origin']),
       imageFilename: '',
       interpretiveText: 'Lakehouse lookup. A shared tag is not a historical relationship.',
       tags: [
@@ -183,6 +185,9 @@ export function applyLakehouseFields(objects, packet) {
     if (!row) return object;
     const date = clean(row.Date);
     const creator = clean(row.Creator);
-    return { ...object, ...(date ? { date } : {}), ...(creator ? { creator } : {}), confirmed: true };
+    const catalogSubject = clean(row.Subject);
+    const catalogDescription = clean(row.Description);
+    const geography = clean(row['Geographic Origin']);
+    return { ...object, ...(date ? { date } : {}), ...(creator ? { creator } : {}), ...(catalogSubject ? { catalogSubject } : {}), ...(catalogDescription ? { catalogDescription } : {}), ...(geography ? { geography } : {}), confirmed: true };
   });
 }

@@ -197,6 +197,9 @@ export function matrixToRecords(objects) {
       creator: object.creator || '',
       date: object.date || '',
       objectType: object.objectType || '',
+      catalogSubject: object.catalogSubject || '',
+      catalogDescription: object.catalogDescription || '',
+      geography: object.geography || '',
       source: 'matrix',
       tags: [...tagList('theme', object.themes, 'Thematic Category'), ...tagList('motif', object.motifs, 'Symbols/Motifs')],
     });

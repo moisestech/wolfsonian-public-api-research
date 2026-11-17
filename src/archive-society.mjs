@@ -151,6 +151,11 @@ export function societyView(records, accession, lens='family', {atlas=false, the
   }));
   return {nodes,edges,landmarks:atlas?fieldLandmarks(nodes):{personas:[],categories:[]}};
 }
+const spokenTitle=value=>{
+  const text=clean(value);
+  const english=text.match(/\[([^\]]{3,90})\]/);
+  return english?clean(english[1]):text;
+};
 export function conversationFor(source,target,edge,lensId='family',snapshots={}) {
   if(!source||!target||!edge?.reasons?.length) throw new Error('Select a metadata edge first.');
 
@@ -182,7 +187,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
     };
   }
   const lens=LENSES.find(l=>l.id===lensId)||LENSES[0], reason=edge.reasons[0];
-  const term=clean(reason.value), a=clean(source.title), b=clean(target.title);
+  const term=clean(reason.value), a=spokenTitle(source.title), b=spokenTitle(target.title);
   const fact=snapshot=>{
     if(snapshot?.status!=='EXACT_PRIMARY_ACCESSION'||snapshot.matches?.length!==1)return null;
     const match=snapshot.matches[0];if(match.identityConflict)return null;
