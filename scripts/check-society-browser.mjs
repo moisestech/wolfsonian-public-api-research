@@ -26,7 +26,7 @@ try {
   assert.match(await page.locator('#atlas-title').innerText(),/On Munitions/);
   assert.match(await page.locator('#conversation-content').innerText(),/ARTIST-AUTHORED SCENE/);
   assert.match(await page.locator('#conversation-content').innerText(),/Who gets credit for labor/);
-  assert.match(await page.locator('#conversation-content').innerText(),/not a documented relationship/i);
+  assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
 
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await page.screenshot({path:new URL('artifacts/archive-society-overview.png',root).pathname,fullPage:true});
