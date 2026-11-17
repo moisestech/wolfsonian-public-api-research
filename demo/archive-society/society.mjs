@@ -6,6 +6,7 @@ import { reconcileLookup } from '../../src/archive-evidence.mjs';
 import { conversationRecords, lookupSnapshots } from '../../src/lakehouse-matches.mjs';
 import { localImageUrl } from '../../src/local-images.mjs';
 import { OPENING_ACCESSION } from '../../src/presentation-pairs.mjs';
+import { withPublicAnchorFallback } from '../../src/object-lens-core.mjs';
 import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 
@@ -228,7 +229,8 @@ function pair(list,label,value){list.append(node('dt',label),node('dd',value||'N
 function renderRecord(){
   const r=focusRecord(),box=$('record-content');
   box.replaceChildren(node('h2',r.title));
-  if(r.source!=='lakehouse')box.prepend(node('span',r.source==='invented'?'INVENTED EXAMPLE':'LOCAL CSV · SOURCE INPUT','evidence-type'));
+  if(r.source!=='lakehouse')box.prepend(node('span',r.source==='invented'?'INVENTED EXAMPLE':r.source==='public-packet'?'PUBLIC PACKET · IDENTITY ONLY':'LOCAL CSV · SOURCE INPUT','evidence-type'));
+  if(r.source==='public-packet')box.append(node('p','This packet identifies an accession and title only. No direct historical relationship, source-linked image, or staff-tag neighbor has been established for it in this view.','muted'));
   if(photo(r)){const img=node('img');img.src=photo(r);img.alt='Locally supplied image matched to '+r.accession;box.append(img);}
   const list=node('dl');pair(list,'Accession',r.accession);pair(list,'Creator',r.creator);pair(list,'Date',r.date);pair(list,'Categories',(r.tags||[]).filter(t=>t.family==='theme').map(t=>t.value).join(' · '));
   if(r.catalogSubject)pair(list,'Catalog subject',r.catalogSubject);
@@ -302,6 +304,10 @@ async function play(){
         }catch(error){
           if(session!==playback||error.name==='AbortError')return;
           const provider=error.message;
+          // A known-disabled provider is a configuration state, not a transient
+          // audio failure. Preserve this actionable status and avoid retrying
+          // with an unconfirmed local voice or additional network requests.
+          if(/not enabled/i.test(provider))throw error;
           message('voice-status',provider);
           try{await speakOnDevice(turn,localVoice);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
         }
@@ -434,6 +440,9 @@ async function loadLakehouse(){
 }
 const requested=new URLSearchParams(location.search).get('accession');
 await loadLakehouse();
+// Preserve a requested public packet identity even when this graph has no source-backed neighbors.
+// Never infer thematic relationships for the fallback record.
+if(requested)state.records=withPublicAnchorFallback(state.records);
 if(requested&&state.records.some(item=>item.accession===requested))state.seed=requested;
 categories();options();render();
 if(requested&&!state.records.some(item=>item.accession===requested))message('import-status','Requested accession is not in the loaded set. No identity was assumed.');
