@@ -1,0 +1,191 @@
+{
+  "schema": "archive-dreams-curatorial-candidates-v1",
+  "created": "2026-11-17",
+  "status": "research_only_not_runtime",
+  "description": "Museum-published exhibition-checklist facts and artist-authored comparison proposals. This file does not add graph nodes or edges, assert Lakehouse matches, attach object imagery, or represent museum approval.",
+  "source": {
+    "publisher": "The Wolfsonian–FIU",
+    "title": "World’s Fairs: Visions of Tomorrow — exhibition checklist (2025)",
+    "url": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+    "exhibition": "World’s Fairs: Visions of Tomorrow (2025–26)"
+  },
+  "verification": {
+    "publishedChecklist": "verified",
+    "accessionInCurrentLakehouseCapture": "not_verified",
+    "metadataIntersection": "not_established",
+    "imageRights": "not_approved",
+    "scriptReview": "not_approved"
+  },
+  "reviewProcess": [
+    "Verify accession/edition and exact fields in the live institutional record with staff",
+    "Decide if each proposed comparison is a curatorial juxtaposition, not a metadata-proven graph edge",
+    "Request rights-cleared image and distribution permission; use text-only otherwise",
+    "Require editorial review and explicit published-source claim locators before any fictional scene is activated"
+  ],
+  "candidates": [
+    {
+      "accession": "83.2.19",
+      "title": "Futurama (book page spread)",
+      "year": "1939",
+      "creatorOrPublisher": "General Motors Corporation, Detroit, publisher",
+      "priority": "P0",
+      "theme": "Who narrates the future?",
+      "why": "The exhibition checklist describes synchronized narration while visitors moved above an imagined city. Tests corporate authorship and the spectator's prescribed point of view.",
+      "publicEvidence": "1939 Futurama book spread; checklist describes conveyor seating and narrative soundtrack at General Motors pavilion.",
+      "question": "What happens when a visitor can interrupt the voice that explains tomorrow?",
+      "proposedComparisons": [
+        "XC2024.03.1.1",
+        "86.19.57"
+      ],
+      "limits": "This record does not tell us what an individual fairgoer believed, nor prove that any Harlem Tours client attended the Futurama ride.",
+      "existingPacket": null,
+      "publicSource": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+      "sourceStatus": "published_exhibition_checklist",
+      "runtimeStatus": "not_in_active_graph",
+      "proposedComparisonsAre": "artist_curatorial_hypotheses_not_verified_edges"
+    },
+    {
+      "accession": "XC2024.03.1.1",
+      "title": "Harlem Invites You to Visit the New York World's Fair (leaflet)",
+      "year": "1939",
+      "creatorOrPublisher": "Harlem “Hospitality” Tours, New York City, publisher",
+      "priority": "P0",
+      "theme": "Who is addressed by the future?",
+      "why": "An invitation and organized itinerary for African American audiences offers a perspective on public access that differs from the corporate master-plan voice.",
+      "publicEvidence": "The checklist states the advertisement offered tours, access to the Lido Recreation Center pool and endorsements including New York Urban League and Joe Louis.",
+      "question": "Who is invited to a future, and who decides the route to reach it?",
+      "proposedComparisons": [
+        "83.2.19",
+        "TD1989.19.9"
+      ],
+      "limits": "Does not establish segregation within Futurama, actual attendance, visitor experience, or contact with General Motors representatives.",
+      "existingPacket": null,
+      "publicSource": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+      "sourceStatus": "published_exhibition_checklist",
+      "runtimeStatus": "not_in_active_graph",
+      "proposedComparisonsAre": "artist_curatorial_hypotheses_not_verified_edges"
+    },
+    {
+      "accession": "83.6.2",
+      "title": "The Threatening Shadow (unexecuted maquette)",
+      "year": "c. 1938",
+      "creatorOrPublisher": "Alfonso Iannelli, artist",
+      "priority": "P0",
+      "theme": "Which warnings were refused?",
+      "why": "The museum reports that the proposed anti-authoritarian fair sculpture was rejected by organizers; a strong counterweight to technological optimism.",
+      "publicEvidence": "The maquette is listed as never executed; checklist describes a proposed sculpture warning of authoritarian aggression, rejected by fair organizers.",
+      "question": "What if the imagined future cannot make room for its own warning?",
+      "proposedComparisons": [
+        "86.17.1",
+        "83.2.19"
+      ],
+      "limits": "The checklist supports rejection of the proposal, not the full decision process, organizers' private motives, or visitor reactions.",
+      "existingPacket": null,
+      "publicSource": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+      "sourceStatus": "published_exhibition_checklist",
+      "runtimeStatus": "not_in_active_graph",
+      "proposedComparisonsAre": "artist_curatorial_hypotheses_not_verified_edges"
+    },
+    {
+      "accession": "84.6.14",
+      "title": "La Gloire du fer [The Glory of Iron] (sculpture)",
+      "year": "c. 1889",
+      "creatorOrPublisher": "Arthur Waagen, sculptor",
+      "priority": "P1",
+      "theme": "Whose labor builds the future?",
+      "why": "Shows workers constructing the Eiffel Tower, giving the futures narrative an explicit account of labor and material infrastructure.",
+      "publicEvidence": "Checklist identifies the sculpture, materials bronze/tin/brass and its commemoration of Eiffel Tower construction labor.",
+      "question": "Can a monument celebrate progress without making its makers disappear?",
+      "proposedComparisons": [
+        "85.4.64.34",
+        "86.17.1"
+      ],
+      "limits": "No proven connection to the 1917 On Munitions print; the comparison crosses separate moments and contexts.",
+      "existingPacket": null,
+      "publicSource": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+      "sourceStatus": "published_exhibition_checklist",
+      "runtimeStatus": "not_in_active_graph",
+      "proposedComparisonsAre": "artist_curatorial_hypotheses_not_verified_edges"
+    },
+    {
+      "accession": "TD1989.19.9",
+      "title": "Direct Route to New York World's Fair – Pennsylvania Railroad (poster)",
+      "year": "1939",
+      "creatorOrPublisher": "Sascha A. Maurer, designer; Pennsylvania Railroad Company, publisher",
+      "priority": "P1",
+      "theme": "The infrastructure of being present",
+      "why": "Presents the technologies and commercial services that delivered fairgoers to the supposedly universal future.",
+      "publicEvidence": "The checklist names the electrified railroad network and the publicity value of a direct route to the fair.",
+      "question": "Who could reach tomorrow, and on whose terms?",
+      "proposedComparisons": [
+        "XC2024.03.1.1",
+        "86.19.57"
+      ],
+      "limits": "Advertising a route does not establish equitable affordability, ridership, or specific access outcomes.",
+      "existingPacket": null,
+      "publicSource": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+      "sourceStatus": "published_exhibition_checklist",
+      "runtimeStatus": "not_in_active_graph",
+      "proposedComparisonsAre": "artist_curatorial_hypotheses_not_verified_edges"
+    },
+    {
+      "accession": "XB1991.830",
+      "title": "Let's Go to the Fair and Futurama: New York World's Fair, 1964–1965 (pamphlet)",
+      "year": "c. 1964",
+      "creatorOrPublisher": "General Motors Corporation, Detroit, publisher",
+      "priority": "P1",
+      "theme": "When the corporate future returns",
+      "why": "The museum describes a reprise of the Futurama concept at the 1964–65 fair, making recurrence and evolution of the narrated visitor journey visible.",
+      "publicEvidence": "Checklist says the 1964–65 Futurama conveyed visitors using moving theater seats before a vehicle showroom; pamphlet is catalogued with two listed examples/credits.",
+      "question": "Why does the future keep returning as a ride, and what changes between iterations?",
+      "proposedComparisons": [
+        "83.2.19",
+        "XB1992.1640"
+      ],
+      "limits": "The checklist lists additional accession XC2017.01.2.311 for another illustrated example; confirm item-level record, edition and reproduction rights before use.",
+      "existingPacket": null,
+      "publicSource": "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+      "sourceStatus": "published_exhibition_checklist",
+      "runtimeStatus": "not_in_active_graph",
+      "proposedComparisonsAre": "artist_curatorial_hypotheses_not_verified_edges"
+    }
+  ],
+  "existingResearchPackets": [
+    {
+      "accession": "86.17.1",
+      "title": "Trylon and Perisphere",
+      "packet": "WOLF-001",
+      "note": "Publicly prepared packet already in repository; graph inclusion depends on active dataset."
+    },
+    {
+      "accession": "86.19.57",
+      "title": "Your World of Tomorrow",
+      "packet": "WOLF-006",
+      "note": "Publicly prepared packet already in repository; graph inclusion depends on active dataset."
+    },
+    {
+      "accession": "XB1992.1640",
+      "title": "Futurama (1940 booklet)",
+      "packet": "WOLF-007",
+      "note": "Existing public record packet. Different accession and object from the 1939 Futurama book spread."
+    },
+    {
+      "accession": "2012.6.1",
+      "title": "RCA Victor TRK 12",
+      "packet": "WOLF-008",
+      "note": "Existing public research packet; its photo/record is not automatically a cleared asset for the runtime."
+    },
+    {
+      "accession": "XM1999.108.8",
+      "title": "Machine Age exposition catalogue",
+      "packet": "WOLF-003",
+      "note": "Existing public seed packet; on-view object cannot be handled without permission."
+    },
+    {
+      "accession": "85.4.64.34",
+      "title": "On Munitions: Skilled Work",
+      "packet": null,
+      "note": "Already in 300-object matrix and scripted opening set; rights/metadata redistribution unresolved."
+    }
+  ]
+}
