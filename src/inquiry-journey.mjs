@@ -46,7 +46,7 @@ export const OBJECT_ENTRY_QUESTIONS=Object.freeze({
   interpret:'When a catalogue calls an era modern, who is allowed to question that description?'
  }),
  '85.7.383a,b':Object.freeze({
-  observe:'The record identifies a Mappemonde vase with lid. What can we describe without inferring its owner's life?',
+  observe:'The record identifies a Mappemonde vase with lid. What can we describe without inferring its owner’s life?',
   encounter:'A vessel can be looked at and potentially used. Which kind of encounter are we imagining?',
   provenance:'What could establish who designed or possessed the vase, beyond its title?',
   systems:'If a world can be made decorative, whose viewpoint of that world is presented?',
