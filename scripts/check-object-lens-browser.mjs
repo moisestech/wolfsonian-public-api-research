@@ -41,6 +41,24 @@ try{
   assert.match(archivist,/original pages/);
   assert.match(await page.locator('#evidence-list').innerText(),/XM1999\.108\.8/);
   assert.match(await page.locator('#evidence-list').innerText(),/1927/);
+
+  assert.equal(await page.locator('#question-options button').count(),6);
+  assert.match(await page.locator('#question-answer').innerText(),/Fernand Léger/);
+  await page.locator('#answer-evidence').evaluate(node=>{node.open=true;});
+  assert.match(await page.locator('#answer-citations').innerText(),/cover designer|Cover designer/i);
+  assert.equal(await page.locator('#answer-citations a').count()>0,true);
+  assert.match(await page.locator('#answer-unknowns').innerText(),/unknown/i);
+  await page.locator('[data-question="network"]').click();
+  assert.match(await page.locator('#question-answer').innerText(),/Jane Heap/);
+  await page.locator('[data-reader="worker"]').click();
+  const workerAnswer=await page.locator('#question-answer').innerText();
+  await page.locator('[data-reader="archivist"]').click();
+  assert.notEqual(await page.locator('#question-answer').innerText(),workerAnswer);
+  await page.locator('[data-question="labor"]').click();
+  assert.match(await page.locator('#question-answer').innerText(),/Not established/);
+  assert.match(await page.locator('#answer-citations').innerText(),/No directly verified claim/);
+  assert.match(await page.locator('#answer-unknowns').innerText(),/original/i);
+
   assert.equal((await page.locator('#handoff').getAttribute('href')), '../archive-society/?accession=XM1999.108.8');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Phone width should not overflow');
   await mkdir(new URL('artifacts/',root),{recursive:true});
