@@ -771,6 +771,10 @@ function updateVisitorGuide(){
   message('visitor-source',info.kind+' · '+info.badge);
   message('visitor-object',info.title+(info.accession?' · '+info.accession:''));
   message('visitor-connection',info.line);
+  const current=state.researchPath?.proposal;
+  message('arrival-connection',current
+    ? 'Artist-proposed comparison: '+current+' This is a question for research, not a documented historical meeting.'
+    : info.line);
 }
 async function service(path,options={}){
   const token=$('access-token').value;
