@@ -55,7 +55,7 @@ export function objectInquiryDialogue(record={accession:'XX1990.1484',title:'Spa
     {speaker:'Visitor',phase:'interpret',type:'question',text:'So the catalog can identify you without telling me where you are?'},
     {speaker:'Archivist · fictional research protocol',phase:'interpret',type:'source_limit',text:'Yes. A catalog identity and a physical container are different systems. A verified join and display permission would be needed to connect them.'},
   ];
-  return {title,accession,turns,disclaimer:'All dialogue is artist-authored fiction, not an object's testimony. This method does not establish a historical relationship or storage location.'};
+  return {title,accession,turns,disclaimer:"All dialogue is artist-authored fiction, not an object's testimony. This method does not establish a historical relationship or storage location."};
 }
 export function stageForQuestion(number){
   return INQUIRY_STAGES.find(s=>s.numbers.includes(Number(number))) || null;
