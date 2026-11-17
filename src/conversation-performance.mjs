@@ -69,6 +69,7 @@ export function directConversation(conversation,voices=[],roleOverrides={},opts=
   const sceneId=conversation.sceneId||conversation.id||'metadata-fallback';
   const score=PERFORMANCE_SCORE[conversation.sceneId]||null;
   const style=opts.style==='continuity'?'continuity':'scene-variety';
+  const tone=opts.tone==='poetic'?'poetic':'critical';
   const archivistMode=opts.archivistMode==='plural'?'plural':'single';
   const archivistOverride=safeVoice(roleOverrides.archivist,available);
   // Reserve a stable, device-local Archivist for the entire exhibition.
@@ -105,13 +106,17 @@ export function directConversation(conversation,voices=[],roleOverrides={},opts=
     if(voice){assigned.set(speakerId,voice);allocated.add(voice.voiceURI);}
     return {
       index,role:turn.role,speakerId,delivery:label,direction:delivery.label,
-      rate:delivery.rate,pitch:delivery.pitch,voice:voice||null,
+      rate:turn.role==='archivist'?delivery.rate
+        :tone==='poetic'?Math.max(0.84,Number((delivery.rate*0.94).toFixed(2))):delivery.rate,
+      pitch:turn.role==='archivist'?delivery.pitch
+        :tone==='poetic'?Number((delivery.pitch*0.98).toFixed(2)):delivery.pitch,
+      voice:voice||null,
       voiceURI:voice?.voiceURI||null,
       engine:'browser-local-only'
     };
   });
   return {
-    sceneId,style,archivistMode,localOnly:true,editorialQuestion:score?.question||null,
+    sceneId,style,tone,archivistMode,localOnly:true,editorialQuestion:score?.question||null,
     tension:score?.tension||null,turns:parts
   };
 }
