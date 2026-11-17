@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { buildStorageTopology, inspectStorageNode } from '/src/storage-topology.mjs';
-import { INQUIRY_STAGES, objectInquiryDialogue, SOURCE_CREDIT } from '/src/object-inquiry.mjs';
+import { INQUIRY_STAGES, objectInquiryPath, SOURCE_CREDIT } from '/src/object-inquiry.mjs';
 
 const $=id=>document.getElementById(id);
 const model=buildStorageTopology();
@@ -31,11 +31,13 @@ function displayPrompt(){
   const stage=INQUIRY_STAGES.find(s=>s.id===$('inquiry').value)||INQUIRY_STAGES[0];
   setText('inquiry-prompt',stage.prompt+' '+stage.examples[0]);
 }
-$('inquiry').addEventListener('change',displayPrompt);
+$('inquiry').addEventListener('change',()=>{displayPrompt();if(!$('dialogue').hidden)showDialogue();});
 displayPrompt();
 function showDialogue(){
   const el=$('dialogue');el.replaceChildren();
-  const study=objectInquiryDialogue(model.identities.find(i=>i.id===state.selected)||model.identities[0]);
+  const selected=model.identities.find(i=>i.id===state.selected);
+  const study=objectInquiryPath(selected||model.identities[0],$('inquiry').value);
+  if(!selected){const note=document.createElement('p');note.textContent='This authored dialogue concerns an UNLOCATED public catalog identity, not the selected fictional box. No association between them is implied.';el.append(note);}
   const pre=document.createElement('p');pre.textContent=study.disclaimer;el.append(pre);
   for(const turn of study.turns){
     const card=document.createElement('section');card.className='turn';card.dataset.type=turn.type;
