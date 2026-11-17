@@ -29,3 +29,18 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
 footer{max-width:1450px;margin:auto;padding:14px 28px 35px;color:#bcc8be;font-size:13px;border-top:1px solid var(--line)}
 @media(max-width:840px){main{grid-template-columns:1fr;padding:10px;gap:11px}header{padding:20px 16px}.inspector{max-height:none;padding:17px}#render-host{height:58vh;min-height:320px}.stage-head{padding:10px}.stage-head p{font-size:11px}footer{padding:14px 16px} }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+
+#inquiry-trail{margin-top:22px;border-top:1px solid var(--line);padding-top:8px}
+#inquiry-trail h3{font-family:Georgia,serif;font-weight:normal;font-size:21px}
+#trail-status{font-size:12px;color:#eff8ed}
+.trail-list{list-style:decimal;padding-left:22px;display:grid;gap:8px;max-height:265px;overflow-y:auto}
+.trail-list li{font-size:13px;color:#f2f4ec;border-bottom:1px solid #43544c;padding:4px 0 9px}
+.trail-list li::marker{color:var(--teal);font:12px ui-monospace,monospace}
+.trail-list strong{display:block;font-size:13px;font-weight:600}
+.trail-list span{display:block;color:#c3d2c7;font-size:12px;margin-top:3px}
+.trail-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}
+.trail-actions button{text-align:left;white-space:normal}
+.trail-actions button:nth-child(n+3){background:#21312b;color:#d4ece0;border-color:#617f71}
+#trail-bridge{border-left:3px solid var(--teal);background:#162923}
+@media(max-width:420px){.trail-actions{grid-template-columns:1fr}}
