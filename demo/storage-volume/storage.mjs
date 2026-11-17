@@ -1,11 +1,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { buildStorageTopology, inspectStorageNode } from '/src/storage-topology.mjs';
-import { INQUIRY_STAGES, objectInquiryPath, SOURCE_CREDIT } from '/src/object-inquiry.mjs';
+import { INQUIRY_STAGES, SOURCE_CREDIT } from '/src/object-inquiry.mjs';
+import { emptyInquiryTrail, addInquiryVisit, summarizeInquiryTrail, suggestInquiryMove, composeInquiryEpisode, exportInquiryTrail, INQUIRY_MOVES } from '/src/inquiry-journey.mjs';
 
 const $=id=>document.getElementById(id);
 const model=buildStorageTopology();
 const state={selected:'XX1990.1484',level:'all',showBoxes:true,showIdentities:true};
+let trail=emptyInquiryTrail();
+let currentEpisode=null;
 const setText=(id,value)=>{$(id).textContent=String(value)};
 const toList=(items,host,labeler)=>{
   for(const item of items){
@@ -33,11 +36,33 @@ function displayPrompt(){
 }
 $('inquiry').addEventListener('change',()=>{displayPrompt();if(!$('dialogue').hidden)showDialogue();});
 displayPrompt();
+function renderTrail(){
+  const summary=summarizeInquiryTrail(trail);
+  setText('trail-status',summary.encounters+' questions followed · '+summary.objects+' catalog identities · '+summary.movements+' different lines of inquiry.');
+  const list=$('trail-list');list.replaceChildren();
+  for(const visit of trail.visits){
+    const item=document.createElement('li');
+    const title=document.createElement('strong');title.textContent=visit.title+' · '+INQUIRY_STAGES.find(s=>s.id===visit.stageId).label;
+    const question=document.createElement('span');question.textContent=visit.question+'  [UNRESOLVED · ARTIST QUESTION]';
+    item.append(title,question);list.append(item);
+  }
+  setText('trail-bridge',currentEpisode?
+    currentEpisode.missionMove+' — '+currentEpisode.closingQuestion+
+    ' The next encounter can test this question; it does not prove that the objects were historically connected.':
+    'Start with one question. Each encounter can challenge what came before.');
+}
 function showDialogue(){
   const el=$('dialogue');el.replaceChildren();
   const selected=model.identities.find(i=>i.id===state.selected);
-  const study=objectInquiryPath(selected||model.identities[0],$('inquiry').value);
-  if(!selected){const note=document.createElement('p');note.textContent='This authored dialogue concerns an UNLOCATED public catalog identity, not the selected fictional box. No association between them is implied.';el.append(note);}
+  if(!selected){
+    const note=document.createElement('p');
+    note.textContent='That is a fictional demonstration box, not a cataloged object. Select a public catalog identity to ask a question; no fictional box is connected to a real accession.';
+    el.append(note);currentEpisode=null;renderTrail();return;
+  }
+  const stageId=$('inquiry').value;
+  const study=composeInquiryEpisode(selected,stageId,trail);
+  trail=addInquiryVisit(trail,{accession:selected.id,title:selected.title,stageId},model.identities.map(x=>x.id));
+  currentEpisode=study;
   const pre=document.createElement('p');pre.textContent=study.disclaimer;el.append(pre);
   for(const turn of study.turns){
     const card=document.createElement('section');card.className='turn';card.dataset.type=turn.type;
@@ -46,13 +71,43 @@ function showDialogue(){
     const p=document.createElement('p');p.textContent=turn.text;
     card.append(name,meta,p);el.append(card);
   }
-  const source=document.createElement('small');source.textContent=SOURCE_CREDIT;el.append(source);
+  const end=document.createElement('p');end.className='prompt';end.textContent='The question we cannot settle yet: '+study.closingQuestion;
+  const source=document.createElement('small');source.textContent=SOURCE_CREDIT+' · '+study.museumStatus;
+  el.append(end,source);
+  renderTrail();
 }
 $('dialogue-toggle').addEventListener('click',()=>{
   const wasHidden=$('dialogue').hidden;$('dialogue').hidden=!wasHidden;
   $('dialogue-toggle').setAttribute('aria-expanded',String(wasHidden));
   if(wasHidden){showDialogue();$('dialogue').scrollIntoView({block:'nearest',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
 });
+$('follow-question').addEventListener('click',()=>{
+  const selected=model.identities.find(x=>x.id===state.selected);
+  if(!selected){setText('trail-bridge','Choose an unlocated catalog identity first. The fictional box cannot serve as evidence.');return;}
+  $('inquiry').value=suggestInquiryMove(trail,{accession:selected.id});
+  displayPrompt();$('dialogue').hidden=false;$('dialogue-toggle').setAttribute('aria-expanded','true');
+  showDialogue();
+});
+$('compare-object').addEventListener('click',()=>{
+  const current=model.identities.findIndex(x=>x.id===state.selected);
+  const next=model.identities[(current+1+model.identities.length)%model.identities.length];
+  select(next.id);
+  $('dialogue').hidden=false;$('dialogue-toggle').setAttribute('aria-expanded','true');
+  if(current===-1)showDialogue();
+});
+$('clear-trail').addEventListener('click',()=>{
+  trail=emptyInquiryTrail();currentEpisode=null;$('dialogue').hidden=true;
+  $('dialogue-toggle').setAttribute('aria-expanded','false');
+  $('dialogue').replaceChildren();renderTrail();
+});
+$('download-trail').addEventListener('click',()=>{
+  const data=JSON.stringify(exportInquiryTrail(trail),null,2);
+  const url=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+  const link=document.createElement('a');link.href=url;link.download='archive-dreams-inquiry-path.json';
+  document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+renderTrail();
 function select(id){
   const detail=inspectStorageNode(model,id);if(!detail)return;
   state.selected=id;setText('selected-title',detail.title);setText('selected-detail',detail.description);
