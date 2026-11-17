@@ -41,8 +41,24 @@
       <p id="reader-script" aria-live="polite"></p>
       <details><summary>Reveal reader prompt and blind spot</summary><p id="reader-prompt"></p><p id="reader-blindspot"></p></details>
     </div>
+    <div id="curated-questions" hidden aria-labelledby="curated-heading">
+      <h3 id="curated-heading">Ask the research</h3>
+      <p class="small">These prepared questions use public institutional source notes; they are not responses from a live AI model or from historical speakers.</p>
+      <div id="question-options" class="question-options" role="group" aria-label="Choose a question about this object"></div>
+      <article id="question-panel" class="question-panel" aria-live="polite">
+        <p id="question-status" class="eyebrow"></p>
+        <h4 id="question-title"></h4>
+        <p id="question-answer"></p>
+        <details id="answer-evidence">
+          <summary>Why can we say this? Inspect claims and sources</summary>
+          <ol id="answer-citations"></ol>
+          <p id="answer-unknowns" class="small"></p>
+          <p class="small">The source is the museum's exhibition checklist, not a verified page-by-page reading of the original 1927 catalogue. No museum image rights are implied.</p>
+        </details>
+      </article>
+    </div>
     <div class="button-row">
-      <button id="speak" type="button">Read aloud using a local voice</button>
+      <button id="speak" type="button">Read selected text aloud using a local voice</button>
       <button id="stop-speech" type="button" class="secondary">Stop voice</button>
     </div>
     <p id="speech-status" class="small" role="status">Transcript is always visible. No external voice service.</p>
