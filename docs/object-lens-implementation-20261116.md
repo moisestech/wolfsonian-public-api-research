@@ -25,7 +25,7 @@
 ## P1 research packets (next)
 One verified detail, one contradiction, one source, one interpretive uncertainty for each of 6–8 objects. Document original page sources and exact credit/rights. Prioritize:
 - Making the Engine 85.4.64.43 ↔ industrial safety notice TD1989.318.1. Existing metadata shares Machines, not historical causation.
-- Machine-Age catalogue XM1999.108.8. Request the original essays/pages from Hannah with their reuse policy.
+- Machine-Age catalogue XM1999.108.8 is ON VIEW. Seek existing digitized/alternate-copy pages and rights guidance from Hannah; do not request handling or removal of the displayed copy.
 - X-ray Shoe Sizer XX1990.7. Verify from the exhibition source before adding as a public packet; not yet in saved 76 matches.
 - First visitor-owned QR card and camera barcode detection with a no-match state.
 
@@ -44,3 +44,10 @@ npm run demo:society
 
 ## Stop conditions
 No new staff workbook or saved Lakehouse dataset committed. No collection photographs, box IDs, undocumented accessions, made-up historical quotations, external automatic speech, or public rollout. Link to GitHub issue #25 when requesting review. Preserve existing PR branches and their uncommitted work.
+
+
+## On-view continuation
+
+The physical Wolfsonian catalogue is currently exhibited; no hands-on object request. Use the museum's official checklist for accession and cover credit, a separate digitized copy for verified interior-page research, and the May 1927 New Yorker review for contemporary reception. Each source is separately labeled in src/machine-age-onview.mjs. HathiTrust and historical Hagley discovery leads are useful but their access/edition are not confirmed.
+
+The mobile demo now provides research-copy links and a three-persona treatment of the 1927 eyewitness review. Local citations, explicit unknowns, no live model and no unlicensed page scans remain the release contract. See test/machine-age-onview.test.mjs and the mobile Chromium smoke check. Museum photography, film and public posting remain subject to staff permission.
