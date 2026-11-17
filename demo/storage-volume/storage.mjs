@@ -62,7 +62,7 @@ function showDialogue(){
     el.append(note);currentEpisode=null;renderTrail();return;
   }
   const stageId=$('inquiry').value;
-  const study=composeInquiryEpisode(selected,stageId,trail);
+  const study=composeInquiryEpisode({accession:selected.id,title:selected.title},stageId,trail);
   trail=addInquiryVisit(trail,{accession:selected.id,title:selected.title,stageId},model.identities.map(x=>x.id));
   currentEpisode=study;
   const pre=document.createElement('p');pre.textContent=study.disclaimer;el.append(pre);
