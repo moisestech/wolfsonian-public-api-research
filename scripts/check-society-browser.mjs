@@ -96,6 +96,7 @@ try {
   assert.equal((await page.request.get(base+'/.env.local')).status(),404);
   assert.equal((await page.request.get(base+'/server/archive-services.mjs')).status(),404);
   assert.equal((await page.request.get(base+'/demo/discovery-lab/')).status(),200);
+  await page.locator('#admin').evaluate(el=>{el.hidden=true;});
   await page.setViewportSize({width:390,height:844});
   await page.locator('#more-toggle').click();
   await page.locator('#atlas-mode').uncheck();
