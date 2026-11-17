@@ -7,6 +7,16 @@
   <link rel="stylesheet" href="./society.css">
 </head>
 <body>
+<div id="demo-gate">
+  <form id="gate-form">
+    <p class="eyebrow">ARCHIVE DREAMS</p>
+    <h1>The conversational atlas</h1>
+    <label for="gate-password">Password</label>
+    <input id="gate-password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">Enter</button>
+    <p id="gate-error" hidden>That password does not open this demo.</p>
+  </form>
+</div>
 <a class="skip" href="#atlas">Skip to the atlas</a>
 <header class="topbar">
   <a class="wordmark" href="#atlas"><svg class="symbol" viewBox="0 0 32 32" aria-hidden="true"><rect x="2.5" y="2.5" width="27" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 23V13h4.5v10M14.5 23V8h5v15M21.5 23v-7H25v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>ARCHIVE DREAMS <em>in Public</em></span></a>
@@ -182,5 +192,19 @@
 <script type="importmap">
 {"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/","three-forcegraph":"/demo/vendor/three-forcegraph.mjs","d3-force-3d":"/demo/vendor/d3-force-3d.mjs"}}
 </script>
-<script type="module" src="./society.mjs"></script>
+<script type="module">
+const local=location.hostname==='127.0.0.1'||location.hostname==='localhost';
+async function start(){
+  document.documentElement.classList.add('demo-open');
+  await import('./society.mjs');
+}
+if(local||sessionStorage.getItem('archive-demo-open')==='1')start();
+document.getElementById('gate-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const password=new FormData(event.target).get('password');
+  const response=await fetch('/api/demo-gate',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({password})});
+  if(response.ok){sessionStorage.setItem('archive-demo-open','1');start();}
+  else document.getElementById('gate-error').hidden=false;
+});
+</script>
 </body></html>
