@@ -1,5 +1,7 @@
 import { buildDiscoveryIndex, parseMatrixCsv, recommendNeighbors } from '../../src/discovery-graph.mjs';
-import { inventedRecords, societyView, conversationFor, LENSES, WORLD, categoryIconUrl, district, deviceCast } from '../../src/archive-society.mjs';
+import { inventedRecords, societyView, conversationFor, LENSES, WORLD, categoryIconUrl, district } from '../../src/archive-society.mjs';
+import {withConversationTone,normalizeTone} from '../../src/conversation-tones.mjs';
+import {directConversation} from '../../src/conversation-performance.mjs';
 import { CARD_BY_ID, portraitUrl } from '../../src/discovery-personas.mjs';
 import { applyLayers, buildAtlasGraph, recordsToAtlasInput } from '../../src/atlas-graph.mjs';
 import { reconcileLookup } from '../../src/archive-evidence.mjs';
@@ -18,8 +20,10 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
   mapMode:'conversation',matrixObjects:MATRIX_OBJECTS,matrixRecords:matrixToRecords(MATRIX_OBJECTS),matrixIndex:null,room:null,district:null,
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
-  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null};
+  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,
+  tone:normalizeTone(new URLSearchParams(location.search).get('tone'))};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
+$('conversation-tone').value=state.tone;
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
 const message=(id,text)=>{const el=$(id);el.textContent=text;if(id==='voice-status')el.hidden=!text;};
@@ -349,7 +353,7 @@ function renderConversation(){
   if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
   const source=record(),target=viewingRecords().find(r=>r.accession===edge.target);
   if(!source||!target){box.append(node('h2','No shared category in this view.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
-  const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
+  const c=withConversationTone(conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)}),state.tone);state.conversation=c;
   paintScene(c,edge);
   const chat=node('div',undefined,'chat');
   chat.style.setProperty('--link',tagColor(edge.reasons[0].value));
@@ -539,12 +543,20 @@ async function play(){
   if(mode==='elevenlabs'&&!$('external-approved').checked){message('voice-status','Review the displayed transcript and confirm external-processing approval first.');return;}
   state.playing=true;$('play').disabled=true;document.querySelectorAll('.conversation-edge.selected').forEach(e=>e.classList.add('speaking'));
   try{
-    let localVoice;
+    let performance=directConversation(conversation,window.speechSynthesis?.getVoices?.()||[],{},{
+      style:$('voice-casting-style').value,
+      archivistMode:$('archivist-voice-mode').value,
+      tone:state.tone
+    });
     if(mode==='device'){
       if(!window.speechSynthesis)throw new Error('No device speech service. The written transcript remains available.');
-      localVoice=window.speechSynthesis.getVoices().find(v=>v.localService);
-      if(!localVoice){await new Promise(r=>setTimeout(r,500));localVoice=window.speechSynthesis.getVoices().find(v=>v.localService);}
-      if(!localVoice)throw new Error('No local device voice is installed. Use the written transcript or configure ElevenLabs.');
+      if(!performance.turns.some(part=>part.voice)){
+        await new Promise(resolve=>setTimeout(resolve,500));
+        performance=directConversation(conversation,window.speechSynthesis.getVoices(),{},{
+          style:$('voice-casting-style').value,archivistMode:$('archivist-voice-mode').value,tone:state.tone
+        });
+      }
+      if(!performance.turns.some(part=>part.voice))throw new Error('No installed device-local voice. The transcript remains available.');
     }
     message('voice-status','');
     for(const [i,turn]of conversation.turns.entries()){
@@ -555,7 +567,7 @@ async function play(){
       markSpeaker(turn.role);
       document.querySelectorAll('#conversation-content .turn').forEach((el,index)=>el.classList.toggle('speaking',index===i));
       if(mode==='device'){
-        await speakOnDevice(turn);
+        await speakOnDevice(turn,performance.turns[i]);
       }else{
         try{
           voiceAbort=new AbortController();
@@ -573,7 +585,7 @@ async function play(){
           // with an unconfirmed local voice or additional network requests.
           if(/not enabled/i.test(provider))throw error;
           message('voice-status',provider);
-          try{await speakOnDevice(turn,localVoice);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
+          try{if(!performance.turns[i].voice)throw new Error('No device-local voice.');await speakOnDevice(turn,performance.turns[i]);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
         }
       }
     }
@@ -581,15 +593,14 @@ async function play(){
   }catch(error){if(session===playback)message('voice-status',error.message);}
   finally{if(session===playback){state.playing=false;$('play').disabled=false;document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));$('voice-controls')?.classList.remove('playing');stage.setSpeaking('');markSpeaker('');}}
 }
-function speakOnDevice(turn){
+function speakOnDevice(turn,direction){
   return new Promise((resolve,reject)=>{
     if(!window.speechSynthesis){reject(new Error('No device speech service. The written transcript remains available.'));return;}
     cancelDeviceSpeech=resolve;
-    const cast=deviceCast(turn.role,window.speechSynthesis.getVoices());
     const utterance=new SpeechSynthesisUtterance(turn.text);
-    if(cast.voice)utterance.voice=cast.voice;
-    utterance.rate=cast.rate;
-    utterance.pitch=cast.pitch;
+    if(direction?.voice){utterance.voice=direction.voice;utterance.lang=direction.voice.lang;}
+    utterance.rate=direction?.rate??.94;
+    utterance.pitch=direction?.pitch??1;
     utterance.onend=()=>{cancelDeviceSpeech=null;resolve();};
     utterance.onerror=()=>{cancelDeviceSpeech=null;reject(new Error('Device speech stopped or unavailable.'));};
     window.speechSynthesis.speak(utterance);
@@ -735,6 +746,29 @@ for(const button of document.querySelectorAll('[data-stop]'))button.addEventList
 for(const button of document.querySelectorAll('[data-map]'))button.addEventListener('click',()=>setMapMode(button.dataset.map));
 $('present').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{message('voice-status','Full screen unavailable on this device.');}});
 $('admin-toggle').addEventListener('click',()=>{const open=$('admin').hidden;$('admin').hidden=!open;$('admin-toggle').setAttribute('aria-expanded',String(open));});
+$('conversation-tone').addEventListener('change',()=>{
+  stop();
+  state.tone=normalizeTone($('conversation-tone').value);
+  const url=new URL(location.href);
+  if(state.tone==='critical')url.searchParams.delete('tone');
+  else url.searchParams.set('tone',state.tone);
+  history.replaceState(history.state,'',url.pathname+url.search+url.hash);
+  renderConversation();
+});
+window.addEventListener('popstate',()=>{
+  state.tone=normalizeTone(new URLSearchParams(location.search).get('tone'));
+  $('conversation-tone').value=state.tone;
+  renderConversation();
+});
+for(const selector of ['archivist-voice-mode','voice-casting-style']){
+  $(selector).addEventListener('change',()=>{
+    stop();
+    message('voice-status',selector==='archivist-voice-mode'&&$('archivist-voice-mode').value==='plural'
+      ?'Experimental plural Archivists selected for future plays.'
+      :'Voice direction updated for this session.');
+  });
+}
+
 $('access-token').addEventListener('input',()=>sessionStorage.setItem('archive-demo-token',$('access-token').value));
 if(sessionStorage.getItem('archive-demo-token'))$('access-token').value=sessionStorage.getItem('archive-demo-token');
 window.addEventListener('beforeunload',()=>{stop();});

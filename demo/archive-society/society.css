@@ -246,3 +246,25 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
 .edge-path-actions{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 18px}
 .edge-path-actions button{flex:1 1 130px;overflow-wrap:anywhere;font-size:12px}
 .edge-path-actions button:first-child{background:#366c63;color:#fff;border-color:#7ed6c5;font-weight:700}
+
+/* Nov 19: concise visitor-facing authored register control. */
+.conversation-tone-selector{
+ display:flex;align-items:center;justify-content:space-between;gap:10px;
+ margin:6px 0 12px;padding:8px 0 12px;border-bottom:1px solid #494949
+}
+.conversation-tone-selector label{
+ font:700 11px/1.35 ui-monospace,monospace;
+ color:#ddd;letter-spacing:.06em;margin:0
+}
+.conversation-tone-selector select{
+ flex:0 1 240px;max-width:66%;min-height:44px;
+ border:1px solid #606060;border-radius:8px;
+ color:#f5f5f5;background:#222;padding:8px;font-size:13px
+}
+#voice-director-settings{margin:12px 0;border:1px solid #555;border-radius:9px;padding:11px}
+#voice-director-settings summary{color:#f1f1f1;font-weight:700}
+#voice-director-settings label{margin:12px 0 4px}
+@media(max-width:700px){
+ .conversation-tone-selector{gap:6px}
+ .conversation-tone-selector select{font-size:12px;padding:7px}
+}
