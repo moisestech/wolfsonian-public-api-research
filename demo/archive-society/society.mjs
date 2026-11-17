@@ -128,6 +128,25 @@ window.addEventListener('popstate',()=>{
 });
 
 
+function renderPerformancePreview(){
+  const list=$('voice-cast-preview');list.replaceChildren();
+  const c=state.conversation;
+  if(!c){list.append(node('p','Select an object-to-object conversation to inspect its cast.','muted'));return;}
+  const plan=directConversation(c,window.speechSynthesis?.getVoices?.()||[],voiceSelections,{
+    style:$('voice-casting-style').value
+  });
+  list.append(node('p',plan.tension||'Metadata-based exchange','performance-tension'));
+  for(const part of plan.turns){
+    const description=part.role==='archivist'?'Archivist':part.role==='objectA'?'Object A':'Object B';
+    const entry=node('div',undefined,'voice-preview-entry');
+    entry.append(
+      node('strong',description+' · '+part.direction),
+      node('span',part.voice?part.voice.name+' ('+part.voice.lang+')':'No installed local voice · text only')
+    );
+    list.append(entry);
+  }
+}
+
 function renderLocalVoiceChoices(){
   const installed=localVoiceOptions(window.speechSynthesis?.getVoices?.()||[]);
   for(const role of SPEAKER_ROLES){
@@ -144,11 +163,13 @@ function renderLocalVoiceChoices(){
   $('local-voice-status').textContent=installed.length
     ?installed.length+' local voice'+(installed.length===1?'':'s')+' available · no per-play API cost'
     :'No device-local voices found. The full written conversation remains available.';
+  renderPerformancePreview();
 }
 document.querySelectorAll('[data-voice-role]').forEach(selector=>
   selector.addEventListener('change',()=>{
     stop();voiceSelections[selector.dataset.voiceRole]=selector.value;
     message('voice-status','Local voice cast updated for this session.');
+    renderPerformancePreview();
   })
 );
 window.speechSynthesis?.addEventListener?.('voiceschanged',renderLocalVoiceChoices);
@@ -157,6 +178,7 @@ $('voice-casting-style').addEventListener('change',()=>{
   message('voice-status',$('voice-casting-style').value==='continuity'
     ?'Object identity mode: the same installed voice is reused for each accession across scenes.'
     :'Scene variation mode: voices follow the dramatic context of each conversation.');
+  renderPerformancePreview();
 });
 renderLocalVoiceChoices();
 
@@ -408,6 +430,7 @@ function renderConversation(){
   details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);$('voice-controls').hidden=false;$('play').disabled=state.playing;
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn 1 of '+c.turns.length;
   updateTurnFocus();
+  renderPerformancePreview();
 }
 function pair(list,label,value){list.append(node('dt',label),node('dd',value||'Not supplied'));}
 function renderRecord(){
