@@ -71,7 +71,7 @@ test('storage study is wired for safe static output and read-only local serving'
   assert.match(js,/THREE.WebGLRenderer/);
   assert.match(js,/OrbitControls/);
   assert.match(js,/select\(item.id\)/);
-  assert.match(js,/objectInquiryDialogue/);
+  assert.match(js,/objectInquiryPath/);
   assert.match(publicBuild,/src\/storage-topology.mjs/);
   assert.match(publicBuild,/src\/object-inquiry.mjs/);
   assert.match(localServer,/demo\/storage-volume/);
