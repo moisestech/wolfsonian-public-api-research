@@ -18,6 +18,41 @@ export const INQUIRY_MOVES=Object.freeze({
  systems:Object.freeze({mission:'Question persuasion and power',axis:'political',question:'Which design choices turn a claim into something persuasive?',handoff:'What does this historical promise change in our present?',next:'interpret'}),
  interpret:Object.freeze({mission:'Connect past, present and future',axis:'future',question:'What evidence could overturn our reading?',handoff:'What would another close look reveal?',next:'observe'})
 });
+/**
+ * Object-specific OPEN QUESTIONS, written solely from the approved display
+ * identities in the public research packet. These are interpretive questions,
+ * not statements about documented original audiences, makers, or ownership.
+ */
+export const OBJECT_ENTRY_QUESTIONS=Object.freeze({
+ 'XX1990.1484':Object.freeze({
+  observe:'The record calls you a radio. What can shape tell us that the word “radio” cannot?',
+  encounter:'What kind of daily listening might a radio invite, and whose experience would differ?',
+  provenance:'A maker, a buyer, a repairer: which of their histories can a catalog record establish?',
+  systems:'Who controlled the voices heard through a radio, and what could we actually verify?',
+  interpret:'When a device speaks into a home, who gets to decide what counts as information?'
+ }),
+ '86.17.1':Object.freeze({
+  observe:'The title names the Trylon and Perisphere. What forms can we actually describe before calling them futuristic?',
+  encounter:'What might a miniature World’s Fair model ask its viewer to imagine—and whose viewpoint is absent?',
+  provenance:'Who designed this model, and which source could distinguish the model from the structures it references?',
+  systems:'Who was invited into the promise of tomorrow? What evidence could make that question answerable?',
+  interpret:'Which promised futures are still with us, even when their monuments are gone?'
+ }),
+ 'XM1999.108.8':Object.freeze({
+  observe:'This is an exposition catalogue. What does its cover show, and what might we be projecting onto it?',
+  encounter:'Does reading a catalogue change how a visitor imagines the objects in a show?',
+  provenance:'Which people wrote, designed, printed and circulated this catalogue—and which names are established?',
+  systems:'Who gets to write the story of machines, and who did the work outside the printed page?',
+  interpret:'When a catalogue calls an era modern, who is allowed to question that description?'
+ }),
+ '85.7.383a,b':Object.freeze({
+  observe:'The record identifies a Mappemonde vase with lid. What can we describe without inferring its owner's life?',
+  encounter:'A vessel can be looked at and potentially used. Which kind of encounter are we imagining?',
+  provenance:'What could establish who designed or possessed the vase, beyond its title?',
+  systems:'If a world can be made decorative, whose viewpoint of that world is presented?',
+  interpret:'What does representing a world as an object allow us to notice—or overlook?'
+ })
+});
 const normalize=v=>String(v??'').replace(/\s+/g,' ').trim().slice(0,180);
 const stages=new Set(INQUIRY_STAGES.map(s=>s.id));
 
@@ -74,6 +109,8 @@ export function composeInquiryEpisode(record,stageId,trail=emptyInquiryTrail()){
  const preceding=trail.visits?.at(-1);
  const move=INQUIRY_MOVES[stageId];
  const turns=scene.turns.map(t=>({...t}));
+ const entry=OBJECT_ENTRY_QUESTIONS[record.accession]?.[stageId];
+ if(entry && turns[0]?.role==='visitor')turns[0].text=entry;
  let bridge=null;
  if(preceding){
   const previous=INQUIRY_STAGES.find(s=>s.id===preceding.stageId);
