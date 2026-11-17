@@ -42,6 +42,10 @@ test('comparison distinguishes period review and institutional checklist, with s
     assert.equal(a.segments[0].claims.every(c=>c.sourceKind==='contemporary_witness_review'),true);
     assert.ok(a.segments[0].claims.every(c=>c.url.includes('newyorker.com')));
     assert.ok(a.segments[1].claims.every(c=>c.url.includes('wolfsonian.org')));
+    assert.ok(a.segments[0].sourceReference.url.includes('newyorker.com'));
+    assert.ok(a.segments[1].sourceReference.url.includes('wolfsonian.org'));
+    assert.equal(a.segments[1].sourceReference.establishesNoAdditionalClaims,true);
+
     assert.equal(new Set(a.claimIds).size,a.claimIds.length);
     assert.ok(a.text.includes('different things'));
   }
