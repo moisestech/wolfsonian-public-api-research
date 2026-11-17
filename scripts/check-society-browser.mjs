@@ -77,10 +77,11 @@ try {
   await page.locator('[data-panel=conversation]').evaluate(button=>button.click());await page.locator('#external-approved').check();await page.locator('#play').evaluate(button=>button.click());
   await page.waitForFunction(()=>document.querySelector('#voice-status').textContent.includes('not enabled'));
   assert.equal(voiceRequests.length,1);
-  await page.locator('#reading-toggle').click();await page.locator('[data-lens="archivist"]').click();assert.equal(await page.locator('#external-approved').isChecked(),false);
   await page.locator('#restore').click();
   await page.waitForFunction(()=>document.querySelector('#import-status').textContent.includes('Invented example restored'));
   assert.equal(await page.locator('.thumbnail').count(),0);
+  await page.locator('#admin-close').click();
+  await page.locator('#reading-toggle').click();await page.locator('[data-lens="archivist"]').click();assert.equal(await page.locator('#external-approved').isChecked(),false);
   const about=await page.request.get(base+'/demo/about/');
   assert.equal(about.status(),200);
   assert.match(await about.text(),/Lakehouse lookup/);
