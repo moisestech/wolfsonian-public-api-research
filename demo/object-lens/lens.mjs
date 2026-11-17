@@ -169,6 +169,12 @@ function sourceEvidence(segment){
   const box=document.createElement('div');
   box.className='conversation-source';
   box.append(conversationText('h5',segment.label));
+  const sourceLink=document.createElement('a');
+  sourceLink.href=segment.sourceReference.url;
+  sourceLink.target='_blank';
+  sourceLink.rel='noopener noreferrer';
+  sourceLink.textContent='Open source for context (not proof of every claim)';
+  box.append(sourceLink);
   box.append(conversationText('p',segment.text,'source-reading'));
   const disclosure=document.createElement('details');
   disclosure.append(conversationText('summary','Inspect '+segment.claims.length+' sourced claim(s) and unresolved questions'));
