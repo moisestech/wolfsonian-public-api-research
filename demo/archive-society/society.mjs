@@ -304,6 +304,10 @@ async function play(){
         }catch(error){
           if(session!==playback||error.name==='AbortError')return;
           const provider=error.message;
+          // A known-disabled provider is a configuration state, not a transient
+          // audio failure. Preserve this actionable status and avoid retrying
+          // with an unconfirmed local voice or additional network requests.
+          if(/not enabled/i.test(provider))throw error;
           message('voice-status',provider);
           try{await speakOnDevice(turn,localVoice);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
         }
