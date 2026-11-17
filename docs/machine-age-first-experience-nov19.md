@@ -93,7 +93,7 @@ https://www.scribd.com/document/1053998892/Machine-Age-Exposition-Catalogue
 
 This is NOT the museum's copy and was not verified visually against a complete facsimile. Printed page numbers are candidates derived from the indexed OCR; do not treat them as signed-off source locators. The repository neither reproduces the scans nor stores full essay text.
 
-### Pages to bring to a physical consultation
+### Page candidates for digital-surrogate or alternate-copy research (Wolfsonian copy stays on display)
 
 - **p. 6 (candidate)** — Hugh Ferriss, "Architecture of This Age": the OCR discusses changing architectural form and inherited beauty conventions.
 - **pp. 8–10 (candidate)** — Enrico Prampolini, "The Aesthetic of the Machine and Mechanical Introspection in Art": the OCR suggests a distinction between literal machine imagery and artistic symbolism.
@@ -114,6 +114,21 @@ This can produce a much richer interpretation than an automatic claim of omissio
 
 ### Next institutional evidence request
 
-Ask Hannah/Frank or collections staff to confirm the physical publication's pagination, whether these sections/exhibit numbers are present, the exact language around labor and safety, whether edition variants exist, and which pages can be photographed privately or reproduced for public interactive use. Mark each page as reviewed/unreviewed and record staff reviewer, date, exact printed page and reproduction rights before promoting its text into the verified claim ledger.
+Because XM1999.108.8 is on view, do not request to handle or remove it. Ask Hannah/Frank or collections staff whether existing authorized scans, other institutional copies, exhibition records, or published catalogues can support the page/pagination checks. Any display photography and public image reuse require separate permission. Mark each page as reviewed/unreviewed and record staff reviewer, date, exact printed page and reproduction rights before promoting its text into the verified claim ledger.
 
 **Code:** src/machine-age-primary-leads.mjs stores brief descriptions and pending questions only, marked OCR_ONLY_NOT_FACSIMILE_VERIFIED. The phone's disclosure list is separate from official checklist claim citations. No scan images or full historical essays have been added.
+
+
+## On-view access strategy — revised November 16, 2026
+
+The Wolfsonian catalogue accession XM1999.108.8 is on view and cannot be handled for page-by-page research. The displayed cover remains the museum encounter; another copy provides interior-page evidence, and a 1927 review provides contemporaneous visitor testimony. These are different sources and must not be merged into an invented first-person account by the museum object.
+
+Implementation: src/machine-age-onview.mjs defines eight source routes (Wolfsonian institutional checklist, independent sample-page scan, HathiTrust discovery listing, historical Hagley link, OCR lead, contemporary period review and scholarly analysis) with access/reproduction limitations. No images or full essays are mirrored. The phone now offers a source inspector and three distinctly authored reflections on E. B. White's 1927 review, with a separately linked claim ledger and transcription caveat.
+
+Reliable lead: https://tehne.com/library/machine-age-exposition-catalogue-new-york-1927 contains selected page images of another copy (NOT the Wolfsonian's exhibited copy). This permits targeted visual checks of those sampled pages only and does not imply rights to rehost them. The Online Books Page lists HathiTrust page images, but access and edition matching need validation. The historical Hagley Digital Archives link appears in scholarly literature but is no longer accessible through the present browser.
+
+Contemporary review: E. B. White, "Machine Age," The New Yorker (May 1927), https://www.newyorker.com/magazine/1927/05/21/machine-age. It describes the juxtaposition of mechanical parts and modern art, a Hugh Ferriss glass-skyscraper model, and special lamps; it is NOT a description of the museum's particular binding, not a catalogue page, and the digitized text may contain errors. Refer to the separate bounded testimony module, not the catalogue original-page claim ledger.
+
+For Hannah: ask about pre-existing scans, a separate reference copy, edition identification, bibliography and approved cover/label photography. Do not request retrieval of an object currently on exhibition. Note that image reproduction at The Wolfsonian is a separate rights process; the museum does not establish third-party copyright for requesters.
+
+Decision: Continue visitor testing and authored conversations immediately with documented source labels. Promote a catalogue page into the verified claim ledger only when the actual page from a named accessible copy has been visually checked and cited with its edition, page and rights status.
