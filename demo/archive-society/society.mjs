@@ -201,6 +201,10 @@ function renderConversation(){
   if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
   const source=record(),target=state.records.find(r=>r.accession===edge.target);
   const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
+  const kind=c.mode==='CURATED_EDGE_SCENE'?'ARTIST-AUTHORED SCENE · EDITORIAL DRAFT':
+    c.edgeMode==='QUESTION_THIS_LINK'?'QUESTIONABLE MATCH · METADATA ONLY':'SOURCE-BOUNDED METADATA READING';
+  box.append(node('span',kind,'evidence-type'));
+  if(c.dramaticArc)box.append(node('h2',c.dramaticArc));
   const chat=node('div',undefined,'chat');
   const linkColor=tagColor(edge.reasons[0].value);
   const topic=node('p',edge.reasons[0].value,'chat-topic');topic.style.background=linkColor;topic.style.color='#111';chat.append(topic);
@@ -220,6 +224,7 @@ function renderConversation(){
     bubble.append(img,say);chat.append(bubble);
   }
   box.append(chat);
+  if(c.nextPrompt)box.append(node('p',c.nextPrompt,'muted'));
   const details=node('details');details.append(node('summary','Inspect the reason for this edge'));
   for(const reason of c.evidence){const e=node('div',undefined,'reason');e.append(node('strong',reason.family+' / '+reason.value),node('small',reason.sourceColumns.join(' + ')+' → '+reason.targetColumns.join(' + ')),node('small','Shared by '+reason.candidateCount+' records in this local index.'));details.append(e);}
   details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);$('voice-controls').hidden=false;$('play').disabled=state.playing;
