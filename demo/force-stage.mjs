@@ -44,6 +44,8 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
   host.append(canvas, list);
   host.dataset.scale = '1';
   host.dataset.speaking = '';
+  host.dataset.activeSpeaker = '';
+  host.dataset.activeRole = '';
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -89,6 +91,17 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   let speakingId = '';
+  let activeSpeakerId = '';
+  let activeRole = '';
+  let pairSource = '';
+  let pairTarget = '';
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  const signal = new THREE.Mesh(
+    new THREE.SphereGeometry(2.1, 12, 8),
+    new THREE.MeshBasicMaterial({ color: '#f4f4f4', transparent: true, opacity: 0.96 })
+  );
+  signal.visible=false;
+  scene.add(signal);
   let distance = FIT_DISTANCE;
   let pointerDown = null;
 
@@ -181,6 +194,7 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
       else { node.fx = undefined; node.fy = undefined; node.fz = undefined; }
     }
     graph.d3ReheatSimulation();
+    pairSource=sourceId;pairTarget=targetId;
     host.dataset.pair = sourceId + '|' + targetId;
   }
 
@@ -189,20 +203,56 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     host.dataset.speaking = speakingId;
   }
 
+  function setActiveSpeaker(nodeId,role='') {
+    activeSpeakerId=nodeId||'';
+    activeRole=role||'';
+    host.dataset.activeSpeaker=activeSpeakerId;
+    host.dataset.activeRole=activeRole;
+    list.querySelectorAll('.graph-node').forEach(button=>{
+      const isCurrent=button.dataset.accession===activeSpeakerId;
+      button.classList.toggle('current-speaker',isCurrent);
+      if(isCurrent)button.setAttribute('aria-current','step');
+      else button.removeAttribute('aria-current');
+    });
+  }
+
   function pulse() {
     const time = performance.now() / 1000;
-    for (const node of graph.graphData().nodes || []) {
+    const reduced=Boolean(reduceMotion?.matches);
+    const nodes=graph.graphData().nodes||[];
+    const source=nodes.find(node=>node.id===pairSource);
+    const target=nodes.find(node=>node.id===pairTarget);
+    const speakerId=speakingId||activeSpeakerId;
+    const forward=speakerId===pairSource,reverse=speakerId===pairTarget;
+    const hasCoordinates=source&&target&&[source.x,source.y,source.z,target.x,target.y,target.z].every(Number.isFinite);
+    signal.visible=Boolean(hasCoordinates&&(forward||reverse||activeRole==='archivist'));
+    if(signal.visible){
+      const start=forward?source:reverse?target:source;
+      const end=forward?target:reverse?source:target;
+      const fraction=reduced||activeRole==='archivist'?.5:(time*.43%1);
+      signal.position.set(
+        start.x+(end.x-start.x)*fraction,
+        start.y+(end.y-start.y)*fraction,
+        start.z+(end.z-start.z)*fraction
+      );
+      signal.material.color.set(activeRole==='archivist'?'#9ed9b4':forward?'#9cc7ff':'#ffc089');
+      signal.scale.setScalar(reduced?0.85:1);
+    }
+    for (const node of nodes) {
       const group = node.__threeObj;
       const sprite = group?.userData?.sprite;
       const ring = group?.userData?.ring;
       if (!sprite || !ring) continue;
       const speaking = node.id === speakingId;
-      const scale = speaking ? 1 + Math.sin(time * 8) * 0.22 : 1;
+      const active = node.id === activeSpeakerId;
+      const scale = speaking && !reduced ? 1 + Math.sin(time * 7) * 0.1 : active ? 1.12 : 1;
       const [fitW, fitH] = fittedSize(sprite.material.map);
       sprite.scale.set(fitW * scale, fitH * scale, 1);
       if (speaking) host.dataset.pulse = String(Math.round(scale * 100) / 100);
-      ring.material.color.set(node.accent || node.color || '#f4f4f4');
-      ring.material.opacity = speaking ? 1 : node.focused ? 0.95 : node.accent ? 0.78 : 0.16;
+      ring.material.color.set(active||speaking
+        ?node.id===pairSource?'#9cc7ff':'#ffc089'
+        :node.accent||node.color||'#f4f4f');
+      ring.material.opacity = speaking||active ? 1 : node.focused ? 0.72 : node.accent ? 0.44 : 0.13;
       const outer = ring.geometry.parameters.outerRadius || 13.8;
       const pad = (node.focused ? 1.22 : 1.14) * scale;
       ring.scale.set((fitW / 2) * pad / outer, (fitH / 2) * pad / outer, 1);
@@ -238,6 +288,7 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     setGraph,
     focusPair,
     setSpeaking,
+    setActiveSpeaker,
     resize,
     zoom(factor) { applyDistance(camera.position.distanceTo(controls.target) / factor); },
     fit() { controls.target.set(0, 0, 0); applyDistance(FIT_DISTANCE); },
