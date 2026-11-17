@@ -208,7 +208,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
   const nextPrompt=onlyMotif?'Keep this as a question, investigate, or withdraw the link?':
     'Which additional source would change the interpretation of this pair?';
   return {
-    id:edge.id+'::'+lens.id,authored:true,mode:'METADATA_EDITORIAL_FALLBACK',
+    id:edge.id+'::'+lens.id,authored:true,mode:'scripted_interpretation',
     editorialStatus:'AUTOMATIC_SOURCE_BOUNDED_FALLBACK',edgeMode,
     dramaticArc:onlyMotif?'Can this connection survive scrutiny?':'What do two differently titled records make visible?',
     nextPrompt,
@@ -220,7 +220,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
       {role:'objectB',speaker:b,text:bPrefix+bLine,citations:bFact?[bFact]:[]},
       {role:'archivist',speaker:'Archivist · fictional reading protocol',text:archivistLine}
     ],
-    resourceLayer:aFact||bFact?'catalog_field_quotes':'metadata_tag_only',
+    resourceLayer:aFact||bFact?'catalog_field_quotes':'no_matched_catalog_field',
     limits:lens.limits+' This is a comparative prompt, not proof that the histories intersected.'
   };
 }
