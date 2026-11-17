@@ -103,3 +103,23 @@ test('offline audio cue exporter supports both tone scripts with separate immuta
     assert.equal(bTurns[i].status,'NOT_RENDERED');
   }
 });
+
+test('plural Archivist also varies when objects are set to continuity; manual fixed voice wins',()=>{
+  const v=voices(8),plural=new Set(),fixed=new Set();
+  for(const scene of CURATED_EDGE_SCENES){
+    const c=conversation(scene);
+    plural.add(directConversation(c,v,{},{style:'continuity',archivistMode:'plural'}).turns[2].voiceURI);
+    fixed.add(directConversation(c,v,{archivist:'voice-4'},{style:'scene-variety',archivistMode:'single'}).turns[2].voiceURI);
+  }
+  assert.ok(plural.size>1);
+  assert.deepEqual([...fixed],['voice-4']);
+});
+
+test('offline poetic audio cues carry slower object delivery but unchanged Archivist timing',()=>{
+  const critical=audioCues({tone:'critical'}).scenes[0].turns;
+  const poetic=audioCues({tone:'poetic'}).scenes[0].turns;
+  assert.ok(poetic[0].rate<critical[0].rate);
+  assert.ok(poetic[1].rate<critical[1].rate);
+  assert.equal(poetic[2].rate,critical[2].rate);
+  assert.equal(poetic[2].pitch,critical[2].pitch);
+});
