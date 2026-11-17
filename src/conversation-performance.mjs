@@ -81,11 +81,17 @@ export function directConversation(conversation,voices=[],roleOverrides={},opts=
     let voice=override||assigned.get(speakerId)||null;
     if(!voice&&available.length){
       const preferred=hash(stableSeed)%available.length;
-      for(let step=0;step<available.length;step++){
-        const candidate=available[(preferred+step)%available.length];
-        if(!allocated.has(candidate.voiceURI)){voice=candidate;break;}
+      if(style==='continuity'){
+        // Absolute accession identity wins over differentiation: the same
+        // object keeps its voice even if another scene introduces a collision.
+        voice=available[preferred];
+      }else{
+        for(let step=0;step<available.length;step++){
+          const candidate=available[(preferred+step)%available.length];
+          if(!allocated.has(candidate.voiceURI)){voice=candidate;break;}
+        }
+        if(!voice)voice=available[preferred];
       }
-      if(!voice)voice=available[preferred];
     }
     if(voice){assigned.set(speakerId,voice);allocated.add(voice.voiceURI);}
     return {
