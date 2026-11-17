@@ -1,6 +1,6 @@
-import {resolvePublicAccession,encounterFor,atlasHandoffFor} from '/src/object-lens-core.mjs';
+import {resolvePublicAccession,encounterFor,atlasHandoffFor,curatedQuestionsFor,answerCuratedQuestion} from '/src/object-lens-core.mjs';
 const $=id=>document.getElementById(id);
-let stream=null,match=null,encounter=null,activeReader='futurist';
+let stream=null,match=null,encounter=null,activeReader='futurist',activeQuestion=null,activeAnswer=null;
 
 function stopSpeech(){
   if('speechSynthesis' in window)window.speechSynthesis.cancel();
@@ -25,7 +25,7 @@ async function openCamera(){
   }
 }
 function resetConfirmation(){
-  stopSpeech();match=null;encounter=null;$('confirm').checked=false;
+  stopSpeech();match=null;encounter=null;activeQuestion=null;activeAnswer=null;$('confirm').checked=false;
   $('confirm').disabled=true;$('encounter').hidden=true;
 }
 function checkAccession(){
@@ -41,6 +41,48 @@ function checkAccession(){
       :'Not found in six public research packets. A partial accession is never accepted.';
   }
 }
+function renderCuratedAnswer(){
+  if(!encounter || !activeQuestion){
+    activeAnswer=null;
+    $('question-panel').hidden=true;
+    return;
+  }
+  const question=curatedQuestionsFor(encounter.accession).find(x=>x.id===activeQuestion);
+  activeAnswer=answerCuratedQuestion(encounter.accession,activeQuestion,activeReader);
+  $('question-panel').hidden=false;
+  $('question-title').textContent=question?.question||'Unknown research question';
+  $('question-status').textContent=activeAnswer.status.replaceAll('_',' ')+' · '+activeReader.toUpperCase();
+  $('question-answer').textContent=activeAnswer.text;
+  const li=activeAnswer.claims.map(claim=>{
+    const item=document.createElement('li');
+    const text=document.createElement('span');
+    text.textContent=claim.label+': '+claim.value+' — '+claim.source.title+', '+claim.source.locator+'. ';
+    item.append(text);
+    const link=document.createElement('a');
+    link.href=claim.source.url;link.target='_blank';link.rel='noopener noreferrer';
+    link.textContent='Inspect public checklist';
+    item.append(link);
+    return item;
+  });
+  $('answer-citations').replaceChildren(...li);
+  $('answer-unknowns').textContent=activeAnswer.unknowns.length
+    ? 'Still unknown: '+activeAnswer.unknowns.join(' ')
+    : 'No further unknowns were specified for this prepared question.';
+  if(!li.length){
+    const item=document.createElement('li');
+    item.textContent='No directly verified claim supports this question in the present source packet.';
+    $('answer-citations').append(item);
+  }
+  for(const button of $('question-options').querySelectorAll('button'))
+    button.setAttribute('aria-pressed',String(button.dataset.question===activeQuestion));
+}
+
+function selectCuratedQuestion(id){
+  stopSpeech();
+  activeQuestion=id;
+  renderCuratedAnswer();
+}
+
 function renderReader(){
   const reader=encounter?.readers.find(r=>r.id===activeReader);
   if(!reader)return;
@@ -51,6 +93,7 @@ function renderReader(){
   $('reader-blindspot').textContent='Blind spot: '+reader.blindSpot;
   for(const b of $('reader-options').querySelectorAll('button'))
     b.setAttribute('aria-pressed',String(b.dataset.reader===activeReader));
+  if(activeQuestion)renderCuratedAnswer();
 }
 function renderEncounter(){
   encounter=encounterFor(match.accession);
@@ -65,6 +108,17 @@ function renderEncounter(){
     return b;
   });
   $('reader-options').replaceChildren(...controls);
+  const questions=curatedQuestionsFor(match.accession);
+  $('curated-questions').hidden=!questions.length;
+  const qButtons=questions.map(q=>{
+    const button=document.createElement('button');
+    button.type='button';button.dataset.question=q.id;button.textContent=q.label;
+    button.addEventListener('click',()=>selectCuratedQuestion(q.id));
+    return button;
+  });
+  $('question-options').replaceChildren(...qButtons);
+  activeQuestion=questions[0]?.id||null;
+  activeAnswer=null;
   const dl=$('evidence-list');dl.replaceChildren();
   for(const field of encounter.evidence){
     const dt=document.createElement('dt'),dd=document.createElement('dd');
@@ -96,7 +150,7 @@ function speak(){
   if(!voices.length){
     $('speech-status').textContent='No verified local English voice installed. Transcript only; no remote voice requested.';return;
   }
-  const utterance=new SpeechSynthesisUtterance(reader.script);
+  const utterance=new SpeechSynthesisUtterance(activeAnswer?.text || reader.script);
   utterance.voice=voices[0];utterance.rate=0.94;
   utterance.onend=()=>{$('speech-status').textContent='Reading complete.';};
   utterance.onerror=()=>{$('speech-status').textContent='Speech unavailable; use transcript.';};
