@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run build:demo",
-  "outputDirectory": ".",
+  "buildCommand": "npm run build:public",
+  "outputDirectory": "public-site",
   "framework": null,
   "rewrites": [
     {

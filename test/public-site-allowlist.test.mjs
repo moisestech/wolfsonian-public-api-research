@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import { mkdtemp, readFile, access } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import test from 'node:test';
+import { assemblePublicSite, FORBIDDEN_OUTPUT, PUBLIC_FILES } from '../scripts/assemble-public-site.mjs';
+
+test('public site allowlist omits the staff matrix and saved Lakehouse capture', async () => {
+  for (const forbidden of FORBIDDEN_OUTPUT) assert.equal(PUBLIC_FILES.includes(forbidden), false);
+  const out = await mkdtemp(join(tmpdir(), 'wolfsonian-public-site-'));
+  await assemblePublicSite(out);
+  await access(join(out, 'index.html'));
+  await access(join(out, 'demo/archive-society/index.html'));
+  await access(join(out, 'demo/object-lens/index.html'));
+  await access(join(out, 'src/object-lens-core.mjs'));
+  await assert.rejects(access(join(out, 'src/matrix-objects.mjs')));
+  await assert.rejects(access(join(out, 'data/lakehouse/project-matches.json')));
+  const room = await readFile(join(out, 'src/matrix-room.mjs'), 'utf8');
+  const matches = await readFile(join(out, 'src/lakehouse-matches.mjs'), 'utf8');
+  assert.doesNotMatch(room, /from '\.\/matrix-objects\.mjs'/);
+  assert.doesNotMatch(matches, /from '\.\/matrix-objects\.mjs'/);
+  assert.match(room, /from '\.\/public-matrix-objects\.mjs'/);
+  await access(join(out, 'src/public-matrix-objects.mjs'));
+  const pages = await readFile(new URL('../.github/workflows/pages.yml', import.meta.url), 'utf8');
+  assert.match(pages, /npm ci/);
+  assert.match(pages, /playwright install --with-deps chromium/);
+  assert.match(pages, /npm test/);
+  assert.doesNotMatch(pages, /test-skip-pattern/);
+  const vercel = JSON.parse(await readFile(new URL('../vercel.json', import.meta.url), 'utf8'));
+  assert.equal(vercel.outputDirectory, 'public-site');
+});

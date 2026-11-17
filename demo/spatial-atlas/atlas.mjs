@@ -253,7 +253,7 @@ async function speak(conversation) {
   const approved = $('voice-approved')?.checked;
   const token = sessionStorage.getItem('archive-demo-token') || '';
   const status = $('voice-status');
-  let aside = approved && !token ? 'Enter the demo token on the conversational atlas. Using the device voice.' : '';
+  let aside = approved && !token ? 'Enter the demo token on The Archive Dreams in Public. Using the device voice.' : '';
   try {
     for (const [i, turn] of conversation.turns.entries()) {
       if (session !== playback) return;

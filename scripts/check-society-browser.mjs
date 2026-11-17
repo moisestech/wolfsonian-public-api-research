@@ -13,7 +13,7 @@ try {
   browser=await chromium.launch({headless:true});
   const page=await browser.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:1}),errors=[],external=[],voiceRequests=[];
   page.on('pageerror',e=>errors.push(e.message));
-  page.on('request',req=>{const url=req.url();if(!url.startsWith(base)&&!url.startsWith('blob:')&&!url.startsWith('data:'))external.push(url);if(url.includes('/api/archive-society/voice'))voiceRequests.push(url);});
+  page.on('request',req=>{const url=req.url();if(!url.startsWith(base)&&!url.startsWith('blob:')&&!url.startsWith('data:')&&!url.startsWith('https://res.cloudinary.com/'))external.push(url);if(url.includes('/api/archive-society/voice'))voiceRequests.push(url);});
   await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
   await page.waitForFunction(()=>document.querySelectorAll('.graph-node').length>0).catch(error=>{throw new Error((errors.join('\n')||error.message));});
   const cards=await page.locator('.graph-node').count();
@@ -24,9 +24,12 @@ try {
 
   // Making the Engine opens on a curated machine-and-body scene, with six paths still clickable.
   assert.match(await page.locator('#atlas-title').innerText(),/Making the Engine/);
-  assert.match(await page.locator('#scene-title').getAttribute('title'),/ARTIST-AUTHORED SCENE/);
-  assert.match(await page.locator('#scene-nav').innerText(),/The machine meets the body/);
+  assert.equal(await page.locator('.topbar').getByText('The machine meets the body').count(),0);
   assert.match(await page.locator('#scene-tag').innerText(),/Machines/);
+  await page.locator('#conversation-head').click();
+  assert.match(await page.locator('#scene-title').getAttribute('title'),/ARTIST-AUTHORED SCENE/);
+  assert.match(await page.locator('#conversation-sheet').innerText(),/Machines[\s\S]*The machine meets the body/);
+  await page.locator('#sheet-close').click();
   assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
   assert.ok(Number(await page.locator('#stage').getAttribute('data-zoom'))>20);
 
@@ -74,19 +77,26 @@ try {
   await page.locator('[data-panel=conversation]').evaluate(button=>button.click());await page.locator('#external-approved').check();await page.locator('#play').evaluate(button=>button.click());
   await page.waitForFunction(()=>document.querySelector('#voice-status').textContent.includes('not enabled'));
   assert.equal(voiceRequests.length,1);
-  await page.locator('#reading-toggle').click();await page.locator('[data-lens="archivist"]').click();assert.equal(await page.locator('#external-approved').isChecked(),false);
   await page.locator('#restore').click();
   await page.waitForFunction(()=>document.querySelector('#import-status').textContent.includes('Invented example restored'));
   assert.equal(await page.locator('.thumbnail').count(),0);
+  await page.locator('#admin-close').click();
+  await page.locator('#reading-toggle').click();await page.locator('[data-lens="archivist"]').click();assert.equal(await page.locator('#external-approved').isChecked(),false);
   const about=await page.request.get(base+'/demo/about/');
   assert.equal(about.status(),200);
   assert.match(await about.text(),/Lakehouse lookup/);
-  await page.locator('#more-toggle').click();
+  assert.equal(await page.locator('#more-toggle').count(),0);
+  assert.equal(await page.locator('#layer-accession').count(),1);
+  assert.equal(await page.locator('#layer-box').count(),1);
+  assert.equal(await page.locator('#atlas-mode').count(),1);
+  const footerFits=()=>page.locator('.atlas-footer').evaluate(el=>el.scrollHeight<=el.clientHeight+1);
+  assert.equal(await footerFits(),true);
   await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),100);
   const scaleOf=()=>page.locator('#stage').evaluate(el=>Number(el.dataset.scale));
   const fitted=await scaleOf();
-  await page.locator('#zoom-open').click();
-  await page.locator('#zoom-in').click();assert.ok(await scaleOf()>fitted);
+  await page.locator('#zoom-toggle').click();
+  await page.locator('[data-stop="100"]').click();assert.ok(await scaleOf()>fitted);
+  await page.locator('#zoom-toggle').click();
   await page.locator('#fit').click();assert.ok(Math.abs(await scaleOf()-fitted)<0.02);
   await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
   assert.ok(await page.locator('.graph-node.emphasized').count()>0);
@@ -98,7 +108,22 @@ try {
   assert.equal((await page.request.get(base+'/demo/discovery-lab/')).status(),200);
   await page.locator('#admin').evaluate(el=>{el.hidden=true;});
   await page.setViewportSize({width:390,height:844});
-  await page.locator('#more-toggle').click();
+  await page.waitForFunction(()=>getComputedStyle(document.querySelector('#path-timeline')).display!=='none');
+  assert.match(await page.locator('#timeline-list').innerText(),/not a documented relationship|not proof that the histories intersected/i);
+  await page.locator('.path-post').first().click();
+  assert.equal(await page.locator('#conversation-content .bubble.turn').count(),3);
+  assert.ok(await page.locator('.listener').count()>=2);
+  const railHeight=()=>page.locator('.evidence-rail').evaluate(el=>Math.round(el.getBoundingClientRect().height));
+  const beforeSheet=await railHeight();
+  await page.locator('#space-evidence').click();
+  assert.equal(await page.locator('#conversation-sheet').evaluate(el=>el.hidden),false);
+  assert.equal(await railHeight(),beforeSheet);
+  await page.locator('#sheet-close').click();
+  await page.screenshot({path:new URL('artifacts/archive-society-space.png',root).pathname});
+  await page.locator('#space-leave').click();
+  await page.waitForFunction(()=>getComputedStyle(document.querySelector('#path-timeline')).display!=='none');
+  await page.locator('#space-room').click();
+  assert.equal(await footerFits(),true);
   await page.locator('#atlas-mode').uncheck();
   await page.screenshot({path:new URL('artifacts/archive-society-mobile.png',root).pathname,fullPage:true});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));

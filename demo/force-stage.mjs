@@ -36,7 +36,7 @@ function nodeIdOf(object) {
   return '';
 }
 
-export function mountForceStage(host, { onSelect, background = '#111111', linkFocus = '#f4f4f4', linkIdle = '#6e6e6e' } = {}) {
+export function mountForceStage(host, { onSelect, onLink, background = '#111111', linkFocus = '#f4f4f4', linkIdle = '#6e6e6e' } = {}) {
   host.replaceChildren();
   host.classList.add('force-stage');
   const canvas = document.createElement('canvas');
@@ -246,7 +246,7 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     for (const node of nextNodes) {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'graph-node' + (node.neighbor ? ' conversation-edge' : '') + (node.emphasized ? ' emphasized' : '') + (node.focused ? ' selected' : '');
+      button.className = 'graph-node' + (node.neighbor ? ' conversation-edge' : '') + (node.emphasized ? ' emphasized' : '') + (node.focused ? ' selected' : '') + (node.schematic ? ' schematic' : '');
       button.dataset.accession = node.id;
       button.textContent = node.label || node.id;
       button.addEventListener('click', () => onSelect?.(node.id));
@@ -306,6 +306,46 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     }
   }
 
+  const projector = new THREE.Vector3();
+  function screenPoint(node, rect) {
+    const object = node?.__threeObj;
+    if (object) object.getWorldPosition(projector);
+    else if (Number.isFinite(node?.x)) projector.set(node.x, node.y || 0, node.z || 0);
+    else return null;
+    projector.project(camera);
+    if (projector.z < -1 || projector.z > 1) return null;
+    return {
+      x: (projector.x * 0.5 + 0.5) * rect.width + rect.left,
+      y: (-projector.y * 0.5 + 0.5) * rect.height + rect.top,
+    };
+  }
+  function linkUnder(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    let best = null;
+    let bestDist = 24;
+    for (const link of graph.graphData().links || []) {
+      const source = endpoint(link.source);
+      const target = endpoint(link.target);
+      const start = screenPoint(link.source, rect);
+      const end = screenPoint(link.target, rect);
+      if (!source || !target || !start || !end) continue;
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const length = dx * dx + dy * dy;
+      const t = length ? Math.max(0, Math.min(1, ((clientX - start.x) * dx + (clientY - start.y) * dy) / length)) : 0;
+      const x = start.x + dx * t;
+      const y = start.y + dy * t;
+      const along = Math.hypot(clientX - x, clientY - y);
+      const fromEnds = Math.min(Math.hypot(clientX - start.x, clientY - start.y), Math.hypot(clientX - end.x, clientY - end.y));
+      if (fromEnds < 36 || along >= bestDist) continue;
+      bestDist = along;
+      best = { source, target };
+    }
+    return best;
+  }
+  canvas.addEventListener('pointermove', event => {
+    canvas.style.cursor = linkUnder(event.clientX, event.clientY) ? 'pointer' : '';
+  });
   canvas.addEventListener('pointerdown', event => { pointerDown = { x: event.clientX, y: event.clientY }; });
   canvas.addEventListener('pointerup', event => {
     if (!pointerDown || Math.hypot(event.clientX - pointerDown.x, event.clientY - pointerDown.y) > 5) return;
@@ -314,7 +354,9 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(pointer, camera);
     const hit = raycaster.intersectObjects(graph.children, true).map(item => nodeIdOf(item.object)).find(Boolean);
-    if (hit) onSelect?.(hit);
+    const link = linkUnder(event.clientX, event.clientY);
+    if (link && !hit) onLink?.(link.source, link.target);
+    else if (hit) onSelect?.(hit);
   });
 
   const observer = new ResizeObserver(() => resize());

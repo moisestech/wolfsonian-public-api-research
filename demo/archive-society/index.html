@@ -3,60 +3,74 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="An artist-authored archive landscape: object photographs as nodes, inspectable conversations as edges.">
-  <title>Archive Dreams · The Conversational Atlas</title>
+  <title>The Archive Dreams in Public</title>
   <link rel="stylesheet" href="./society.css">
 </head>
 <body>
+<div id="demo-gate">
+  <form id="gate-form">
+    <h1>The Archive Dreams in Public</h1>
+    <label for="gate-password">Password</label>
+    <input id="gate-password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">Enter</button>
+    <p id="gate-error" hidden>That password does not open this demo.</p>
+  </form>
+</div>
 <a class="skip" href="#atlas">Skip to the atlas</a>
 <header class="topbar">
-  <a class="wordmark" href="#atlas"><svg class="symbol" viewBox="0 0 32 32" aria-hidden="true"><rect x="2.5" y="2.5" width="27" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 23V13h4.5v10M14.5 23V8h5v15M21.5 23v-7H25v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>ARCHIVE DREAMS <em>in Public</em></span></a>
+  <a class="wordmark" href="#atlas"><svg class="symbol" viewBox="0 0 32 32" aria-hidden="true"><rect x="2.5" y="2.5" width="27" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 23V13h4.5v10M14.5 23V8h5v15M21.5 23v-7H25v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>The Archive Dreams <em>in Public</em></span></a>
   <div class="top-actions">
     <nav class="top-nav" aria-label="Inspector">
-      <div id="scene-nav" class="scene-nav" hidden>
-        <strong id="scene-title"></strong>
-      </div>
       <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
-      <button type="button" id="source-info" class="icon-button" aria-label="About this encounter" aria-expanded="false" aria-controls="source-note">i</button>
+      <button type="button" id="source-info" class="icon-button" aria-label="About this encounter">i</button>
     </nav>
     <a class="icon-link" href="../object-lens/" aria-label="Object Lens"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg></a>
-    <button id="admin-toggle" class="icon-button" type="button" aria-label="Settings" aria-expanded="false" aria-controls="admin"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg></button>
+    <button id="admin-toggle" class="icon-button" type="button" hidden aria-label="Settings" aria-expanded="false" aria-controls="admin"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg></button>
   </div>
 </header>
-<section id="admin" class="admin" hidden>
-  <p class="eyebrow">SETTINGS</p>
-  <button id="present" type="button">Full screen</button>
-  <form class="finder" role="search">
-    <label for="search">Find a title or accession</label>
-    <input id="search" type="search" placeholder="Title or accession" autocomplete="off">
-  </form>
-  <label class="check"><input id="layer-box-sim" type="checkbox"> Simulated box fixture · not museum data</label>
-  <details class="source-studio"><summary>Local sources</summary>
-    <p>Files stay in this browser session. Import the Object at Scale worksheet as CSV.</p>
-    <label class="file">Open CSV<input id="csv-file" type="file" accept=".csv,text/csv"></label>
-    <label class="file">Replace landscape<input id="background-file" type="file" accept=".png,.jpg,.jpeg,.webp"></label>
-    <label for="veil">Landscape clarity</label><input id="veil" type="range" min="20" max="80" value="68">
-    <button id="restore" class="quiet">Restore invented example</button>
-  </details>
-  <p id="import-status" class="muted" role="status"></p>
-  <label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice</option><option value="elevenlabs">ElevenLabs · external service</option></select>
-  <div id="approval-box" hidden><p>Only the displayed transcript is sent. No photograph or full CSV is transmitted. Provider retention follows your account settings.</p><label class="check"><input id="external-approved" type="checkbox"> I have approval to send these displayed words to ElevenLabs.</label></div>
-  <button id="export" class="quiet">Save selected conversation JSON</button>
-  <details><summary>Lakehouse evidence</summary><p>A lookup is a separate source layer. It never changes the CSV tags.</p>
-    <button id="lookup">Look up this accession</button>
-    <label class="file">Open bounded lookup JSON<input id="snapshot-file" type="file" accept=".json,application/json"></label>
-    <div id="snapshot-content"></div>
-  </details>
-  <h2>Server</h2>
-  <label for="access-token">Private demo access token</label><input id="access-token" type="password" autocomplete="off" placeholder="Server access token, not a provider key">
-  <button id="check-services">Check server configuration</button><p id="service-status" class="muted" role="status">Services have not been checked.</p>
-  <a href="../discovery-lab/">Discovery Lab</a>
-  <a href="../../docs/archive-society.md">Setup &amp; evidence contract</a>
+<section id="admin" class="admin" hidden role="dialog" aria-modal="true" aria-labelledby="admin-title">
+  <button type="button" id="admin-close">Close</button>
+  <div class="admin-reading">
+    <p class="eyebrow">SETTINGS</p>
+    <h2 id="admin-title">Staff tools</h2>
+    <p class="admin-lead">These controls belong to this browser session. They appear after the staff password.</p>
+    <form class="finder" role="search">
+      <label for="search">Find a title or accession</label>
+      <input id="search" type="search" placeholder="Title or accession" autocomplete="off">
+    </form>
+    <label class="check"><input id="layer-box-sim" type="checkbox"> Simulated box fixture · not museum data</label>
+    <button id="present" type="button">Full screen</button>
+    <h3>Local sources</h3>
+    <details class="source-studio" open><summary>Files in this browser</summary>
+      <p>Files stay in this browser session. Import the Object at Scale worksheet as CSV.</p>
+      <label class="file">Open CSV<input id="csv-file" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Replace landscape<input id="background-file" type="file" accept=".png,.jpg,.jpeg,.webp"></label>
+      <label for="veil">Landscape clarity</label><input id="veil" type="range" min="20" max="80" value="68">
+      <button id="restore" class="quiet">Restore invented example</button>
+    </details>
+    <p id="import-status" class="muted" role="status"></p>
+    <h3>Voice</h3>
+    <label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice</option><option value="elevenlabs">ElevenLabs · external service</option></select>
+    <div id="approval-box" hidden><p>Only the displayed transcript is sent. No photograph or full CSV is transmitted. Provider retention follows your account settings.</p><label class="check"><input id="external-approved" type="checkbox"> I have approval to send these displayed words to ElevenLabs.</label></div>
+    <button id="export" class="quiet">Save selected conversation JSON</button>
+    <h3>Lakehouse evidence</h3>
+    <details open><summary>Saved lookup</summary><p>A lookup is a separate source layer. It never changes the CSV tags.</p>
+      <button id="lookup">Look up this accession</button>
+      <label class="file">Open bounded lookup JSON<input id="snapshot-file" type="file" accept=".json,application/json"></label>
+      <div id="snapshot-content"></div>
+    </details>
+    <h3>Server</h3>
+    <label for="access-token">Private demo access token</label><input id="access-token" type="password" autocomplete="off" placeholder="Server access token, not a provider key">
+    <button id="check-services">Check server configuration</button><p id="service-status" class="muted" role="status">Services have not been checked.</p>
+    <p class="admin-links"><a href="../discovery-lab/">Discovery Lab</a><a href="../../docs/archive-society.md">Setup &amp; evidence contract</a></p>
+  </div>
 </section>
 <main class="workspace">
-<section class="atlas-panel" id="atlas" aria-label="Interactive conversational atlas">
-  <div class="atlas-toolbar"><h2 id="atlas-title">A constellation of possible readings</h2><div id="room-legend" class="room-legend" hidden></div></div>
+<section class="atlas-panel" id="atlas" aria-label="The Archive Dreams in Public">
+  <div class="atlas-toolbar"><button type="button" id="room-back" class="room-back">Back</button><h2 id="atlas-title">A constellation of possible readings</h2><div id="room-legend" class="room-legend" hidden></div></div>
   <div class="canvas">
     <div id="stage" role="img" aria-label="Objects in a force graph"></div>
+    <p id="research-edge" class="research-edge edge-curatorial" hidden>Curatorial juxtaposition</p>
     <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
   </div>
   <footer class="atlas-footer">
@@ -98,29 +112,21 @@
         </div>
       </div>
       <div class="tool">
-        <button id="more-toggle" class="choice" type="button" data-sheet="more" aria-haspopup="dialog" aria-expanded="false" aria-controls="more-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18" cy="12" r="1.7" fill="currentColor"/></svg></span><span class="reading-label"><small>More</small><strong>Map options</strong></span></button>
-        <div id="more-popover" class="tool-popover" hidden role="dialog" aria-label="Map options">
-          <div data-more="layers">
-            <div class="more-layers">
-              <label class="icon-check" title="Accession identity"><input id="layer-accession" type="checkbox" checked aria-label="Accession identity"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.6"/></svg></label>
-              <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
-              <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
-            </div>
-            <button id="zoom-open" type="button">Zoom</button>
-          </div>
-          <div data-more="zoom" hidden>
-            <button id="sheet-back" type="button">Back</button>
-            <div class="zoom">
-              <button id="fit" class="on" type="button" title="The whole set">Field</button>
-              <button type="button" data-stop="34" title="Objects in this conversation">Group</button>
-              <button type="button" data-stop="67" title="The two objects talking">Pair</button>
-              <button type="button" data-stop="100" title="This photograph">Object</button>
-              <span id="zoom-note">The whole set</span>
-              <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
-              <input id="zoom" type="range" min="0" max="100" value="0" aria-label="Zoom">
-              <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
-            </div>
-          </div>
+        <button id="paths-toggle" class="choice" type="button" data-sheet="paths" aria-haspopup="dialog" aria-expanded="false" aria-controls="paths-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 16c2-6 4-6 6 0s4 6 6 0" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="16" r="1.6" fill="currentColor"/><circle cx="18" cy="16" r="1.6" fill="currentColor"/></svg></span><span class="reading-label"><small>Paths</small><strong id="paths-name">Research</strong></span></button>
+        <div id="paths-popover" class="tool-popover" hidden role="dialog" aria-label="Curatorial paths"><div id="path-choices"></div></div>
+      </div>
+      <div class="command-layers" role="group" aria-label="Map layers">
+        <label class="icon-check" title="Accession identity"><input id="layer-accession" type="checkbox" checked aria-label="Accession identity"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.6"/></svg></label>
+        <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
+        <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
+      </div>
+      <div class="tool">
+        <button id="zoom-toggle" class="choice" type="button" data-sheet="zoom" aria-haspopup="dialog" aria-expanded="false" aria-controls="zoom-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14.5 14.5 20 20" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="reading-label"><small>Zoom</small><strong id="zoom-name">Field</strong></span></button>
+        <div id="zoom-popover" class="tool-popover" hidden role="dialog" aria-label="Zoom">
+          <button id="fit" class="on" type="button" title="The whole set">Field</button>
+          <button type="button" data-stop="34" title="Objects in this conversation">Group</button>
+          <button type="button" data-stop="67" title="The two objects talking">Pair</button>
+          <button type="button" data-stop="100" title="This photograph">Object</button>
         </div>
       </div>
     </div>
@@ -129,20 +135,32 @@
   </footer>
 </section>
 <aside class="evidence-rail" aria-label="Conversation, record and services">
+  <div id="path-timeline" class="path-timeline">
+    <p id="timeline-title" class="timeline-title"></p>
+    <div id="timeline-list"></div>
+  </div>
+  <div class="space-view">
   <div class="rail-head">
     <button type="button" id="conversation-head" aria-expanded="false" aria-controls="conversation-sheet">
       <span id="scene-tag" class="chat-topic rail-theme" hidden></span>
       <span id="counts"></span>
     </button>
-    <div id="conversation-sheet" class="conversation-sheet" hidden>
-      <p id="sheet-title" hidden></p>
-      <p id="sheet-note"></p>
-      <ul id="sheet-facts"></ul>
-    </div>
+    <button type="button" id="space-leave" class="space-leave">Leave</button>
   </div>
+  <div id="space-stage"></div>
+  <div id="listener-row" class="listener-row" aria-label="Other conversation paths"></div>
   <div class="rail-scroll">
+    <div id="conversation-sheet" class="conversation-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="scene-title">
+      <button type="button" id="sheet-close">Close</button>
+      <div class="sheet-reading">
+        <p id="sheet-concept" class="chat-topic" hidden></p>
+        <p id="scene-title" hidden></p>
+        <p id="sheet-note"></p>
+        <ul id="sheet-facts"></ul>
+      </div>
+    </div>
     <div id="source-note" class="source-note" hidden role="dialog" aria-label="About this encounter">
-      <p class="eyebrow">ARCHIVE DREAMS · AN ARTIST-AUTHORED ENCOUNTER</p>
+      <p class="eyebrow">THE ARCHIVE DREAMS IN PUBLIC · AN ARTIST-AUTHORED ENCOUNTER</p>
       <h1>What could two objects say to each other?</h1>
       <p>Follow a connection, listen to three fictional perspectives, and see what the record actually tells us.</p>
       <ol class="visitor-path" aria-label="Three steps"><li>Meet an object</li><li>Hear a conversation</li><li>Check the evidence</li></ol>
@@ -150,10 +168,32 @@
       <p id="visitor-source" class="visitor-source"></p>
       <p id="visitor-object" class="visitor-object"></p>
       <p id="visitor-connection" class="visitor-connection" aria-live="polite"></p>
-      <p class="landscape-credit">Fictional readings · <a href="../about/">About</a></p>
+      <p class="landscape-credit">Fictional readings</p>
+    </div>
+    <div id="prompt-sheet" class="prompt-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="prompt-title">
+      <button type="button" id="prompt-close">Close</button>
+      <div class="sheet-reading">
+        <p class="eyebrow">ARTIST-AUTHORED ARCHETYPE</p>
+        <p id="prompt-kicker" class="prompt-kicker"></p>
+        <h2 id="prompt-title"></h2>
+        <p id="prompt-hook" class="prompt-hook"></p>
+        <p id="prompt-description"></p>
+        <h3>What this perspective attends to</h3>
+        <ul id="prompt-priorities"></ul>
+        <h3>What it cannot claim</h3>
+        <p id="prompt-limits"></p>
+        <h3>The prompt</h3>
+        <pre id="prompt-text"></pre>
+        <p class="prompt-note">These rules define a proposed lens. They are not evidence of a live model, and they are not a museum voice.</p>
+        <details id="archivist-block">
+          <summary>The Archivist, who speaks third</summary>
+          <pre id="archivist-prompt"></pre>
+        </details>
+      </div>
     </div>
     <section id="conversation-panel"><div id="conversation-content"></div></section>
     <section id="record-panel" hidden><div id="record-content"></div></section>
+  </div>
   </div>
   <div id="voice-controls" class="audio-bar">
     <button id="play" class="play-round" type="button" aria-label="Play">▶</button>
@@ -162,10 +202,32 @@
     <button id="stop" class="quiet" type="button">Stop</button>
   </div>
   <p id="voice-status" class="muted" role="status" hidden></p>
+  <div id="space-bar" class="space-bar">
+    <button type="button" id="space-play">Play</button>
+    <button type="button" id="space-stop">Stop</button>
+    <button type="button" id="space-evidence">Evidence</button>
+    <button type="button" id="space-room">Room</button>
+  </div>
 </aside>
 </main>
 <script type="importmap">
 {"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/","three-forcegraph":"/demo/vendor/three-forcegraph.mjs","d3-force-3d":"/demo/vendor/d3-force-3d.mjs"}}
 </script>
-<script type="module" src="./society.mjs"></script>
+<script type="module">
+const local=location.hostname==='127.0.0.1'||location.hostname==='localhost';
+async function start(){
+  document.documentElement.classList.add('demo-open');
+  const gear=document.getElementById('admin-toggle');
+  if(gear&&(local||sessionStorage.getItem('archive-demo-open')==='1'))gear.hidden=false;
+  await import('./society.mjs');
+}
+if(local||sessionStorage.getItem('archive-demo-open')==='1')start();
+document.getElementById('gate-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const password=new FormData(event.target).get('password');
+  const response=await fetch('/api/demo-gate',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({password})});
+  if(response.ok){sessionStorage.setItem('archive-demo-open','1');start();}
+  else document.getElementById('gate-error').hidden=false;
+});
+</script>
 </body></html>
