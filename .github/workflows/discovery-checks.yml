@@ -5,6 +5,9 @@ on:
     paths:
       - 'demo/discovery-lab/**'
       - 'demo/archive-society/**'
+      - 'demo/about/**'
+      - 'data/research/worlds-fairs-critical-records-20261117.json'
+      - 'test/curatorial-paths.test.mjs'
       - 'src/discovery-*.mjs'
       - 'src/archive-*.mjs'
       - 'src/curated-edge-scenes.mjs'
@@ -47,6 +50,8 @@ jobs:
         run: npm run test:society
       - name: Verify curated relationships and skeptical fallbacks
         run: node --test test/curated-edge-scenes.test.mjs
+      - name: Verify curatorial source-status and About disclosures
+        run: node --test test/curatorial-paths.test.mjs
       - name: Browser smoke and screenshots
         run: |
           npm ci
