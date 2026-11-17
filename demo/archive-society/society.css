@@ -282,7 +282,8 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
 .graph-list{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .audio-bar{display:flex;align-items:center;gap:10px;margin-top:12px;padding:6px 12px 6px 6px;background:#1a1a1a;border-radius:999px}
 .audio-bar[hidden]{display:none}
-.audio-bar .play-round{width:42px;height:42px;min-width:42px;min-height:42px;padding:0;border:0;border-radius:50%;background:#f4f4f4;color:#111}
+.audio-bar .play-round{width:42px;height:42px;min-width:42px;min-height:42px;padding:0;border:0;border-radius:50%;background:#f4f4f4;color:#111;display:grid;place-items:center}
+.audio-bar .play-round svg{width:18px;height:18px;display:block}
 .audio-bar .bars{display:flex;align-items:flex-end;gap:2px;height:18px;flex:1}
 .audio-bar .bars i{display:block;width:3px;height:5px;background:#f4f4f4;border-radius:2px}
 .audio-bar .bars i:nth-child(3n){height:11px}
