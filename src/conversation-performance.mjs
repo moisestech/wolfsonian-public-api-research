@@ -69,7 +69,14 @@ export function directConversation(conversation,voices=[],roleOverrides={},opts=
   const sceneId=conversation.sceneId||conversation.id||'metadata-fallback';
   const score=PERFORMANCE_SCORE[conversation.sceneId]||null;
   const style=opts.style==='continuity'?'continuity':'scene-variety';
-  const allocated=new Set(),assigned=new Map();
+  const archivistMode=opts.archivistMode==='plural'?'plural':'single';
+  const archivistOverride=safeVoice(roleOverrides.archivist,available);
+  // Reserve a stable, device-local Archivist for the entire exhibition.
+  // Plural mode is opt-in and uses the scene-aware palette instead.
+  const singleArchivist=archivistMode==='single'
+    ?archivistOverride||(available.length?available[hash('fictional-archivist-fixed-v1')%available.length]:null)
+    :null;
+  const allocated=new Set(singleArchivist&&style==='scene-variety'?[singleArchivist.voiceURI]:[]),assigned=new Map();
   const parts=conversation.turns.map((turn,index)=>{
     const speakerId=accessionForTurn(conversation,turn);
     const label=score?.beat[index]||(
@@ -78,7 +85,9 @@ export function directConversation(conversation,voices=[],roleOverrides={},opts=
     const delivery=DELIVERY[label]||DELIVERY.observe;
     const override=safeVoice(roleOverrides[turn.role],available);
     const stableSeed=style==='continuity'?speakerId:sceneId+'|'+speakerId+'|'+label;
-    let voice=override||assigned.get(speakerId)||null;
+    let voice=turn.role==='archivist'&&singleArchivist
+      ?singleArchivist
+      :override||assigned.get(speakerId)||null;
     if(!voice&&available.length){
       const preferred=hash(stableSeed)%available.length;
       if(style==='continuity'){
@@ -102,7 +111,7 @@ export function directConversation(conversation,voices=[],roleOverrides={},opts=
     };
   });
   return {
-    sceneId,style,localOnly:true,editorialQuestion:score?.question||null,
+    sceneId,style,archivistMode,localOnly:true,editorialQuestion:score?.question||null,
     tension:score?.tension||null,turns:parts
   };
 }
