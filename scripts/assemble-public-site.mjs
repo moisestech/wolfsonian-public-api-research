@@ -33,6 +33,8 @@ export const PUBLIC_FILES = [
   'src/matrix-room.mjs',
   'src/public-matrix-objects.mjs',
   'src/object-lens-core.mjs',
+  'src/object-inquiry.mjs',
+  'src/storage-topology.mjs',
   'src/presentation-pairs.mjs',
   'src/session-images.mjs',
   'src/sprite-fit.mjs',
