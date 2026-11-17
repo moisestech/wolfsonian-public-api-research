@@ -251,3 +251,19 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
     transition:none;animation:none
   }
 }
+
+/* Mobile: keep the graph discoverable without making the text a second-screen afterthought. */
+.read-conversation-link{display:none}
+@media(max-width:700px){
+  .atlas-panel{min-height:0}
+  .atlas-toolbar{align-items:flex-start;gap:8px;padding-bottom:8px}
+  .atlas-toolbar h2{font-size:18px;line-height:1.24;flex:1}
+  .read-conversation-link{
+    display:inline-flex;align-items:center;justify-content:center;
+    flex:0 0 auto;min-height:44px;padding:7px 9px;border:1px solid #555;
+    border-radius:8px;color:#f4f4f4;font-size:12px;text-decoration:none
+  }
+  .canvas{height:clamp(240px,33dvh,310px);min-height:240px;flex:0 0 auto}
+  #stage{min-height:240px}
+  #conversation-panel{scroll-margin-top:10px}
+}
