@@ -27,6 +27,7 @@
       <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
       <button type="button" id="source-info" class="icon-button" aria-label="About this encounter" aria-expanded="false" aria-controls="source-note">i</button>
     </nav>
+    <a class="about-link" href="../about/">About</a>
     <a class="icon-link" href="../object-lens/" aria-label="Object Lens"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg></a>
     <button id="admin-toggle" class="icon-button" type="button" aria-label="Settings" aria-expanded="false" aria-controls="admin"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg></button>
   </div>
@@ -66,6 +67,7 @@
   <div class="atlas-toolbar"><button type="button" id="room-back" class="room-back">Back</button><h2 id="atlas-title">A constellation of possible readings</h2><div id="room-legend" class="room-legend" hidden></div></div>
   <div class="canvas">
     <div id="stage" role="img" aria-label="Objects in a force graph"></div>
+    <p id="research-edge" class="research-edge edge-curatorial" hidden>Curatorial juxtaposition</p>
     <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
   </div>
   <footer class="atlas-footer">
@@ -107,30 +109,19 @@
         </div>
       </div>
       <div class="tool">
-        <button id="more-toggle" class="choice" type="button" data-sheet="more" aria-haspopup="dialog" aria-expanded="false" aria-controls="more-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18" cy="12" r="1.7" fill="currentColor"/></svg></span><span class="reading-label"><small>More</small><strong>Map options</strong></span></button>
-        <div id="more-popover" class="tool-popover" hidden role="dialog" aria-label="Map options">
-          <div data-more="layers">
-            <div class="more-layers">
-              <label class="icon-check" title="Accession identity"><input id="layer-accession" type="checkbox" checked aria-label="Accession identity"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.6"/></svg></label>
-              <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
-              <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
-            </div>
-            <button id="zoom-open" type="button">Zoom</button>
-          </div>
-          <div data-more="zoom" hidden>
-            <button id="sheet-back" type="button">Back</button>
-            <div class="zoom">
-              <button id="fit" class="on" type="button" title="The whole set">Field</button>
-              <button type="button" data-stop="34" title="Objects in this conversation">Group</button>
-              <button type="button" data-stop="67" title="The two objects talking">Pair</button>
-              <button type="button" data-stop="100" title="This photograph">Object</button>
-              <span id="zoom-note">The whole set</span>
-              <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
-              <input id="zoom" type="range" min="0" max="100" value="0" aria-label="Zoom">
-              <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
-            </div>
-          </div>
-        </div>
+        <button id="paths-toggle" class="choice" type="button" data-sheet="paths" aria-haspopup="dialog" aria-expanded="false" aria-controls="paths-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 16c2-6 4-6 6 0s4 6 6 0" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="16" r="1.6" fill="currentColor"/><circle cx="18" cy="16" r="1.6" fill="currentColor"/></svg></span><span class="reading-label"><small>Paths</small><strong id="paths-name">Research</strong></span></button>
+        <div id="paths-popover" class="tool-popover" hidden role="dialog" aria-label="Curatorial paths"><div id="path-choices"></div></div>
+      </div>
+      <div class="command-layers" role="group" aria-label="Map layers">
+        <label class="icon-check" title="Accession identity"><input id="layer-accession" type="checkbox" checked aria-label="Accession identity"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.6"/></svg></label>
+        <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
+        <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
+      </div>
+      <div class="command-zoom" role="group" aria-label="Zoom">
+        <button id="fit" class="on" type="button" title="The whole set">Field</button>
+        <button type="button" data-stop="34" title="Objects in this conversation">Group</button>
+        <button type="button" data-stop="67" title="The two objects talking">Pair</button>
+        <button type="button" data-stop="100" title="This photograph">Object</button>
       </div>
     </div>
     <p id="layer-notice" class="boundary" hidden></p>

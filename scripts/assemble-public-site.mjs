@@ -18,6 +18,7 @@ export const PUBLIC_FILES = [
   'src/atlas-graph.mjs',
   'src/atlas-scripts.mjs',
   'src/curated-edge-scenes.mjs',
+  'src/curatorial-relationships.mjs',
   'src/discovery-dialogue.mjs',
   'src/discovery-graph.mjs',
   'src/discovery-personas.mjs',
@@ -36,6 +37,7 @@ export const PUBLIC_FILES = [
   'src/session-images.mjs',
   'src/sprite-fit.mjs',
   'src/visitor-guide.mjs',
+  'src/worlds-fairs-research.mjs',
   'src/zoom-stops.mjs',
 ];
 

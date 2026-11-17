@@ -246,7 +246,7 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     for (const node of nextNodes) {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'graph-node' + (node.neighbor ? ' conversation-edge' : '') + (node.emphasized ? ' emphasized' : '') + (node.focused ? ' selected' : '');
+      button.className = 'graph-node' + (node.neighbor ? ' conversation-edge' : '') + (node.emphasized ? ' emphasized' : '') + (node.focused ? ' selected' : '') + (node.schematic ? ' schematic' : '');
       button.dataset.accession = node.id;
       button.textContent = node.label || node.id;
       button.addEventListener('click', () => onSelect?.(node.id));
