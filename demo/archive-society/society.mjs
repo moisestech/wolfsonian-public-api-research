@@ -11,7 +11,7 @@ import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
-const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,
+const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
   playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null};
@@ -207,7 +207,7 @@ function renderConversation(){
   if(c.dramaticArc)box.append(node('h2',c.dramaticArc));
   const chat=node('div',undefined,'chat');
   const linkColor=tagColor(edge.reasons[0].value);
-  const topic=node('p',edge.reasons[0].value,'chat-topic');topic.style.background=linkColor;topic.style.color='#111';chat.append(topic);
+  const topic=node('p',c.scriptBasis?.value||edge.reasons[0].value,'chat-topic');topic.style.background=linkColor;topic.style.color='#111';chat.append(topic);
   chat.style.setProperty('--link',linkColor);
   const guide=CARD_BY_ID.get('archivist');
   const faces={
@@ -224,7 +224,28 @@ function renderConversation(){
     bubble.append(img,say);chat.append(bubble);
   }
   box.append(chat);
-  if(c.nextPrompt)box.append(node('p',c.nextPrompt,'muted'));
+  if(c.nextPrompt)box.append(node('p','NEXT QUESTION · '+c.nextPrompt,'edge-next-question'));
+  // A narrative edge can become a new starting object. Make this an explicit
+  // visitor action; graph connectivity is never inferred from the dialogue.
+  const actions=node('div',undefined,'edge-path-actions');
+  const follow=node('button','Follow this object');
+  follow.type='button';follow.dataset.followObject=target.accession;
+  follow.setAttribute('aria-label','Continue the investigation with '+target.title);
+  follow.addEventListener('click',()=>{
+    if(state.journey.length>=8)state.journey.shift();
+    state.journey.push(state.seed);
+    changeSeed(target.accession);setPanel('conversation');
+  });
+  actions.append(follow);
+  if(state.journey.length){
+    const back=node('button','Back to previous object','quiet');
+    back.type='button';back.dataset.returnObject=state.journey[state.journey.length-1];
+    back.addEventListener('click',()=>{
+      const previous=state.journey.pop();if(previous){changeSeed(previous);setPanel('conversation');}
+    });
+    actions.append(back);
+  }
+  box.append(actions);
   const details=node('details');details.append(node('summary','Inspect the reason for this edge'));
   for(const reason of c.evidence){const e=node('div',undefined,'reason');e.append(node('strong',reason.family+' / '+reason.value),node('small',reason.sourceColumns.join(' + ')+' → '+reason.targetColumns.join(' + ')),node('small','Shared by '+reason.candidateCount+' records in this local index.'));details.append(e);}
   details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);$('voice-controls').hidden=false;$('play').disabled=state.playing;
@@ -335,7 +356,7 @@ function speakOnDevice(turn,voice){
     window.speechSynthesis.speak(utterance);
   });
 }
-function invalidateData(){stop();resetApproval();lookupAbort?.abort();state.epoch++;state.edge=null;state.snapshots.clear();state.payload=null;state.lookupBusy=false;}
+function invalidateData(){stop();resetApproval();lookupAbort?.abort();state.epoch++;state.edge=null;state.journey=[];state.snapshots.clear();state.payload=null;state.lookupBusy=false;}
 function saveConversation(){
   if(!state.conversation)return;
   const payload={...state.conversation,exportedAt:new Date().toISOString(),source:record().source,notice:'Local research export. Review permissions before sharing. No photos, service token or provider credentials included.'};
@@ -377,7 +398,7 @@ document.addEventListener('click',event=>{
 });
 const stage=mountForceStage($('stage'),{onSelect:id=>onGraphSelect(id),background:'#111111'});
 paintReading();
-$('seed').addEventListener('change',()=>changeSeed($('seed').value));
+$('seed').addEventListener('change',()=>{state.journey=[];changeSeed($('seed').value);});
 $('search').addEventListener('input',()=>{stop();resetApproval();options();render();});
 for(const id of ['layer-accession','layer-box','layer-box-sim'])$(id).addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();});
 $('atlas-mode').addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();stage.fit();});
