@@ -9,7 +9,8 @@ import { OPENING_ACCESSION } from '../../src/presentation-pairs.mjs';
 import { withPublicAnchorFallback } from '../../src/object-lens-core.mjs';
 import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { CONVERSATION_CHAPTERS, conversationGuide, destinationForScene } from '../../src/conversation-guide.mjs';
-import { localVoiceOptions, roleVoiceCast, SPEAKER_ROLES } from '../../src/local-voice-cast.mjs';
+import { localVoiceOptions, SPEAKER_ROLES } from '../../src/local-voice-cast.mjs';
+import { directConversation } from '../../src/conversation-performance.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -454,18 +455,18 @@ async function play(){
   if(mode==='elevenlabs'&&!$('external-approved').checked){message('voice-status','Review the displayed transcript and confirm external-processing approval first.');return;}
   state.playing=true;$('play').disabled=true;document.querySelectorAll('.conversation-edge.selected').forEach(e=>e.classList.add('speaking'));
   try{
-    let voiceCast=roleVoiceCast(window.speechSynthesis?.getVoices?.()||[],voiceSelections);
+    let performance=directConversation(conversation,window.speechSynthesis?.getVoices?.()||[],voiceSelections,{style:$('voice-casting-style').value});
     if(mode==='device'){
       if(!window.speechSynthesis)throw new Error('No device speech service. The written transcript remains available.');
-      if(!voiceCast.objectA){
+      if(!performance.turns.some(part=>part.voice)){
         await new Promise(resolve=>setTimeout(resolve,500));
         renderLocalVoiceChoices();
-        voiceCast=roleVoiceCast(window.speechSynthesis.getVoices(),voiceSelections);
+        performance=directConversation(conversation,window.speechSynthesis.getVoices(),voiceSelections,{style:$('voice-casting-style').value});
       }
-      if(!voiceCast.objectA)throw new Error('No device-local voice is installed. The full written conversation remains available.');
+      if(!performance.turns.some(part=>part.voice))throw new Error('No device-local voice is installed. The full written conversation remains available.');
     }
     for(const [i,turn]of conversation.turns.entries()){
-      if(session!==playback)return;message('voice-status','Speaking '+(i+1)+' of '+conversation.turns.length+' · '+turn.speaker);
+      if(session!==playback)return;message('voice-status','Speaking '+(i+1)+' of '+conversation.turns.length+' · '+turn.speaker+' · '+performance.turns[i].direction);
       $('voice-controls')?.classList.add('playing');
       if($('audio-elapsed'))$('audio-elapsed').textContent='Turn '+(i+1)+' of '+conversation.turns.length;
       state.turnIndex=i;
@@ -473,7 +474,7 @@ async function play(){
       updateTurnFocus();
       document.querySelectorAll('#conversation-content .turn').forEach((el,index)=>el.classList.toggle('speaking',index===i));
       if(mode==='device'){
-        await speakOnDevice(turn,voiceCast[turn.role]);
+        await speakOnDevice(turn,performance.turns[i]);
       }else{
         try{
           voiceAbort=new AbortController();
@@ -491,7 +492,7 @@ async function play(){
           // with an unconfirmed local voice or additional network requests.
           if(/not enabled/i.test(provider))throw error;
           message('voice-status',provider);
-          try{if(!voiceCast[turn.role])throw new Error('No local voice installed.');await speakOnDevice(turn,voiceCast[turn.role]);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
+          try{if(!performance.turns[i].voice)throw new Error('No local voice installed.');await speakOnDevice(turn,performance.turns[i]);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
         }
       }
     }
@@ -499,14 +500,14 @@ async function play(){
   }catch(error){if(session===playback)message('voice-status',error.message);}
   finally{if(session===playback){state.playing=false;$('play').disabled=false;document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));$('voice-controls')?.classList.remove('playing');stage.setSpeaking('');updateTurnFocus();}}
 }
-function speakOnDevice(turn,voice){
+function speakOnDevice(turn,direction){
   return new Promise((resolve,reject)=>{
     if(!window.speechSynthesis){reject(new Error('No device speech service. The written transcript remains available.'));return;}
     cancelDeviceSpeech=resolve;
     const utterance=new SpeechSynthesisUtterance(turn.text);
-    if(voice){utterance.voice=voice;utterance.lang=voice.lang;}
-    utterance.rate=turn.role==='objectA'?.94:turn.role==='objectB'?1.02:.88;
-    utterance.pitch=turn.role==='objectA'?.97:turn.role==='objectB'?1.04:1;
+    if(direction?.voice){utterance.voice=direction.voice;utterance.lang=direction.voice.lang;}
+    utterance.rate=direction?.rate??.94;
+    utterance.pitch=direction?.pitch??1;
     utterance.onend=()=>{cancelDeviceSpeech=null;resolve();};
     utterance.onerror=()=>{cancelDeviceSpeech=null;reject(new Error('Device speech stopped or unavailable.'));};
     window.speechSynthesis.speak(utterance);
