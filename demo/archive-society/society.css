@@ -357,3 +357,15 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
   body.show-room .atlas-footer{display:block;flex:0 0 auto}
   body.show-room .room-back{display:inline-flex;width:auto;min-height:36px;margin:0 8px 0 0}
 }
+
+
+/* Plain-language cold arrival. Never hide the explanation behind a modal. */
+.arrival-guide{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.9fr);gap:22px;padding:12px 24px 13px;background:#1b201f;color:#eaf1e9;border-bottom:1px solid #4e5e57}
+.arrival-intro,.arrival-actions{min-width:0}.arrival-guide p{font:400 15px/1.45 system-ui,sans-serif;margin:0 0 5px}
+.arrival-guide strong{font-weight:700;color:#f8fbf6}
+.arrival-guide .arrival-kicker{font:700 10px/1.5 ui-monospace,monospace;color:#9fdcc9;letter-spacing:.09em;margin-bottom:4px}
+#arrival-connection{color:#f1c49f;overflow-wrap:anywhere}
+.arrival-path{color:#d8e6da}.arrival-voices{font:13px/1.45 system-ui,sans-serif;color:#eaf1e9}
+.arrival-voices summary{cursor:pointer;min-height:26px;font-weight:650;color:#9fdcc9}
+.arrival-guide .arrival-voices p{font-size:13px;line-height:1.48;margin:3px 0 0}
+@media(max-width:800px){.arrival-guide{grid-template-columns:1fr;gap:6px;padding:11px 15px}.arrival-guide p{font-size:13px}.arrival-guide .arrival-voices p{font-size:13px}.arrival-path{margin:0}}
