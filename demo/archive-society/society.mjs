@@ -8,14 +8,24 @@ import { localImageUrl } from '../../src/local-images.mjs';
 import { OPENING_ACCESSION } from '../../src/presentation-pairs.mjs';
 import { withPublicAnchorFallback } from '../../src/object-lens-core.mjs';
 import { focusedPairGraph } from '../../src/force-graph-data.mjs';
+import { CONVERSATION_CHAPTERS, conversationGuide, destinationForScene } from '../../src/conversation-guide.mjs';
+import { localVoiceOptions, roleVoiceCast, SPEAKER_ROLES } from '../../src/local-voice-cast.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
-  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null};
+  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,turnIndex:0,turnKey:null};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
+let guideCacheRecords=null,guideCache=null;
+const voiceSelections={objectA:'',objectB:'',archivist:''};
+const currentGuide=()=>{
+  if(guideCacheRecords!==state.records){
+    guideCacheRecords=state.records;guideCache=conversationGuide(state.records);
+  }
+  return guideCache;
+};
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
 const message=(id,text)=>{$(id).textContent=text;};
@@ -45,10 +55,104 @@ function stop(){
   document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));
   $('voice-controls')?.classList.remove('playing');
   stage.setSpeaking('');
+  updateTurnFocus();
 }
 function changeSeed(id){stop();resetApproval();state.seed=id;state.edge=null;
   if(state.payload)state.snapshots.set(id,reconcileLookup(state.payload,id,'UNKNOWN_LOCAL_CAPTURE_TIME'));
   render();setPanel('record');}
+
+function renderConversationGuide(){
+  const chapter=$('guide-chapter').value||'all';
+  const query=$('guide-search').value.toLocaleLowerCase().trim();
+  const root=$('guide-list');root.replaceChildren();
+  const data=currentGuide();
+  const total=data.flatMap(item=>item.scenes).filter(item=>item.available).length;
+  const matched=data.map(group=>({
+    group,
+    scenes:group.scenes.filter(scene=>{
+      if(chapter!=='all'&&group.id!==chapter)return false;
+      const search=[scene.arc,scene.aTitle,scene.bTitle,scene.a,scene.b,scene.tagValue,group.title].join(' ').toLocaleLowerCase();
+      return search.includes(query);
+    })
+  })).filter(item=>item.scenes.length);
+  for(const {group,scenes} of matched){
+    root.append(node('p',group.title,'guide-chapter-title'));
+    for(const scene of scenes){
+      const button=node('button',undefined,'guide-scene');
+      button.type='button';button.dataset.sceneId=scene.id;button.disabled=!scene.available;
+      button.setAttribute('aria-current',String(state.conversation?.sceneId===scene.id));
+      const heading=node('strong',scene.arc);
+      const summary=node('small',scene.available
+        ?(scene.aTitle+' ↔ '+scene.bTitle)
+        :'Unavailable in the current source-backed graph');
+      const metadata=node('small',scene.tagFamily+' / '+scene.tagValue+' · artist-authored draft');
+      button.append(heading,summary,metadata);
+      if(scene.available)button.addEventListener('click',()=>navigateToConversation(scene.id));
+      root.append(button);
+    }
+  }
+  if(!matched.length)root.append(node('p','No matching conversations. Try another chapter or term.','muted'));
+  $('guide-count').textContent=total+' of 16 curated conversations available in the current records';
+}
+function navigateToConversation(sceneId,{writeHistory=true}={}){
+  const destination=destinationForScene(currentGuide(),sceneId);
+  if(!destination){
+    $('guide-count').textContent='This conversation is not available in the current source-backed records.';
+    return false;
+  }
+  stop();resetApproval();
+  state.journey=[];state.turnIndex=0;state.turnKey=null;
+  state.lens='family';$('lens').value='family';paintReading();
+  $('theme').value='';$('atlas-mode').checked=false;
+  state.seed=destination.seed;state.edge=destination.edgeId;state.identityEdge=null;
+  render();setPanel('conversation');$('conversation-guide').open=false;
+  if(writeHistory){
+    const url=new URL(location.href);
+    url.searchParams.set('scene',sceneId);
+    url.searchParams.delete('accession');
+    history.pushState({scene:sceneId},'',url.pathname+url.search+url.hash);
+  }
+  $('conversation-panel').scrollIntoView({behavior:'auto',block:'start'});
+  return true;
+}
+$('guide-chapter').replaceChildren(...[
+  {value:'all',label:'All five chapters'},
+  ...CONVERSATION_CHAPTERS.map(chapter=>({value:chapter.id,label:chapter.title}))
+].map(entry=>{const option=node('option',entry.label);option.value=entry.value;return option;}));
+$('guide-chapter').addEventListener('change',renderConversationGuide);
+$('guide-search').addEventListener('input',renderConversationGuide);
+window.addEventListener('popstate',()=>{
+  const sceneId=new URLSearchParams(location.search).get('scene');
+  if(sceneId)navigateToConversation(sceneId,{writeHistory:false});
+});
+
+
+function renderLocalVoiceChoices(){
+  const installed=localVoiceOptions(window.speechSynthesis?.getVoices?.()||[]);
+  for(const role of SPEAKER_ROLES){
+    const selector=document.querySelector('[data-voice-role="'+role+'"]');
+    const automatic=node('option','Automatic local voice');automatic.value='';
+    selector.replaceChildren(automatic,...installed.map(voice=>{
+      const opt=node('option',voice.name+' · '+voice.lang);opt.value=voice.voiceURI;
+      return opt;
+    }));
+    if(installed.some(voice=>voice.voiceURI===voiceSelections[role]))
+      selector.value=voiceSelections[role];
+    else {selector.value='';voiceSelections[role]='';}
+  }
+  $('local-voice-status').textContent=installed.length
+    ?installed.length+' local voice'+(installed.length===1?'':'s')+' available · no per-play API cost'
+    :'No device-local voices found. The full written conversation remains available.';
+}
+document.querySelectorAll('[data-voice-role]').forEach(selector=>
+  selector.addEventListener('change',()=>{
+    stop();voiceSelections[selector.dataset.voiceRole]=selector.value;
+    message('voice-status','Local voice cast updated for this session.');
+  })
+);
+window.speechSynthesis?.addEventListener?.('voiceschanged',renderLocalVoiceChoices);
+renderLocalVoiceChoices();
+
 function options(){
   const query=$('search').value.toLowerCase();
   const entries=state.records.filter(r=>(r.title+' '+r.accession).toLowerCase().includes(query));
@@ -100,7 +204,7 @@ function paintPreview(){
   document.querySelectorAll('.preview').forEach(el=>el.classList.remove('preview'));
   if(state.hover?.kind==='object')document.querySelector('[data-accession="'+CSS.escape(state.hover.accession)+'"]')?.classList.add('preview');
   if(state.hover?.kind==='edge'||state.hover?.kind==='identity')document.querySelector('[data-edge="'+CSS.escape(state.hover.id)+'"]')?.classList.add('preview');
-  renderStage();renderConversation();renderRecord();
+  if(!state.playing){renderStage();renderConversation();renderRecord();}
 }
 function shownEdge(){
   if(!state.view)return null;
@@ -186,9 +290,49 @@ function renderStage(){
   row.append(reader);
   box.append(row);
 }
+
+/** Reading focus is independent of speech: visitors can inspect every turn in silence. */
+function updateTurnFocus(){
+  const turns=[...document.querySelectorAll('#conversation-content .bubble.turn')];
+  const c=state.conversation;
+  if(!c||!turns.length){
+    $('turn-navigation').hidden=true;
+    $('zoom-stage').dataset.activeRole='';
+    stage.setActiveSpeaker('');
+    return;
+  }
+  state.turnIndex=Math.max(0,Math.min(state.turnIndex,turns.length-1));
+  const index=state.turnIndex;
+  turns.forEach((turn,i)=>{
+    turn.classList.toggle('current',i===index);
+    turn.setAttribute('aria-current',i===index?'step':'false');
+  });
+  const current=c.turns[index],speaker=current.speaker;
+  const activeId=current.role==='objectA'?c.source:current.role==='objectB'?c.target:'';
+  stage.setActiveSpeaker(activeId,current.role);
+  $('zoom-stage').dataset.activeRole=current.role;
+  $('graph-dialogue-label').dataset.activeRole=current.role;
+  const roleLabel=current.role==='objectA'?'OBJECT A':current.role==='objectB'?'OBJECT B':'ARCHIVIST';
+  $('graph-active-speaker').textContent='CURRENT FOCUS · '+roleLabel;
+  $('turn-progress').textContent='Reading '+(index+1)+' of '+turns.length+' · '+roleLabel;
+  $('previous-turn').disabled=index===0||state.playing;
+  $('next-turn').disabled=index===turns.length-1||state.playing;
+  $('turn-navigation').hidden=false;
+}
+function focusTurn(index){
+  if(!state.conversation||state.playing)return;
+  state.turnIndex=Math.max(0,Math.min(index,state.conversation.turns.length-1));
+  updateTurnFocus();
+}
+$('previous-turn').addEventListener('click',()=>focusTurn(state.turnIndex-1));
+$('next-turn').addEventListener('click',()=>focusTurn(state.turnIndex+1));
+
 function renderConversation(){
   const edge=shownEdge(),box=$('conversation-content');box.replaceChildren();
   state.conversation=null;
+  $('turn-navigation').hidden=true;
+  $('graph-dialogue-label').hidden=true;
+  stage.setActiveSpeaker('');
   if(state.hover?.kind==='identity'){
     const identity=state.layerView?.relationships.find(item=>item.id===state.hover.id);
     if(identity){box.append(node('span','SCRIPTED · '+identity.validationState,'evidence-type'),node('h2',identity.type.replaceAll('_',' ')),node('p',identity.basis),node('p','A shared tag or identifier is not a historical relationship.','muted'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
@@ -201,6 +345,10 @@ function renderConversation(){
   if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
   const source=record(),target=state.records.find(r=>r.accession===edge.target);
   const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
+  $('graph-dialogue-label').hidden=false;
+  $('graph-context').textContent=source.title+' ↔ '+target.title;
+  const turnKey=state.seed+'|'+edge.id+'|'+state.lens;
+  if(state.turnKey!==turnKey){state.turnIndex=0;state.turnKey=turnKey;}
   const kind=c.mode==='CURATED_EDGE_SCENE'?'ARTIST-AUTHORED SCENE · EDITORIAL DRAFT':
     c.edgeMode==='QUESTION_THIS_LINK'?'QUESTIONABLE MATCH · METADATA ONLY':'SOURCE-BOUNDED METADATA READING';
   box.append(node('span',kind,'evidence-type'));
@@ -219,7 +367,9 @@ function renderConversation(){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
     const img=node('img');img.className='avatar';img.alt='';img.src=face.src;
-    const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
+    const say=node('div',undefined,'say');
+    const roleLabel=turn.role==='objectA'?'OBJECT A':turn.role==='objectB'?'OBJECT B':'THE ARCHIVIST';
+    say.append(node('span',roleLabel,'speaker-id'),node('strong',face.name),node('p',turn.text));
     for(const citation of turn.citations||[])say.append(node('small','Catalog field '+citation.pointer+' · '+citation.retrievedAt,'muted'));
     bubble.append(img,say);chat.append(bubble);
   }
@@ -250,6 +400,7 @@ function renderConversation(){
   for(const reason of c.evidence){const e=node('div',undefined,'reason');e.append(node('strong',reason.family+' / '+reason.value),node('small',reason.sourceColumns.join(' + ')+' → '+reason.targetColumns.join(' + ')),node('small','Shared by '+reason.candidateCount+' records in this local index.'));details.append(e);}
   details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);$('voice-controls').hidden=false;$('play').disabled=state.playing;
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn 1 of '+c.turns.length;
+  updateTurnFocus();
 }
 function pair(list,label,value){list.append(node('dt',label),node('dd',value||'Not supplied'));}
 function renderRecord(){
@@ -289,7 +440,7 @@ function render(){
   }
   const identityCount=state.layerView?.relationships.length||0;
   message('counts',state.view.nodes.length+' visible objects · '+state.view.edges.length+' conversation paths · '+identityCount+' identity or storage lines · 0 historical claims inferred');
-  renderStage();renderConversation();renderRecord();
+  renderStage();renderConversation();renderRecord();renderConversationGuide();
 }
 async function service(path,options={}){
   const token=$('access-token').value;
@@ -303,21 +454,26 @@ async function play(){
   if(mode==='elevenlabs'&&!$('external-approved').checked){message('voice-status','Review the displayed transcript and confirm external-processing approval first.');return;}
   state.playing=true;$('play').disabled=true;document.querySelectorAll('.conversation-edge.selected').forEach(e=>e.classList.add('speaking'));
   try{
-    let localVoice;
+    let voiceCast=roleVoiceCast(window.speechSynthesis?.getVoices?.()||[],voiceSelections);
     if(mode==='device'){
       if(!window.speechSynthesis)throw new Error('No device speech service. The written transcript remains available.');
-      localVoice=window.speechSynthesis.getVoices().find(v=>v.localService);
-      if(!localVoice){await new Promise(r=>setTimeout(r,500));localVoice=window.speechSynthesis.getVoices().find(v=>v.localService);}
-      if(!localVoice)throw new Error('No local device voice is installed. Use the written transcript or configure ElevenLabs.');
+      if(!voiceCast.objectA){
+        await new Promise(resolve=>setTimeout(resolve,500));
+        renderLocalVoiceChoices();
+        voiceCast=roleVoiceCast(window.speechSynthesis.getVoices(),voiceSelections);
+      }
+      if(!voiceCast.objectA)throw new Error('No device-local voice is installed. The full written conversation remains available.');
     }
     for(const [i,turn]of conversation.turns.entries()){
       if(session!==playback)return;message('voice-status','Speaking '+(i+1)+' of '+conversation.turns.length+' · '+turn.speaker);
       $('voice-controls')?.classList.add('playing');
       if($('audio-elapsed'))$('audio-elapsed').textContent='Turn '+(i+1)+' of '+conversation.turns.length;
+      state.turnIndex=i;
       stage.setSpeaking(turn.role==='objectA'?conversation.source:turn.role==='objectB'?conversation.target:'');
+      updateTurnFocus();
       document.querySelectorAll('#conversation-content .turn').forEach((el,index)=>el.classList.toggle('speaking',index===i));
       if(mode==='device'){
-        await speakOnDevice(turn,localVoice);
+        await speakOnDevice(turn,voiceCast[turn.role]);
       }else{
         try{
           voiceAbort=new AbortController();
@@ -335,28 +491,28 @@ async function play(){
           // with an unconfirmed local voice or additional network requests.
           if(/not enabled/i.test(provider))throw error;
           message('voice-status',provider);
-          try{await speakOnDevice(turn,localVoice);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
+          try{if(!voiceCast[turn.role])throw new Error('No local voice installed.');await speakOnDevice(turn,voiceCast[turn.role]);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
         }
       }
     }
     if(session===playback)message('voice-status','Finished · this was a scripted interpretation, not historical testimony.');
   }catch(error){if(session===playback)message('voice-status',error.message);}
-  finally{if(session===playback){state.playing=false;$('play').disabled=false;document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));$('voice-controls')?.classList.remove('playing');stage.setSpeaking('');}}
+  finally{if(session===playback){state.playing=false;$('play').disabled=false;document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));$('voice-controls')?.classList.remove('playing');stage.setSpeaking('');updateTurnFocus();}}
 }
 function speakOnDevice(turn,voice){
   return new Promise((resolve,reject)=>{
     if(!window.speechSynthesis){reject(new Error('No device speech service. The written transcript remains available.'));return;}
     cancelDeviceSpeech=resolve;
     const utterance=new SpeechSynthesisUtterance(turn.text);
-    if(voice)utterance.voice=voice;
-    utterance.rate=.92;
-    utterance.pitch=turn.role==='objectA'?0.95:turn.role==='objectB'?1.08:1;
+    if(voice){utterance.voice=voice;utterance.lang=voice.lang;}
+    utterance.rate=turn.role==='objectA'?.94:turn.role==='objectB'?1.02:.88;
+    utterance.pitch=turn.role==='objectA'?.97:turn.role==='objectB'?1.04:1;
     utterance.onend=()=>{cancelDeviceSpeech=null;resolve();};
     utterance.onerror=()=>{cancelDeviceSpeech=null;reject(new Error('Device speech stopped or unavailable.'));};
     window.speechSynthesis.speak(utterance);
   });
 }
-function invalidateData(){stop();resetApproval();lookupAbort?.abort();state.epoch++;state.edge=null;state.journey=[];state.snapshots.clear();state.payload=null;state.lookupBusy=false;}
+function invalidateData(){stop();resetApproval();lookupAbort?.abort();state.epoch++;state.edge=null;state.turnIndex=0;state.turnKey=null;state.journey=[];state.snapshots.clear();state.payload=null;state.lookupBusy=false;}
 function saveConversation(){
   if(!state.conversation)return;
   const payload={...state.conversation,exportedAt:new Date().toISOString(),source:record().source,notice:'Local research export. Review permissions before sharing. No photos, service token or provider credentials included.'};
@@ -471,4 +627,6 @@ await loadLakehouse();
 if(requested)state.records=withPublicAnchorFallback(state.records);
 if(requested&&state.records.some(item=>item.accession===requested))state.seed=requested;
 categories();options();render();
+const requestedScene=new URLSearchParams(location.search).get('scene');
+if(requestedScene)navigateToConversation(requestedScene,{writeHistory:false});
 if(requested&&!state.records.some(item=>item.accession===requested))message('import-status','Requested accession is not in the loaded set. No identity was assumed.');
