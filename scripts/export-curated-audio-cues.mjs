@@ -31,7 +31,10 @@ export function audioCues({tone='critical'}={}){
         return {
           index,role,speakerAccession:turn.speakerAccession,
           delivery,direction:DELIVERY[delivery]?.label||'reads',
-          rate:DELIVERY[delivery]?.rate||1,pitch:DELIVERY[delivery]?.pitch||1,
+          rate:role==='archivist'?DELIVERY[delivery].rate:
+            selectedTone==='poetic'?Math.max(.84,Number((DELIVERY[delivery].rate*.94).toFixed(2))):DELIVERY[delivery].rate,
+          pitch:role==='archivist'?DELIVERY[delivery].pitch:
+            selectedTone==='poetic'?Number((DELIVERY[delivery].pitch*.98).toFixed(2)):DELIVERY[delivery].pitch,
           text:turn.text,textSha256Prefix:digest,
           proposedFile:'audio/'+selectedTone+'/'+scene.id+'/turn-'+(index+1)+'-'+digest+'.mp3',
           status:'NOT_RENDERED'
