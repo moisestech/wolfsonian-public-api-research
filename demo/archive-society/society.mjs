@@ -95,7 +95,22 @@ function syncZoomUi(){
   if($('zoom-note'))$('zoom-note').textContent=stop.note;
   if($('zoom-name'))$('zoom-name').textContent=stop.label;
 }
-function setPlayDisabled(disabled){$('play').disabled=disabled;if($('space-play'))$('space-play').disabled=disabled;}
+function transportIcon(kind){
+  const icon=svg('svg',{viewBox:'0 0 24 24','aria-hidden':'true'});
+  if(kind==='stop')icon.append(svg('rect',{x:'6',y:'6',width:'12',height:'12',rx:'1.5',fill:'currentColor'}));
+  else icon.append(svg('path',{d:'M8 6v12l10-6z',fill:'currentColor'}));
+  return icon;
+}
+function setPlayDisabled(disabled){
+  const playing=state.playing;
+  const play=$('play');
+  play.disabled=playing?false:disabled;
+  play.setAttribute('aria-label',playing?'Stop':'Play');
+  play.setAttribute('aria-pressed',String(playing));
+  play.replaceChildren(transportIcon(playing?'stop':'play'));
+  const space=$('space-play');
+  if(space){space.disabled=play.disabled;space.textContent=playing?'Stop':'Play';space.setAttribute('aria-label',playing?'Stop':'Play');}
+}
 function setPanel(name){
   for(const p of ['conversation','record'])$(p+'-panel').hidden=p!==name;
   for(const b of document.querySelectorAll('[data-panel]'))b.setAttribute('aria-pressed',String(b.dataset.panel===name));
@@ -1010,7 +1025,7 @@ $('theme').addEventListener('change',()=>{stop();resetApproval();state.researchP
 $('veil').addEventListener('input',renderGraph);
 document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>setPanel(b.dataset.panel)));
 $('voice-mode').addEventListener('change',()=>{stop();resetApproval();$('approval-box').hidden=$('voice-mode').value!=='elevenlabs';});
-$('play').addEventListener('click',play);$('stop').addEventListener('click',()=>{stop();message('voice-status','Playback stopped.');});$('export').addEventListener('click',saveConversation);
+$('play').addEventListener('click',()=>{if(state.playing){stop();message('voice-status','Playback stopped.');return;}play();});$('stop').addEventListener('click',()=>{stop();message('voice-status','Playback stopped.');});$('export').addEventListener('click',saveConversation);
 const sourceNote=$('source-note'), sourceInfo=$('source-info');
 function closeSourceNote(){if(sourceNote)sourceNote.hidden=true;}
 sourceInfo?.addEventListener('click',()=>{window.location.href='../about/';});
