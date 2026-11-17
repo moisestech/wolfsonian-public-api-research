@@ -18,17 +18,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title calls munitions work skilled. Why does the word skilled need to be announced?",
+        "text": "They call me Skilled Work, as if a title could pay a worker. I can name a task. Can I give anyone credit?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.317.66",
-        "text": "My title advertises a lottery tied to an exhibition of women's labor. Is making work visible the same as valuing the people who do it?",
+        "text": "I advertise a lottery at an exhibition of women's labor. A prize can draw a crowd. What keeps the labor visible after the draw?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The records share the Women motif and Labor theme. They do not establish a common workforce, audience, or historical collaboration.",
+        "text": "The index connects us through Women and Labor. It does not say who was paid, named, or whether our audiences ever overlapped.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -58,17 +58,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "I tie skilled work to munitions. Does the job become visible, or only the national need for it?",
+        "text": "I insist on the word skilled. Is that a portrait of the worker, or a way to praise what the worker produces?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1990.340.141",
-        "text": "I announce an exhibition called The Woman 1813–1913. Who decides which kinds of work deserve a public exhibition?",
+        "text": "My title compresses The Woman 1813–1913 into an exhibition. A century can fit on a poster. What work disappears between the dates?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The Women motif connects these records. Their different dates and purposes are grounds for comparison, not proof of a shared cause.",
+        "text": "The index assigns both records the Women motif. That invites comparison, not a claim of shared organizers, audiences, or lives.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -98,17 +98,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "Skilled work appears in my title. Can production be celebrated without naming the people doing it?",
+        "text": "I ask you to notice skilled work. But when you leave, will you remember the worker—or only the object made?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "I am titled Making the Engine. What happens when a machine becomes the hero of the image, rather than the act of making it?",
+        "text": "I am titled Making the Engine, not The Engine. If the verb matters, why does the machine so often take the bow?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The Factories motif is shared. It does not establish the same factory, workers, or a connection between the makers of these prints.",
+        "text": "Factories appears in both records' metadata. That does not place us in the same workshop or name the hands behind either image.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -138,17 +138,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title asks the viewer to notice skilled work on munitions.",
+        "text": "I make skilled work available to admire. You can admire workers without asking them a single question.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.4091",
-        "text": "My title asks people to vote for a workers' party. When does being pictured as labor become having a political voice?",
+        "text": "My title doesn't ask you to admire workers. It asks you to vote for a workers' party. But who authorizes a poster to speak for workers?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Factories is the shared motif. We can compare the requests these titles make without claiming a common movement or campaign.",
+        "text": "Factories is the shared motif. Neither record alone shows what workers thought of these images, or whether their makers shared a political cause.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -178,17 +178,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My 1917 title names munitions as skilled work. Does a wartime need change how skill is celebrated?",
+        "text": "I speak from 1917 and call munitions work skilled. Does that word sound different when another image invokes 1939?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "I am titled 1939 A.D. What does that date do to the earlier image's confidence in work and progress?",
+        "text": "I am called 1939 A.D. A year can be a date, a warning, a promise. My title alone cannot tell you which.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Labor is the common category. The records' dates establish distance, not a documented causal chain.",
+        "text": "Labor is our shared category. The dates establish distance, not that one image predicted, answered, or influenced the other.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -218,17 +218,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title stays close to the work of making munitions.",
+        "text": "My title names munitions work. What is made here can travel far beyond the workshop, but whose labor travels with its story?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990. 3722",
-        "text": "My title places a Savoia-Marchetti aircraft above Rome's Colosseum. What changes when technical power is seen from above rather than from the workshop?",
+        "text": "My title places an aircraft above Rome's Colosseum. From that altitude, who can you still see: the pilot, the engineers, the people carrying parts?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "War / Military is the shared category. It does not place the two images in one program, conflict, or propaganda campaign.",
+        "text": "War / Military is the shared category. It is not evidence of one factory, conflict, political purpose, or shared production network.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -258,17 +258,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Making the Engine is my title. Does the act of making disappear when the engine becomes the subject?",
+        "text": "My title is Making the Engine. It invites you to look at an achievement. Who is missing if achievement becomes the entire story?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.318.1",
-        "text": "My warning says one splinter can cost an eye. What is progress worth if the worker's body carries the risk?",
+        "text": "My warning says one splinter can cost an eye. The machine is not the only thing produced here; work can produce risk too.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Machines is the shared motif. That justifies comparison, not a claim that the two images depict the same industry, location, or incident.",
+        "text": "Machines is our shared motif, not a documented workplace or incident. A safety record might test this argument better than an image can.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -418,17 +418,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "84.4.66",
-        "text": "My record names Paul Robeson. Why should I be connected to an architectural fantasy?",
+        "text": "My record names Paul Robeson. Why am I in this conversation? A Trees keyword cannot tell you the story of his life.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1991.13",
-        "text": "My record describes a house on a steep hillside. Is the shared Trees motif enough for us to claim a conversation?",
+        "text": "My record describes a house on a steep hillside. The index found a tree; did it find any reason for us to speak?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "No documented historical relationship is established. Trees is a metadata overlap. This might be a useful failed hypothesis, not a meaningful historical edge.",
+        "text": "Only the Trees motif links these records here. No historical relationship has been established. The visitor can reject the edge.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -538,17 +538,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.2870",
-        "text": "I announce the 10th Utrecht Fair. Why has this graph connected me to Let the Living Rise?",
+        "text": "I announce the 10th Utrecht Fair. The graph says Water. What, exactly, should I say to Let the Living Rise?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "83.4.40",
-        "text": "The metadata says we share Water. But what do our titles actually tell us about a common purpose?",
+        "text": "My title says Let the Living Rise. A repeated motif doesn't explain our purposes. Is this an accidental introduction?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Not enough. A repeated motif does not establish intention, contact, or a historical relationship. The proposed edge remains unproven.",
+        "text": "Water is a metadata overlap, not proof of a shared audience, maker, or intention. This edge might need to be withdrawn.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
