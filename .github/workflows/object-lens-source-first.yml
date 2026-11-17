@@ -1,0 +1,31 @@
+name: Object Lens source-first contract
+on:
+  pull_request:
+    paths:
+      - "src/object-lens-core.mjs"
+      - "demo/object-lens/**"
+      - "demo/archive-society/society.mjs"
+      - "scripts/serve-archive-society.mjs"
+      - "test/object-lens-core.test.mjs"
+      - ".github/workflows/object-lens-source-first.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check JavaScript syntax
+        run: |
+          node --check src/object-lens-core.mjs
+          node --check demo/object-lens/lens.mjs
+          node --check demo/archive-society/society.mjs
+          node --check scripts/serve-archive-society.mjs
+      - name: Verify source-first visitor contract
+        run: node --test test/object-lens-core.test.mjs
