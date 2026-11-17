@@ -85,7 +85,9 @@ export function directConversation(conversation,voices=[],roleOverrides={},opts=
     );
     const delivery=DELIVERY[label]||DELIVERY.observe;
     const override=safeVoice(roleOverrides[turn.role],available);
-    const stableSeed=style==='continuity'?speakerId:sceneId+'|'+speakerId+'|'+label;
+    const stableSeed=turn.role==='archivist'&&archivistMode==='plural'
+      ?sceneId+'|'+speakerId+'|'+label
+      :style==='continuity'?speakerId:sceneId+'|'+speakerId+'|'+label;
     let voice=turn.role==='archivist'&&singleArchivist
       ?singleArchivist
       :override||assigned.get(speakerId)||null;
