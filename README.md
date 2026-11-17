@@ -4,6 +4,20 @@ An independent research notebook exploring The Wolfsonian–FIU's publicly docum
 
 It is **not** an official Wolfsonian application, production system, or museum-authored dataset.
 
+## Archive Dreams in Public — current curatorial question (November 2026)
+
+**What happens when a visitor can interrupt the voice that claims to know the future?** The Conversational Atlas is an artist-authored, source-aware environment where objects may propose, challenge, or reject relationships. Visitors can inspect the evidence for a connection; a shared catalog tag is not proof that people, makers, or records historically interacted.
+
+The project builds on The Wolfsonian–FIU's public research around *World's Fairs: Visions of Tomorrow* and Marco Brambilla's *After Utopia*, while investigating a different mode of participation: **visitors challenge how narratives are assembled instead of only viewing their images**. That distinction does not imply Brambilla's work ignored questions of agency or technological optimism.
+
+- [About the experience](demo/about/index.html) — visitor introduction, method and evidence boundaries
+- [Curatorial research paths](docs/curatorial-paths-voices-of-the-future-20261117.md) — six newly identified public-checklist records and three proposed cross-record questions
+- [Machine-readable research queue](data/research/worlds-fairs-critical-records-20261117.json) — accession identifiers and explicit verification / rights status
+- [Research issue #38](https://github.com/moisestech/wolfsonian-public-api-research/issues/38) — follow-up review with collection staff
+
+**Important:** The six new records are **research candidates**, not newly deployed graph nodes. The existing 1940 *Futurama* booklet (XB1992.1640), RCA Victor TV (2012.6.1), Trylon/Perisphere (86.17.1), and Your World of Tomorrow (86.19.57) already have independent public-source packets. Do not infer that these packets are all present in the current 76-record Lakehouse capture. A new fictional relationship requires collection verification, a distinct reviewed curatorial-link type, and publication rights approval. No unapproved museum images are bundled in this research update.
+
+
 ## Research Demo 001 (on `main`)
 
 **The Archive Dreams in Public — Institutional Memory Simulation**
