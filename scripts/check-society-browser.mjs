@@ -16,6 +16,14 @@ try {
   page.on('request',req=>{const url=req.url();if(!url.startsWith(base)&&!url.startsWith('blob:')&&!url.startsWith('data:'))external.push(url);if(url.includes('/api/archive-society/voice'))voiceRequests.push(url);});
   await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
   await page.waitForFunction(()=>document.querySelectorAll('.graph-node').length>0).catch(error=>{throw new Error((errors.join('\n')||error.message));});
+
+  // Capture the clean first-open experience BEFORE admin/testing controls obscure it.
+  await mkdir(new URL('artifacts/',root),{recursive:true});
+  await page.screenshot({path:new URL('artifacts/archive-society-stage-first-open-desktop.png',root).pathname,fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  await page.screenshot({path:new URL('artifacts/archive-society-stage-first-open-mobile.png',root).pathname,fullPage:true});
+  await page.setViewportSize({width:1600,height:1000});
+
   const cards=await page.locator('.graph-node').count();
   assert.ok(cards>=2&&cards<=7);
   assert.equal(await page.locator('#add-image, #add-images, #photos, #clear-images').count(),0);
@@ -27,6 +35,56 @@ try {
   assert.match(await page.locator('#conversation-content').innerText(),/ARTIST-AUTHORED SCENE/);
   assert.match(await page.locator('#conversation-content').innerText(),/Who gets credit for labor/);
   assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
+
+
+  // Tone is an editorial layer: object speech changes, source evidence cannot.
+  assert.equal(await page.locator('#conversation-tone').inputValue(),'critical');
+  assert.equal(await page.locator('#archivist-voice-mode').inputValue(),'single');
+  const criticalObject=await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText();
+  const archivistOriginal=await page.locator('#conversation-content .bubble.turn').nth(2).locator('p').innerText();
+  const originalEvidence=await page.locator('#conversation-content details').textContent();
+  const identity=await page.locator('#stage').getAttribute('data-pair');
+  await page.selectOption('#conversation-tone','poetic');
+  const uncannyObject=await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText();
+  assert.notEqual(uncannyObject,criticalObject);
+  assert.equal(await page.locator('#conversation-content .bubble.turn').nth(2).locator('p').innerText(),archivistOriginal);
+  assert.equal(await page.locator('#conversation-content details').textContent(),originalEvidence);
+  assert.equal(await page.locator('#stage').getAttribute('data-pair'),identity);
+  assert.match(page.url(),/tone=poetic/);
+  await page.selectOption('#conversation-tone','critical');
+  assert.equal(await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText(),criticalObject);
+  assert.doesNotMatch(page.url(),/tone=poetic/);
+
+  // Conversation Stage: large text, real speaker focus, graph signal and quiet navigation.
+  assert.equal(await page.locator('#turn-navigation').isVisible(),true);
+  assert.equal(await page.locator('#zoom-stage').isVisible(),false);
+  assert.equal(await page.locator('#graph-dialogue-label').isVisible(),true);
+  assert.match(await page.locator('#graph-context').innerText(),/On Munitions/);
+  assert.match(await page.locator('#graph-active-speaker').innerText(),/OBJECT A/);
+  assert.equal(await page.locator('#stage .graph-node[aria-current="step"]').count(),1);
+  assert.equal(await page.locator('#conversation-content .bubble.current').count(),1);
+  assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'objectA');
+  assert.match(await page.locator('#turn-progress').innerText(),/Reading 1 of 3/);
+  assert.equal(await page.locator('#previous-turn').isDisabled(),true);
+  const firstSpeaker=await page.locator('#stage').getAttribute('data-active-speaker');
+  assert.equal(firstSpeaker,'85.4.64.34');
+  const dialogueWidth=await page.locator('.evidence-rail').evaluate(el=>el.getBoundingClientRect().width);
+  assert.ok(dialogueWidth>=460,'Desktop conversation panel must be legible: '+dialogueWidth);
+  const firstFont=await page.locator('#conversation-content .bubble.current p').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+  assert.ok(firstFont>=22,'Active dialogue must be large: '+firstFont);
+  await page.locator('#next-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'objectB');
+  const secondSpeaker=await page.locator('#stage').getAttribute('data-active-speaker');
+  assert.notEqual(secondSpeaker,firstSpeaker);
+  assert.match(await page.locator('#turn-progress').innerText(),/Reading 2 of 3/);
+  await page.locator('#next-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'archivist');
+  assert.equal(await page.locator('#stage').getAttribute('data-active-speaker'),'');
+  assert.equal(await page.locator('#next-turn').isDisabled(),true);
+  await page.locator('#previous-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-speaker'),secondSpeaker);
+  await page.locator('#previous-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-speaker'),firstSpeaker);
 
   // Exercise every actual opening edge, not just one hard-coded scene.
   const openingArcs=new Set();
@@ -49,6 +107,24 @@ try {
   assert.equal(await page.locator('#atlas-title').innerText(),oldTitle);
   await page.locator('.conversation-edge').first().focus();
   await page.keyboard.press('Enter');
+
+  // Visitors can discover a curated question, inspect a skeptical connection,
+  // and return to the launch scene without the graph inventing a new edge.
+  assert.match(await page.locator('#guide-count').textContent(),/16 of 16 curated conversations available/);
+  await page.locator('#conversation-guide > summary').click();
+  await page.selectOption('#guide-chapter','doubt');
+  assert.equal(await page.locator('#guide-list [data-scene-id]').count(),2);
+  await page.locator('[data-scene-id="challenge-robeson-architectural-fantasy"]').click();
+  assert.match(await page.locator('#conversation-content h2').innerText(),/When the algorithm should doubt itself/);
+  assert.match(page.url(),/scene=challenge-robeson-architectural-fantasy/);
+  assert.match(await page.locator('#conversation-content').innerText(),/not establish|not established|No documented|No historical relationship/i);
+  await page.locator('#conversation-guide > summary').click();
+  await page.selectOption('#guide-chapter','all');
+  await page.locator('[data-scene-id="opening-skilled-work-lottery"]').click();
+  assert.match(await page.locator('#atlas-title').innerText(),/On Munitions/);
+  assert.match(await page.locator('#conversation-content h2').innerText(),/Who gets credit for labor/);
+  assert.match(page.url(),/scene=opening-skilled-work-lottery/);
+  assert.equal(await page.locator('[data-voice-role]').count(),3);
 
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await page.screenshot({path:new URL('artifacts/archive-society-overview.png',root).pathname,fullPage:true});
@@ -99,6 +175,18 @@ try {
   assert.equal((await page.request.get(base+'/server/archive-services.mjs')).status(),404);
   assert.equal((await page.request.get(base+'/demo/discovery-lab/')).status(),200);
   await page.setViewportSize({width:390,height:844});await page.locator('#atlas-mode').uncheck();
+
+  // Readable on phone, without sideways scrolling, even when animations are disabled.
+  await page.locator('.conversation-edge').first().focus();await page.keyboard.press('Enter');
+  await page.locator('#next-turn').click();
+  assert.equal(await page.locator('.read-conversation-link').isVisible(),true);
+  assert.equal(await page.locator('#graph-dialogue-label').isVisible(),true);
+  const phoneFont=await page.locator('#conversation-content .bubble.current p').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+  assert.ok(phoneFont>=21,'Active mobile speech must remain large: '+phoneFont);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  assert.equal(await page.locator('#conversation-content .bubble.current .say').evaluate(el=>getComputedStyle(el).animationName),'none');
+  await page.locator('#previous-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'objectA');
   await page.screenshot({path:new URL('artifacts/archive-society-mobile.png',root).pathname,fullPage:true});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
