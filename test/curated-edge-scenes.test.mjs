@@ -102,8 +102,8 @@ test('frontend renders editorial arc, source-based explanation and visitor quest
  assert.match(js,/CURATED_EDGE_SCENE/);
  assert.match(js,/c\.dramaticArc/);
  assert.match(js,/c\.nextPrompt/);
- assert.match(js,/data\.followObject/);
- assert.match(js,/data\.returnObject/);
+ assert.match(js,/dataset\.followObject/);
+ assert.match(js,/dataset\.returnObject/);
  assert.match(js,/state\.journey/);
  assert.match(js,/c\.scriptBasis/);
  assert.match(js,/ARTIST-AUTHORED SCENE/);
