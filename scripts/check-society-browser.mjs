@@ -21,6 +21,13 @@ try {
   assert.equal(await page.locator('#add-image, #add-images, #photos, #clear-images').count(),0);
   assert.equal(await page.getByText('Lakehouse lookup').count(),0);
   assert.ok(await page.locator('.conversation-edge').count()>0);
+
+  // The current 76-match snapshot should open on the six-script Munitions chapter.
+  assert.match(await page.locator('#atlas-title').innerText(),/On Munitions/);
+  assert.match(await page.locator('#conversation-content').innerText(),/ARTIST-AUTHORED SCENE/);
+  assert.match(await page.locator('#conversation-content').innerText(),/Who gets credit for labor/);
+  assert.match(await page.locator('#conversation-content').innerText(),/not a documented relationship/i);
+
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await page.screenshot({path:new URL('artifacts/archive-society-overview.png',root).pathname,fullPage:true});
   await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
