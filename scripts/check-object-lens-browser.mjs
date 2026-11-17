@@ -82,6 +82,29 @@ try{
   assert.match(leadsText,/NOT VERIFIED/);
   const leadLinks=await page.locator('#primary-leads-list a').count();
   assert.ok(leadLinks>=3);
+  assert.equal(await page.locator('#visitor-conversation').isVisible(),true);
+  await page.locator('#visitor-question').fill('Why did the 1927 reviewer see a future, and who built it?');
+  await page.locator('#visitor-question-form button[type="submit"]').click();
+  assert.equal(await page.locator('#visitor-transcript > li').count(),2);
+  assert.equal(await page.locator('#visitor-transcript .conversation-source').count(),2);
+  assert.match(await page.locator('#visitor-transcript').innerText(),/BOUNDED COMPARISON/);
+  const reviewed=await page.locator('#visitor-transcript .conversation-source a').evaluateAll(links=>links.map(l=>l.href));
+  assert.ok(reviewed.some(url=>url.includes('newyorker.com/magazine/1927')));
+  assert.ok(reviewed.some(url=>url.includes('wolfsonian.org')));
+  const firstReading=await page.locator('#visitor-transcript .conversation-source .source-reading').first().textContent();
+  await page.locator('[data-reader="worker"]').click();
+  assert.equal(await page.locator('#visitor-transcript > li').count(),3);
+  const otherReading=await page.locator('#visitor-transcript .conversation-reply').last().locator('.source-reading').first().textContent();
+  assert.notEqual(firstReading,otherReading,'Changing reader must preserve question while changing interpretation');
+  await page.locator('#visitor-question').fill('How many balloons were in the gallery?');
+  await page.locator('#visitor-question-form button[type="submit"]').click();
+  assert.match(await page.locator('#visitor-transcript .conversation-reply').last().innerText(),/NOT ESTABLISHED/);
+  assert.equal(await page.locator('#visitor-transcript .conversation-reply').last().locator('.conversation-source').count(),0);
+  await page.locator('#clear-conversation').click();
+  assert.equal(await page.locator('#visitor-transcript > li').count(),0);
+  assert.equal(await page.locator('#visitor-question').inputValue(),'');
+  assert.equal(await page.locator('#visitor-prompt-options button').count()>0,true);
+
   await page.locator('[data-question="cover"]').click();
   assert.equal(await page.locator('#primary-text-leads').isVisible(),false,'no unsupported primary-page citations for cover');
 
