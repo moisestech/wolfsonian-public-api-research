@@ -47,6 +47,7 @@ try{
   assert.notEqual(await page.locator('#witness-text').innerText(),witnessA);
   assert.equal(await page.locator('#witness-claims li').count()>=2,true);
   assert.equal(await page.locator('#witness-claims a').count()>=2,true);
+  await page.locator('#witness-evidence').evaluate(details=>{details.open=true;});
   assert.match(await page.locator('#witness-unknowns').innerText(),/Not established/);
 
   assert.notEqual(worker,futurist);
