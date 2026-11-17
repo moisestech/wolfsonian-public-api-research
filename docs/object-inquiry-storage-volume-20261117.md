@@ -51,3 +51,40 @@ Geometry is fixed because shelves and floors should not be shuffled by force sim
 3. No exact Annex location, real box identifier, or museum image should enter this public preview without reviewed permission.
 4. Discuss one authorized join, the display policy and the physical layout's actual coverage with Andrius and Luna.
 5. Demonstrate: question -> contested interpretation -> evidence boundary -> schematic physical archive, explicitly labeled not a floor plan.
+
+
+## Nov 17 extension — Compounding Inquiry / Mission Alignment
+Official museum mission reference: https://wolfsonian.org/about/ . The Wolfsonian–FIU describes using objects to illustrate the persuasive power of art and design; to explore modernity and changes in society, politics and technology; and to encourage people to learn from the past while shaping the present and future. The proposed interaction is an INDEPENDENT ARTIST'S RESPONSE, not institutionally approved museum copy.
+
+### What actually compounds
+A question should grow three ways:
+1. **Dramaturgically** — a visitor asks one question, another voice objects, the next scene remembers *which line of inquiry* was previously followed, and offers a more specific counterquestion.
+2. **Spatially** — the visitor can carry that question to a different catalog identity. The UI represents a VISITOR_QUESTION_PATH, never a documented association between objects. The storage cube remains a distinct physical-schema visualization.
+3. **Editorially** — with research and staff review, a question can mature into a source packet with claim IDs, citations, an honest unknown, an authored scene revision and a review state. A visitor's path is **not automatically imported** into a curatorial database, training set, gallery log or institutional record.
+
+### Code now in the same draft PR
+- src/inquiry-journey.mjs: five mission-inspired inquiry movements, exactly identified by the same twenty-question editorial stages; four identity-specific opening questions; a role-based transition/bridge built from prior selected question; in-memory visit trail capped at 18; authorized-identity-only path, rejection of DEMO boxes, explicit false historicalRelationshipEstablished, optional JSON export excluding visitor text.
+- demo/storage-volume: "Your questions begin to connect" panel; follow next question, compare on another catalog identity, view unresolved questions, clear, and opt-in download. Never sends selected questions to a service, localStorage or analytics.
+- Object Lens: conditional link to this separate research study for only a confirmed supported accession. No URL parameter alone confirms an identity; the storage scene only accepts its known public catalog IDs.
+- CI: pure provenance and dramaturgy tests plus browser interaction checks for transitions, fictional-box nonlinkage, mobile, build allowlist, absence of outbound requests.
+
+### Editorial voice principles
+- Object: a nonhuman fictional viewpoint that may refuse a human's premise; avoid claiming original memories.
+- Visitor: interrupts, changes its mind, asks ordinary questions, chooses what comes next.
+- Worker: exposes labor and care as questions rather than fabricating worker testimony.
+- Archivist: a fictional *research protocol*, not an impersonated Wolfsonian employee; distinguishes catalog entry, period source and unestablished story.
+- Setting: an active presence; the questions change if the thing is at home, a World's Fair, a public gallery, or unknown storage — but do NOT infer a true storage history from a visual fiction.
+
+Each object-specific opening is a QUESTION derived from the published identity title, not a historical claim. The machine-era catalogue's actual checked primary sources remain in the existing Object Lens source contract; the new storage scene does not silently reuse those as evidence for unrelated objects.
+
+### Source packet review workflow (human-edited, compounding over time)
+A new proposed scene should have: {accession, title, edition/record identity, questionNumber, inquiryMovement, visitorProblem, scriptTurns[], sourceClaims[{id,sourceUri,locator,verbatimQuoteOrParaphrase}], uncertainClaims[], researchNeeded[], permissions, reviewStatus, editorialRevision}.
+Claim status begins UNRESOLVED; only an explicit checked source can make an exact historical statement CATALOG or CONTEXT. Separate author/rights approval from research confidence. Mark fictional exchange on every displayed surface. Keep notes on actual visitor questions only with consent and an approved policy; for the demo the default is NO collection.
+
+### Evaluation with Luna / collections
+Use three people, 90 seconds each, and ask without prompting: what did they learn, what do they suspect, which statement was supported by an actual source, and which next object/question did they choose? Test one visitor who disagrees with the script. If they leave with a false historical belief, fewer repeated turns, lower the model's apparent authority, or add a clearer citation before making dialogue more immersive. Report the *number of sourced revisions* separately from visitor movement counts.
+
+### Next content priorities
+- Compare the same premise across the public Sparton, World's Fair model, Machine Age catalog and Mappemonde using the source packets for each. Do not claim they belonged together or were stored together.
+- Add verified object-specific evidence cards only after rights/source review. Distinguish period voice, collection record, and an artist-authored objection.
+- Keep the real Annex box/accession join, exact floor geometry and storage permissions off the public surface until confirmed by Andrius and approved for release.
