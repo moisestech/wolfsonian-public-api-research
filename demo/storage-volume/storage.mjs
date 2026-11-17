@@ -95,8 +95,8 @@ function create(){
   const lamp=new THREE.DirectionalLight('#ffffff',1.1);lamp.position.set(100,155,125);scene.add(lamp);
   stage=new THREE.Group();scene.add(stage);
   const edgeMaterial=new THREE.LineBasicMaterial({color:'#6b9185',transparent:true,opacity:.72});
-  const frame=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(190,142,150)),edgeMaterial);
-  frame.position.set(-22,0,0);stage.add(frame);
+  const cageFrame=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(190,142,150)),edgeMaterial);
+  cageFrame.position.set(-22,0,0);stage.add(cageFrame);
   const tick=new THREE.Group();stage.add(tick);
   model.levels.forEach(level=>{
     const deck=new THREE.Mesh(new THREE.BoxGeometry(185,2,147),
