@@ -10,12 +10,14 @@ on:
       - 'src/curated-edge-scenes.mjs'
       - 'src/conversation-guide.mjs'
       - 'src/local-voice-cast.mjs'
+      - 'src/conversation-performance.mjs'
       - 'server/archive-*.mjs'
       - 'api/archive-society/**'
       - 'scripts/*society*'
       - 'test/archive-*.test.mjs'
       - 'test/curated-edge-scenes.test.mjs'
       - 'test/conversation-guide.test.mjs'
+      - 'test/conversation-performance.test.mjs'
       - 'examples/archive-society*'
       - 'test/discovery-*.test.mjs'
       - '.github/workflows/discovery-checks.yml'
@@ -42,6 +44,7 @@ jobs:
           node --check src/curated-edge-scenes.mjs
           node --check src/conversation-guide.mjs
           node --check src/local-voice-cast.mjs
+          node --check src/conversation-performance.mjs
           node --check src/archive-evidence.mjs
           node --check server/archive-services.mjs
           node --check scripts/serve-archive-society.mjs
@@ -54,6 +57,8 @@ jobs:
         run: node --test test/curated-edge-scenes.test.mjs
       - name: Verify curated chapter navigation and no-cloud device voice casting
         run: node --test test/conversation-guide.test.mjs
+      - name: Check scene-aware voice casting and editorial scores
+        run: node --test test/conversation-performance.test.mjs
       - name: Browser smoke and screenshots
         run: |
           npm ci
