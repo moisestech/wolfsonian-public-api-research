@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The Storage Dream | Archive Dreams in Public</title>
+<meta name="description" content="Schematic storage-volume visualization. Demonstration floors and boxes are fictional; real accessions have no verified location here.">
+<link rel="stylesheet" href="./storage.css">
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+<a class="skip" href="#info">Skip 3D visualization</a>
+<header>
+  <p class="kicker">ARCHIVE DREAMS IN PUBLIC / INVESTIGATIVE PROTOTYPE</p>
+  <h1>The Storage Dream</h1>
+  <p class="lede">One institution, two maps: <strong>what the catalog calls an object</strong> and <strong>where a person might find it.</strong></p>
+  <nav aria-label="Related research"><a href="../archive-society/">Conversations</a><a href="../spatial-atlas/">Spatial Atlas</a><a href="../object-lens/">Ask an Object</a></nav>
+</header>
+<main>
+  <section class="stage" aria-label="Interactive schematic storage volume">
+    <div class="stage-head">
+      <span class="model-status">SCHEMATIC · NOT AN ANNEX FLOOR PLAN</span>
+      <p>Orbit: drag · Inspect: tap a container · Use the accessible list on the right</p>
+    </div>
+    <div id="render-host">
+      <canvas id="world" role="img" aria-label="Three-level demonstration cube with sample storage boxes and unlocated museum catalog identities."></canvas>
+      <div class="canvas-label" id="render-status" role="status">Preparing interactive model…</div>
+    </div>
+    <div class="toolbar">
+      <label for="level">Explore a level <select id="level"><option value="all">All illustrative levels</option><option value="DEMO-L1">Illustrative Level 1</option><option value="DEMO-L2">Illustrative Level 2</option><option value="DEMO-L3">Illustrative Level 3</option></select></label>
+      <label class="check"><input type="checkbox" id="show-boxes" checked> Demo boxes</label>
+      <label class="check"><input type="checkbox" id="show-identities" checked> Catalog identities</label>
+      <button id="reset" type="button">Reset 3D view</button>
+    </div>
+  </section>
+  <aside id="info" class="inspector">
+    <p class="kicker">INSPECT AN OBJECT</p>
+    <h2 id="selected-title">No box selected</h2>
+    <p id="selected-detail">Choose a sample box or a catalog accession. A box location is a physical identifier, not an accession.</p>
+    <p class="status" id="selected-source">All positions are illustrative.</p>
+    <h3>Public catalog identities <span class="tag">UNLOCATED</span></h3>
+    <div id="identity-list" class="items"></div>
+    <h3>Illustrative sample boxes <span class="tag">FICTION</span></h3>
+    <div id="box-list" class="items"></div>
+    <h3>Question the object</h3>
+    <p class="small">Adapted from Susan Garfinkel's Twenty Questions handout supplied by Luna. These inquiry stages are an artistic grouping.</p>
+    <label for="inquiry">Begin with <select id="inquiry"></select></label>
+    <p id="inquiry-prompt" class="prompt"></p>
+    <button id="dialogue-toggle" type="button" aria-expanded="false" aria-controls="dialogue">Explore this conversation</button>
+    <div id="dialogue" hidden></div>
+    <section id="inquiry-trail" aria-labelledby="trail-heading">
+      <h3 id="trail-heading">Your questions begin to connect</h3>
+      <p class="small">A private, in-memory path through fictional readings. Connections mean you compared questions—not that the objects met.</p>
+      <p id="trail-status" role="status">No inquiry paths followed yet.</p>
+      <ol id="trail-list" class="trail-list" aria-label="Questions explored in this visit"></ol>
+      <p id="trail-bridge" class="prompt">Start with one question. Each encounter can challenge what came before.</p>
+      <div class="trail-actions">
+        <button type="button" id="follow-question">Follow the next question</button>
+        <button type="button" id="compare-object">Carry this question to another object</button>
+        <button type="button" id="download-trail">Download this inquiry path</button>
+        <button type="button" id="clear-trail">Clear this visit</button>
+      </div>
+      <p class="small">No automatic logging, visitor profile, persistent history, or institutional claim. Download is optional and stays under your control.</p>
+      <p class="small">An artist's response to <a href="https://wolfsonian.org/about/" target="_blank" rel="noopener noreferrer">The Wolfsonian–FIU's stated mission</a>: examine the persuasive power of design and use the past to reconsider the present and future. Not museum-authored dialogue.</p>
+    </section>
+  </aside>
+</main>
+<footer><strong>Research boundary:</strong> Fictional shelves and DEMO box labels are not archival storage information. No actual box-to-accession join or Annex coordinates have been loaded. This is not a real digital twin.</footer>
+<noscript>JavaScript is needed for the 3D scene; the written research premise is still available above.</noscript>
+<script type="module" src="./storage.mjs"></script>
+</body>
+</html>

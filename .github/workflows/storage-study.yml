@@ -1,0 +1,46 @@
+name: Storage inquiry schematic checks
+on:
+  pull_request:
+    paths:
+      - 'demo/storage-volume/**'
+      - 'src/storage-topology.mjs'
+      - 'src/object-inquiry.mjs'
+      - 'src/inquiry-journey.mjs'
+      - 'test/inquiry-journey.test.mjs'
+      - 'demo/object-lens/**'
+      - 'test/storage-study.test.mjs'
+      - 'scripts/check-storage-browser.mjs'
+      - 'scripts/assemble-public-site.mjs'
+      - 'scripts/serve-archive-society.mjs'
+      - '.github/workflows/storage-study.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Syntax and 20-question provenance assertions
+        run: |
+          node --check demo/storage-volume/storage.mjs
+          node --check src/object-inquiry.mjs
+          node --check src/storage-topology.mjs
+          node --check src/inquiry-journey.mjs
+          node --test test/storage-study.test.mjs test/inquiry-journey.test.mjs
+      - name: Verify explicit public static output
+        run: |
+          npm run build:public
+          test -f public-site/demo/storage-volume/index.html
+          test -f public-site/src/storage-topology.mjs
+          test ! -f public-site/src/matrix-objects.mjs
+          test ! -f public-site/data/lakehouse/project-matches.json
+      - run: npx playwright install --with-deps chromium
+      - name: Check desktop, mobile, and source boundaries
+        run: node scripts/check-storage-browser.mjs
