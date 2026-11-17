@@ -36,24 +36,11 @@ export function buildStorageTopology({sample=true,approvedPlacements=[]}={}){
     from:box.demoAccession,to:box.id,kind:'fictional_example',historical:false,
     source:'DEMONSTRATION DATA — NOT A MUSEUM RECORD'
   }));
-  for(const place of approvedPlacements){
-    if(!place || place.publicationApproved!==true ||
-       place.coordinatesVerified!==true || typeof place.sourceRef!=='string' ||
-       !place.sourceRef.trim() || !REAL_CATALOG_IDENTITIES.some(r=>r.id===place.accession) ||
-       !/^DEMO-L[123]$/.test(place.level||'') ||
-       typeof place.containerId!=='string'||!place.containerId.trim() ||
-       typeof place.bay!=='string'||!place.bay.trim()){
-      throw new Error('A real placement requires a verifiable record, documented physical position and explicit publication approval. No inferred joins.');
-    }
-    // Never place a real object into a synthetic box, even with a claimed source.
-    if(place.containerId.startsWith('DEMO-'))throw new Error('Synthetic boxes cannot hold real accessions.');
-    const object=identities.find(x=>x.id===place.accession);
-    if(object.containerId)throw new Error('Conflicting placement for accession '+place.accession);
-    object.containerId=place.containerId;
-    object.level=place.level;
-    object.bay=place.bay;
-    object.locationStatus='VERIFIED & APPROVED';
-    links.push({from:object.id,to:place.containerId,kind:'approved_placement',historical:false,source:place.sourceRef});
+  if(approvedPlacements.length){
+    // This prototype contains NO authorized Annex geometry, box-field schema
+    // or public storage location approvals. A string saying 'approved' cannot
+    // convert illustrative DEMO floors into a factual museum floor plan.
+    throw new Error('Real placements are disabled. Require a separate verified physical layout, source contract and publication clearance.');
   }
   return {
     sceneStatus:'SCHEMATIC MODEL — NOT A DIGITAL TWIN OR BUILDING PLAN',
