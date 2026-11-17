@@ -101,7 +101,7 @@ function paintPreview(){
   document.querySelectorAll('.preview').forEach(el=>el.classList.remove('preview'));
   if(state.hover?.kind==='object')document.querySelector('[data-accession="'+CSS.escape(state.hover.accession)+'"]')?.classList.add('preview');
   if(state.hover?.kind==='edge'||state.hover?.kind==='identity')document.querySelector('[data-edge="'+CSS.escape(state.hover.id)+'"]')?.classList.add('preview');
-  renderStage();renderConversation();renderRecord();
+  if(!state.playing){renderStage();renderConversation();renderRecord();}
 }
 function shownEdge(){
   if(!state.view)return null;
@@ -206,7 +206,7 @@ function updateTurnFocus(){
   });
   const current=c.turns[index],speaker=current.speaker;
   const activeId=current.role==='objectA'?c.source:current.role==='objectB'?c.target:'';
-  stage.setActiveSpeaker(activeId);
+  stage.setActiveSpeaker(activeId,current.role);
   $('zoom-stage').dataset.activeRole=current.role;
   $('turn-progress').textContent='Reading '+(index+1)+' of '+turns.length+' · '+speaker;
   $('previous-turn').disabled=index===0||state.playing;
@@ -225,6 +225,7 @@ function renderConversation(){
   const edge=shownEdge(),box=$('conversation-content');box.replaceChildren();
   state.conversation=null;
   $('turn-navigation').hidden=true;
+  stage.setActiveSpeaker('');
   if(state.hover?.kind==='identity'){
     const identity=state.layerView?.relationships.find(item=>item.id===state.hover.id);
     if(identity){box.append(node('span','SCRIPTED · '+identity.validationState,'evidence-type'),node('h2',identity.type.replaceAll('_',' ')),node('p',identity.basis),node('p','A shared tag or identifier is not a historical relationship.','muted'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
