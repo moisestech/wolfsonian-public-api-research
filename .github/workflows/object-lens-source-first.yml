@@ -4,11 +4,13 @@ on:
     paths:
       - "src/object-lens-core.mjs"
       - "src/machine-age-research.mjs"
+      - "src/machine-age-primary-leads.mjs"
       - "demo/object-lens/**"
       - "demo/archive-society/society.mjs"
       - "scripts/serve-archive-society.mjs"
       - "test/object-lens-core.test.mjs"
       - "test/machine-age-research.test.mjs"
+      - "test/machine-age-primary-leads.test.mjs"
       - "scripts/check-object-lens-browser.mjs"
       - ".github/workflows/object-lens-source-first.yml"
   workflow_dispatch:
@@ -28,11 +30,12 @@ jobs:
         run: |
           node --check src/object-lens-core.mjs
           node --check src/machine-age-research.mjs
+          node --check src/machine-age-primary-leads.mjs
           node --check demo/object-lens/lens.mjs
           node --check demo/archive-society/society.mjs
           node --check scripts/serve-archive-society.mjs
       - name: Verify source-first visitor contract
-        run: node --test test/object-lens-core.test.mjs test/machine-age-research.test.mjs
+        run: node --test test/object-lens-core.test.mjs test/machine-age-research.test.mjs test/machine-age-primary-leads.test.mjs
 
       - name: Install browser test dependencies
         run: |
