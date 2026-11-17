@@ -82,3 +82,38 @@ GitHub:
 - PR #28: https://github.com/moisestech/wolfsonian-public-api-research/pull/28
 - Source rights issue #25: https://github.com/moisestech/wolfsonian-public-api-research/issues/25
 - Broader roadmap issue #29: https://github.com/moisestech/wolfsonian-public-api-research/issues/29
+
+
+## Original catalogue check — November 16 late-evening update (PROVISIONAL)
+
+**Institutional collection copy NOT physically verified.** The Wolfsonian checklist confirms identity and cover attribution. Hannah's November 9 email supplied catalog and reproduction-request routes, but her thread contains no reply authorizing research-page photographs or a scan of XM1999.108.8. The November 10 request already asked for access to the physical catalogue, its essays, captions and reproduction process.
+
+**Third-party source inspected:** an indexed OCR/transcription of a purported 1927 Machine-Age Exposition Catalogue:
+https://www.scribd.com/document/1053998892/Machine-Age-Exposition-Catalogue
+
+This is NOT the museum's copy and was not verified visually against a complete facsimile. Printed page numbers are candidates derived from the indexed OCR; do not treat them as signed-off source locators. The repository neither reproduces the scans nor stores full essay text.
+
+### Pages to bring to a physical consultation
+
+- **p. 6 (candidate)** — Hugh Ferriss, "Architecture of This Age": the OCR discusses changing architectural form and inherited beauty conventions.
+- **pp. 8–10 (candidate)** — Enrico Prampolini, "The Aesthetic of the Machine and Mechanical Introspection in Art": the OCR suggests a distinction between literal machine imagery and artistic symbolism.
+- **pp. 12–14 (candidate)** — Alexander Archipenko, "Machine and Art": the OCR suggests the problem of action/movement rather than merely painting machine fragments.
+- **pp. 10–12 (approximate)** — Austrian exhibit list appears to include workers' housing / a workingman's unit house; multi-column OCR prevents a reliable exact page reading.
+- **p. 17 (candidate)** — American exhibit list appears to include industrial safety garments and masks (item 442).
+- **pp. 18–19 (candidate)** — Louis Lozowick, "The Americanization of Art," connecting industrialization and visual design.
+- **pp. 36–37 (candidate)** — Jane Heap, "Machine-Age Exposition," on collaboration among engineers and artists, a promising link to this fellowship.
+- **p. 37 (candidate)** — an International Business Machines entry may list a time clock; verify columns and attribution.
+
+### An important corrective to the Worker reading
+
+Do **not** say the catalogue never mentions labor. The provisional OCR includes references to workmen's housing, a labor building, safety garments and a time clock. This remains a research lead, not verified physical-catalogue evidence. A better question is:
+
+**When machine-age designers represented workers, safety, housing and efficiency, whose experiences did they emphasize—and whose do the documents still leave unknowable?**
+
+This can produce a much richer interpretation than an automatic claim of omission. The current source-backed answer remains conservative: identity, cover credit, Jane Heap and named essayists are established by the museum checklist; specific arguments and items in the 1927 publication remain a separate, provisional reading layer.
+
+### Next institutional evidence request
+
+Ask Hannah/Frank or collections staff to confirm the physical publication's pagination, whether these sections/exhibit numbers are present, the exact language around labor and safety, whether edition variants exist, and which pages can be photographed privately or reproduced for public interactive use. Mark each page as reviewed/unreviewed and record staff reviewer, date, exact printed page and reproduction rights before promoting its text into the verified claim ledger.
+
+**Code:** src/machine-age-primary-leads.mjs stores brief descriptions and pending questions only, marked OCR_ONLY_NOT_FACSIMILE_VERIFIED. The phone's disclosure list is separate from official checklist claim citations. No scan images or full historical essays have been added.
