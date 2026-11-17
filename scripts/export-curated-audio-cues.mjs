@@ -7,6 +7,7 @@
  */
 import {createHash} from 'node:crypto';
 import {CURATED_EDGE_SCENES} from '../src/curated-edge-scenes.mjs';
+import {PERFORMANCE_SCORE, DELIVERY} from '../src/conversation-performance.mjs';
 
 export function audioCues(){
   return {
@@ -17,11 +18,15 @@ export function audioCues(){
     scenes:CURATED_EDGE_SCENES.map(scene=>({
       id:scene.id,
       a:scene.a,b:scene.b,arc:scene.arc,status:scene.status,
+      performance:{question:PERFORMANCE_SCORE[scene.id]?.question||null,tension:PERFORMANCE_SCORE[scene.id]?.tension||null},
       turns:scene.turns.map((turn,index)=>{
         const role=turn.speakerAccession==='archivist'?'archivist':index===0?'objectA':'objectB';
         const digest=createHash('sha256').update(turn.text,'utf8').digest('hex').slice(0,16);
+        const delivery=PERFORMANCE_SCORE[scene.id]?.beat[index]||'observe';
         return {
           index,role,speakerAccession:turn.speakerAccession,
+          delivery,direction:DELIVERY[delivery]?.label||'reads',
+          rate:DELIVERY[delivery]?.rate||1,pitch:DELIVERY[delivery]?.pitch||1,
           text:turn.text,textSha256Prefix:digest,
           proposedFile:'audio/'+scene.id+'/turn-'+(index+1)+'-'+digest+'.mp3',
           status:'NOT_RENDERED'
