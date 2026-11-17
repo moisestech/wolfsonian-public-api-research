@@ -1,6 +1,7 @@
-import {resolvePublicAccession,encounterFor,atlasHandoffFor,curatedQuestionsFor,answerCuratedQuestion,curatedPrimaryPageLeadsFor,researchCopiesFor,contemporaneousAccountFor} from '/src/object-lens-core.mjs';
+import {resolvePublicAccession,encounterFor,atlasHandoffFor,curatedQuestionsFor,answerCuratedQuestion,curatedPrimaryPageLeadsFor,researchCopiesFor,contemporaneousAccountFor,visitorTopicChoices,answerVisitorQuestion} from '/src/object-lens-core.mjs';
 const $=id=>document.getElementById(id);
 let stream=null,match=null,encounter=null,activeReader='futurist',activeQuestion=null,activeAnswer=null;
+let latestVisitorQuestion=null,latestVisitorAnswer=null;
 
 function stopSpeech(){
   if('speechSynthesis' in window)window.speechSynthesis.cancel();
@@ -25,7 +26,7 @@ async function openCamera(){
   }
 }
 function resetConfirmation(){
-  stopSpeech();match=null;encounter=null;activeQuestion=null;activeAnswer=null;$('confirm').checked=false;
+  stopSpeech();clearConversation();match=null;encounter=null;activeQuestion=null;activeAnswer=null;$('confirm').checked=false;
   $('confirm').disabled=true;$('encounter').hidden=true;
 }
 function checkAccession(){
@@ -136,6 +137,105 @@ function renderOnViewResearch() {
   }));
 }
 
+
+function conversationText(tag,text,className='') {
+  const el=document.createElement(tag);
+  el.textContent=text;
+  if(className)el.className=className;
+  return el;
+}
+function clearConversation(){
+  stopSpeech();
+  latestVisitorQuestion=null;latestVisitorAnswer=null;
+  $('visitor-transcript').replaceChildren();
+  $('visitor-question').value='';
+  $('visitor-session-status').textContent='Conversation cleared on this device. Nothing was stored or uploaded.';
+  $('visitor-prompt-options').replaceChildren();
+}
+function renderQuestionSuggestions(items){
+  const buttons=items.map(({prompt})=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.textContent=prompt;
+    button.addEventListener('click',()=>{
+      $('visitor-question').value=prompt;
+      askVisitor(prompt);
+    });
+    return button;
+  });
+  $('visitor-prompt-options').replaceChildren(...buttons);
+}
+function sourceEvidence(segment){
+  const box=document.createElement('div');
+  box.className='conversation-source';
+  box.append(conversationText('h5',segment.label));
+  box.append(conversationText('p',segment.text,'source-reading'));
+  const disclosure=document.createElement('details');
+  disclosure.append(conversationText('summary','Inspect '+segment.claims.length+' sourced claim(s) and unresolved questions'));
+  const claims=document.createElement('ol');
+  if(!segment.claims.length)
+    claims.append(conversationText('li','No directly verified claims in this bounded response.'));
+  for(const claim of segment.claims){
+    const row=document.createElement('li');
+    row.append(conversationText('span',claim.label+': '+claim.statement+' — '+claim.locator+'. '));
+    const link=document.createElement('a');
+    link.href=claim.url;
+    link.target='_blank';
+    link.rel='noopener noreferrer';
+    link.textContent='Open '+claim.sourceTitle;
+    row.append(link);
+    claims.append(row);
+  }
+  disclosure.append(claims);
+  const pending=conversationText('p','Not established by this source: '+segment.unknowns.join(' '),'small');
+  disclosure.append(pending);
+  box.append(disclosure);
+  return box;
+}
+function renderVisitorTurn(question,answer,{continuation=false}={}){
+  const transcript=$('visitor-transcript');
+  if(!continuation){
+    const turn=document.createElement('li');
+    turn.className='conversation-visitor';
+    turn.append(conversationText('strong','Visitor'));
+    turn.append(conversationText('p',question));
+    transcript.append(turn);
+  }
+  const reply=document.createElement('li');
+  reply.className='conversation-reply';
+  const persona=(answer.readerId||activeReader).toUpperCase();
+  reply.append(conversationText('strong',persona+' · FICTIONAL READER · '+answer.status.replaceAll('_',' ')));
+  if(answer.segments.length){
+    for(const segment of answer.segments)reply.append(sourceEvidence(segment));
+    reply.append(conversationText('p',answer.text,'small'));
+  }else reply.append(conversationText('p',answer.text));
+  reply.append(conversationText('p','Artist-authored, source-bounded dialogue; no historical speaker is being simulated as evidence.','small'));
+  transcript.append(reply);
+  while(transcript.children.length>14)transcript.firstChild.remove();
+  reply.scrollIntoView?.({block:'nearest',behavior:'instant'});
+  $('visitor-session-status').textContent='Local conversation · '+transcript.children.length+' displayed entries · no remote model, storage or upload';
+}
+function askVisitor(question,{continuation=false}={}){
+  if(!encounter || $('encounter').hidden)return;
+  stopSpeech();
+  const answer=answerVisitorQuestion(encounter.accession,question,activeReader,{
+    previousTopic:latestVisitorAnswer?.topicId||null
+  });
+  renderVisitorTurn(question,answer,{continuation});
+  latestVisitorQuestion=question;
+  latestVisitorAnswer=answer;
+  renderQuestionSuggestions(answer.nextQuestions);
+  $('visitor-question').value='';
+}
+function enableVisitorConversation(){
+  const choices=visitorTopicChoices(encounter.accession);
+  $('visitor-conversation').hidden=!choices.length;
+  if(choices.length){
+    renderQuestionSuggestions(choices.slice(0,5));
+    $('visitor-session-status').textContent='Ready for a question. Responses use authored local packets; no transcript saved.';
+  }
+}
+
 function renderReader(){
   const reader=encounter?.readers.find(r=>r.id===activeReader);
   if(!reader)return;
@@ -148,6 +248,9 @@ function renderReader(){
     b.setAttribute('aria-pressed',String(b.dataset.reader===activeReader));
   if(activeQuestion)renderCuratedAnswer();
   renderOnViewResearch();
+  if(latestVisitorQuestion && latestVisitorAnswer?.topicId){
+    askVisitor(latestVisitorQuestion,{continuation:true});
+  }
 }
 function renderEncounter(){
   encounter=encounterFor(match.accession);
@@ -189,9 +292,10 @@ function renderEncounter(){
   }else $('source-link').textContent='More documentation needs review.';
   $('handoff').href=atlasHandoffFor(match.accession)||'../archive-society/';
   activeReader='futurist';renderReader();
+  enableVisitorConversation();
 }
 function confirm(){
-  if(!$('confirm').checked||!match){stopSpeech();$('encounter').hidden=true;return;}
+  if(!$('confirm').checked||!match){stopSpeech();clearConversation();$('encounter').hidden=true;return;}
   renderEncounter();
 }
 function speak(){
@@ -204,13 +308,22 @@ function speak(){
   if(!voices.length){
     $('speech-status').textContent='No verified local English voice installed. Transcript only; no remote voice requested.';return;
   }
-  const utterance=new SpeechSynthesisUtterance(activeAnswer?.text || reader.script);
+  const spoken=latestVisitorAnswer?.segments?.length ? latestVisitorAnswer.segments.map(x=>x.text).join(' ') : (latestVisitorAnswer?.text || activeAnswer?.text || reader.script);
+  const utterance=new SpeechSynthesisUtterance(spoken);
   utterance.voice=voices[0];utterance.rate=0.94;
   utterance.onend=()=>{$('speech-status').textContent='Reading complete.';};
   utterance.onerror=()=>{$('speech-status').textContent='Speech unavailable; use transcript.';};
   $('speech-status').textContent='Reading the displayed fictional text with a local voice.';
   window.speechSynthesis.speak(utterance);
 }
+$('visitor-question-form').addEventListener('submit',event=>{
+  event.preventDefault();
+  askVisitor($('visitor-question').value);
+});
+$('clear-conversation').addEventListener('click',()=>{
+  clearConversation();
+  if(encounter)enableVisitorConversation();
+});
 $('open-camera').addEventListener('click',openCamera);
 $('close-camera').addEventListener('click',stopCamera);
 $('check').addEventListener('click',checkAccession);
