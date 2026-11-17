@@ -91,9 +91,10 @@ $('follow-question').addEventListener('click',()=>{
 $('compare-object').addEventListener('click',()=>{
   const current=model.identities.findIndex(x=>x.id===state.selected);
   const next=model.identities[(current+1+model.identities.length)%model.identities.length];
+  const wasHidden=$('dialogue').hidden;
   select(next.id);
   $('dialogue').hidden=false;$('dialogue-toggle').setAttribute('aria-expanded','true');
-  if(current===-1)showDialogue();
+  if(wasHidden)showDialogue();
 });
 $('clear-trail').addEventListener('click',()=>{
   trail=emptyInquiryTrail();currentEpisode=null;$('dialogue').hidden=true;
