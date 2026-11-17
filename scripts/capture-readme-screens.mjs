@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const outDir = fileURLToPath(new URL('../docs/images/', import.meta.url));
 fs.mkdirSync(outDir, { recursive: true });
 
-const TARGET_URL = 'https://wolfsonian-research.vercel.app/demo/';
+const TARGET_URL = 'https://wolfsonian-research.vercel.app/demo/#simulation';
 
 async function screenshotOverview(page) {
   await page.locator('#enter-sim').click();
