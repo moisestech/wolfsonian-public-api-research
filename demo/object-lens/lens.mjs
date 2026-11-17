@@ -1,4 +1,5 @@
 import {resolvePublicAccession,encounterFor,atlasHandoffFor,curatedQuestionsFor,answerCuratedQuestion,curatedPrimaryPageLeadsFor,researchCopiesFor,contemporaneousAccountFor,visitorTopicChoices,answerVisitorQuestion} from '/src/object-lens-core.mjs';
+import { REAL_CATALOG_IDENTITIES } from '/src/storage-topology.mjs';
 const $=id=>document.getElementById(id);
 let stream=null,match=null,encounter=null,activeReader='futurist',activeQuestion=null,activeAnswer=null;
 let latestVisitorQuestion=null,latestVisitorAnswer=null;
@@ -28,6 +29,7 @@ async function openCamera(){
 function resetConfirmation(){
   stopSpeech();clearConversation();match=null;encounter=null;activeQuestion=null;activeAnswer=null;$('confirm').checked=false;
   $('confirm').disabled=true;$('encounter').hidden=true;
+  $('storage-handoff').hidden=true;
 }
 function checkAccession(){
   resetConfirmation();
@@ -297,6 +299,9 @@ function renderEncounter(){
     $('source-link').append(link);
   }else $('source-link').textContent='More documentation needs review.';
   $('handoff').href=atlasHandoffFor(match.accession)||'../archive-society/';
+  const inStorageStudy=REAL_CATALOG_IDENTITIES.some(x=>x.id===match.accession);
+  $('storage-handoff').hidden=!inStorageStudy;
+  if(inStorageStudy)$('storage-handoff').href='../storage-volume/?accession='+encodeURIComponent(match.accession);
   activeReader='futurist';renderReader();
   enableVisitorConversation();
 }
