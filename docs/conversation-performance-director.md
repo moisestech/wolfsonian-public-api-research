@@ -89,9 +89,9 @@ Both registers are artist-authored fictional speeches, not generated live. Poeti
 
 ### Optional casting controls
 
-1. **Archivist:** one recognizable neutral voice across the exhibition, or multiple restrained voices suggesting an institution without a single point of view? Current default is consistent *delivery*, scene-varying timbre.
-2. **Other objects:** should voice variation be the default **per scene** (current implementation) or should each object keep a fixed voice over its entire network biography? Visitors can currently switch modes in Admin.
-3. **Tone:** this is now a visible switch between two authored alternatives; continue refining both in response to listener and curator feedback.
+- **Archivist:** Single consistent voice by default; **Multiple Archivists (experimental)** is an explicit opt-in in Admin.
+- **Objects:** Scene variety by default; **Keep voice per object** is an opt-in in Admin. These are independent from the Archivist choice.
+- **Tone:** Every visitor can change the two authored texts while keeping the current edge and evidence; cast direction follows the selected writing style.
 
 ## Links
 
