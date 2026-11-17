@@ -11,14 +11,17 @@ import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { CONVERSATION_CHAPTERS, conversationGuide, destinationForScene } from '../../src/conversation-guide.mjs';
 import { localVoiceOptions, SPEAKER_ROLES } from '../../src/local-voice-cast.mjs';
 import { directConversation } from '../../src/conversation-performance.mjs';
+import { normalizeTone, withConversationTone } from '../../src/conversation-tones.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
-  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,turnIndex:0,turnKey:null};
+  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,turnIndex:0,turnKey:null,
+  tone:normalizeTone(new URLSearchParams(location.search).get('tone'))};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
+$('conversation-tone').value=state.tone;
 let guideCacheRecords=null,guideCache=null;
 const voiceSelections={objectA:'',objectB:'',archivist:''};
 const currentGuide=()=>{
@@ -123,8 +126,21 @@ $('guide-chapter').replaceChildren(...[
 $('guide-chapter').addEventListener('change',renderConversationGuide);
 $('guide-search').addEventListener('input',renderConversationGuide);
 window.addEventListener('popstate',()=>{
-  const sceneId=new URLSearchParams(location.search).get('scene');
+  const parameters=new URLSearchParams(location.search);
+  state.tone=normalizeTone(parameters.get('tone'));
+  $('conversation-tone').value=state.tone;
+  const sceneId=parameters.get('scene');
   if(sceneId)navigateToConversation(sceneId,{writeHistory:false});
+  else renderConversation();
+});
+$('conversation-tone').addEventListener('change',()=>{
+  stop();
+  state.tone=normalizeTone($('conversation-tone').value);
+  const url=new URL(location.href);
+  if(state.tone==='critical')url.searchParams.delete('tone');
+  else url.searchParams.set('tone',state.tone);
+  history.replaceState(history.state,'',url.pathname+url.search+url.hash);
+  renderConversation();
 });
 
 
@@ -133,7 +149,9 @@ function renderPerformancePreview(){
   const c=state.conversation;
   if(!c){list.append(node('p','Select an object-to-object conversation to inspect its cast.','muted'));return;}
   const plan=directConversation(c,window.speechSynthesis?.getVoices?.()||[],voiceSelections,{
-    style:$('voice-casting-style').value
+    style:$('voice-casting-style').value,
+    tone:state.tone,
+    archivistMode:$('archivist-voice-mode').value
   });
   list.append(node('p',plan.tension||'Metadata-based exchange','performance-tension'));
   for(const part of plan.turns){
@@ -173,6 +191,13 @@ document.querySelectorAll('[data-voice-role]').forEach(selector=>
   })
 );
 window.speechSynthesis?.addEventListener?.('voiceschanged',renderLocalVoiceChoices);
+$('archivist-voice-mode').addEventListener('change',()=>{
+  stop();
+  renderPerformancePreview();
+  message('voice-status',$('archivist-voice-mode').value==='single'
+    ?'One consistent Archivist voice across conversations.'
+    :'Experimental: the Archivist may use different local voices between scenes.');
+});
 $('voice-casting-style').addEventListener('change',()=>{
   stop();
   message('voice-status',$('voice-casting-style').value==='continuity'
@@ -373,7 +398,7 @@ function renderConversation(){
   }
   if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
   const source=record(),target=state.records.find(r=>r.accession===edge.target);
-  const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
+  const c=withConversationTone(conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)}),state.tone);state.conversation=c;
   $('graph-dialogue-label').hidden=false;
   $('graph-context').textContent=source.title+' ↔ '+target.title;
   const turnKey=state.seed+'|'+edge.id+'|'+state.lens;
@@ -381,6 +406,8 @@ function renderConversation(){
   const kind=c.mode==='CURATED_EDGE_SCENE'?'ARTIST-AUTHORED SCENE · EDITORIAL DRAFT':
     c.edgeMode==='QUESTION_THIS_LINK'?'QUESTIONABLE MATCH · METADATA ONLY':'SOURCE-BOUNDED METADATA READING';
   box.append(node('span',kind,'evidence-type'));
+  if(state.tone==='poetic'&&c.mode!=='CURATED_EDGE_SCENE')
+    box.append(node('p','No authored poetic version for this metadata-only reading; its source-limited wording is unchanged.','muted'));
   if(c.dramaticArc)box.append(node('h2',c.dramaticArc));
   const chat=node('div',undefined,'chat');
   const linkColor=tagColor(edge.reasons[0].value);
@@ -484,13 +511,13 @@ async function play(){
   if(mode==='elevenlabs'&&!$('external-approved').checked){message('voice-status','Review the displayed transcript and confirm external-processing approval first.');return;}
   state.playing=true;$('play').disabled=true;document.querySelectorAll('.conversation-edge.selected').forEach(e=>e.classList.add('speaking'));
   try{
-    let performance=directConversation(conversation,window.speechSynthesis?.getVoices?.()||[],voiceSelections,{style:$('voice-casting-style').value});
+    let performance=directConversation(conversation,window.speechSynthesis?.getVoices?.()||[],voiceSelections,{style:$('voice-casting-style').value,tone:state.tone,archivistMode:$('archivist-voice-mode').value});
     if(mode==='device'){
       if(!window.speechSynthesis)throw new Error('No device speech service. The written transcript remains available.');
       if(!performance.turns.some(part=>part.voice)){
         await new Promise(resolve=>setTimeout(resolve,500));
         renderLocalVoiceChoices();
-        performance=directConversation(conversation,window.speechSynthesis.getVoices(),voiceSelections,{style:$('voice-casting-style').value});
+        performance=directConversation(conversation,window.speechSynthesis.getVoices(),voiceSelections,{style:$('voice-casting-style').value,tone:state.tone,archivistMode:$('archivist-voice-mode').value});
       }
       if(!performance.turns.some(part=>part.voice))throw new Error('No device-local voice is installed. The full written conversation remains available.');
     }
