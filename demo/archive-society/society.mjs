@@ -225,6 +225,7 @@ function renderConversation(){
   const edge=shownEdge(),box=$('conversation-content');box.replaceChildren();
   state.conversation=null;
   $('turn-navigation').hidden=true;
+  $('graph-dialogue-label').hidden=true;
   stage.setActiveSpeaker('');
   if(state.hover?.kind==='identity'){
     const identity=state.layerView?.relationships.find(item=>item.id===state.hover.id);
