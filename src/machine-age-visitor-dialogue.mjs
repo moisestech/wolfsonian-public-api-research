@@ -12,7 +12,7 @@ const READERS=new Set(['futurist','worker','archivist']);
 const TOPICS=Object.freeze([
  {id:'compare',label:'Compare the promised future and labor',prompt:'Why did the 1927 reviewer see a future, and who built it?',test:/\b(compar|both|versus|vs\b|tension|contradict|future.*(work|labor|built)|review.*(work|labor|built)|work.*(future|review))\b/i},
  {id:'review',label:'The exhibition in 1927',prompt:'What did a reviewer see in 1927?',test:/\b(review|eyewitness|journalis|witness|spectator|new yorker|e b white|saw|see|visitor|audience|lighting|glass skyscraper|sun like|1927.*show)\b/i},
- {id:'labor',label:'Workers and labor',prompt:'Who did the work behind the machines?',test:/\b(work|labor|labour|build|built|maker|maintain|mainten|safety|workers|factory|employee|printer|housing|made the machines|production)\b/i},
+ {id:'labor',label:'Workers and labor',prompt:'Who did the work behind the machines?',test:/\b(work|labor|labour|build|built|made|maker|manufactur|maintain|mainten|safety|workers|factory|employee|printer|housing|production)\b/i},
  {id:'cover',label:'The catalogue cover',prompt:'Who designed the catalogue cover?',test:/\b(cover|l[eé]ger|designer of the cover)\b/i},
  {id:'network',label:'Jane Heap and the exhibition',prompt:'Who initiated the exposition?',test:/\b(jane heap|heap|initiated|organis|organiz|who started|who put|behind the exhibition)\b/i},
  {id:'essays',label:'Essays and writers',prompt:'Which artists contributed essays?',test:/\b(prampolini|archipenko|essay|author|writer|wrote|foreword|ferriss)\b/i},
