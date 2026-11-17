@@ -16,6 +16,14 @@ try {
   page.on('request',req=>{const url=req.url();if(!url.startsWith(base)&&!url.startsWith('blob:')&&!url.startsWith('data:'))external.push(url);if(url.includes('/api/archive-society/voice'))voiceRequests.push(url);});
   await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
   await page.waitForFunction(()=>document.querySelectorAll('.graph-node').length>0).catch(error=>{throw new Error((errors.join('\n')||error.message));});
+
+  // Capture the clean first-open experience BEFORE admin/testing controls obscure it.
+  await mkdir(new URL('artifacts/',root),{recursive:true});
+  await page.screenshot({path:new URL('artifacts/archive-society-stage-first-open-desktop.png',root).pathname,fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  await page.screenshot({path:new URL('artifacts/archive-society-stage-first-open-mobile.png',root).pathname,fullPage:true});
+  await page.setViewportSize({width:1600,height:1000});
+
   const cards=await page.locator('.graph-node').count();
   assert.ok(cards>=2&&cards<=7);
   assert.equal(await page.locator('#add-image, #add-images, #photos, #clear-images').count(),0);
