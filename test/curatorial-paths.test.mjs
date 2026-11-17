@@ -54,8 +54,8 @@ test('About explains research agency, prior exhibitions and accurate evidence / 
   ]);
   for(const needed of [
     'What if an archive could disagree with itself?',
-    'After Utopia','World&#39;', // alternatively literal text checked below
-  ].slice(0,2))assert.ok(about.includes(needed));
+    'After Utopia'
+  ])assert.ok(about.includes(needed));
   assert.match(about,/World's Fairs: Visions of Tomorrow/);
   assert.match(about,/not a verified interaction/i);
   assert.match(about,/not additional conversations currently available/i);
@@ -63,5 +63,5 @@ test('About explains research agency, prior exhibitions and accurate evidence / 
   assert.match(about,/rights|permission/i);
   assert.match(atlas,/href="\.\.\/about\/" class="about-link"/);
   assert.match(css,/\.top-actions a\.about-link/);
-  assert.match(readme,/research candidates.*not newly deployed graph nodes/i);
+  assert.match(readme,/research candidates\\*\\*, not newly deployed graph nodes/i);
 });
