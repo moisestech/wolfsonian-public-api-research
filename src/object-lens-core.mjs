@@ -1,5 +1,6 @@
 /** Source-first Object Lens: independently authored fiction, no image recognition or private corpus. */
 import { PUBLIC_ANCHORS, findByAccession } from './atlas-graph.mjs';
+export {onViewResourcesFor as researchCopiesFor, contemporaryWitnessFor as contemporaneousAccountFor, MACHINE_AGE_ACCESS_STATE} from './machine-age-onview.mjs';
 export { machineAgeQuestions as curatedQuestionsFor, machineAgeAnswer as answerCuratedQuestion, machineAgeClaimLedger as curatedClaimLedgerFor, machineAgeResearchLeads as curatedPrimaryPageLeadsFor } from './machine-age-research.mjs';
 
 export const LENS_READERS = Object.freeze([
