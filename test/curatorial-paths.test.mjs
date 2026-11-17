@@ -63,5 +63,5 @@ test('About explains research agency, prior exhibitions and accurate evidence / 
   assert.match(about,/rights|permission/i);
   assert.match(atlas,/href="\.\.\/about\/" class="about-link"/);
   assert.match(css,/\.top-actions a\.about-link/);
-  assert.match(readme,/research candidates\\*\\*, not newly deployed graph nodes/i);
+  assert.ok(readme.includes('research candidates**, not newly deployed graph nodes'));
 });
