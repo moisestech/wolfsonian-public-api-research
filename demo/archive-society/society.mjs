@@ -208,7 +208,10 @@ function updateTurnFocus(){
   const activeId=current.role==='objectA'?c.source:current.role==='objectB'?c.target:'';
   stage.setActiveSpeaker(activeId,current.role);
   $('zoom-stage').dataset.activeRole=current.role;
-  $('turn-progress').textContent='Reading '+(index+1)+' of '+turns.length+' · '+speaker;
+  $('graph-dialogue-label').dataset.activeRole=current.role;
+  const roleLabel=current.role==='objectA'?'OBJECT A':current.role==='objectB'?'OBJECT B':'ARCHIVIST';
+  $('graph-active-speaker').textContent='CURRENT FOCUS · '+roleLabel;
+  $('turn-progress').textContent='Reading '+(index+1)+' of '+turns.length+' · '+roleLabel;
   $('previous-turn').disabled=index===0||state.playing;
   $('next-turn').disabled=index===turns.length-1||state.playing;
   $('turn-navigation').hidden=false;
@@ -239,6 +242,8 @@ function renderConversation(){
   if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
   const source=record(),target=state.records.find(r=>r.accession===edge.target);
   const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
+  $('graph-dialogue-label').hidden=false;
+  $('graph-context').textContent=source.title+' ↔ '+target.title;
   const turnKey=state.seed+'|'+edge.id+'|'+state.lens;
   if(state.turnKey!==turnKey){state.turnIndex=0;state.turnKey=turnKey;}
   const kind=c.mode==='CURATED_EDGE_SCENE'?'ARTIST-AUTHORED SCENE · EDITORIAL DRAFT':
