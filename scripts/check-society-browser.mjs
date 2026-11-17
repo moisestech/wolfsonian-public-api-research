@@ -28,6 +28,33 @@ try {
   assert.match(await page.locator('#conversation-content').innerText(),/Who gets credit for labor/);
   assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
 
+
+  // Conversation Stage: large text, real speaker focus, graph signal and quiet navigation.
+  assert.equal(await page.locator('#turn-navigation').isVisible(),true);
+  assert.equal(await page.locator('#conversation-content .bubble.current').count(),1);
+  assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'objectA');
+  assert.match(await page.locator('#turn-progress').innerText(),/Reading 1 of 3/);
+  assert.equal(await page.locator('#previous-turn').isDisabled(),true);
+  const firstSpeaker=await page.locator('#stage').getAttribute('data-active-speaker');
+  assert.equal(firstSpeaker,'85.4.64.34');
+  const dialogueWidth=await page.locator('.evidence-rail').evaluate(el=>el.getBoundingClientRect().width);
+  assert.ok(dialogueWidth>=460,'Desktop conversation panel must be legible: '+dialogueWidth);
+  const firstFont=await page.locator('#conversation-content .bubble.current p').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+  assert.ok(firstFont>=22,'Active dialogue must be large: '+firstFont);
+  await page.locator('#next-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'objectB');
+  const secondSpeaker=await page.locator('#stage').getAttribute('data-active-speaker');
+  assert.notEqual(secondSpeaker,firstSpeaker);
+  assert.match(await page.locator('#turn-progress').innerText(),/Reading 2 of 3/);
+  await page.locator('#next-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'archivist');
+  assert.equal(await page.locator('#stage').getAttribute('data-active-speaker'),'');
+  assert.equal(await page.locator('#next-turn').isDisabled(),true);
+  await page.locator('#previous-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-speaker'),secondSpeaker);
+  await page.locator('#previous-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-speaker'),firstSpeaker);
+
   // Exercise every actual opening edge, not just one hard-coded scene.
   const openingArcs=new Set();
   assert.equal(await page.locator('.conversation-edge').count(),6);
@@ -99,6 +126,16 @@ try {
   assert.equal((await page.request.get(base+'/server/archive-services.mjs')).status(),404);
   assert.equal((await page.request.get(base+'/demo/discovery-lab/')).status(),200);
   await page.setViewportSize({width:390,height:844});await page.locator('#atlas-mode').uncheck();
+
+  // Readable on phone, without sideways scrolling, even when animations are disabled.
+  await page.locator('.conversation-edge').first().focus();await page.keyboard.press('Enter');
+  await page.locator('#next-turn').click();
+  const phoneFont=await page.locator('#conversation-content .bubble.current p').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+  assert.ok(phoneFont>=21,'Active mobile speech must remain large: '+phoneFont);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  assert.equal(await page.locator('#conversation-content .bubble.current .say').evaluate(el=>getComputedStyle(el).animationName),'none');
+  await page.locator('#previous-turn').click();
+  assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'objectA');
   await page.screenshot({path:new URL('artifacts/archive-society-mobile.png',root).pathname,fullPage:true});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
