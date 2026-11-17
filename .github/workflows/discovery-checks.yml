@@ -11,6 +11,7 @@ on:
       - 'src/conversation-guide.mjs'
       - 'src/local-voice-cast.mjs'
       - 'src/conversation-performance.mjs'
+      - 'src/conversation-tones.mjs'
       - 'server/archive-*.mjs'
       - 'api/archive-society/**'
       - 'scripts/*society*'
@@ -18,6 +19,7 @@ on:
       - 'test/curated-edge-scenes.test.mjs'
       - 'test/conversation-guide.test.mjs'
       - 'test/conversation-performance.test.mjs'
+      - 'test/conversation-tones.test.mjs'
       - 'examples/archive-society*'
       - 'test/discovery-*.test.mjs'
       - '.github/workflows/discovery-checks.yml'
@@ -45,6 +47,7 @@ jobs:
           node --check src/conversation-guide.mjs
           node --check src/local-voice-cast.mjs
           node --check src/conversation-performance.mjs
+          node --check src/conversation-tones.mjs
           node --check src/archive-evidence.mjs
           node --check server/archive-services.mjs
           node --check scripts/serve-archive-society.mjs
@@ -59,6 +62,8 @@ jobs:
         run: node --test test/conversation-guide.test.mjs
       - name: Check scene-aware voice casting and editorial scores
         run: node --test test/conversation-performance.test.mjs
+      - name: Verify two tone registries and consistent Archivist
+        run: node --test test/conversation-tones.test.mjs
       - name: Browser smoke and screenshots
         run: |
           npm ci
