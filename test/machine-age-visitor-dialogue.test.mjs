@@ -90,7 +90,7 @@ test('browser wiring is local-only, identity-gated and claims are linked safely'
   assert.match(html,/No transcript is saved/);
   assert.match(js,/answerVisitorQuestion/);
   assert.match(js,/renderVisitorTurn/);
-  assert.match(js,/textContent=claim\.label/);
+  assert.match(js,/conversationText\('span',claim\.label/);
   assert.match(js,/rel='noopener noreferrer'/);
   assert.match(js,/while\(transcript\.children\.length>14\)/);
   assert.doesNotMatch(js,/fetch\(|sendBeacon|localStorage|sessionStorage|indexedDB|WebSocket/);
