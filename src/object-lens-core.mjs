@@ -1,6 +1,6 @@
 /** Source-first Object Lens: independently authored fiction, no image recognition or private corpus. */
 import { PUBLIC_ANCHORS, findByAccession } from './atlas-graph.mjs';
-export { machineAgeQuestions as curatedQuestionsFor, machineAgeAnswer as answerCuratedQuestion, machineAgeClaimLedger as curatedClaimLedgerFor } from './machine-age-research.mjs';
+export { machineAgeQuestions as curatedQuestionsFor, machineAgeAnswer as answerCuratedQuestion, machineAgeClaimLedger as curatedClaimLedgerFor, machineAgeResearchLeads as curatedPrimaryPageLeadsFor } from './machine-age-research.mjs';
 
 export const LENS_READERS = Object.freeze([
   { id:'futurist',label:'Futurist',icon:'⚡',prompt:'Ask what future this object might promise; a promise is not proof of progress.',blindSpot:'Could mistake aspiration for historical outcome.' },
