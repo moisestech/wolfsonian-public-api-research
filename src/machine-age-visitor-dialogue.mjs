@@ -5,8 +5,8 @@
  * page-level original-publication assertions, or historical impersonation.
  * Only hand-authored answers from two bounded research modules are returned.
  */
-import {machineAgeAnswer, machineAgeQuestions} from './machine-age-research.mjs';
-import {contemporaryWitnessFor, MACHINE_AGE_ACCESSION} from './machine-age-onview.mjs';
+import {machineAgeAnswer, MACHINE_AGE_RESEARCH} from './machine-age-research.mjs';
+import {contemporaryWitnessFor, MACHINE_AGE_ACCESSION, MACHINE_AGE_SOURCE_LAYERS} from './machine-age-onview.mjs';
 
 const READERS=new Set(['futurist','worker','archivist']);
 const TOPICS=Object.freeze([
@@ -51,6 +51,13 @@ function fromCatalogue(topic,readerId){
   label:'The Wolfsonian public exhibition checklist',
   origin:'INSTITUTIONAL_CURATORIAL_RECORD',
   kind:'institutional_checklist',
+  sourceReference:{
+    url:MACHINE_AGE_RESEARCH.sources[0].url,
+    title:MACHINE_AGE_RESEARCH.sources[0].title,
+    sourceKind:'institutional_exhibition_checklist',
+    locator:MACHINE_AGE_RESEARCH.sources[0].locator,
+    establishesNoAdditionalClaims:true
+  },
   text:p.text,
   claims:p.claims.map(c=>({
    id:c.id,label:c.label,statement:c.value,
@@ -68,6 +75,13 @@ function fromReview(readerId){
   label:'Contemporary review, E. B. White, May 1927',
   origin:'CONTEMPORARY_PUBLISHED_WITNESS',
   kind:'period_review',
+  sourceReference:{
+    url:MACHINE_AGE_SOURCE_LAYERS.find(s=>s.id==='NY-REVIEW').url,
+    title:MACHINE_AGE_SOURCE_LAYERS.find(s=>s.id==='NY-REVIEW').label,
+    sourceKind:'contemporary_witness_review',
+    locator:'The New Yorker, May 21, 1927 — digitized review',
+    establishesNoAdditionalClaims:true
+  },
   text:p.text,
   claims:p.claims.map(c=>({
    id:c.id,label:c.label,statement:c.paraphrase,
