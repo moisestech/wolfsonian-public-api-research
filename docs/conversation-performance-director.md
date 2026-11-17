@@ -76,15 +76,27 @@ A practical rehearsal pair is **Making the Engine → Grind Safely** because the
 
 **Do not auto-approve after a successful browser test.** Treat the 16 scenes as editor-reviewed drafts until the artist and relevant curatorial reviewer accept the wording, tones and intended internal use. Actual iPhone/projection playback and the collection-record/asset permissions (#25/#27) remain separate release decisions.
 
-## 6. Artistic decisions awaiting your answer
+## 6. Artistic decisions agreed on November 17
+
+The artist selected two definitive defaults:
+
+1. **One Archivist:** A single recognizable, installed local Archivist voice across every scene and both tones by default. This remains fixed even when other objects vary per scene. In Admin, an opt-in **Multiple Archivists (experimental)** setting allows scene-varying institutional voices. It does not change the Archivist's source evidence.
+2. **Two switchable conversation registers:** A visitor-facing **Argumentative / Critical** and **Poetic / Uncanny** selector. The first is the full revised 16-scene script; the second is a separately authored set of 32 object readings, two for each scene. The same 16 Archivist evidence statements remain *verbatim* across both registers. The selected register is shareable via `?tone=poetic`, and changing it preserves the graph edge, object IDs and source evidence.
+
+Both registers are artist-authored fictional speeches, not generated live. Poetic text is read slightly slower; the Archivist's pace, identity and evidence remain fixed. Unscripted metadata-only scenes intentionally do **not** invent poetic variants.
+
+**Editorial practice:** Review each scene in both registers. The mode should change *what is being experienced*, not make unsupported history seem more certain. For politically sensitive objects, review the poetic metaphors for unintended glamorization or misrepresentation.
+
+### Optional casting controls
 
 1. **Archivist:** one recognizable neutral voice across the exhibition, or multiple restrained voices suggesting an institution without a single point of view? Current default is consistent *delivery*, scene-varying timbre.
 2. **Other objects:** should voice variation be the default **per scene** (current implementation) or should each object keep a fixed voice over its entire network biography? Visitors can currently switch modes in Admin.
-3. **Tone:** should exchanges be predominantly *poetic/uncanny*, *argumentative/critical*, or *a curatorial balance*? The current drafts prioritize lucid conflicts and pointed questions, not comedy, period imitation, or long monologues.
+3. **Tone:** this is now a visible switch between two authored alternatives; continue refining both in response to listener and curator feedback.
 
 ## Links
 
 - Source registry: `src/curated-edge-scenes.mjs`
+- Poetic variants and invariant evidence: `src/conversation-tones.mjs`
 - Director and score: `src/conversation-performance.mjs`
 - Playback/admin casting preview: `demo/archive-society/society.mjs`
 - Audio cue export: `scripts/export-curated-audio-cues.mjs`
