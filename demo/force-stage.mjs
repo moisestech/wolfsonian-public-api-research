@@ -229,7 +229,7 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     if(signal.visible){
       const start=forward?source:reverse?target:source;
       const end=forward?target:reverse?source:target;
-      const fraction=reduced||activeRole==='archivist'?.5:(time*.43%1);
+      const fraction=(reduced||activeRole==='archivist') ? 0.5 : (time*0.43%1);
       signal.position.set(
         start.x+(end.x-start.x)*fraction,
         start.y+(end.y-start.y)*fraction,
