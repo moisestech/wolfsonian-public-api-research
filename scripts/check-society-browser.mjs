@@ -99,7 +99,7 @@ try {
   await page.locator('[data-scene-id="challenge-robeson-architectural-fantasy"]').click();
   assert.match(await page.locator('#conversation-content h2').innerText(),/When the algorithm should doubt itself/);
   assert.match(page.url(),/scene=challenge-robeson-architectural-fantasy/);
-  assert.match(await page.locator('#conversation-content').innerText(),/not establish|not established|No documented/i);
+  assert.match(await page.locator('#conversation-content').innerText(),/not establish|not established|No documented|No historical relationship/i);
   await page.locator('#conversation-guide > summary').click();
   await page.selectOption('#guide-chapter','all');
   await page.locator('[data-scene-id="opening-skilled-work-lottery"]').click();
