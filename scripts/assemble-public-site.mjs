@@ -30,6 +30,7 @@ export const PUBLIC_FILES = [
   'src/machine-age-research.mjs',
   'src/machine-age-visitor-dialogue.mjs',
   'src/matrix-room.mjs',
+  'src/public-matrix-objects.mjs',
   'src/object-lens-core.mjs',
   'src/presentation-pairs.mjs',
   'src/session-images.mjs',
@@ -91,6 +92,13 @@ export async function assemblePublicSite(destination, { requireResearchConsole =
   for (const file of PUBLIC_FILES) {
     await mkdir(dirname(join(out, file)), { recursive: true });
     await cp(join(root, file), join(out, file));
+  }
+  for (const rel of ['src/matrix-room.mjs', 'src/lakehouse-matches.mjs']) {
+    const file = join(out, rel);
+    const text = await readFile(file, 'utf8');
+    const staffImport = "from './matrix-objects.mjs'";
+    if (!text.includes(staffImport)) throw new Error(rel + ' no longer imports the staff matrix under the expected name.');
+    await writeFile(file, text.replaceAll(staffImport, "from './public-matrix-objects.mjs'"));
   }
   const consoleFrom = join(root, 'research-console/dist');
   try {

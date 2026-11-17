@@ -15,6 +15,12 @@ test('public site allowlist omits the staff matrix and saved Lakehouse capture',
   await access(join(out, 'src/object-lens-core.mjs'));
   await assert.rejects(access(join(out, 'src/matrix-objects.mjs')));
   await assert.rejects(access(join(out, 'data/lakehouse/project-matches.json')));
+  const room = await readFile(join(out, 'src/matrix-room.mjs'), 'utf8');
+  const matches = await readFile(join(out, 'src/lakehouse-matches.mjs'), 'utf8');
+  assert.doesNotMatch(room, /from '\.\/matrix-objects\.mjs'/);
+  assert.doesNotMatch(matches, /from '\.\/matrix-objects\.mjs'/);
+  assert.match(room, /from '\.\/public-matrix-objects\.mjs'/);
+  await access(join(out, 'src/public-matrix-objects.mjs'));
   const pages = await readFile(new URL('../.github/workflows/pages.yml', import.meta.url), 'utf8');
   assert.match(pages, /npm ci/);
   assert.match(pages, /playwright install --with-deps chromium/);

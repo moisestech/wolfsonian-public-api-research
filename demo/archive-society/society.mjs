@@ -830,7 +830,7 @@ function bestSeed(records){
 async function loadLakehouse(){
   try{
     const response=await fetch('/data/lakehouse/project-matches.json');
-    if(!response.ok)return;
+    if(!response.ok){state.records=state.matrixRecords;state.seed=bestSeed(state.records);return;}
     const packet=await response.json();
     const graph=conversationRecords(packet);
     if(graph.strong<2)return;
