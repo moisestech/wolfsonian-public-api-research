@@ -40,14 +40,17 @@ function supportedEdge(records,scene,seed,target){
  * Try both orientations; NEVER create a synthetic link when neither exists.
  */
 export function conversationGuide(records){
-  const known=new Map(records.map(item=>[item.accession,item]));
+  const normalized=value=>String(value||'').trim().replace(/\s+/g,'').replace(/[–—]/g,'-').toUpperCase();
+  const known=new Map(records.map(item=>[normalized(item.accession),item]));
   return CONVERSATION_CHAPTERS.map(chapter=>({
     id:chapter.id,title:chapter.title,description:chapter.description,
     scenes:chapter.sceneIds.map(id=>{
       const scene=sceneById.get(id);
-      const a=known.get(scene.a),b=known.get(scene.b);
-      const destination=a&&b&&(supportedEdge(records,scene,scene.a,scene.b)
-        ||supportedEdge(records,scene,scene.b,scene.a));
+      const a=known.get(normalized(scene.a)),b=known.get(normalized(scene.b));
+      // Use the actual record accession in this capture, not the registry's
+      // historical punctuation/spacing variant, to select an existing edge.
+      const destination=a&&b&&(supportedEdge(records,scene,a.accession,b.accession)
+        ||supportedEdge(records,scene,b.accession,a.accession));
       return {
         id:scene.id,chapter:chapter.id,arc:scene.arc,mode:scene.mode,
         a:scene.a,b:scene.b,
