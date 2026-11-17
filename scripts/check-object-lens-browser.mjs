@@ -30,10 +30,24 @@ try{
   await page.locator('#confirm').check();
   await page.locator('#encounter').waitFor({state:'visible'});
   assert.match(await page.locator('#encounter-title').innerText(),/Machine Age Exposition catalogue/);
+
+  assert.equal(await page.locator('#on-view-context').isVisible(),true);
+  assert.match(await page.locator('#on-view-heading').innerText(),/on display/);
+  assert.equal(await page.locator('#on-view-source-list li').count(),8);
+  assert.match(await page.locator('#on-view-source-list').innerText(),/HathiTrust/);
+  assert.match(await page.locator('#witness-text').innerText(),/1927 visitor/);
+  const witnessA=await page.locator('#witness-text').innerText();
+
   assert.equal(await page.locator('#reader-script').count(),1);
   const futurist=await page.locator('#reader-script').innerText();
   await page.locator('[data-reader="worker"]').click();
   const worker=await page.locator('#reader-script').innerText();
+
+  assert.notEqual(await page.locator('#witness-text').innerText(),witnessA);
+  assert.equal(await page.locator('#witness-claims li').count()>=2,true);
+  assert.equal(await page.locator('#witness-claims a').count()>=2,true);
+  assert.match(await page.locator('#witness-unknowns').innerText(),/Not established/);
+
   assert.notEqual(worker,futurist);
   await page.locator('[data-reader="archivist"]').click();
   const archivist=await page.locator('#reader-script').innerText();
