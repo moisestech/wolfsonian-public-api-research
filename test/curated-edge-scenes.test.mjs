@@ -58,6 +58,7 @@ test('actual On Munitions opening edges use distinct dialogue, with metadata as 
     assert.equal(c.editorialStatus,'EDITORIAL_DRAFT_NOT_APPROVED');
     assert.equal(c.historicalRelationshipEstablished,false);
     assert.equal(c.evidence[0].value,s.tag);
+    assert.deepEqual(c.scriptBasis,{family:s.family,value:s.tag});
     assert.equal(c.turns.length,3);
     assert.equal(c.turns[0].role,'objectA');
     assert.equal(c.turns[1].role,'objectB');
@@ -101,6 +102,10 @@ test('frontend renders editorial arc, source-based explanation and visitor quest
  assert.match(js,/CURATED_EDGE_SCENE/);
  assert.match(js,/c\.dramaticArc/);
  assert.match(js,/c\.nextPrompt/);
+ assert.match(js,/data\.followObject/);
+ assert.match(js,/data\.returnObject/);
+ assert.match(js,/state\.journey/);
+ assert.match(js,/c\.scriptBasis/);
  assert.match(js,/ARTIST-AUTHORED SCENE/);
  assert.match(js,/Inspect the reason for this edge/);
  assert.match(server,/curated-edge-scenes/);
