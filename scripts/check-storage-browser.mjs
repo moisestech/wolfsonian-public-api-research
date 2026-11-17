@@ -34,8 +34,11 @@ try{
   await page.locator('#inquiry').selectOption('systems');
   assert.match(await page.locator('#inquiry-prompt').innerText(),/identities, beliefs, labor, value, and agency/);
   await page.locator('#dialogue-toggle').click();
-  assert.equal(await page.locator('#dialogue .turn').count(),9);
-  assert.match(await page.locator('#dialogue').innerText(),/no approved record connecting/);
+  assert.equal(await page.locator('#dialogue .turn').count(),7);
+  assert.match(await page.locator('#dialogue').innerText(),/artist-authored/i);
+  await page.locator('#inquiry').selectOption('provenance');
+  assert.match(await page.locator('#dialogue').innerText(),/no approved box, bay or floor/);
+  assert.equal(await page.locator('#dialogue .turn').count(),7);
   await page.locator('#level').selectOption('DEMO-L2');
   await page.locator('#show-boxes').uncheck();
   await page.locator('#reset').click();
