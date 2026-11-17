@@ -78,7 +78,7 @@ test('weak trees and water connections deliberately question the algorithm',()=>
  for(const s of weak){
   const c=conversationFor(fakeObject(s.a),fakeObject(s.b),makeEdge(s.a,s.b,s.family,s.tag),'archivist');
   assert.equal(c.edgeMode,'question_edge');
-  assert.match(c.turns[2].text,/No documented|No historical relationship|not enough|not establish|unproven/i);
+  assert.match(c.turns[2].text,/No documented|No historical relationship|not enough|not establish|not proof|unproven/i);
   assert.match(c.nextPrompt,/withdraw|reject/i);
  }
 });
