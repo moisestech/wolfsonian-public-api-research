@@ -38,7 +38,26 @@ try{
   assert.match(await page.locator('#dialogue').innerText(),/artist-authored/i);
   await page.locator('#inquiry').selectOption('provenance');
   assert.match(await page.locator('#dialogue').innerText(),/no approved box, bay or floor/);
-  assert.equal(await page.locator('#dialogue .turn').count(),7);
+  assert.equal(await page.locator('#dialogue .turn').count(),8);
+  assert.equal(await page.locator('#trail-list li').count(),2);
+  assert.match(await page.locator('#trail-status').innerText(),/2 questions followed/);
+  await page.locator('#follow-question').click();
+  assert.equal(await page.locator('#trail-list li').count(),3);
+  assert.equal(await page.locator('#dialogue .turn').count(),8);
+  await page.locator('#compare-object').click();
+  assert.equal(await page.locator('#trail-list li').count(),4);
+  assert.match(await page.locator('#trail-status').innerText(),/2 catalog identities/);
+  assert.match(await page.locator('#dialogue').innerText(),/Now we are looking at/);
+  const beforeBox=await page.locator('#trail-list li').count();
+  await page.locator('#box-list button').first().click();
+  assert.match(await page.locator('#dialogue').innerText(),/fictional demonstration box/);
+  assert.equal(await page.locator('#trail-list li').count(),beforeBox,'fictional boxes cannot create inquiry edges');
+  const downloadWait=page.waitForEvent('download');
+  await page.locator('#download-trail').click();
+  const download=await downloadWait;
+  assert.equal(download.suggestedFilename(),'archive-dreams-inquiry-path.json');
+  await page.locator('#clear-trail').click();
+  assert.equal(await page.locator('#trail-list li').count(),0);
   await page.locator('#level').selectOption('DEMO-L2');
   await page.locator('#show-boxes').uncheck();
   await page.locator('#reset').click();
@@ -48,5 +67,5 @@ try{
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   assert.deepEqual(errors,[]);
   assert.deepEqual(outbound,[]);
-  console.log('PASS storage cube: accessible list, 9 turns, evidence boundaries, mobile, no remote calls.');
+  console.log('PASS storage cube: accessible list, compounding seven/eight-turn scenes, privacy, mobile, no remote calls.');
 }finally{await browser?.close();server.kill('SIGTERM')}
