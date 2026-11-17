@@ -62,6 +62,20 @@
         <ol id="primary-leads-list"></ol>
       </details>
     </div>
+    <section id="visitor-conversation" hidden aria-labelledby="visitor-conversation-heading">
+      <p class="eyebrow">VISITOR-DIRECTED · EVIDENCE FIRST</p>
+      <h3 id="visitor-conversation-heading">Ask what the sources can tell us</h3>
+      <p class="small">Write a question. A local, deterministic selector chooses from prepared fictional interpretations; this is not live AI and cannot answer every question. No transcript is saved, uploaded or sent to a model.</p>
+      <form id="visitor-question-form">
+        <label for="visitor-question">Your question about the 1927 Machine Age Exposition</label>
+        <textarea id="visitor-question" rows="2" maxlength="240" required placeholder="Why did a visitor imagine the future, and who built it?"></textarea>
+        <button type="submit">Ask the selected reader</button>
+      </form>
+      <div id="visitor-prompt-options" class="question-options" role="group" aria-label="Prepared questions to ask"></div>
+      <div class="conversation-controls button-row"><button id="clear-conversation" type="button" class="secondary">Clear local conversation</button></div>
+      <p id="visitor-session-status" class="small" role="status">No questions asked. Session-only text; no saving or analytics.</p>
+      <ol id="visitor-transcript" class="visitor-transcript" aria-label="Visitor conversation transcript" aria-live="polite" aria-relevant="additions"></ol>
+    </section>
     <div class="button-row">
       <button id="speak" type="button">Read selected text aloud using a local voice</button>
       <button id="stop-speech" type="button" class="secondary">Stop voice</button>
