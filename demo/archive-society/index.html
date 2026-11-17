@@ -32,7 +32,14 @@
     <button id="restore" class="quiet">Restore invented example</button>
   </details>
   <p id="import-status" class="muted" role="status"></p>
-  <label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice</option><option value="elevenlabs">ElevenLabs · external service</option></select>
+  <label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice · no API cost</option><option value="elevenlabs">ElevenLabs · external service</option></select>
+  <details id="voice-cast" class="voice-cast"><summary>Cast local voices for three readers</summary>
+    <p class="muted">Only voices installed locally on this device are offered. A separate voice can be selected for each fictional role. No words are sent to a speech API.</p>
+    <label for="voice-object-a">Object A</label><select id="voice-object-a" data-voice-role="objectA"><option value="">Automatic local voice</option></select>
+    <label for="voice-object-b">Object B</label><select id="voice-object-b" data-voice-role="objectB"><option value="">Automatic local voice</option></select>
+    <label for="voice-archivist">Archivist</label><select id="voice-archivist" data-voice-role="archivist"><option value="">Automatic local voice</option></select>
+    <p id="local-voice-status" class="muted" role="status">Checking voices available on this device.</p>
+  </details>
   <div id="approval-box" hidden><p>Only the displayed transcript is sent. No photograph or full CSV is transmitted. Provider retention follows your account settings.</p><label class="check"><input id="external-approved" type="checkbox"> I have approval to send these displayed words to ElevenLabs.</label></div>
   <button id="export" class="quiet">Save selected conversation JSON</button>
   <details><summary>Lakehouse evidence</summary><p>A lookup is a separate source layer. It never changes the CSV tags.</p>
@@ -99,6 +106,18 @@
   <p class="landscape-credit">Fictional readings · <a href="../about/">About</a></p>
 </section>
 <aside class="evidence-rail" aria-label="Conversation, record and services">
+  <details id="conversation-guide" class="conversation-guide">
+    <summary>Explore 16 conversations <span aria-hidden="true">⌄</span></summary>
+    <div class="guide-controls">
+      <label for="guide-chapter">Chapter</label>
+      <select id="guide-chapter"><option value="all">All chapters</option></select>
+      <label for="guide-search">Find a question or object</label>
+      <input id="guide-search" type="search" placeholder="Search conversations" autocomplete="off">
+      <p id="guide-count" role="status" class="muted"></p>
+    </div>
+    <div id="guide-list" class="guide-list" aria-label="Curated conversation destinations"></div>
+    <p class="muted">Artist-authored fictional readings. Links follow recorded metadata; they do not establish historical contact.</p>
+  </details>
   <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
   <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
   <section id="conversation-panel" aria-label="Object-to-object dialogue"><nav id="turn-navigation" class="turn-navigation" aria-label="Read dialogue one speaker at a time" hidden>
