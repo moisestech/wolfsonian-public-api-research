@@ -7,6 +7,7 @@ on:
       - "demo/archive-society/society.mjs"
       - "scripts/serve-archive-society.mjs"
       - "test/object-lens-core.test.mjs"
+      - "scripts/check-object-lens-browser.mjs"
       - ".github/workflows/object-lens-source-first.yml"
   workflow_dispatch:
 
@@ -29,3 +30,17 @@ jobs:
           node --check scripts/serve-archive-society.mjs
       - name: Verify source-first visitor contract
         run: node --test test/object-lens-core.test.mjs
+
+      - name: Install browser test dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Test phone encounter and Atlas handoff in Chromium
+        run: node scripts/check-object-lens-browser.mjs
+      - name: Upload source-first phone screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: object-lens-mobile
+          path: artifacts/object-lens-mobile.png
+          if-no-files-found: ignore
