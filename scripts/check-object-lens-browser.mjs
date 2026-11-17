@@ -59,6 +59,17 @@ try{
   assert.match(await page.locator('#answer-citations').innerText(),/No directly verified claim/);
   assert.match(await page.locator('#answer-unknowns').innerText(),/original/i);
 
+  const leadsText=await page.locator('#primary-leads-list').textContent();
+  assert.match(leadsText,/Safety garments and masks appear in exhibit list/);
+  assert.match(leadsText,/Labor-related architectural entries/);
+  assert.match(leadsText,/Time clock in the exhibit list/);
+  assert.match(leadsText,/NOT VERIFIED/);
+  const leadLinks=await page.locator('#primary-leads-list a').count();
+  assert.ok(leadLinks>=3);
+  await page.locator('[data-question="cover"]').click();
+  assert.equal(await page.locator('#primary-text-leads').isVisible(),false,'no unsupported primary-page citations for cover');
+
+
   assert.equal((await page.locator('#handoff').getAttribute('href')), '../archive-society/?accession=XM1999.108.8');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Phone width should not overflow');
   await mkdir(new URL('artifacts/',root),{recursive:true});
