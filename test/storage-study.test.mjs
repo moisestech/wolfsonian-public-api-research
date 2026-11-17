@@ -50,8 +50,8 @@ test('non-approved real placements, bogus source references and synthetic target
     {...base,accession:'UNKNOWN-ACCESSION'},
     {...base,containerId:'DEMO-BOX-01'}
   ]) assert.throws(()=>buildStorageTopology({approvedPlacements:[bad]}));
-  assert.equal(buildStorageTopology({approvedPlacements:[base]}).statistics.verifiedPlacements,1);
-  assert.throws(()=>buildStorageTopology({approvedPlacements:[base,base]}),/Conflicting/);
+  assert.throws(()=>buildStorageTopology({approvedPlacements:[base]}),/Real placements are disabled/);
+  assert.throws(()=>buildStorageTopology({approvedPlacements:[base,base]}),/Real placements are disabled/);
 });
 test('inspector visibly distinguishes fictional container and unknown real identity',()=>{
   const scene=buildStorageTopology();
