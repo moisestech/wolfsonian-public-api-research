@@ -1,37 +1,115 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,follow">
-  <title>Object Lens · Archive Dreams in Public</title>
-  <link rel="stylesheet" href="./lens.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<title>Object Lens · Archive Dreams in Public</title>
+<link rel="stylesheet" href="./lens.css">
 </head>
 <body>
+<a class="skip" href="#identify">Skip to object identification</a>
 <header>
-  <p class="eyebrow">OBJECT LENS · CAMERA STAYS OFF UNTIL YOU ASK</p>
-  <h1>A possible identity, then a person confirms it.</h1>
-  <nav>
-    <a href="../archive-society/">Conversational Atlas</a>
-    <a href="../spatial-atlas/">Spatial Atlas</a>
-  </nav>
+  <p class="eyebrow">OBJECT LENS · INDEPENDENT ARTIST RESEARCH</p>
+  <h1>Meet an object. Question its story.</h1>
+  <p>Identify one public research packet, choose a fictional perspective, then examine the evidence.</p>
+  <nav><a href="../archive-society/">Conversational Atlas</a><a href="../spatial-atlas/">Spatial Atlas</a></nav>
 </header>
 <main>
   <section>
+    <h2>1. Look closely</h2>
     <video id="preview" playsinline autoplay muted hidden></video>
     <p id="camera-status" role="status">Camera is off. No frames are stored.</p>
     <button id="open-camera" type="button">Use the camera</button>
     <button id="close-camera" type="button" hidden>Turn the camera off</button>
-    <p class="recognition">Image recognition is not configured. A picture is not treated as a match.</p>
+    <p class="recognition">Camera preview only: automatic image and label recognition is not enabled. A photograph is never silently treated as a catalog match.</p>
   </section>
-  <section>
-    <label for="accession">Accession, typed exactly</label>
-    <input id="accession" autocomplete="off" spellcheck="false" placeholder="XX1990.1484">
-    <button id="check" type="button">Check against the public packets</button>
+  <section id="identify">
+    <h2>2. Confirm an identity</h2>
+    <label for="accession">Exact accession on a label or prepared test card</label>
+    <input id="accession" spellcheck="false" autocomplete="off" placeholder="XM1999.108.8">
+    <button id="check" type="button">Check the six public research packets</button>
     <p id="result" role="status"></p>
-    <label class="confirm"><input id="confirm" type="checkbox" disabled> I confirm this is the object in front of me</label>
-    <a id="handoff" hidden href="../archive-society/">Return to the atlas</a>
+    <label class="confirm"><input id="confirm" type="checkbox" disabled> I confirm this is the research object I want to explore</label>
+  </section>
+  <section id="encounter" hidden>
+    <p class="eyebrow">3. FICTIONAL INTERPRETATIONS</p>
+    <h2 id="encounter-title"></h2>
+    <p id="encounter-question"></p>
+    <div id="reader-options" class="readers" role="group" aria-label="Choose interpretive reader"></div>
+    <div class="reading-panel">
+      <p class="eyebrow" id="reader-label"></p>
+      <p id="reader-script" aria-live="polite"></p>
+      <details><summary>Reveal reader prompt and blind spot</summary><p id="reader-prompt"></p><p id="reader-blindspot"></p></details>
+    </div>
+    <div id="curated-questions" hidden aria-labelledby="curated-heading">
+      <h3 id="curated-heading">Ask the research</h3>
+      <p class="small">These prepared questions use public institutional source notes; they are not responses from a live AI model or from historical speakers.</p>
+      <div id="question-options" class="question-options" role="group" aria-label="Choose a question about this object"></div>
+      <article id="question-panel" class="question-panel" aria-live="polite">
+        <p id="question-status" class="eyebrow"></p>
+        <h4 id="question-title"></h4>
+        <p id="question-answer"></p>
+        <details id="answer-evidence">
+          <summary>Why can we say this? Inspect claims and sources</summary>
+          <ol id="answer-citations"></ol>
+          <p id="answer-unknowns" class="small"></p>
+          <p class="small">The source is the museum's exhibition checklist, not a verified page-by-page reading of the original 1927 catalogue. No museum image rights are implied.</p>
+        </details>
+      </article>
+      <details id="primary-text-leads">
+        <summary>Original-catalogue page leads (unverified transcription)</summary>
+        <p class="small">These page numbers are suggested by a third-party OCR/transcription of a purported 1927 catalogue. They are NOT verified against The Wolfsonian's original copy or even a visually inspected full facsimile. They do not support factual claims or quotation in the dialogue.</p>
+        <ol id="primary-leads-list"></ol>
+      </details>
+    </div>
+    <section id="visitor-conversation" hidden aria-labelledby="visitor-conversation-heading">
+      <p class="eyebrow">VISITOR-DIRECTED · EVIDENCE FIRST</p>
+      <h3 id="visitor-conversation-heading">Ask what the sources can tell us</h3>
+      <p class="small">Write a question. A local, deterministic selector chooses from prepared fictional interpretations; this is not live AI and cannot answer every question. No transcript is saved, uploaded or sent to a model.</p>
+      <form id="visitor-question-form">
+        <label for="visitor-question">Your question about the 1927 Machine Age Exposition</label>
+        <textarea id="visitor-question" rows="2" maxlength="240" required placeholder="Why did a visitor imagine the future, and who built it?"></textarea>
+        <button type="submit">Ask the selected reader</button>
+      </form>
+      <div id="visitor-prompt-options" class="question-options" role="group" aria-label="Prepared questions to ask"></div>
+      <div class="conversation-controls button-row"><button id="clear-conversation" type="button" class="secondary">Clear local conversation</button></div>
+      <p id="visitor-session-status" class="small" role="status">No questions asked. Session-only text; no saving or analytics.</p>
+      <ol id="visitor-transcript" class="visitor-transcript" aria-label="Visitor conversation transcript" aria-live="polite" aria-relevant="additions"></ol>
+    </section>
+    <div class="button-row">
+      <button id="speak" type="button">Read selected text aloud using a local voice</button>
+      <button id="stop-speech" type="button" class="secondary">Stop voice</button>
+    </div>
+    <p id="speech-status" class="small" role="status">Transcript is always visible. No external voice service.</p>
+    <section id="on-view-context" class="research-panel" hidden aria-labelledby="on-view-heading">
+      <p class="eyebrow">ON VIEW · NO PHYSICAL HANDLING</p>
+      <h3 id="on-view-heading">The object is on display. Research continues through other copies.</h3>
+      <p class="small">The Wolfsonian's accession identifies its exhibited copy. Other scanned copies, 1927 reviews and later scholarship are separate evidence layers, not pages from this museum object's currently accessible record. No rights to reproduce their images are implied.</p>
+      <details id="on-view-sources">
+        <summary>Open research copies and source routes</summary>
+        <ol id="on-view-source-list"></ol>
+      </details>
+      <div class="reading-panel">
+        <h4>What did someone see in 1927?</h4>
+        <p id="witness-status" class="eyebrow"></p>
+        <p id="witness-text"></p>
+        <details id="witness-evidence">
+          <summary>Inspect contemporary-review evidence and limitations</summary>
+          <ol id="witness-claims"></ol>
+          <p id="witness-unknowns" class="small"></p>
+          <p class="small">This is a separately published period account, not the catalogue and not a quotation by a historical speaker. The publisher warns that its digitized transcription may contain errors.</p>
+        </details>
+      </div>
+    </section>
+    <h3>4. Check the evidence</h3>
+    <dl id="evidence-list"></dl>
+    <p class="small">Identity fields are not a full biography or evidence of direct relationships.</p>
+    <p id="source-link"></p>
+    <a id="handoff" href="../archive-society/">Explore this accession in the Atlas</a>
+    <p class="small">The Atlas may have no verified neighbors for this object. An isolated object is an honest result.</p>
   </section>
 </main>
+<footer><p>Interpretation is not evidence. Fictional readers; not an official Wolfsonian visitor app.</p></footer>
 <script type="module" src="./lens.mjs"></script>
 </body>
 </html>

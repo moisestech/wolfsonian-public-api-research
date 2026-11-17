@@ -165,3 +165,9 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
   .evidence-rail{display:flex;flex-direction:column;overflow:visible;max-height:none}
   .rail-scroll{max-height:58vh;overflow:auto}
 }
+
+/* Short, visitor-controlled object-to-object narrative paths. */
+.edge-next-question{font:13px/1.45 Georgia,serif;color:#e3b684;margin:16px 0 10px}
+.edge-path-actions{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 18px}
+.edge-path-actions button{flex:1 1 130px;overflow-wrap:anywhere;font-size:12px}
+.edge-path-actions button:first-child{background:#366c63;color:#fff;border-color:#7ed6c5;font-weight:700}

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Archive Dreams Object Lens Encounter v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "accession",
+    "title",
+    "sourceState",
+    "evidence",
+    "readers"
+  ],
+  "properties": {
+    "accession": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "question": {
+      "type": "string"
+    },
+    "sourceState": {
+      "const": "VERIFIED_PUBLIC_PACKET_IDENTITY"
+    },
+    "sourceUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "field",
+          "value",
+          "status"
+        ],
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "readers": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "prompt",
+          "blindSpot",
+          "script",
+          "classification",
+          "historicalRelationshipEstablished",
+          "citations"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "futurist",
+              "worker",
+              "archivist"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "blindSpot": {
+            "type": "string"
+          },
+          "script": {
+            "type": "string"
+          },
+          "classification": {
+            "const": "ARTIST_AUTHORED_INTERPRETATION"
+          },
+          "historicalRelationshipEstablished": {
+            "const": false
+          },
+          "citations": {
+            "type": "array"
+          }
+        }
+      }
+    }
+  }
+}

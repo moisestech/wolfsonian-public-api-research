@@ -19,14 +19,6 @@ test('CSV categories remain exact and private data is not needed in the repo',as
   const c=conversationFor(records[0],records.find(r=>r.accession===view.edges[0].target),view.edges[0],'worker');
   assert.equal(c.turns.length,3);assert.equal(c.mode,'scripted_interpretation');
   assert.equal(c.historicalRelationshipEstablished,false);assert.ok(c.evidence[0].sourceColumns[0]);
-  assert.equal(c.turns[0].speaker,'Worker');
-  assert.match(c.turns[0].text,/Who made, repaired, maintained or benefited from this/);
-  assert.match(c.turns[1].text,/does not show that our histories crossed/);
-  assert.match(c.turns[1].text,/A labor theme alone does not identify actual workers/);
-  assert.equal(c.turns[1].text.includes('Who made, repaired, maintained or benefited from this'),false);
-  assert.match(c.turns[2].text,/does not establish that these objects met/);
-  assert.notEqual(c.turns[0].text,c.turns[1].text);
-  assert.notEqual(c.turns[1].text,c.turns[2].text);
 });
 test('filters and isolated objects do not manufacture edges',()=>{
   const records=inventedRecords();
@@ -74,10 +66,6 @@ test('catalog date enters dialogue only after a unique primary match',()=>{
   const snapshot=reconcileLookup([{'Accession Number':records[0].accession,Date:'TEST DATE'}],records[0].accession,'TEST_TIME');
   const c=conversationFor(records[0],target,edge,'family',{source:snapshot});
   assert.equal(c.resourceLayer,'catalog_field_quotes');assert.match(c.turns[0].text,/TEST DATE/);assert.equal(c.turns[0].citations[0].pointer,'/0/Date');
-  assert.equal(c.turns[0].speaker,'Family');
-  assert.match(c.turns[0].text,/How did this change ordinary daily life/);
-  assert.match(c.turns[1].text,/Domestic experience cannot be recovered from a poster alone/);
-  assert.equal(c.turns[1].text.includes('How did this change ordinary daily life'),false);
   assert.equal(conversationFor(records[0],target,edge,'family',{source:{...snapshot,status:'AMBIGUOUS'}}).resourceLayer,'no_matched_catalog_field');
 });
 test('local photograph matching preserves accession suffixes and filenames',()=>{

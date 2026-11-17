@@ -6,13 +6,14 @@ import { reconcileLookup } from '../../src/archive-evidence.mjs';
 import { conversationRecords, lookupSnapshots } from '../../src/lakehouse-matches.mjs';
 import { localImageUrl } from '../../src/local-images.mjs';
 import { OPENING_ACCESSION } from '../../src/presentation-pairs.mjs';
+import { withPublicAnchorFallback } from '../../src/object-lens-core.mjs';
 import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
-const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,
+const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
   playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null};
@@ -205,12 +206,17 @@ function renderConversation(){
   if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
   const source=record(),target=state.records.find(r=>r.accession===edge.target);
   const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
+  const kind=c.mode==='CURATED_EDGE_SCENE'?'ARTIST-AUTHORED SCENE · EDITORIAL DRAFT':
+    c.edgeMode==='QUESTION_THIS_LINK'?'QUESTIONABLE MATCH · METADATA ONLY':'SOURCE-BOUNDED METADATA READING';
+  box.append(node('span',kind,'evidence-type'));
+  if(c.dramaticArc)box.append(node('h2',c.dramaticArc));
   const chat=node('div',undefined,'chat');
   const linkColor=tagColor(edge.reasons[0].value);
-  const topic=node('p',edge.reasons[0].value,'chat-topic');topic.style.background=linkColor;topic.style.color='#111';chat.append(topic);
+  const label=c.scriptBasis?.value||edge.reasons[0].value;
+  const topic=node('p',label,'chat-topic');topic.style.background=linkColor;topic.style.color='#111';chat.append(topic);
   const key=node('p',undefined,'tag-key');
   const swatch=node('i');swatch.style.background=linkColor;
-  key.append(swatch,document.createTextNode(edge.reasons[0].value+' — this color is the shared category.'));
+  key.append(swatch,document.createTextNode(label+' — this color is the shared category.'));
   chat.append(key);
   chat.style.setProperty('--link',linkColor);
   const reader=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
@@ -229,6 +235,28 @@ function renderConversation(){
     bubble.append(img,say);chat.append(bubble);
   }
   box.append(chat);
+  if(c.nextPrompt)box.append(node('p','NEXT QUESTION · '+c.nextPrompt,'edge-next-question'));
+  // A narrative edge can become a new starting object. Make this an explicit
+  // visitor action; graph connectivity is never inferred from the dialogue.
+  const actions=node('div',undefined,'edge-path-actions');
+  const follow=node('button','Follow this object');
+  follow.type='button';follow.dataset.followObject=target.accession;
+  follow.setAttribute('aria-label','Continue the investigation with '+target.title);
+  follow.addEventListener('click',()=>{
+    if(state.journey.length>=8)state.journey.shift();
+    state.journey.push(state.seed);
+    changeSeed(target.accession);setPanel('conversation');
+  });
+  actions.append(follow);
+  if(state.journey.length){
+    const back=node('button','Back to previous object','quiet');
+    back.type='button';back.dataset.returnObject=state.journey[state.journey.length-1];
+    back.addEventListener('click',()=>{
+      const previous=state.journey.pop();if(previous){changeSeed(previous);setPanel('conversation');}
+    });
+    actions.append(back);
+  }
+  box.append(actions);
   const details=node('details');details.append(node('summary','Inspect the reason for this edge'));
   for(const reason of c.evidence){const e=node('div',undefined,'reason');e.append(node('strong',reason.family+' / '+reason.value),node('small',reason.sourceColumns.join(' + ')+' → '+reason.targetColumns.join(' + ')),node('small','Shared by '+reason.candidateCount+' records in this local index.'));details.append(e);}
   details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);$('voice-controls').hidden=$('conversation-panel').hidden;$('play').disabled=state.playing;
@@ -238,7 +266,8 @@ function pair(list,label,value){list.append(node('dt',label),node('dd',value||'N
 function renderRecord(){
   const r=focusRecord(),box=$('record-content');
   box.replaceChildren(node('h2',r.title));
-  if(r.source!=='lakehouse')box.prepend(node('span',r.source==='invented'?'INVENTED EXAMPLE':'LOCAL CSV · SOURCE INPUT','evidence-type'));
+  if(r.source!=='lakehouse')box.prepend(node('span',r.source==='invented'?'INVENTED EXAMPLE':r.source==='public-packet'?'PUBLIC PACKET · IDENTITY ONLY':'LOCAL CSV · SOURCE INPUT','evidence-type'));
+  if(r.source==='public-packet')box.append(node('p','This packet identifies an accession and title only. No direct historical relationship, source-linked image, or staff-tag neighbor has been established for it in this view.','muted'));
   if(photo(r)){const img=node('img');img.src=photo(r);img.alt='Locally supplied image matched to '+r.accession;box.append(img);}
   const list=node('dl');pair(list,'Accession',r.accession);pair(list,'Creator',r.creator);pair(list,'Date',r.date);pair(list,'Categories',(r.tags||[]).filter(t=>t.family==='theme').map(t=>t.value).join(' · '));
   if(r.catalogSubject)pair(list,'Catalog subject',r.catalogSubject);
@@ -322,6 +351,10 @@ async function play(){
         }catch(error){
           if(session!==playback||error.name==='AbortError')return;
           const provider=error.message;
+          // A known-disabled provider is a configuration state, not a transient
+          // audio failure. Preserve this actionable status and avoid retrying
+          // with an unconfirmed local voice or additional network requests.
+          if(/not enabled/i.test(provider))throw error;
           message('voice-status',provider);
           try{await speakOnDevice(turn,localVoice);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
         }
@@ -345,7 +378,7 @@ function speakOnDevice(turn){
     window.speechSynthesis.speak(utterance);
   });
 }
-function invalidateData(){stop();resetApproval();lookupAbort?.abort();state.epoch++;state.edge=null;state.snapshots.clear();state.payload=null;state.lookupBusy=false;}
+function invalidateData(){stop();resetApproval();lookupAbort?.abort();state.epoch++;state.edge=null;state.journey=[];state.snapshots.clear();state.payload=null;state.lookupBusy=false;}
 function saveConversation(){
   if(!state.conversation)return;
   const payload={...state.conversation,exportedAt:new Date().toISOString(),source:record().source,notice:'Local research export. Review permissions before sharing. No photos, service token or provider credentials included.'};
@@ -387,7 +420,7 @@ document.addEventListener('click',event=>{
 });
 const stage=mountForceStage($('stage'),{onSelect:id=>onGraphSelect(id),background:'#111111'});
 paintReading();
-$('seed').addEventListener('change',()=>changeSeed($('seed').value));
+$('seed').addEventListener('change',()=>{state.journey=[];changeSeed($('seed').value);});
 $('search').addEventListener('input',()=>{stop();resetApproval();options();render();});
 for(const id of ['layer-accession','layer-box','layer-box-sim'])$(id).addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();});
 $('atlas-mode').addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();stage.fit();});
@@ -462,6 +495,9 @@ async function loadLakehouse(){
 }
 const requested=new URLSearchParams(location.search).get('accession');
 await loadLakehouse();
+// Preserve a requested public packet identity even when this graph has no source-backed neighbors.
+// Never infer thematic relationships for the fallback record.
+if(requested)state.records=withPublicAnchorFallback(state.records);
 if(requested&&state.records.some(item=>item.accession===requested))state.seed=requested;
 categories();options();render();
 if(requested&&!state.records.some(item=>item.accession===requested))message('import-status','Requested accession is not in the loaded set. No identity was assumed.');
