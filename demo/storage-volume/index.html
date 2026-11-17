@@ -49,6 +49,21 @@
     <p id="inquiry-prompt" class="prompt"></p>
     <button id="dialogue-toggle" type="button" aria-expanded="false" aria-controls="dialogue">Explore this conversation</button>
     <div id="dialogue" hidden></div>
+    <section id="inquiry-trail" aria-labelledby="trail-heading">
+      <h3 id="trail-heading">Your questions begin to connect</h3>
+      <p class="small">A private, in-memory path through fictional readings. Connections mean you compared questions—not that the objects met.</p>
+      <p id="trail-status" role="status">No inquiry paths followed yet.</p>
+      <ol id="trail-list" class="trail-list" aria-label="Questions explored in this visit"></ol>
+      <p id="trail-bridge" class="prompt">Start with one question. Each encounter can challenge what came before.</p>
+      <div class="trail-actions">
+        <button type="button" id="follow-question">Follow the next question</button>
+        <button type="button" id="compare-object">Carry this question to another object</button>
+        <button type="button" id="download-trail">Download this inquiry path</button>
+        <button type="button" id="clear-trail">Clear this visit</button>
+      </div>
+      <p class="small">No automatic logging, visitor profile, persistent history, or institutional claim. Download is optional and stays under your control.</p>
+      <p class="small">An artist's response to <a href="https://wolfsonian.org/about/" target="_blank" rel="noopener noreferrer">The Wolfsonian–FIU's stated mission</a>: examine the persuasive power of design and use the past to reconsider the present and future. Not museum-authored dialogue.</p>
+    </section>
   </aside>
 </main>
 <footer><strong>Research boundary:</strong> Fictional shelves and DEMO box labels are not archival storage information. No actual box-to-accession join or Annex coordinates have been loaded. This is not a real digital twin.</footer>
