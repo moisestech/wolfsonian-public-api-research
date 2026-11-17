@@ -14,7 +14,7 @@ const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
-  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null};
+  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,turnIndex:0,turnKey:null};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
@@ -45,6 +45,7 @@ function stop(){
   document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));
   $('voice-controls')?.classList.remove('playing');
   stage.setSpeaking('');
+  updateTurnFocus();
 }
 function changeSeed(id){stop();resetApproval();state.seed=id;state.edge=null;
   if(state.payload)state.snapshots.set(id,reconcileLookup(state.payload,id,'UNKNOWN_LOCAL_CAPTURE_TIME'));
@@ -186,9 +187,44 @@ function renderStage(){
   row.append(reader);
   box.append(row);
 }
+
+/** Reading focus is independent of speech: visitors can inspect every turn in silence. */
+function updateTurnFocus(){
+  const turns=[...document.querySelectorAll('#conversation-content .bubble.turn')];
+  const c=state.conversation;
+  if(!c||!turns.length){
+    $('turn-navigation').hidden=true;
+    $('zoom-stage').dataset.activeRole='';
+    stage.setActiveSpeaker('');
+    return;
+  }
+  state.turnIndex=Math.max(0,Math.min(state.turnIndex,turns.length-1));
+  const index=state.turnIndex;
+  turns.forEach((turn,i)=>{
+    turn.classList.toggle('current',i===index);
+    turn.setAttribute('aria-current',i===index?'step':'false');
+  });
+  const current=c.turns[index],speaker=current.speaker;
+  const activeId=current.role==='objectA'?c.source:current.role==='objectB'?c.target:'';
+  stage.setActiveSpeaker(activeId);
+  $('zoom-stage').dataset.activeRole=current.role;
+  $('turn-progress').textContent='Reading '+(index+1)+' of '+turns.length+' · '+speaker;
+  $('previous-turn').disabled=index===0||state.playing;
+  $('next-turn').disabled=index===turns.length-1||state.playing;
+  $('turn-navigation').hidden=false;
+}
+function focusTurn(index){
+  if(!state.conversation||state.playing)return;
+  state.turnIndex=Math.max(0,Math.min(index,state.conversation.turns.length-1));
+  updateTurnFocus();
+}
+$('previous-turn').addEventListener('click',()=>focusTurn(state.turnIndex-1));
+$('next-turn').addEventListener('click',()=>focusTurn(state.turnIndex+1));
+
 function renderConversation(){
   const edge=shownEdge(),box=$('conversation-content');box.replaceChildren();
   state.conversation=null;
+  $('turn-navigation').hidden=true;
   if(state.hover?.kind==='identity'){
     const identity=state.layerView?.relationships.find(item=>item.id===state.hover.id);
     if(identity){box.append(node('span','SCRIPTED · '+identity.validationState,'evidence-type'),node('h2',identity.type.replaceAll('_',' ')),node('p',identity.basis),node('p','A shared tag or identifier is not a historical relationship.','muted'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
@@ -201,6 +237,8 @@ function renderConversation(){
   if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;$('play').disabled=true;return;}
   const source=record(),target=state.records.find(r=>r.accession===edge.target);
   const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
+  const turnKey=state.seed+'|'+edge.id+'|'+state.lens;
+  if(state.turnKey!==turnKey){state.turnIndex=0;state.turnKey=turnKey;}
   const kind=c.mode==='CURATED_EDGE_SCENE'?'ARTIST-AUTHORED SCENE · EDITORIAL DRAFT':
     c.edgeMode==='QUESTION_THIS_LINK'?'QUESTIONABLE MATCH · METADATA ONLY':'SOURCE-BOUNDED METADATA READING';
   box.append(node('span',kind,'evidence-type'));
@@ -219,7 +257,9 @@ function renderConversation(){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
     const img=node('img');img.className='avatar';img.alt='';img.src=face.src;
-    const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
+    const say=node('div',undefined,'say');
+    const roleLabel=turn.role==='objectA'?'OBJECT A':turn.role==='objectB'?'OBJECT B':'THE ARCHIVIST';
+    say.append(node('span',roleLabel,'speaker-id'),node('strong',face.name),node('p',turn.text));
     for(const citation of turn.citations||[])say.append(node('small','Catalog field '+citation.pointer+' · '+citation.retrievedAt,'muted'));
     bubble.append(img,say);chat.append(bubble);
   }
@@ -250,6 +290,7 @@ function renderConversation(){
   for(const reason of c.evidence){const e=node('div',undefined,'reason');e.append(node('strong',reason.family+' / '+reason.value),node('small',reason.sourceColumns.join(' + ')+' → '+reason.targetColumns.join(' + ')),node('small','Shared by '+reason.candidateCount+' records in this local index.'));details.append(e);}
   details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);$('voice-controls').hidden=false;$('play').disabled=state.playing;
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn 1 of '+c.turns.length;
+  updateTurnFocus();
 }
 function pair(list,label,value){list.append(node('dt',label),node('dd',value||'Not supplied'));}
 function renderRecord(){
@@ -314,7 +355,9 @@ async function play(){
       if(session!==playback)return;message('voice-status','Speaking '+(i+1)+' of '+conversation.turns.length+' · '+turn.speaker);
       $('voice-controls')?.classList.add('playing');
       if($('audio-elapsed'))$('audio-elapsed').textContent='Turn '+(i+1)+' of '+conversation.turns.length;
+      state.turnIndex=i;
       stage.setSpeaking(turn.role==='objectA'?conversation.source:turn.role==='objectB'?conversation.target:'');
+      updateTurnFocus();
       document.querySelectorAll('#conversation-content .turn').forEach((el,index)=>el.classList.toggle('speaking',index===i));
       if(mode==='device'){
         await speakOnDevice(turn,localVoice);
@@ -341,7 +384,7 @@ async function play(){
     }
     if(session===playback)message('voice-status','Finished · this was a scripted interpretation, not historical testimony.');
   }catch(error){if(session===playback)message('voice-status',error.message);}
-  finally{if(session===playback){state.playing=false;$('play').disabled=false;document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));$('voice-controls')?.classList.remove('playing');stage.setSpeaking('');}}
+  finally{if(session===playback){state.playing=false;$('play').disabled=false;document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));$('voice-controls')?.classList.remove('playing');stage.setSpeaking('');updateTurnFocus();}}
 }
 function speakOnDevice(turn,voice){
   return new Promise((resolve,reject)=>{
@@ -356,7 +399,7 @@ function speakOnDevice(turn,voice){
     window.speechSynthesis.speak(utterance);
   });
 }
-function invalidateData(){stop();resetApproval();lookupAbort?.abort();state.epoch++;state.edge=null;state.journey=[];state.snapshots.clear();state.payload=null;state.lookupBusy=false;}
+function invalidateData(){stop();resetApproval();lookupAbort?.abort();state.epoch++;state.edge=null;state.turnIndex=0;state.turnKey=null;state.journey=[];state.snapshots.clear();state.payload=null;state.lookupBusy=false;}
 function saveConversation(){
   if(!state.conversation)return;
   const payload={...state.conversation,exportedAt:new Date().toISOString(),source:record().source,notice:'Local research export. Review permissions before sharing. No photos, service token or provider credentials included.'};
