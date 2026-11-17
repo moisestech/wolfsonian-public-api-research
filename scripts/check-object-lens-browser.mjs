@@ -34,6 +34,7 @@ try{
   assert.equal(await page.locator('#on-view-context').isVisible(),true);
   assert.match(await page.locator('#on-view-heading').innerText(),/on display/);
   assert.equal(await page.locator('#on-view-source-list li').count(),8);
+  await page.locator('#on-view-sources').evaluate(details=>{details.open=true;});
   assert.match(await page.locator('#on-view-source-list').innerText(),/HathiTrust/);
   assert.match(await page.locator('#witness-text').innerText(),/1927 visitor/);
   const witnessA=await page.locator('#witness-text').innerText();
