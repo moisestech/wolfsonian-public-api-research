@@ -31,6 +31,11 @@ try {
 
   // Conversation Stage: large text, real speaker focus, graph signal and quiet navigation.
   assert.equal(await page.locator('#turn-navigation').isVisible(),true);
+  assert.equal(await page.locator('#zoom-stage').isVisible(),false);
+  assert.equal(await page.locator('#graph-dialogue-label').isVisible(),true);
+  assert.match(await page.locator('#graph-context').innerText(),/On Munitions/);
+  assert.match(await page.locator('#graph-active-speaker').innerText(),/OBJECT A/);
+  assert.equal(await page.locator('#stage .graph-node[aria-current="step"]').count(),1);
   assert.equal(await page.locator('#conversation-content .bubble.current').count(),1);
   assert.equal(await page.locator('#stage').getAttribute('data-active-role'),'objectA');
   assert.match(await page.locator('#turn-progress').innerText(),/Reading 1 of 3/);
@@ -130,6 +135,8 @@ try {
   // Readable on phone, without sideways scrolling, even when animations are disabled.
   await page.locator('.conversation-edge').first().focus();await page.keyboard.press('Enter');
   await page.locator('#next-turn').click();
+  assert.equal(await page.locator('.read-conversation-link').isVisible(),true);
+  assert.equal(await page.locator('#graph-dialogue-label').isVisible(),true);
   const phoneFont=await page.locator('#conversation-content .bubble.current p').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
   assert.ok(phoneFont>=21,'Active mobile speech must remain large: '+phoneFont);
   await page.emulateMedia({reducedMotion:'reduce'});
