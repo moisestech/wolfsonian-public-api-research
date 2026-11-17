@@ -5,6 +5,7 @@ import {conversationRecords} from '../src/lakehouse-matches.mjs';
 import {conversationGuide,destinationForScene,CONVERSATION_CHAPTERS} from '../src/conversation-guide.mjs';
 import {localVoiceOptions,roleVoiceCast} from '../src/local-voice-cast.mjs';
 import {societyView} from '../src/archive-society.mjs';
+import {audioCues} from '../scripts/export-curated-audio-cues.mjs';
 
 const packet=JSON.parse(await readFile(new URL('../data/lakehouse/project-matches.json',import.meta.url),'utf8'));
 const graph=conversationRecords(packet);
@@ -62,6 +63,16 @@ test('missing local voice does not silently select a remote voice',()=>{
   const one=roleVoiceCast([v('single','local','en-US',true)]);
   assert.equal(one.objectA.voiceURI,'single');
   assert.equal(one.objectB.voiceURI,'single');
+});
+
+test('all 48 approved-for-review audio cues are stable, distinct, and not rendered in the repository',()=>{
+  const cueSheet=audioCues(),turns=cueSheet.scenes.flatMap(s=>s.turns);
+  assert.equal(cueSheet.scenes.length,16);
+  assert.equal(turns.length,48);
+  assert.equal(turns.reduce((n,t)=>n+t.text.length,0),5120);
+  assert.equal(new Set(turns.map(t=>t.proposedFile)).size,48);
+  assert.ok(turns.every(t=>t.status==='NOT_RENDERED'&&t.textSha256Prefix.length===16));
+  assert.ok(cueSheet.scenes.every(s=>s.status==='EDITORIAL_DRAFT_NOT_APPROVED'));
 });
 
 test('navigation and local voice controls exist without secret keys or automatic third-party audio',async()=>{
