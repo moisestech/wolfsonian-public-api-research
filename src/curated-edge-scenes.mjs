@@ -298,17 +298,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.4091",
-        "text": "My title instructs viewers to vote for a workers' party. Can an image speak for labor?",
+        "text": "I call for a workers' vote. A command on paper is cheap. Who gets to speak when the poster stops speaking?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "I depict engine-making by title. What is the difference between showing people working and hearing what they demand?",
+        "text": "My title is Making the Engine. An image can show work without letting a worker answer back. Is that difference visible to you?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Factories is the repeated motif, not a proven relation between the parties, artists, or workers represented.",
+        "text": "The index gives us Factories in common, not the same makers, workers, or audience. A worker's account could change what we think we see.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -338,17 +338,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "84.4.157",
-        "text": "My title names 1939 A.D. Can a year stand in for a prediction about what comes next?",
+        "text": "I am 1939 A.D.: a date suspended like a question. Do you read me as a memory, a forecast, or a warning?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.2907",
-        "text": "Mine insists that 1943 is not 1918. Why would a poster need to argue with a previous year?",
+        "text": "I insist that 1943 is not 1918. I ask one year to argue with another. What can a date make an audience remember?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The Political symbols motif links the records. Nothing here proves a shared speaker, ideology, or direct historical response.",
+        "text": "Political symbols links our records in the index. It does not prove that one image answered the other, or that both addressed the same public.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -378,17 +378,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.3843",
-        "text": "My title says The Effect of Our U-Boats. Who is invited into that word our?",
+        "text": "My title says Our U-Boats. One small word places you inside a group before you know who drew its borders.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "Mine names 1939 A.D. Does a date address everyone equally, or a particular imagined public?",
+        "text": "I have no our. Only a year: 1939 A.D. Who is allowed to claim its future?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Political symbols is a staff-assigned connection. This is a comparison of how titles speak, not a common campaign.",
+        "text": "Political symbols is our shared index motif. Nothing here establishes the same publisher, political purpose, or intended audience.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -458,17 +458,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "84.4.25.1",
-        "text": "I announce an international exhibition of contemporary art. What makes an image appear worthy of attention?",
+        "text": "I announce an international exhibition of contemporary art. What makes an image worthy of a wall—and who gets to decide?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.3275",
-        "text": "My title advertises a dye. What happens when a similar mythological motif enters an industrial advertisement?",
+        "text": "My title sells a dye. If a mythological motif moves from an exhibition to an advertisement, does its meaning follow it?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Mythological figures is the shared motif. Resemblance does not establish copying, influence, or a shared designer.",
+        "text": "The index marks Mythological figures in both records. Inspect the images before arguing resemblance; resemblance alone cannot prove influence.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -498,17 +498,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "TD1990.340.146",
-        "text": "My title demands that the East Indies be free and urges people to work and fight for it. Who is being summoned?",
+        "text": "My title demands freedom for the East Indies and calls people to work and fight. Is its audience being addressed—or enlisted?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "My title gives us a year, 1939. Can a date answer a later political demand?",
+        "text": "Mine doesn't issue a command. It names 1939 A.D. Yet even a date can invite expectations. Whose expectations?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Flags is the shared motif. Do not merge these distinct political contexts or infer ideological alignment.",
+        "text": "Flags is the shared index motif. These titles do not establish a common political context, audience, or cause.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -578,17 +578,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.2880",
-        "text": "My title describes an invader's grasp and a threat of enslavement. What future is being feared?",
+        "text": "My title imagines an invader's grasp and the threat of enslavement. Fear does persuasive work here. Whose fear—and for whom?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "I am titled 1939 A.D. Can a future be an expectation for one audience and a danger for another?",
+        "text": "I give you 1939 A.D. without saying promise or warning. Do you read the future from my title, or from your hindsight?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Flags is the shared category. It does not support a claim that the two works spoke to the same event or audience.",
+        "text": "The index connects these records through Flags, not a verified event, campaign, or audience. The difference matters.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -618,17 +618,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.3277",
-        "text": "My title promotes Pirelli heels. Can an image make a commercial object seem extraordinary?",
+        "text": "I advertise Pirelli heels. I offer desire as something you might wear. What would make you want it?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.25.1",
-        "text": "I announce a biennial exhibition. Why would the same motif appear in a product image and an art exhibition poster?",
+        "text": "I announce a biennial exhibition. I ask you to treat what you see as art. How far apart are our requests?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The shared Mythological figures tag creates a comparison. It does not establish borrowing, influence, or collaboration.",
+        "text": "Mythological figures is our shared tag. Without examining the original images, borrowing, influence, and shared design remain unproven.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
