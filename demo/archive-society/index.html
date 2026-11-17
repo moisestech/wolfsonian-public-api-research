@@ -34,7 +34,9 @@
   <p id="import-status" class="muted" role="status"></p>
   <label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice · no API cost</option><option value="elevenlabs">ElevenLabs · external service</option></select>
   <details id="voice-cast" class="voice-cast"><summary>Cast local voices for three readers</summary>
-    <p class="muted">Only voices installed locally on this device are offered. A separate voice can be selected for each fictional role. No words are sent to a speech API.</p>
+    <p class="muted">Automatic voices vary by scene and dramatic intent. Every fictional reader remains identified in text; no voice is a historical-person imitation. Only local voices are eligible.</p>
+    <label for="voice-casting-style">Voice identity across conversations</label><select id="voice-casting-style"><option value="scene-variety">Variety per conversation (recommended)</option><option value="continuity">Keep voice per object across scenes</option></select>
+    <p class="muted">The following manual overrides apply to roles inside the current scene and take precedence over automatic casting.</p>
     <label for="voice-object-a">Object A</label><select id="voice-object-a" data-voice-role="objectA"><option value="">Automatic local voice</option></select>
     <label for="voice-object-b">Object B</label><select id="voice-object-b" data-voice-role="objectB"><option value="">Automatic local voice</option></select>
     <label for="voice-archivist">Archivist</label><select id="voice-archivist" data-voice-role="archivist"><option value="">Automatic local voice</option></select>
