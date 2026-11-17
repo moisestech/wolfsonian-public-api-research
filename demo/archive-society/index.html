@@ -35,6 +35,11 @@
   <label for="voice-mode">Read the displayed script with</label><select id="voice-mode"><option value="device">Local device voice · no API cost</option><option value="elevenlabs">ElevenLabs · external service</option></select>
   <details id="voice-cast" class="voice-cast"><summary>Cast local voices for three readers</summary>
     <p class="muted">Automatic voices vary by scene and dramatic intent. Every fictional reader remains identified in text; no voice is a historical-person imitation. Only local voices are eligible.</p>
+    <label for="archivist-voice-mode">Archivist voice</label><select id="archivist-voice-mode">
+      <option value="single">One consistent Archivist (recommended)</option>
+      <option value="plural">Multiple Archivists (experimental)</option>
+    </select>
+    <p class="muted">Voice identity is a performance setting, not a claim about museum authority.</p>
     <label for="voice-casting-style">Voice identity across conversations</label><select id="voice-casting-style"><option value="scene-variety">Variety per conversation (recommended)</option><option value="continuity">Keep voice per object across scenes</option></select>
     <p class="muted">The following manual overrides apply to roles inside the current scene and take precedence over automatic casting.</p>
     <label for="voice-object-a">Object A</label><select id="voice-object-a" data-voice-role="objectA"><option value="">Automatic local voice</option></select>
@@ -123,7 +128,15 @@
   </details>
   <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
   <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
-  <section id="conversation-panel" aria-label="Object-to-object dialogue"><nav id="turn-navigation" class="turn-navigation" aria-label="Read dialogue one speaker at a time" hidden>
+  <section id="conversation-panel" aria-label="Object-to-object dialogue">
+    <div class="conversation-tone-selector" role="group" aria-label="Conversation writing tone">
+      <label for="conversation-tone">Conversation tone</label>
+      <select id="conversation-tone" aria-label="Conversation tone">
+        <option value="critical">Argumentative / Critical</option>
+        <option value="poetic">Poetic / Uncanny</option>
+      </select>
+    </div>
+    <nav id="turn-navigation" class="turn-navigation" aria-label="Read dialogue one speaker at a time" hidden>
       <button id="previous-turn" type="button" aria-label="Previous speaker">← Previous</button>
       <p id="turn-progress" role="status" aria-live="polite" aria-atomic="true">Reading 1 of 3</p>
       <button id="next-turn" type="button" aria-label="Next speaker">Next →</button>
