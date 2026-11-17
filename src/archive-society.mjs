@@ -151,6 +151,11 @@ export function societyView(records, accession, lens='family', {atlas=false, the
   }));
   return {nodes,edges,landmarks:atlas?fieldLandmarks(nodes):{personas:[],categories:[]}};
 }
+const spokenTitle=value=>{
+  const text=clean(value);
+  const english=text.match(/\[([^\]]{3,90})\]/);
+  return english?clean(english[1]):text;
+};
 export function conversationFor(source,target,edge,lensId='family',snapshots={}) {
   if(!source||!target||!edge?.reasons?.length) throw new Error('Select a metadata edge first.');
 
@@ -182,7 +187,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
     };
   }
   const lens=LENSES.find(l=>l.id===lensId)||LENSES[0], reason=edge.reasons[0];
-  const term=clean(reason.value), a=clean(source.title), b=clean(target.title);
+  const term=clean(reason.value), a=spokenTitle(source.title), b=spokenTitle(target.title);
   const fact=snapshot=>{
     if(snapshot?.status!=='EXACT_PRIMARY_ACCESSION'||snapshot.matches?.length!==1)return null;
     const match=snapshot.matches[0];if(match.identityConflict)return null;
@@ -224,6 +229,15 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
     resourceLayer:aFact||bFact?'catalog_field_quotes':'no_matched_catalog_field',
     limits:lens.limits+' This is a comparative prompt, not proof that the histories intersected.'
   };
+}
+export function deviceCast(role, voices = []) {
+  const local = voices.filter(voice => voice.localService);
+  const english = local.filter(voice => /en/i.test(voice.lang || ''));
+  const pool = english.length ? english : local;
+  const pick = index => pool[Math.min(index, Math.max(0, pool.length - 1))] || null;
+  if (role === 'objectB') return { voice: pick(1), rate: 1.05, pitch: 1.16 };
+  if (role === 'archivist') return { voice: pick(pool.length > 2 ? 2 : 0), rate: 0.86, pitch: 0.94 };
+  return { voice: pick(0), rate: 0.9, pitch: 0.86 };
 }
 const base=name=>clean(name).replace(/\\/g,'/').split('/').pop().toLowerCase();
 export function photoKeys(record) {

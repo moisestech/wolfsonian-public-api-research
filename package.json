@@ -19,7 +19,7 @@
     "check:society:browser": "node scripts/check-society-browser.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   },
   "license": "MIT",
   "devDependencies": {

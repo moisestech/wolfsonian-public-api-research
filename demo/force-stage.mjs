@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import ThreeForceGraph from 'three-forcegraph';
-import { fittedSize } from '../src/sprite-fit.mjs';
+import { fittedSize, frameBars } from '../src/sprite-fit.mjs';
+import { nearestZoomStop } from '../src/zoom-stops.mjs';
 
 const PLACEHOLDER = '/demo/archive-society/assets/object-placeholder.png';
-const FIT_DISTANCE = 240;
+const FAR = 640;
+const NEAR = 28;
 
 const loader = new THREE.TextureLoader();
 const textures = new Map();
@@ -43,6 +45,8 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
   list.className = 'graph-list';
   host.append(canvas, list);
   host.dataset.scale = '1';
+  host.dataset.zoom = '0';
+  host.dataset.scope = 'world';
   host.dataset.speaking = '';
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
@@ -50,10 +54,10 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(background);
   const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 4000);
-  camera.position.set(0, 0, FIT_DISTANCE);
+  camera.position.set(0, 0, FAR);
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = false;
-  controls.minDistance = 48;
+  controls.minDistance = 24;
   controls.maxDistance = 900;
   const linkMaterials = new Map();
   function paintFor(link) {
@@ -89,7 +93,7 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   let speakingId = '';
-  let distance = FIT_DISTANCE;
+  let distance = FAR;
   let pointerDown = null;
 
   function spriteFor(node) {
@@ -105,23 +109,107 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     const [fitW, fitH] = fittedSize(material.map);
     sprite.scale.set(fitW, fitH, 1);
     const accent = node.accent || '';
-    const ring = new THREE.Mesh(
-      new THREE.RingGeometry(node.focused ? 12.2 : 12.6, node.focused ? 15.4 : 13.8, 48),
-      new THREE.MeshBasicMaterial({ color: accent || node.color || '#f4f4f4', transparent: true, opacity: node.focused ? 0.95 : accent ? 0.72 : 0.14, side: THREE.DoubleSide })
-    );
-    group.add(sprite, ring);
+    const frame = new THREE.Group();
+    const frameMaterial = new THREE.MeshBasicMaterial({
+      color: accent || node.color || '#f4f4f4',
+      transparent: true,
+      opacity: node.focused ? 0.95 : accent ? 0.72 : 0.14,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    for (const bar of frameBars(fitW, fitH, { focused: Boolean(node.focused) })) {
+      const piece = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), frameMaterial);
+      piece.scale.set(bar.w, bar.h, 1);
+      piece.position.set(bar.x, bar.y, 0.2);
+      frame.add(piece);
+    }
+    group.add(sprite, frame);
     group.userData.sprite = sprite;
-    group.userData.ring = ring;
+    group.userData.frame = frame;
     return group;
   }
 
   function applyDistance(next) {
-    distance = Math.min(900, Math.max(48, next));
+    distance = Math.min(900, Math.max(24, next));
     const offset = camera.position.clone().sub(controls.target);
     if (offset.lengthSq() < 1e-6) offset.set(0, 0, 1);
     offset.setLength(distance);
     camera.position.copy(controls.target).add(offset);
-    host.dataset.scale = String(Math.round((FIT_DISTANCE / distance) * 1000) / 1000);
+    host.dataset.scale = String(Math.round((FAR / distance) * 1000) / 1000);
+  }
+
+  function distanceForT(t) {
+    const u = Math.min(100, Math.max(0, Number(t) || 0)) / 100;
+    return FAR * Math.pow(NEAR / FAR, u);
+  }
+
+  function tForDistance(value) {
+    const ratio = Math.min(FAR, Math.max(NEAR, value)) / FAR;
+    return Math.round(100 * Math.log(ratio) / Math.log(NEAR / FAR));
+  }
+
+  function endpoint(id) {
+    return typeof id === 'string' ? id : id?.id || '';
+  }
+
+  function pointOf(node) {
+    if (node?.__threeObj) return node.__threeObj.position;
+    if (Number.isFinite(node?.x)) return { x: node.x, y: node.y || 0, z: node.z || 0 };
+    return null;
+  }
+
+  function aim(stopId) {
+    const nodes = graph.graphData().nodes || [];
+    const links = graph.graphData().links || [];
+    const pair = (host.dataset.pair || '').split('|');
+    let chosen = nodes;
+    if (stopId === 'region') {
+      const ids = new Set();
+      for (const link of links) {
+        const source = endpoint(link.source);
+        const target = endpoint(link.target);
+        if (source) ids.add(source);
+        if (target) ids.add(target);
+      }
+      const group = nodes.filter(node => ids.has(node.id));
+      if (group.length) chosen = group;
+    } else if (stopId === 'street') {
+      const pairNodes = nodes.filter(node => node.focused);
+      if (pairNodes.length) chosen = pairNodes;
+    } else if (stopId === 'object') {
+      const subject = nodes.find(node => node.id === pair[0]) || nodes.find(node => node.focused);
+      if (subject) chosen = [subject];
+    }
+    const points = chosen.map(pointOf).filter(Boolean);
+    const target = new THREE.Vector3();
+    for (const point of points) target.add(new THREE.Vector3(point.x, point.y, point.z));
+    if (points.length) target.multiplyScalar(1 / points.length);
+    controls.target.copy(target);
+  }
+
+  function presence(node) {
+    const scope = host.dataset.scope || 'world';
+    if (scope === 'world') return 1;
+    if (scope === 'region') {
+      const links = graph.graphData().links || [];
+      const linked = links.some(link => endpoint(link.source) === node.id || endpoint(link.target) === node.id);
+      return linked ? 1 : 0.16;
+    }
+    if (scope === 'street') return node.focused ? 1 : 0.1;
+    const subject = (host.dataset.pair || '').split('|')[0];
+    if (subject && node.id === subject) return 1;
+    return node.focused ? 0.34 : 0.07;
+  }
+
+  function commitZoom(nextDistance, retarget) {
+    const stop = nearestZoomStop(tForDistance(Math.min(900, Math.max(24, nextDistance))));
+    const before = host.dataset.scope || 'world';
+    if (retarget || stop.id !== before) aim(stop.id);
+    host.dataset.scope = stop.id;
+    applyDistance(nextDistance);
+    host.dataset.zoom = String(tForDistance(distance));
+    const scale = distance / FAR;
+    graph.linkWidth(link => (link.focused ? 5.2 : 2.1) * scale);
   }
 
   function resize() {
@@ -194,19 +282,27 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     for (const node of graph.graphData().nodes || []) {
       const group = node.__threeObj;
       const sprite = group?.userData?.sprite;
-      const ring = group?.userData?.ring;
-      if (!sprite || !ring) continue;
+      const frame = group?.userData?.frame;
+      if (!sprite || !frame) continue;
       const speaking = node.id === speakingId;
       const scale = speaking ? 1 + Math.sin(time * 8) * 0.22 : 1;
       const [fitW, fitH] = fittedSize(sprite.material.map);
       sprite.scale.set(fitW * scale, fitH * scale, 1);
+      const shown = presence(node);
+      sprite.material.opacity = shown;
       if (speaking) host.dataset.pulse = String(Math.round(scale * 100) / 100);
-      ring.material.color.set(node.accent || node.color || '#f4f4f4');
-      ring.material.opacity = speaking ? 1 : node.focused ? 0.95 : node.accent ? 0.78 : 0.16;
-      const outer = ring.geometry.parameters.outerRadius || 13.8;
-      const pad = (node.focused ? 1.22 : 1.14) * scale;
-      ring.scale.set((fitW / 2) * pad / outer, (fitH / 2) * pad / outer, 1);
-      ring.lookAt(camera.position);
+      const bars = frameBars(fitW, fitH, { focused: Boolean(node.focused), scale });
+      frame.children.forEach((piece, index) => {
+        const bar = bars[index];
+        piece.scale.set(bar.w, bar.h, 1);
+        piece.position.set(bar.x, bar.y, 0.2);
+      });
+      const material = frame.children[0]?.material;
+      if (material) {
+        material.color.set(node.accent || node.color || '#f4f4f4');
+        material.opacity = (speaking ? 1 : node.focused ? 0.95 : node.accent ? 0.78 : 0.16) * shown;
+      }
+      frame.lookAt(camera.position);
     }
   }
 
@@ -239,13 +335,10 @@ export function mountForceStage(host, { onSelect, background = '#111111', linkFo
     focusPair,
     setSpeaking,
     resize,
-    zoom(factor) { applyDistance(camera.position.distanceTo(controls.target) / factor); },
-    fit() { controls.target.set(0, 0, 0); applyDistance(FIT_DISTANCE); },
-    setZoomT(t) {
-      const clamped = Math.min(100, Math.max(0, Number(t) || 0));
-      controls.target.set(0, 0, 0);
-      applyDistance(FIT_DISTANCE * Math.pow(48 / FIT_DISTANCE, clamped / 100));
-    },
+    zoom(factor) { commitZoom(camera.position.distanceTo(controls.target) / factor, false); },
+    fit() { commitZoom(FAR, true); },
+    setZoomT(t) { commitZoom(distanceForT(t), true); },
+    zoomT() { return Number(host.dataset.zoom || 0); },
     scale() { return Number(host.dataset.scale); },
   };
 }

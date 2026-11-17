@@ -32,11 +32,12 @@
   <aside id="card" aria-live="polite" hidden></aside>
 </main>
 <footer class="dock">
-  <div class="stops" role="group" aria-label="Zoom stops">
-    <button type="button" data-stop="0">World</button>
-    <button type="button" data-stop="34">Region</button>
-    <button type="button" data-stop="67">Street</button>
-    <button type="button" data-stop="100">Object</button>
+  <div class="stops" role="group" aria-label="How close you are">
+    <button type="button" data-stop="0" title="The whole set">Field</button>
+    <button type="button" data-stop="34" title="Objects in this conversation">Group</button>
+    <button type="button" data-stop="67" title="The two objects talking">Pair</button>
+    <button type="button" data-stop="100" title="This photograph">Object</button>
+    <span id="zoom-note">The whole set</span>
   </div>
   <input id="zoom" type="range" min="0" max="100" value="0" aria-label="Zoom">
   <a class="about" href="../about/">About</a>

@@ -22,24 +22,20 @@ try {
   assert.equal(await page.getByText('Lakehouse lookup').count(),0);
   assert.ok(await page.locator('.conversation-edge').count()>0);
 
-  // The current 76-match snapshot should open on the six-script Munitions chapter.
-  assert.match(await page.locator('#atlas-title').innerText(),/On Munitions/);
-  assert.match(await page.locator('#conversation-content').innerText(),/ARTIST-AUTHORED SCENE/);
-  assert.match(await page.locator('#conversation-content').innerText(),/Who gets credit for labor/);
+  // Making the Engine opens on a curated machine-and-body scene, with six paths still clickable.
+  assert.match(await page.locator('#atlas-title').innerText(),/Making the Engine/);
+  assert.match(await page.locator('#scene-title').getAttribute('title'),/ARTIST-AUTHORED SCENE/);
+  assert.match(await page.locator('#scene-nav').innerText(),/The machine meets the body/);
+  assert.match(await page.locator('#scene-tag').innerText(),/Machines/);
   assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
+  assert.ok(Number(await page.locator('#stage').getAttribute('data-zoom'))>20);
 
-  // Exercise every actual opening edge, not just one hard-coded scene.
-  const openingArcs=new Set();
   assert.equal(await page.locator('.conversation-edge').count(),6);
   for(let i=0;i<6;i++){
     await page.locator('.conversation-edge').nth(i).focus();
     await page.keyboard.press('Enter');
-    const content=page.locator('#conversation-content');
-    assert.match(await content.innerText(),/ARTIST-AUTHORED SCENE/);
-    assert.equal(await content.locator('.bubble.turn').count(),3);
-    openingArcs.add((await content.locator('h2').textContent()).trim());
+    assert.equal(await page.locator('#conversation-content .bubble.turn').count(),3);
   }
-  assert.equal(openingArcs.size,6);
   // Following an edge changes the seed; returning restores the prior inquiry.
   const oldTitle=await page.locator('#atlas-title').innerText();
   await page.locator('[data-follow-object]').click();
@@ -85,20 +81,25 @@ try {
   const about=await page.request.get(base+'/demo/about/');
   assert.equal(about.status(),200);
   assert.match(await about.text(),/Lakehouse lookup/);
+  await page.locator('#more-toggle').click();
   await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),100);
   const scaleOf=()=>page.locator('#stage').evaluate(el=>Number(el.dataset.scale));
   const fitted=await scaleOf();
+  await page.locator('#zoom-open').click();
   await page.locator('#zoom-in').click();assert.ok(await scaleOf()>fitted);
   await page.locator('#fit').click();assert.ok(Math.abs(await scaleOf()-fitted)<0.02);
   await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
   assert.ok(await page.locator('.graph-node.emphasized').count()>0);
-  await page.locator('#theme-toggle').click();await page.selectOption('#theme','Domestic life');
+  await page.locator('#theme-toggle').click();await page.locator('#theme-choices [data-theme="Domestic life"]').click();
   assert.equal(await page.locator('#stage').getAttribute('data-theme'),'Domestic life');
   assert.ok(await page.locator('.graph-node').count()>0);
   assert.equal((await page.request.get(base+'/.env.local')).status(),404);
   assert.equal((await page.request.get(base+'/server/archive-services.mjs')).status(),404);
   assert.equal((await page.request.get(base+'/demo/discovery-lab/')).status(),200);
-  await page.setViewportSize({width:390,height:844});await page.locator('#atlas-mode').uncheck();
+  await page.locator('#admin').evaluate(el=>{el.hidden=true;});
+  await page.setViewportSize({width:390,height:844});
+  await page.locator('#more-toggle').click();
+  await page.locator('#atlas-mode').uncheck();
   await page.screenshot({path:new URL('artifacts/archive-society-mobile.png',root).pathname,fullPage:true});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);

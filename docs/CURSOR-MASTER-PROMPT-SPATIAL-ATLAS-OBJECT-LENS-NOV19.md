@@ -151,3 +151,26 @@ Code and run this in order:
 Report branch, SHA, changed paths, actual commands/test results, local demo URLs, available preview (if any), three screenshots, exact P0/P1/blocked distinction, data/rights limitations, offline/camera/browser findings, and next actions for Andrius/Mark/Luna. If blocked, deliver the working P0 subset with a precise blocker, not a fictional completion claim.
 
 ARTISTIC STANDARD: Every object is allowed to be curious; none is allowed to impersonate historical evidence. The moment of wonder is the network opening. The moment of critique is when evidence interrupts it. The moment of return is a person looking back at the real object differently.
+
+
+---
+
+## ONSITE LAKEHOUSE UPDATE — NOVEMBER 16, 2026 (USER-REPORTED; NOT INDEPENDENTLY REPRODUCED)
+
+The artist reports that, from an authorized network inside the Wolfsonian, **GET https://lakehouse.wolfsonian.org/api/v1/aa_good_lookup** without query parameters returned HTTP 200 and started returning JSON-formatted collection data in under 500 ms. The stream was **stopped after the first chunk and not saved**. Its first observed item appeared to be a library item with accession **XC2002.11.4.375.1-13**. The *observed fragment only* had field names Accession Number, Resource Type, Title, ID (Node ID), Collection, Creator, Genre, Date, Geographic Origin and Subject. No box field was visible **in that fragment**. Do NOT infer from a partial prefix that the entire schema contains only ten fields, that box mapping does not exist, or that a complete parseable record was verified.
+
+**Current capability:** museum-network reachability and HTTP 200 reported; safe accession-scoped query NOT established. No trusted filter or limit query-parameter names have been provided. A no-filter call can stream the collection; DO NOT repeat it, and do not guess parameters. The demo's Lakehouse integration still remains OFF by default; the artist reports no local .env.local and no enabled server configuration. Never check in or print one. No demonstrated exact match for Sparton **XX1990.1484** or any other anchor. No verified box-to-accession edge.
+
+**Human contract request to Andrius / Lakehouse maintainers:**
+1. Provide one **authorized working exact accession GET URL** for XX1990.1484 using only /api/v1/aa_good_lookup, including the exact parameter key and expected value for accession matching.
+2. Provide the exact **five-row maximum limit** parameter and a complete, small representative response showing its JSON wrapper and any differences between primary and additional accession fields. Confirm what the server does if it receives an unknown parameter, and whether filtering is an exact match.
+3. Confirm whether box/container identifiers have an approved public/researcher-safe projection, which actual object/accession key joins them (including cardinality), and whether storage identifiers can be displayed in an internal or public artwork.
+Do not ask for a collection dump. Test ONLY the provided small URL, stop at 512 KiB and reject more than five returned rows.
+
+**Code review after PR #18 merge:** repository main at observed commit a79b3743bde7bdc0dfea985c017f0d5c6e105ba6 already contains the current archive-society, SVG spatial-atlas, object-lens (camera on/off + manually typed accession + confirm; NO visual image recognition), atlas-graph (independent accession/box graph layers), and staff-matrix-derived spatial visualization. The spatial-atlas is SVG, not yet Three.js. Do not claim P1 complete. PR #20's branch was identical to main at the moment of this review, so this update becomes a new reviewable documentation delta; PR #18 was merged.
+
+**Independent deployment issue:** GitHub Pages run 43891807031 on Nov 16 failed with 59/60 Node tests passing because the Pages workflow ran npm test without installing root dependencies, so discovery-browser-smoke.mjs could not import Playwright. Review .github/workflows/pages.yml and add a locked install (npm ci) before that command on a separate tested changeset; also verify the assembled public static site serves its intended routes/modules and NEVER copies private museum source files. A passing older PR #18 check is not a passing current-main deployment.
+
+**Publication gate:** main currently includes 300 metadata records derived from the staff matrix in src/matrix-objects.mjs (not museum photographs). Verify the permission for public publication of this subset and its staff-classified categories; absence of photos is not automatic authorization. Keep them distinct from live Lakehouse-verified records.
+
+**For Thursday:** demonstrate the local/offline sourced radio research card plus the existing interactive interface, explicitly labeling the current stream result as a **connectivity diagnostic**, NOT as live accession retrieval. Keep the current live Lakehouse service disabled unless and until the supported exact lookup/limit contract is provided and safely tested.

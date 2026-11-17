@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { MATRIX_OBJECTS, LAYERS, ZOOM_STOPS, layoutRoom, linksFor, conversationFor, objectConversation, zoomScale, detailFor, districtsOverlap, valuesOf } from '../src/matrix-room.mjs';
+import { MATRIX_OBJECTS, LAYERS, ZOOM_STOPS, layoutRoom, linksFor, conversationFor, objectConversation, zoomScale, detailFor, districtsOverlap, valuesOf, matrixToRecords } from '../src/matrix-room.mjs';
+import { societyView } from '../src/archive-society.mjs';
+import { OPENING_ACCESSION } from '../src/presentation-pairs.mjs';
 
 test('matrix room keeps staff tags and drops photographs', () => {
   assert.equal(MATRIX_OBJECTS.length, 300);
@@ -48,7 +50,18 @@ test('a clicked matrix object speaks with its strongest shared-tag neighbor', ()
   const talk = objectConversation(MATRIX_OBJECTS, '2009.5.1');
   assert.equal(talk.turns.length, 3);
   assert.equal(talk.historicalRelationshipEstablished, false);
-  assert.match(talk.turns[2].text, /Thematic Category|Symbols\/Motifs/);
+  assert.match(talk.turns[2].text, /cannot establish|does not establish|not a documented/);
   assert.notEqual(talk.target, '2009.5.1');
   assert.match(talk.limits, /not a historical|cannot|alone|not proof|not evidence|not a complete|cannot establish|does not|never asserts|not a statement/i);
+});
+
+test('conversation mode still opens on On Munitions inside the photographed matrix', () => {
+  const records = matrixToRecords(MATRIX_OBJECTS);
+  const view = societyView(records, OPENING_ACCESSION, 'family');
+  assert.equal(view.nodes[0].record.accession, OPENING_ACCESSION);
+  assert.match(view.nodes[0].record.title, /On Munitions/);
+  assert.ok(view.nodes.length <= 7);
+  assert.ok(view.edges.length > 0);
+  assert.ok(view.edges.every(edge => edge.historicalRelationshipEstablished === false));
+  for (const layer of LAYERS) assert.ok(layoutRoom(MATRIX_OBJECTS, layer.id).districts.length > 1);
 });

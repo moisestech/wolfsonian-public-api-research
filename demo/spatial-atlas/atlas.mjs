@@ -2,7 +2,10 @@ import { MATRIX_OBJECTS, LAYERS, layoutRoom, conversationFor, objectConversation
 import { focusedPairGraph } from '/src/force-graph-data.mjs';
 import { applyLakehouseFields } from '/src/lakehouse-matches.mjs';
 import { localImageUrl } from '/src/local-images.mjs';
+import { CARD_BY_ID, portraitUrl } from '/src/discovery-personas.mjs';
+import { deviceCast } from '/src/archive-society.mjs';
 import { mountForceStage } from '../force-stage.mjs';
+import { nearestZoomStop } from '/src/zoom-stops.mjs';
 
 const $ = id => document.getElementById(id);
 const ns = 'http://www.w3.org/2000/svg';
@@ -38,6 +41,22 @@ function glyph(key, color) {
   return g;
 }
 
+function objectShot(node, kind) {
+  const fig = document.createElement('figure');
+  fig.className = 'shot ' + kind;
+  const src = localImageUrl(node.accession);
+  if (src) {
+    const img = document.createElement('img');
+    img.alt = '';
+    img.src = src;
+    fig.append(img);
+  } else fig.append(plate(node.glyph || 'person', node.color || '#111'));
+  const cap = document.createElement('figcaption');
+  cap.textContent = node.title || node.accession;
+  fig.append(cap);
+  return fig;
+}
+
 function plate(key, color) {
   const holder = document.createElement('div');
   holder.className = 'plate';
@@ -50,10 +69,13 @@ function plate(key, color) {
 }
 
 function setZoom(t) {
-  state.t = Math.min(100, Math.max(0, t));
-  graph.setZoomT(state.t);
+  graph.setZoomT(t);
+  state.t = graph.zoomT();
   $('zoom').value = String(Math.round(state.t));
-  for (const button of document.querySelectorAll('[data-stop]')) button.classList.toggle('on', Number(button.dataset.stop) === Math.round(state.t));
+  const stop = nearestZoomStop(state.t);
+  for (const button of document.querySelectorAll('[data-stop]')) button.classList.toggle('on', Number(button.dataset.stop) === stop.t);
+  const note = $('zoom-note');
+  if (note) note.textContent = stop.note;
 }
 
 function stopTalk() {
@@ -74,9 +96,18 @@ function showCard() {
   if (!selected) { card.hidden = true; card.replaceChildren(); return; }
   card.hidden = false;
   card.replaceChildren();
+  const scroll = document.createElement('div');
+  scroll.className = 'card-scroll';
   const head = document.createElement('header');
+  const talk = selected.kind === 'object' ? objectConversation(state.objects, selected.accession) : null;
   const shot = selected.kind === 'object' ? localImageUrl(selected.accession) : '';
-  if (shot) {
+  if (talk) {
+    const reply = state.objects.find(item => item.accession === talk.target);
+    const figures = document.createElement('div');
+    figures.className = 'talking';
+    figures.append(objectShot(selected, 'selected'), objectShot(reply || { accession: talk.target, title: talk.turns[1].speaker, glyph: 'person', color: '#111' }, 'reply'));
+    head.append(figures);
+  } else if (shot) {
     const img = document.createElement('img');
     img.className = 'photo';
     img.alt = 'Locally supplied image matched to ' + selected.accession;
@@ -93,28 +124,70 @@ function showCard() {
     : selected.count + ' objects · ' + state.room.layer.label;
   copy.append(title, meta);
   head.append(copy);
-  card.append(head);
-  const talk = selected.kind === 'object' ? objectConversation(state.objects, selected.accession) : null;
+  scroll.append(head);
   if (talk) {
     const linkColor = conversationColor(talk.evidence[0].value);
+    const term = talk.evidence[0].value;
     const pair = document.createElement('p');
     pair.className = 'pair';
     pair.style.borderLeft = '4px solid ' + linkColor;
-    pair.textContent = talk.turns[0].speaker + ' and ' + talk.turns[1].speaker + ' share ' + talk.evidence[0].value;
-    card.append(pair);
-    const sideColor = ['#2f6fed', '#e07a2f', linkColor];
-    for (const [index, turn] of talk.turns.entries()) {
-      const line = document.createElement('p');
-      line.className = 'turn side-' + ['a', 'b', 'guide'][index];
-      line.style.borderLeft = '4px solid ' + sideColor[index];
-      const who = document.createElement('b');
+    pair.textContent = talk.turns[0].speaker + ' reads this object. ' + talk.turns[1].speaker + ' answers.';
+    const key = document.createElement('p');
+    key.className = 'tag-key';
+    const swatch = document.createElement('i');
+    swatch.style.background = linkColor;
+    key.append(swatch, document.createTextNode(term + ' — this color is the shared category.'));
+    const reader = CARD_BY_ID.get(talk.lens) || CARD_BY_ID.get('family');
+    const guide = CARD_BY_ID.get('archivist');
+    const faces = {
+      objectA: portraitUrl(reader),
+      objectB: localImageUrl(talk.target),
+      archivist: portraitUrl(guide),
+    };
+    const chat = document.createElement('div');
+    chat.className = 'chat';
+    for (const turn of talk.turns) {
+      const bubble = document.createElement('article');
+      bubble.className = 'bubble turn side-' + (turn.role === 'objectB' ? 'b' : turn.role === 'archivist' ? 'guide' : 'a');
+      const avatar = document.createElement('img');
+      avatar.className = 'avatar';
+      avatar.alt = '';
+      avatar.src = faces[turn.role] || '';
+      const say = document.createElement('div');
+      say.className = 'say';
+      const who = document.createElement('strong');
       who.textContent = turn.speaker;
-      line.append(who, document.createTextNode(' ' + turn.text));
-      card.append(line);
+      const text = document.createElement('p');
+      text.textContent = turn.text;
+      say.append(who, text);
+      bubble.append(avatar, say);
+      chat.append(bubble);
     }
-    const note = document.createElement('p');
-    note.className = 'hint';
-    note.textContent = 'A shared tag is not a historical relationship.';
+    const know = document.createElement('button');
+    know.type = 'button';
+    know.className = 'know';
+    know.textContent = 'What do we know?';
+    const facts = document.createElement('dl');
+    facts.className = 'facts';
+    facts.hidden = true;
+    const addFact = (name, value) => {
+      if (!value) return;
+      const termName = document.createElement('dt');
+      termName.textContent = name;
+      const termValue = document.createElement('dd');
+      termValue.textContent = value;
+      facts.append(termName, termValue);
+    };
+    addFact('Accession', selected.accession);
+    addFact('Creator', selected.creator);
+    addFact('Date', selected.date);
+    addFact('Shared category', term);
+    const limit = document.createElement('p');
+    limit.className = 'meta';
+    limit.textContent = 'A shared category is a staff tag. It is not proof these objects met.';
+    facts.append(limit);
+    know.addEventListener('click', () => { facts.hidden = !facts.hidden; });
+    scroll.append(pair, key, know, facts, chat);
     const bar = document.createElement('div');
     bar.id = 'voice-controls';
     bar.className = 'audio-bar';
@@ -122,8 +195,8 @@ function showCard() {
     listen.id = 'play';
     listen.className = 'play-round';
     listen.type = 'button';
-    listen.setAttribute('aria-label', 'Play this conversation');
-    listen.textContent = '▶';
+    listen.setAttribute('aria-label', 'Listen to this conversation');
+    listen.textContent = 'Listen';
     const bars = document.createElement('span');
     bars.className = 'bars';
     bars.setAttribute('aria-hidden', 'true');
@@ -136,8 +209,6 @@ function showCard() {
     halt.type = 'button';
     halt.textContent = 'Stop';
     bar.append(listen, bars, elapsed, halt);
-    const controls = document.createElement('div');
-    controls.className = 'voice';
     const approve = document.createElement('label');
     const box = document.createElement('input');
     box.type = 'checkbox';
@@ -146,11 +217,11 @@ function showCard() {
     const status = document.createElement('p');
     status.id = 'voice-status';
     status.className = 'hint';
-    status.textContent = 'Written transcript. Device voice unless ElevenLabs is enabled.';
+    status.hidden = true;
     listen.addEventListener('click', () => speak(talk));
-    halt.addEventListener('click', () => { stopTalk(); status.textContent = 'Playback stopped.'; });
-    controls.append(bar, approve, status);
-    card.append(note, controls);
+    halt.addEventListener('click', () => { stopTalk(); status.hidden = false; status.textContent = 'Playback stopped.'; });
+    scroll.append(approve);
+    card.append(scroll, bar, status);
     return;
   }
   const subject = selected.kind === 'object'
@@ -171,8 +242,9 @@ function showCard() {
       line.append(who, document.createTextNode(turn.text));
       block.append(line);
     }
-    card.append(block);
+    scroll.append(block);
   }
+  card.append(scroll);
 }
 
 async function speak(conversation) {
@@ -190,7 +262,7 @@ async function speak(conversation) {
       const elapsed = $('audio-elapsed');
       if (elapsed) elapsed.textContent = 'Turn ' + (i + 1) + ' of ' + conversation.turns.length;
       graph.setSpeaking(turn.role === 'objectA' ? conversation.source : turn.role === 'objectB' ? conversation.target : '');
-      if (status) status.textContent = ['Speaking ' + (i + 1) + ' of ' + conversation.turns.length + ' · ' + turn.speaker, aside].filter(Boolean).join(' ');
+      if (status && aside) { status.hidden = false; status.textContent = aside; }
       let played = false;
       if (approved && token) {
         const response = await fetch('/api/archive-society/voice', {
@@ -203,7 +275,7 @@ async function speak(conversation) {
           let detail = 'ElevenLabs is not available.';
           try { detail = (await response.json()).message || detail; } catch { /* Keep the short fallback. */ }
           aside = detail + ' Using the device voice.';
-          if (status) status.textContent = ['Speaking ' + (i + 1) + ' of ' + conversation.turns.length + ' · ' + turn.speaker, aside].join(' ');
+          if (status) { status.hidden = false; status.textContent = aside; }
         }
         if (response.ok) {
           const url = URL.createObjectURL(await response.blob());
@@ -227,19 +299,20 @@ async function speak(conversation) {
         await new Promise((resolve, reject) => {
           if (!window.speechSynthesis) { reject(new Error('No device speech service. The written transcript remains available.')); return; }
           cancelDevice = resolve;
+          const cast = deviceCast(turn.role, window.speechSynthesis.getVoices());
           const utterance = new SpeechSynthesisUtterance(turn.text);
-          utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.localService) || null;
-          utterance.rate = 0.92;
-          utterance.pitch = turn.role === 'objectA' ? 0.95 : turn.role === 'objectB' ? 1.08 : 1;
+          utterance.voice = cast.voice;
+          utterance.rate = cast.rate;
+          utterance.pitch = cast.pitch;
           utterance.onend = () => { cancelDevice = null; resolve(); };
           utterance.onerror = () => { cancelDevice = null; reject(new Error('Device speech stopped or unavailable.')); };
           window.speechSynthesis.speak(utterance);
         });
       }
     }
-    if (session === playback && status) status.textContent = 'Finished. This was a scripted interpretation, not historical testimony.';
+    if (session === playback && status && !aside) { status.hidden = true; status.textContent = ''; }
   } catch (error) {
-    if (session === playback && status) status.textContent = error.message;
+    if (session === playback && status) { status.hidden = false; status.textContent = error.message; }
   } finally {
     if (session === playback) {
       document.querySelectorAll('#card .turn.speaking').forEach(el => el.classList.remove('speaking'));
