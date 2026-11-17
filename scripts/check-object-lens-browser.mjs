@@ -18,9 +18,11 @@ try{
   const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
   const errors=[],external=[];
   page.on('pageerror',e=>errors.push(e.message));
+  const publicPhoto=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/archive-dreams\/object-images\//;
   page.on('request',request=>{
     const url=request.url();
-    if(!url.startsWith(base)&&!url.startsWith('blob:')&&!url.startsWith('data:'))external.push(url);
+    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url))return;
+    external.push(url);
   });
 
   await page.goto(base+'/demo/object-lens/?accession=XM1999.108.8',{waitUntil:'networkidle'});
