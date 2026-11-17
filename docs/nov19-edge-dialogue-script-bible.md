@@ -327,7 +327,7 @@ The fictional Archivist does not always end with “a shared tag is not history.
 4. **Visitor agency:** Offer “Follow this object,” “Inspect source,” and “Question this link.” A new selection changes the conversation stakes; avoid unsolicited three-object monologues.
 5. **Institutional correction:** A curator can qualify, withdraw or retain an interpretive edge once they inspect an additional source; **do not** quietly change staff taxonomy or claim human review occurred where it has not.
 
-A coherent demo route: **Munitions → Women's Labor (recognition) → Making the Engine (production) → Grind Safely (risk)**, with alternative path into a weak **Trees** link that demonstrates the system's ability to question itself. The first leg and latter leg are each metadata-backed pairs but the route as a whole is **an artist-curated interpretive sequence**, not a documented historical network.
+A coherent demo route using the ACTUAL visible edge navigation: **On Munitions → Women's Labor (recognition) → back to the On Munitions hub → Making the Engine (production) → Grind Safely (risk)**. Returning to the hub is intentional: the Women's Labor record does not currently offer Making the Engine among its six `family`-lens neighbors. For the separate self-critical scene, select Paul Robeson (`84.4.66`) as the seed and follow its Trees-tag edge to the architectural fantasy; select Utrecht Fair (`XX1990.2870`) to reach the Water-tag challenge. These are valid shared-tag edges, not documented historical relationships. The first leg and latter leg are each metadata-backed pairs but the route as a whole is **an artist-curated interpretive sequence**, not a documented historical network.
 
 ## Data, rights, and safety decisions for Thursday
 
