@@ -6,7 +6,9 @@ import { emptyInquiryTrail, addInquiryVisit, summarizeInquiryTrail, suggestInqui
 
 const $=id=>document.getElementById(id);
 const model=buildStorageTopology();
-const state={selected:'XX1990.1484',level:'all',showBoxes:true,showIdentities:true};
+const incomingAccession=new URLSearchParams(location.search).get('accession')||'';
+const validIncoming=model.identities.some(x=>x.id===incomingAccession);
+const state={selected:validIncoming?incomingAccession:'XX1990.1484',level:'all',showBoxes:true,showIdentities:true};
 let trail=emptyInquiryTrail();
 let currentEpisode=null;
 const setText=(id,value)=>{$(id).textContent=String(value)};
