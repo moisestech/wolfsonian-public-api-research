@@ -37,6 +37,24 @@ try {
   assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
 
 
+  // Tone is an editorial layer: object speech changes, source evidence cannot.
+  assert.equal(await page.locator('#conversation-tone').inputValue(),'critical');
+  assert.equal(await page.locator('#archivist-voice-mode').inputValue(),'single');
+  const criticalObject=await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText();
+  const archivistOriginal=await page.locator('#conversation-content .bubble.turn').nth(2).locator('p').innerText();
+  const originalEvidence=await page.locator('#conversation-content details').textContent();
+  const identity=await page.locator('#stage').getAttribute('data-pair');
+  await page.selectOption('#conversation-tone','poetic');
+  const uncannyObject=await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText();
+  assert.notEqual(uncannyObject,criticalObject);
+  assert.equal(await page.locator('#conversation-content .bubble.turn').nth(2).locator('p').innerText(),archivistOriginal);
+  assert.equal(await page.locator('#conversation-content details').textContent(),originalEvidence);
+  assert.equal(await page.locator('#stage').getAttribute('data-pair'),identity);
+  assert.match(page.url(),/tone=poetic/);
+  await page.selectOption('#conversation-tone','critical');
+  assert.equal(await page.locator('#conversation-content .bubble.turn').first().locator('p').innerText(),criticalObject);
+  assert.doesNotMatch(page.url(),/tone=poetic/);
+
   // Conversation Stage: large text, real speaker focus, graph signal and quiet navigation.
   assert.equal(await page.locator('#turn-navigation').isVisible(),true);
   assert.equal(await page.locator('#zoom-stage').isVisible(),false);
