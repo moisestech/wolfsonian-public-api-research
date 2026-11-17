@@ -569,15 +569,15 @@ async function play(){
           if(session!==playback||error.name==='AbortError')return;
           const provider=error.message;
           // A known-disabled provider is a configuration state, not a transient
-          // audio failure. Preserve this actionable status and avoid retrying
-          // with an unconfirmed local voice or additional network requests.
-          if(/not enabled/i.test(provider))throw error;
+          // audio failure. Leave this status in place: device speech in a
+          // headless browser can finish immediately and the loop used to clear it.
+          if(/not enabled|disabled|ELEVENLABS_DISABLED/i.test(provider)){message('voice-status',provider);return;}
           message('voice-status',provider);
           try{await speakOnDevice(turn,localVoice);}catch(deviceError){if(session===playback)message('voice-status',provider+' '+deviceError.message);}
         }
       }
     }
-    if(session===playback)message('voice-status','');
+    if(session===playback && !/not enabled|disabled|ELEVENLABS_DISABLED/i.test($('voice-status').textContent))message('voice-status','');
   }catch(error){if(session===playback)message('voice-status',error.message);}
   finally{if(session===playback){state.playing=false;$('play').disabled=false;document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));$('voice-controls')?.classList.remove('playing');stage.setSpeaking('');markSpeaker('');}}
 }

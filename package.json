@@ -13,6 +13,7 @@
     "build:graph": "node scripts/build-institutional-graph.mjs",
     "build:research-console": "npm --prefix research-console ci && npm --prefix research-console run build",
     "build:demo": "node scripts/compile-demo-packets.mjs && node scripts/build-institutional-graph.mjs && npm run build:research-console",
+    "build:public": "npm run build:demo && node scripts/assemble-public-site.mjs public-site --require-console",
     "test": "node --test",
     "demo:society": "node scripts/serve-archive-society.mjs",
     "test:society": "node --test test/archive-society.test.mjs test/archive-services.test.mjs",
