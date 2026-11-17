@@ -4,7 +4,7 @@
 **Make the conversation visible before asking people to interpret the network.** A viewer should know within two seconds **which two objects are connected, who has the floor, what that object says, and which recorded label created this edge**. The work is an artificial society with an accountable archive, not a tiny chat window next to a mysterious graph.
 
 ### Design simplification
-Keep one spatial field and one reading stage. The existing two-pane Atlas remains: graph on the left, conversation on the right. Remove the redundant third portrait from the mini object strip (the Archivist still appears as a distinct labeled speaker in the text). Preserve exact accession IDs, source inspector and synthetic/real data boundary. Don't add a new mode, modal, autoplay, transcript upload, or LLM.
+Keep one spatial field and one reading stage. The existing two-pane Atlas remains: graph on the left, conversation on the right. Remove the redundant mini-object portrait strip entirely; the graph now displays the two participant titles in a compact overlay while the Archivist remains a distinct fictional speaker in the transcript. Preserve exact accession IDs, source inspector and synthetic/real data boundary. Don't add a new mode, modal, autoplay, transcript upload, or LLM.
 
 - **Spatial field:** selected pair remains fixed and emphasized in Three.js. The currently focused object gets a distinct blue/amber halo; a small dot travels along the actual selected pair link while a visitor reads its line. During the Archivist's turn the dot pauses at the midpoint. The dot is **narrative emphasis**, not a claim of measured data transfer. With reduced-motion enabled it remains stationary.
 - **Reading stage:** the active turn is the largest line on the page (22–27px Georgia), while all other turns remain completely readable and available (16–19px). No word-by-word typewriter or auto-scrolling. Every turn labels **OBJECT A**, **OBJECT B**, or **THE ARCHIVIST**, with image, name, and distinct color. First turn is focused by default.
@@ -13,13 +13,13 @@ Keep one spatial field and one reading stage. The existing two-pane Atlas remain
 
 ## Implementation
 - `demo/archive-society/index.html`: stable navigation and audio controls above the transcript.
-- `demo/archive-society/society.css`: widen conversation stage on desktop; compress the object imagery strip; improve type scale/contrast, active turn states, mobile and reduced-motion behavior.
+- `demo/archive-society/society.css`: widen conversation stage on desktop; eliminate duplicate photo strip, add a compact graph conversation identity overlay and mobile 'Read the dialogue' jump; improve type scale/contrast, active turn states and reduced-motion behavior.
 - `demo/archive-society/society.mjs`: `turnIndex` and `turnKey` for within-scene reading focus; source/target/Archivist roles mapped to the graph; Previous/Next; local voice moves the same focus state; hover stops redrawing while voice is playing.
-- `demo/force-stage.mjs`: new `setActiveSpeaker(id, role)` updates node identities in the graph's accessible controls; visible speaker halos and a subtle moving dialogue signal along the selected pair, never a fabricated historical edge.
+- `demo/force-stage.mjs`: new `setActiveSpeaker(id, role)` updates node identities in the graph's accessible controls; visible speaker halos and a subtle moving dialogue signal along the selected pair, never a fabricated historical edge. `#graph-dialogue-label` identifies the current two records and focused fictional voice as text, including when node images are absent.
 - `scripts/check-society-browser.mjs`: Chromium checks type scale, 3 turn changes, source/target speaker identifiers, mobile legibility, reduced motion, and no horizontal overflow in addition to existing six edge scripts / privacy tests.
 
 ## Intended physical staging
-At 1600px desktop the conversation side is roughly 42% of the width, not a 340–400px afterthought. On a phone, the graph appears first and the reading stage is below as a complete, usable layout. For an external wall in a museum, test the actual viewing distance; a dedicated projection/large type mode is a later phase, not silently assumed complete by web breakpoints.
+At 1600px desktop the conversation side is roughly 42% of the width, not a 340–400px afterthought. On a phone, the graph is compact (roughly 240–310px tall) with a native 'Read the dialogue' link so the reading stage is immediately discoverable. The data-source inspector stays accessible. For an external wall in a museum, test the actual viewing distance; a dedicated projection/large type mode is a later phase, not silently assumed complete by web breakpoints.
 
 **Suggested walkthrough (45–90 sec)**
 1. Open **On Munitions: Skilled Work**; show the two active objects and colored graph halos.
