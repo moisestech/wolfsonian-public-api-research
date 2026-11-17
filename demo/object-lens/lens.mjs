@@ -1,4 +1,4 @@
-import {resolvePublicAccession,encounterFor,atlasHandoffFor,curatedQuestionsFor,answerCuratedQuestion,curatedPrimaryPageLeadsFor} from '/src/object-lens-core.mjs';
+import {resolvePublicAccession,encounterFor,atlasHandoffFor,curatedQuestionsFor,answerCuratedQuestion,curatedPrimaryPageLeadsFor,researchCopiesFor,contemporaneousAccountFor} from '/src/object-lens-core.mjs';
 const $=id=>document.getElementById(id);
 let stream=null,match=null,encounter=null,activeReader='futurist',activeQuestion=null,activeAnswer=null;
 
@@ -103,6 +103,39 @@ function selectCuratedQuestion(id){
   renderCuratedAnswer();
 }
 
+function renderOnViewResearch() {
+  if(!encounter)return;
+  const list=researchCopiesFor(encounter.accession);
+  $('on-view-context').hidden=!list.length;
+  if(!list.length)return;
+  const witness=contemporaneousAccountFor(encounter.accession,activeReader);
+  $('witness-status').textContent='1927 PERIOD REVIEW · '+activeReader.toUpperCase()+' INTERPRETATION';
+  $('witness-text').textContent=witness.text;
+  $('witness-claims').replaceChildren(...witness.claims.map(claim=>{
+    const li=document.createElement('li');
+    const span=document.createElement('span');
+    span.textContent=claim.label+': '+claim.paraphrase+' ';
+    const link=document.createElement('a');
+    link.href=claim.source.url;link.target='_blank';link.rel='noopener noreferrer';
+    link.textContent='Read the original period review';
+    li.append(span,link);
+    return li;
+  }));
+  $('witness-unknowns').textContent='Not established: '+witness.unknowns.join(' ');
+  $('on-view-source-list').replaceChildren(...list.map(item=>{
+    const li=document.createElement('li');
+    const strong=document.createElement('strong');
+    strong.textContent=item.label+' — '+item.type.replaceAll('_',' ');
+    const p=document.createElement('p');
+    p.textContent=item.scope+' Access: '+item.access.replaceAll('_',' ')+'. Reproduction: '+item.reproduction.replaceAll('_',' ')+'.';
+    const link=document.createElement('a');
+    link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';
+    link.textContent='Open external reference';
+    li.append(strong,p,link);
+    return li;
+  }));
+}
+
 function renderReader(){
   const reader=encounter?.readers.find(r=>r.id===activeReader);
   if(!reader)return;
@@ -114,6 +147,7 @@ function renderReader(){
   for(const b of $('reader-options').querySelectorAll('button'))
     b.setAttribute('aria-pressed',String(b.dataset.reader===activeReader));
   if(activeQuestion)renderCuratedAnswer();
+  renderOnViewResearch();
 }
 function renderEncounter(){
   encounter=encounterFor(match.accession);
