@@ -1,0 +1,27 @@
+name: Curatorial source and About checks
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'demo/about/**'
+      - 'demo/archive-society/index.html'
+      - 'demo/archive-society/society.css'
+      - 'data/research/worlds-fairs-critical-records-20261117.json'
+      - 'docs/curatorial-paths-voices-of-the-future-20261117.md'
+      - 'test/curatorial-paths.test.mjs'
+      - 'README.md'
+      - '.github/workflows/curatorial-checks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-claims:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Validate curated public research without publishing new graph edges
+        run: node --test test/curatorial-paths.test.mjs

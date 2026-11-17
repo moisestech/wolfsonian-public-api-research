@@ -4,25 +4,119 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,follow">
-  <title>About · Archive Dreams</title>
+  <meta name="description" content="Archive Dreams in Public is an artist-authored investigation of how archival objects make, dispute, and sometimes fail to support stories about the future.">
+  <title>About · Archive Dreams in Public</title>
   <style>
-    body{margin:0;background:#111;color:#f4f4f4;font:16px/1.5 system-ui,sans-serif}
-    main{max-width:38rem;margin:0 auto;padding:48px 22px 72px}
-    a{color:#f4f4f4}h1{font:400 32px/1.15 Georgia,serif;margin:28px 0 16px}
-    h2{font:400 22px/1.2 Georgia,serif;margin:28px 0 12px}
-    p{margin:0 0 14px}
+    :root{color-scheme:dark;--bg:#111917;--surface:#1b2622;--text:#f1f0e9;--muted:#b8c9c3;--line:#435951;--accent:#a5dcc9}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,sans-serif}
+    a{color:var(--accent);text-underline-offset:3px}
+    a:focus-visible{outline:3px solid #e5b78c;outline-offset:4px}
+    .wrap{max-width:790px;margin:auto;padding:34px clamp(20px,5vw,56px) 90px}
+    nav{display:flex;flex-wrap:wrap;gap:9px 18px;font-size:13px;margin-bottom:50px}
+    nav a{text-decoration:none}
+    h1,h2,h3{font-family:Georgia,serif;font-weight:400;line-height:1.13;letter-spacing:-.02em}
+    h1{font-size:clamp(36px,6vw,58px);margin:14px 0 19px;max-width:14ch}
+    h2{font-size:clamp(24px,4vw,31px);margin:34px 0 15px}
+    h3{font-size:20px;margin:8px 0 8px}
+    p{margin:0 0 16px}
+    .eyebrow{font:700 10px/1.5 ui-monospace,monospace;letter-spacing:.16em;color:var(--accent);text-transform:uppercase}
+    .lead{font:19px/1.5 Georgia,serif;color:#e9ede7;max-width:42rem}
+    .subdued{color:var(--muted);font-size:14px}
+    section{margin-top:36px}
+    .steps{counter-reset:item;display:grid;gap:0;list-style:none;padding:0;margin:10px 0}
+    .steps li{counter-increment:item;padding:13px 0 13px 49px;border-top:1px solid var(--line);position:relative}
+    .steps li:before{content:'0' counter(item);position:absolute;left:0;top:16px;color:var(--accent);font:700 11px/1 ui-monospace,monospace}
+    .steps strong{display:block;font-weight:650;margin-bottom:3px}
+    .paths{display:grid;gap:14px;margin:16px 0}
+    .path{border:1px solid var(--line);border-radius:12px;padding:17px 20px;background:var(--surface)}
+    .path span{color:var(--accent);font:700 10px/1.45 ui-monospace,monospace;letter-spacing:.11em;text-transform:uppercase}
+    .path p{margin-bottom:0}
+    .small{font-size:13px;color:var(--muted)}
+    .note{padding:18px 20px;border-left:2px solid var(--accent);background:#1a2621;margin:20px 0}
+    .note strong{display:block;margin-bottom:5px}
+    .divider{border-top:1px solid var(--line);margin:36px 0}
+    footer{margin-top:50px;border-top:1px solid var(--line);padding-top:17px;font-size:13px;color:var(--muted)}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
 </head>
 <body>
-<main>
-  <p><a href="../archive-society/">Conversational Atlas</a> · <a href="../spatial-atlas/">Spatial Atlas</a></p>
-  <h1>About this view</h1>
-  <p>The photographs are local presentation files, matched by accession. An object without a file keeps the schematic card.</p>
-  <p>Lakehouse lookup. The conversation set uses a saved lookup. A lookup is a separate source layer. It never changes the catalog tags. A shared tag is not a historical relationship.</p>
-  <p>Box and storage lines stay empty unless an authorized mapping is loaded.</p>
-  <h2>The conversation</h2>
-  <p>Interpretation is not evidence. These voices are a scripted interpretation. They are fictional, not historical testimony or an official museum voice.</p>
-  <p>Playback reads that written script. The device voice is the path in use. ElevenLabs receives only the displayed words, and only after approval.</p>
+<main class="wrap">
+  <nav aria-label="Explore Archive Dreams">
+    <a href="../archive-society/">Conversational Atlas</a>
+    <a href="../spatial-atlas/">Spatial Atlas</a>
+    <a href="../object-lens/">Object Lens</a>
+    <a href="#method">Method &amp; limits</a>
+  </nav>
+  <p class="eyebrow">Archive Dreams in Public · An artist-led research prototype</p>
+  <h1>What if an archive could disagree with itself?</h1>
+  <p class="lead">Objects from another century made promises about technology, work, politics, and a better tomorrow. We inherit those promises—but not always the people they spoke for, the people they left out, or the reasons we connect them.</p>
+  <p>In this interactive experiment, archival records encounter one another through a network. Their dialogue is <strong>fictional and artist-authored</strong>. The underlying records and the reasons for a connection should remain visible and open to challenge. A compelling interpretation may still be wrong.</p>
+
+  <section aria-labelledby="participate">
+    <h2 id="participate">Your role is not simply to watch.</h2>
+    <ol class="steps">
+      <li><strong>Choose an object or connection.</strong> Follow a possible relationship through the Atlas.</li>
+      <li><strong>Hear two positions.</strong> Different records confront one another in scripted, interpretive speech.</li>
+      <li><strong>Meet the Archivist.</strong> A consistent fictional voice explains what the available evidence supports—and what it cannot establish.</li>
+      <li><strong>Decide what deserves further research.</strong> Inspect the source, question the link, or follow another object. Some connections are intentionally weak.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="futures">
+    <h2 id="futures">The futures we inherited</h2>
+    <p>This research follows the Wolfsonian's interest in the persuasive power of design. World's fairs are a useful entry point: their grand visions of tomorrow were also advertisements, organized journeys, industrial achievements, and selective accounts of society.</p>
+    <p>The museum's 2025–26 <em>World's Fairs: Visions of Tomorrow</em> exhibition and Marco Brambilla's <em>After Utopia</em> explored those imagined futures through archival material, moving images, and new technologies. This project follows a different formal question: <strong>what changes when the visitor can interrupt the narration and inspect the reasons for a proposed connection?</strong></p>
+    <p class="small">Prior programs:
+      <a href="https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html">World's Fairs: Visions of Tomorrow</a> ·
+      <a href="https://wolfsonian.org/whats-on/exhibitions+installations/2025/12/marco-brambilla-after-utopia.html">After Utopia</a>.
+      These are research contexts, not a claim of endorsement or direct collaboration with this prototype.
+    </p>
+  </section>
+
+  <section aria-labelledby="questions">
+    <h2 id="questions">Three conversations worth having</h2>
+    <p class="subdued">These are proposed research paths based on the museum's published checklist—not additional conversations currently available in the live graph.</p>
+    <div class="paths">
+      <article class="path">
+        <span>01 · Who narrates?</span>
+        <h3>Futurama × Harlem Invites You</h3>
+        <p>One 1939 fair presented a narrated city of the future; another record invited an African American audience to visit the fair. Who determines the route and the voice that explains tomorrow?</p>
+        <p class="small">Museum accessions 83.2.19 and XC2024.03.1.1 · Curatorial juxtaposition, not a verified interaction.</p>
+      </article>
+      <article class="path">
+        <span>02 · Which future is refused?</span>
+        <h3>The Threatening Shadow × Trylon and Perisphere</h3>
+        <p>A proposed warning about authoritarian aggression was rejected for the fair. What becomes of a vision of progress when an uncomfortable image cannot join it?</p>
+        <p class="small">83.6.2 and 86.17.1 · Comparison proposal pending collection review.</p>
+      </article>
+      <article class="path">
+        <span>03 · Who builds it?</span>
+        <h3>The Glory of Iron × On Munitions: Skilled Work</h3>
+        <p>From the workers who assembled a monument to those represented through wartime production: how does an image of progress remember the labor behind it?</p>
+        <p class="small">84.6.14 and 85.4.64.34 · Separate dates and contexts; no direct historical connection claimed.</p>
+      </article>
+    </div>
+    <p class="small">Records and curatorial context: <a href="https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf">The Wolfsonian–FIU, World's Fairs: Visions of Tomorrow — published exhibition checklist (PDF)</a>. A prioritized six-object shortlist is recorded in the research repository; no images from this checklist are embedded here.</p>
+  </section>
+
+  <section id="method" aria-labelledby="method-title">
+    <h2 id="method-title">What this system knows—and does not know</h2>
+    <p>Here, an accession identifies a record; a catalog title describes it; a metadata tag can suggest a comparison. <strong>A shared tag is not proof that two objects, makers, or audiences encountered each other.</strong> Interpretive dialogue is a contemporary artwork, not an archival quotation, a historical reconstruction of someone's speech, or an official museum statement.</p>
+    <div class="note">
+      <strong>Interpretation is not evidence.</strong>
+      <p>Some nodes use locally supplied presentation photographs; missing images use schematic representations. Lakehouse lookups are a separate data layer and do not overwrite catalog tags. Storage locations stay unknown unless an authorized mapping exists.</p>
+      <p style="margin-bottom:0">This independent prototype is under development. Public exhibition-checklist references do not automatically authorize image reproduction, redistribution of internal metadata, or public use of the museum's collections data.</p>
+    </div>
+    <p>Recorded dialogue may be played using locally installed device voices. The optional external voice service requires an explicit approval step and receives only displayed words, not the full collection file. Text remains available without audio.</p>
+    <p class="small">Current state: the 1939 fair and labor records above are <strong>research candidates</strong>, not new nodes or verified edges in the live Atlas. Any additional scene requires record matching, rights review, source checks, and editorial sign-off.</p>
+  </section>
+
+  <footer>
+    <p>Archive Dreams in Public · Artist-led research by Moises Sanabria during a creative fellowship at The Wolfsonian–FIU. Research materials and experimental interpretations are independently authored, not official museum catalog records.</p>
+    <p><a href="../archive-society/">Return to the conversation</a> · <a href="https://github.com/moisestech/wolfsonian-public-api-research/issues/38">Research questions and source review</a></p>
+  </footer>
 </main>
 </body>
 </html>
