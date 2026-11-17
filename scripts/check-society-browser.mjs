@@ -90,6 +90,24 @@ try {
   await page.locator('.conversation-edge').first().focus();
   await page.keyboard.press('Enter');
 
+  // Visitors can discover a curated question, inspect a skeptical connection,
+  // and return to the launch scene without the graph inventing a new edge.
+  assert.match(await page.locator('#guide-count').textContent(),/16 of 16 curated conversations available/);
+  await page.locator('#conversation-guide > summary').click();
+  await page.selectOption('#guide-chapter','doubt');
+  assert.equal(await page.locator('#guide-list [data-scene-id]').count(),2);
+  await page.locator('[data-scene-id="challenge-robeson-architectural-fantasy"]').click();
+  assert.match(await page.locator('#conversation-content h2').innerText(),/When the algorithm should doubt itself/);
+  assert.match(page.url(),/scene=challenge-robeson-architectural-fantasy/);
+  assert.match(await page.locator('#conversation-content').innerText(),/not establish|not established|No documented/i);
+  await page.locator('#conversation-guide > summary').click();
+  await page.selectOption('#guide-chapter','all');
+  await page.locator('[data-scene-id="opening-skilled-work-lottery"]').click();
+  assert.match(await page.locator('#atlas-title').innerText(),/On Munitions/);
+  assert.match(await page.locator('#conversation-content h2').innerText(),/Who gets credit for labor/);
+  assert.match(page.url(),/scene=opening-skilled-work-lottery/);
+  assert.equal(await page.locator('[data-voice-role]').count(),3);
+
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await page.screenshot({path:new URL('artifacts/archive-society-overview.png',root).pathname,fullPage:true});
   await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
