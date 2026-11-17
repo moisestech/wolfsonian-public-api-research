@@ -24,9 +24,12 @@ try {
 
   // Making the Engine opens on a curated machine-and-body scene, with six paths still clickable.
   assert.match(await page.locator('#atlas-title').innerText(),/Making the Engine/);
-  assert.match(await page.locator('#scene-title').getAttribute('title'),/ARTIST-AUTHORED SCENE/);
-  assert.match(await page.locator('#scene-nav').innerText(),/The machine meets the body/);
+  assert.equal(await page.locator('.topbar').getByText('The machine meets the body').count(),0);
   assert.match(await page.locator('#scene-tag').innerText(),/Machines/);
+  await page.locator('#conversation-head').click();
+  assert.match(await page.locator('#scene-title').getAttribute('title'),/ARTIST-AUTHORED SCENE/);
+  assert.match(await page.locator('#conversation-sheet').innerText(),/Machines[\s\S]*The machine meets the body/);
+  await page.locator('#sheet-close').click();
   assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
   assert.ok(Number(await page.locator('#stage').getAttribute('data-zoom'))>20);
 
@@ -90,7 +93,9 @@ try {
   await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),100);
   const scaleOf=()=>page.locator('#stage').evaluate(el=>Number(el.dataset.scale));
   const fitted=await scaleOf();
+  await page.locator('#zoom-toggle').click();
   await page.locator('[data-stop="100"]').click();assert.ok(await scaleOf()>fitted);
+  await page.locator('#zoom-toggle').click();
   await page.locator('#fit').click();assert.ok(Math.abs(await scaleOf()-fitted)<0.02);
   await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
   assert.ok(await page.locator('.graph-node.emphasized').count()>0);
@@ -112,7 +117,7 @@ try {
   await page.locator('#space-evidence').click();
   assert.equal(await page.locator('#conversation-sheet').evaluate(el=>el.hidden),false);
   assert.equal(await railHeight(),beforeSheet);
-  await page.locator('#space-evidence').click();
+  await page.locator('#sheet-close').click();
   await page.screenshot({path:new URL('artifacts/archive-society-space.png',root).pathname});
   await page.locator('#space-leave').click();
   await page.waitForFunction(()=>getComputedStyle(document.querySelector('#path-timeline')).display!=='none');
