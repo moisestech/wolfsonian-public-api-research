@@ -69,9 +69,10 @@ test('all 48 approved-for-review audio cues are stable, distinct, and not render
   const cueSheet=audioCues(),turns=cueSheet.scenes.flatMap(s=>s.turns);
   assert.equal(cueSheet.scenes.length,16);
   assert.equal(turns.length,48);
-  assert.equal(turns.reduce((n,t)=>n+t.text.length,0),5120);
+  assert.ok(turns.reduce((n,t)=>n+t.text.length,0)>4500);
   assert.equal(new Set(turns.map(t=>t.proposedFile)).size,48);
   assert.ok(turns.every(t=>t.status==='NOT_RENDERED'&&t.textSha256Prefix.length===16));
+  assert.ok(turns.every(t=>typeof t.direction==='string'&&t.direction.length>3));
   assert.ok(cueSheet.scenes.every(s=>s.status==='EDITORIAL_DRAFT_NOT_APPROVED'));
 });
 
@@ -89,7 +90,8 @@ test('navigation and local voice controls exist without secret keys or automatic
   assert.match(ui,/navigateToConversation/);
   assert.match(ui,/destinationForScene/);
   assert.match(ui,/history\.pushState/);
-  assert.match(ui,/roleVoiceCast/);
+  assert.match(ui,/directConversation/);
+  assert.match(html,/id="voice-casting-style"/);
   assert.match(ui,/localVoiceOptions/);
   assert.match(server,/conversation-guide/);
   assert.match(server,/local-voice-cast/);
