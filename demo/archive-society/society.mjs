@@ -8,6 +8,8 @@ import { localImageUrl } from '../../src/local-images.mjs';
 import { OPENING_ACCESSION } from '../../src/presentation-pairs.mjs';
 import { withPublicAnchorFallback } from '../../src/object-lens-core.mjs';
 import { focusedPairGraph } from '../../src/force-graph-data.mjs';
+import { CONVERSATION_CHAPTERS, conversationGuide, destinationForScene } from '../../src/conversation-guide.mjs';
+import { localVoiceOptions, roleVoiceCast, SPEAKER_ROLES } from '../../src/local-voice-cast.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -16,6 +18,14 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
   playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,turnIndex:0,turnKey:null};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
+let guideCacheRecords=null,guideCache=null;
+const voiceSelections={objectA:'',objectB:'',archivist:''};
+const currentGuide=()=>{
+  if(guideCacheRecords!==state.records){
+    guideCacheRecords=state.records;guideCache=conversationGuide(state.records);
+  }
+  return guideCache;
+};
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
 const message=(id,text)=>{$(id).textContent=text;};
@@ -50,6 +60,72 @@ function stop(){
 function changeSeed(id){stop();resetApproval();state.seed=id;state.edge=null;
   if(state.payload)state.snapshots.set(id,reconcileLookup(state.payload,id,'UNKNOWN_LOCAL_CAPTURE_TIME'));
   render();setPanel('record');}
+
+function renderConversationGuide(){
+  const chapter=$('guide-chapter').value||'all';
+  const query=$('guide-search').value.toLocaleLowerCase().trim();
+  const root=$('guide-list');root.replaceChildren();
+  const data=currentGuide();
+  const total=data.flatMap(item=>item.scenes).filter(item=>item.available).length;
+  const matched=data.map(group=>({
+    group,
+    scenes:group.scenes.filter(scene=>{
+      if(chapter!=='all'&&group.id!==chapter)return false;
+      const search=[scene.arc,scene.aTitle,scene.bTitle,scene.a,scene.b,scene.tagValue,group.title].join(' ').toLocaleLowerCase();
+      return search.includes(query);
+    })
+  })).filter(item=>item.scenes.length);
+  for(const {group,scenes} of matched){
+    root.append(node('p',group.title,'guide-chapter-title'));
+    for(const scene of scenes){
+      const button=node('button',undefined,'guide-scene');
+      button.type='button';button.dataset.sceneId=scene.id;button.disabled=!scene.available;
+      button.setAttribute('aria-current',String(state.conversation?.sceneId===scene.id));
+      const heading=node('strong',scene.arc);
+      const summary=node('small',scene.available
+        ?(scene.aTitle+' ↔ '+scene.bTitle)
+        :'Unavailable in the current source-backed graph');
+      const metadata=node('small',scene.tagFamily+' / '+scene.tagValue+' · artist-authored draft');
+      button.append(heading,summary,metadata);
+      if(scene.available)button.addEventListener('click',()=>navigateToConversation(scene.id));
+      root.append(button);
+    }
+  }
+  if(!matched.length)root.append(node('p','No matching conversations. Try another chapter or term.','muted'));
+  $('guide-count').textContent=total+' of 16 curated conversations available in the current records';
+}
+function navigateToConversation(sceneId,{writeHistory=true}={}){
+  const destination=destinationForScene(currentGuide(),sceneId);
+  if(!destination){
+    $('guide-count').textContent='This conversation is not available in the current source-backed records.';
+    return false;
+  }
+  stop();resetApproval();
+  state.journey=[];state.turnIndex=0;state.turnKey=null;
+  state.lens='family';$('lens').value='family';paintReading();
+  $('theme').value='';$('atlas-mode').checked=false;
+  state.seed=destination.seed;state.edge=destination.edgeId;state.identityEdge=null;
+  render();setPanel('conversation');$('conversation-guide').open=false;
+  if(writeHistory){
+    const url=new URL(location.href);
+    url.searchParams.set('scene',sceneId);
+    url.searchParams.delete('accession');
+    history.pushState({scene:sceneId},'',url.pathname+url.search+url.hash);
+  }
+  $('conversation-panel').scrollIntoView({behavior:'auto',block:'start'});
+  return true;
+}
+$('guide-chapter').replaceChildren(...[
+  {value:'all',label:'All five chapters'},
+  ...CONVERSATION_CHAPTERS.map(chapter=>({value:chapter.id,label:chapter.title}))
+].map(entry=>{const option=node('option',entry.label);option.value=entry.value;return option;}));
+$('guide-chapter').addEventListener('change',renderConversationGuide);
+$('guide-search').addEventListener('input',renderConversationGuide);
+window.addEventListener('popstate',()=>{
+  const sceneId=new URLSearchParams(location.search).get('scene');
+  if(sceneId)navigateToConversation(sceneId,{writeHistory:false});
+});
+
 function options(){
   const query=$('search').value.toLowerCase();
   const entries=state.records.filter(r=>(r.title+' '+r.accession).toLowerCase().includes(query));
@@ -337,7 +413,7 @@ function render(){
   }
   const identityCount=state.layerView?.relationships.length||0;
   message('counts',state.view.nodes.length+' visible objects · '+state.view.edges.length+' conversation paths · '+identityCount+' identity or storage lines · 0 historical claims inferred');
-  renderStage();renderConversation();renderRecord();
+  renderStage();renderConversation();renderRecord();renderConversationGuide();
 }
 async function service(path,options={}){
   const token=$('access-token').value;
@@ -521,4 +597,6 @@ await loadLakehouse();
 if(requested)state.records=withPublicAnchorFallback(state.records);
 if(requested&&state.records.some(item=>item.accession===requested))state.seed=requested;
 categories();options();render();
+const requestedScene=new URLSearchParams(location.search).get('scene');
+if(requestedScene)navigateToConversation(requestedScene,{writeHistory:false});
 if(requested&&!state.records.some(item=>item.accession===requested))message('import-status','Requested accession is not in the loaded set. No identity was assumed.');
