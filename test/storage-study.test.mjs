@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {INQUIRY_STAGES,stageForQuestion,objectInquiryDialogue,ORIGINAL_QUESTION_COUNT} from '../src/object-inquiry.mjs';
+import {INQUIRY_STAGES,stageForQuestion,objectInquiryDialogue,objectInquiryPath,ORIGINAL_QUESTION_COUNT} from '../src/object-inquiry.mjs';
 import {buildStorageTopology,inspectStorageNode} from '../src/storage-topology.mjs';
 
 test('Luna handout adaptation covers all twenty numbered questions exactly once',()=>{
@@ -21,6 +21,15 @@ test('nine-turn conversation has authentic back-and-forth but no made-up locatio
   assert.ok(result.turns.some(x=>x.type==='source_limit'));
   assert.match(result.turns.map(x=>x.text).join(' '),/no approved record connecting/);
   assert.ok(!result.turns.some(x=>/DEMO-BOX-0[1-6]/.test(x.text)));
+});
+test('inquiry choice changes dramatic structure and keeps the source boundary',()=>{
+  const chapters=INQUIRY_STAGES.map(stage=>objectInquiryPath({accession:'XX1990.1484',title:'Sparton 558-C radio'},stage.id));
+  assert.equal(chapters.length,5);
+  assert.ok(chapters.every(ch=>ch.turns.length===7));
+  assert.equal(new Set(chapters.map(ch=>ch.turns[0].text)).size,5);
+  assert.match(chapters.find(ch=>ch.stage==='provenance').turns.map(t=>t.text).join(' '),/no approved box/);
+  assert.ok(chapters.every(ch=>ch.turns.some(t=>t.type==='source_limit')));
+  assert.ok(chapters.every(ch=>ch.turns.every(t=>!t.text.includes('DEMO-BOX-'))));
 });
 test('real public catalog identities are never given invented box, floor or bay',()=>{
   const scene=buildStorageTopology();
