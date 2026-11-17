@@ -5,9 +5,9 @@
 For the **November 19 internal Wolfsonian experience**, a small, authored repertory is more artistically reliable and cheaper than continuous cloud speech generation. There are **16 scripted edges × 3 turns = 48 lines**, totaling approximately **5,120 text characters** in the source registry. No live model is required to make these objects appear to converse. A live model cannot substitute for intentional interpretation and verification.
 
 **Keep three progressively enhanced modes:**
-1. **Silent reading always works.** The new Conversation Stage displays all three turns immediately, with a large active line, visible speakers, Next/Previous, graph synchronization and an evidence inspector. This is the canonical experience and must work offline.
+1. **Silent reading always works in two tones.** The new Conversation Stage displays all three turns immediately, with a large active line, visible speakers, Next/Previous, graph synchronization and an evidence inspector. This is the canonical experience and must work offline.
 2. **Device-local voice cast (implemented in this branch).** Offer three device-local installed voices for Object A, Object B and the fictional Archivist. Distinct voices are selected automatically when available, and visitors operating the presentation can override them in Admin. `SpeechSynthesisVoice.localService===true` is required; if no local voices exist, retain the full text and explain the limitation. Different browsers/operating systems have different voices. No per-play TTS billing.
-3. **One-time prerecorded premium speech (production next, no clips bundled yet).** After author/rights approval, render the approved 48 turns once via an affordable cloud TTS provider (e.g. Google Cloud Chirp 3 HD) or on a controlled workstation using Kokoro TTS. Store clips in an access-controlled, rights-cleared audio library. Cache playback by `scene.id + turn index + text hash + voice revision`, never by accession alone. The current implementation does NOT yet fetch/play these clips.
+3. **One-time prerecorded premium speech (production next, no clips bundled yet).** After author/rights approval, render the approved 48 turns once via an affordable cloud TTS provider (e.g. Google Cloud Chirp 3 HD) or on a controlled workstation using Kokoro TTS. Store clips in an access-controlled, rights-cleared audio library. Cache playback by `scene.id + turn index + text hash + voice revision`, never by accession alone. The current implementation does NOT yet fetch/play these clips. Both written tones can be exported separately after approval: `node scripts/export-curated-audio-cues.mjs --tone=critical` and `node scripts/export-curated-audio-cues.mjs --tone=poetic`. Each yields 48 line cues (96 exports total). The unchanged Archivist lines can potentially reuse one master audio clip in a future manifest instead of synthesizing them twice.
 
 ### Approximate voice production cost
 
@@ -48,7 +48,7 @@ After approval, consider adding a short per-turn silence and simple spatial cue 
 
 - [x] 16 scene IDs visible in 5 themed chapters; search and chapter filter; source-backed destination only
 - [x] 3 voice-role selectors constrained to local voices, session-scoped and no automatic remote fallback
-- [x] Optional audio-cue export for exactly 48 authored lines, zero external API calls
+- [x] Optional audio-cue export for exactly 48 lines *per tone* (96 possible cues), zero external API calls
 - [ ] Browser/Node tests green on latest PR head and deep-linkable navigation verified on 390px phone
 - [ ] Artist editorial sign-off on scene wording and voice personalities
 - [ ] Optional audio prerecorded and listen-tested, only if time and rights permit
