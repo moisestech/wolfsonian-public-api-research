@@ -7,10 +7,12 @@ on:
       - 'demo/archive-society/**'
       - 'src/discovery-*.mjs'
       - 'src/archive-*.mjs'
+      - 'src/curated-edge-scenes.mjs'
       - 'server/archive-*.mjs'
       - 'api/archive-society/**'
       - 'scripts/*society*'
       - 'test/archive-*.test.mjs'
+      - 'test/curated-edge-scenes.test.mjs'
       - 'examples/archive-society*'
       - 'test/discovery-*.test.mjs'
       - '.github/workflows/discovery-checks.yml'
@@ -34,6 +36,7 @@ jobs:
           node --check demo/discovery-lab/showcase.mjs
           node --check demo/archive-society/society.mjs
           node --check src/archive-society.mjs
+          node --check src/curated-edge-scenes.mjs
           node --check src/archive-evidence.mjs
           node --check server/archive-services.mjs
           node --check scripts/serve-archive-society.mjs
@@ -42,6 +45,8 @@ jobs:
         run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
       - name: Run archive society and service tests
         run: npm run test:society
+      - name: Verify curated relationships and skeptical fallbacks
+        run: node --test test/curated-edge-scenes.test.mjs
       - name: Browser smoke and screenshots
         run: |
           npm ci
