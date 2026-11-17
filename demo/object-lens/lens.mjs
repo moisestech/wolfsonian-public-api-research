@@ -1,4 +1,4 @@
-import {resolvePublicAccession,encounterFor,atlasHandoffFor,curatedQuestionsFor,answerCuratedQuestion} from '/src/object-lens-core.mjs';
+import {resolvePublicAccession,encounterFor,atlasHandoffFor,curatedQuestionsFor,answerCuratedQuestion,curatedPrimaryPageLeadsFor} from '/src/object-lens-core.mjs';
 const $=id=>document.getElementById(id);
 let stream=null,match=null,encounter=null,activeReader='futurist',activeQuestion=null,activeAnswer=null;
 
@@ -65,6 +65,26 @@ function renderCuratedAnswer(){
     return item;
   });
   $('answer-citations').replaceChildren(...li);
+  const leads=curatedPrimaryPageLeadsFor(encounter.accession,activeQuestion);
+  const pending=$('primary-text-leads');
+  pending.hidden=!leads.length;
+  const leadRows=leads.map(lead=>{
+    const li=document.createElement('li');
+    const title=document.createElement('strong');
+    title.textContent=lead.label+' · suggested printed p. '+lead.printedPageCandidate;
+    const description=document.createElement('p');
+    description.textContent=lead.observed;
+    const question=document.createElement('p');
+    question.textContent='To verify: '+lead.researchQuestion;
+    const source=document.createElement('a');
+    source.href=lead.source.url;
+    source.target='_blank';
+    source.rel='noopener noreferrer';
+    source.textContent='Open third-party OCR (NOT VERIFIED)';
+    li.append(title,description,question,source);
+    return li;
+  });
+  $('primary-leads-list').replaceChildren(...leadRows);
   $('answer-unknowns').textContent=activeAnswer.unknowns.length
     ? 'Still unknown: '+activeAnswer.unknowns.join(' ')
     : 'No further unknowns were specified for this prepared question.';
