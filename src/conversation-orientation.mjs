@@ -69,7 +69,7 @@ export function connectionCaption({episode,proposal}={}){
   }
   const family=episode.relationship.family||'tag';
   const term=episode.relationship.term;
-  return term?'Shared '+family+': '+term+' · metadata only':'Connection not established · Research question';
+  return term?'Both records include “'+term+'” · no historical link established':'Connection not established · Research question';
 }
 
 export function explainEncounter({source,target,conversation,lensLabel='Family',previous=null}={}){

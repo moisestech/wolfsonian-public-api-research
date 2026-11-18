@@ -27,7 +27,7 @@ try {
   assert.equal(await page.locator('#admin-toggle,#space-stop,#add-images,#clear-images').count(),0);
   assert.equal(await page.locator('#room-question').innerText(),'Who pays the price of progress?');
   assert.equal(await page.locator('#room-header').getAttribute('data-mode'),'CURATED_SCRIPT');
-  assert.match(await page.locator('#room-rationale').innerText(),/Shared motif: Machines/);
+  assert.match(await page.locator('#room-rationale').innerText(),/Why these two\?/);
   assert.match(await page.locator('#room-description').innerText(),/Shared motif: Machines · metadata only/);
   assert.equal(await page.locator('#room-participants .object-inspect').count(),2);
    assert.equal(await page.locator('#room-participants .object-portrait-media').count(),2);
@@ -121,7 +121,14 @@ try {
   await page.locator('#sheet-close').click();
   await page.locator('#space-leave').click();
   assert.equal(await page.locator('#timeline-title').innerText(),'Choose a question');
-  assert.match(await page.locator('#timeline-list').innerText(),/Authored scene/);
+  assert.match(await page.locator('#timeline-list').innerText(),/Conversations/);
+  const questionTitles=await page.locator('#timeline-list .question-card-face strong').allTextContents();
+  assert.ok(questionTitles.includes('Can a tree connect Paul Robeson to an imagined house?'));
+  assert.ok(questionTitles.includes('Can water connect a trade fair to Let the Living Rise?'));
+  assert.ok(questionTitles.every(title=>!(/withdraw|reject this connection|editorial/i.test(title))));
+  const labels=await page.locator('#timeline-list .path-post').allInnerTexts();
+  assert.ok(labels.every(text=>!(/Authored scene|Shared motif:|Imagined comparison/i.test(text))),
+    'Browse cards should emphasize artwork and actual spoken questions rather than editorial terminology');
   const card=page.locator('.path-post').first();
   assert.equal(await card.locator('.question-card-portraits img').count(),2);
   assert.ok(await card.locator('.preview-line').innerText());
@@ -148,6 +155,8 @@ try {
   await page.waitForURL('**/demo/about/');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   assert.match(await page.locator('h2').allTextContents().then(parts=>parts.join(' | ')),/A conversation between two objects/);
+  const aboutWords=await page.locator('h3').allTextContents();
+  for(const term of ['Authored scene','Shared motif','Imagined comparison'])assert.ok(aboutWords.includes(term));
   await screenshot('mobile-about');
   await open();
 

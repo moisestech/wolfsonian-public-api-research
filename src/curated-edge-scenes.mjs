@@ -453,7 +453,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "b": "XX1991.13",
     "family": "motif",
     "tag": "Trees",
-    "arc": "When the algorithm should doubt itself",
+    "arc": "Can a tree connect Paul Robeson to an imagined house?",
     "mode": "question_edge",
     "turns": [
       {
@@ -573,7 +573,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "b": "83.4.40",
     "family": "motif",
     "tag": "Water",
-    "arc": "A false-looking bridge",
+    "arc": "Can water connect a trade fair to Let the Living Rise?",
     "mode": "question_edge",
     "turns": [
       {
