@@ -42,7 +42,7 @@ export function conversationEpisode({source,target,conversation}={}){
     question:short(question,200),
     participants:Object.freeze([source,target].map((item,i)=>Object.freeze({accession:item.accession,title:item.title,shortName:names[i],role:i?'objectB':'objectA'}))),
     mode:authored?'CURATED_SCRIPT':'RESEARCH_PROMPT',
-    label:authored?'Authored scene':'Research prompt',
+    label:conversation.aiAssisted?'AI-assisted script':authored?'Authored scene':'Research prompt',
     sourceStatus:proposed?'ARTIST_PROPOSAL':term?([source,target].every(item=>['matrix','lakehouse'].includes(item.source))?'STAFF_METADATA':'LOCAL_INPUT'):'UNRESOLVED',
     relationship:Object.freeze({type:proposed?'ARTIST_COMPARISON':'SHARED_TAG',family:reason?.family||null,term:term||null}),
     rationale:proposed?'Artist-proposed comparison · Not a catalog match':term?'Shared '+family+': '+term+' · Imagined comparison':'Comparison proposed · No verified shared tag',
@@ -77,7 +77,7 @@ export function explainEncounter({source,target,conversation,lensLabel='Family',
   const frame=juxtaposition
     ? 'The research path supplies the question.'
     : curated
-      ? 'The selected perspective helps navigate the map. This hand-written scene does not change its script when you change that perspective.'
+      ? 'The selected perspective helps navigate the map. This scripted scene does not change its script when you change that perspective.'
       : 'The selected “'+short(lensLabel,60)+'” perspective changes which question frames this scripted exchange.';
   const previousChanged=previous&&previous.key!==key;
   const changed=previousChanged

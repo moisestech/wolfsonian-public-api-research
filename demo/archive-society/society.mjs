@@ -393,7 +393,7 @@ function paintSceneLabel(label,color,note,arc,kind){
   if(sheetNote)sheetNote.textContent=kind;
 }
 function paintScene(c,edge){
-  const kind=c.mode==='CURATED_EDGE_SCENE'?'ARTIST-AUTHORED SCENE · EDITORIAL DRAFT':
+  const kind=c.aiAssisted?'AI-ASSISTED SCRIPT · EDITORIAL DRAFT':c.mode==='CURATED_EDGE_SCENE'?'ARTIST-AUTHORED SCENE · EDITORIAL DRAFT':
     c.edgeMode==='QUESTION_THIS_LINK'?'QUESTIONABLE MATCH · METADATA ONLY':'SOURCE-BOUNDED METADATA READING';
   const curated=c.mode==='CURATED_EDGE_SCENE'&&c.dramaticArc;
   const label=c.scriptBasis?.value||edge.reasons[0].value;
@@ -551,7 +551,7 @@ function renderRoomHeader(source,target,c){
   }
   const lens=LENSES.find(item=>item.id===state.lens);
   evidence.append(node('p',explainEncounter({source,target,conversation:c,lensLabel:lens?.label}).frame),
-    node('p','Source review and image permissions are separate from this artist-authored interpretation.','muted'));
+    node('p','Source review and image permissions are separate from this imagined exchange.','muted'));
 }
 function paintResearchScene(c){
   paintSceneLabel('Curatorial juxtaposition','#e8d5a3','Curatorial juxtaposition. Not a catalog match or a documented meeting.',c.dramaticArc,'RESEARCH PREVIEW · NOT A CATALOG MATCH');
