@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {explainEncounter,conversationEpisode,connectionCaption} from '../src/conversation-orientation.mjs';
+import {explainEncounter,conversationEpisode,connectionCaption,visitorFollowUp} from '../src/conversation-orientation.mjs';
 import {CURATED_EDGE_SCENES} from '../src/curated-edge-scenes.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
 const rec=(id,title)=>({accession:id,title,source:'synthetic'});
@@ -137,4 +137,14 @@ test('about explains authored scene, shared motif and imagined comparison outsid
  assert.match(js,/\['Proposed pairings',comparisons\]/);
  assert.match(js,/\['Open questions',prompts\]/);
  assert.match(js,/\$\('room-rationale'\)\.textContent='Why these two\? ↗'/);
+});
+
+
+test('internal withdraw-edge editorial choices are not exposed as visitor prompts',()=>{
+ const c={edgeMode:'question_edge',nextPrompt:'Keep the comparison as a question, or withdraw this edge?'};
+ assert.match(c.nextPrompt,/withdraw this edge/);
+ assert.equal(visitorFollowUp(c),'What evidence beyond a shared motif would make this connection convincing?');
+ assert.doesNotMatch(visitorFollowUp(c),/withdraw|reject|edge/);
+ assert.equal(visitorFollowUp({edgeMode:'QUESTION_THIS_LINK',nextPrompt:'Reject the link?'}),visitorFollowUp(c));
+ assert.equal(visitorFollowUp({edgeMode:'contest',nextPrompt:'What would the publisher say?'}),'What would the publisher say?');
 });

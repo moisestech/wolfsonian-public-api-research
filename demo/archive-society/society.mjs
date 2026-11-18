@@ -12,7 +12,7 @@ import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
-import { explainEncounter, conversationEpisode, connectionCaption } from '../../src/conversation-orientation.mjs';
+import { explainEncounter, conversationEpisode, connectionCaption, visitorFollowUp } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -771,7 +771,7 @@ function renderConversation(){
     }
   }
   if(c.mode!=='CURATED_EDGE_SCENE'&&c.dramaticArc)box.append(node('p',c.dramaticArc,'notice'));
-  if(c.nextPrompt)box.append(node('p',c.nextPrompt,'notice'));
+  if(c.nextPrompt)box.append(node('p',visitorFollowUp(c),'notice'));
   // A narrative edge can become a new starting object. Make this an explicit
   // visitor action; graph connectivity is never inferred from the dialogue.
   const actions=node('div',undefined,'edge-path-actions');

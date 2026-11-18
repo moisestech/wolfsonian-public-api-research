@@ -72,6 +72,15 @@ export function connectionCaption({episode,proposal}={}){
   return term?'Both records include “'+term+'” · no historical link established':'Connection not established · Research question';
 }
 
+/** Keep internal editorial rejection actions out of visitor-facing dialogue. */
+export function visitorFollowUp(conversation) {
+  if(!conversation)return '';
+  if(conversation.edgeMode==='question_edge'||conversation.edgeMode==='QUESTION_THIS_LINK'){
+    return 'What evidence beyond a shared motif would make this connection convincing?';
+  }
+  return conversation.nextPrompt||'';
+}
+
 export function explainEncounter({source,target,conversation,lensLabel='Family',previous=null}={}){
   if(!source?.accession||!target?.accession||!conversation)throw Error('A selected source, target and conversation are required.');
   const curated=conversation.mode==='CURATED_EDGE_SCENE';
