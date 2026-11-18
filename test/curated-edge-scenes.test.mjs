@@ -110,7 +110,9 @@ test('frontend renders editorial arc, source-based explanation and visitor quest
  assert.match(js,/state\.journey/);
  assert.match(js,/c\.scriptBasis/);
  assert.match(js,/ARTIST-AUTHORED SCENE/);
- assert.match(js,/Inspect the reason for this edge/);
+ assert.doesNotMatch(js,/Inspect the reason for this edge/);
+ assert.match(js,/episode\.rationale/);
+ assert.match(js,/addRelatedQuestionsAction/);
  assert.match(server,/curated-edge-scenes/);
  assert.doesNotMatch(js,/innerHTML\s*=/);
 });
