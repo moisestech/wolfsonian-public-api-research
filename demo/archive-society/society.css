@@ -702,3 +702,48 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
   .room-participant .object-more{font-size:10px;overflow-wrap:anywhere}
 }
 @media(prefers-reduced-motion:reduce){.room-participant.speaking{transition:none}}
+
+
+/* Mobile reading navigation — X-style persistent destinations, not extra chrome.
+   Keep the authored dialogue scrollable and the archive's evidence in the room header. */
+@media(max-width:800px){
+  :root{--archive-mobile-bar:calc(64px + env(safe-area-inset-bottom, 0px))}
+  #space-bar.space-bar,body.show-timeline #space-bar.space-bar{
+    position:relative;z-index:45;display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    align-items:stretch;gap:0;flex:none;width:100%;height:var(--archive-mobile-bar);
+    margin:0;padding:0 3px env(safe-area-inset-bottom, 0px);
+    border-top:1px solid #4c6058;background:#111e19;
+    box-shadow:0 -3px 12px rgba(0,0,0,.15);
+  }
+  #space-bar .space-tab{
+    position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:4px;width:100%;min-width:0;min-height:44px;height:64px;
+    margin:0;padding:5px 1px 6px;border:0;border-radius:0;
+    background:transparent;color:#b9c9bf;box-shadow:none;
+    font:550 10px/1.15 system-ui,sans-serif;letter-spacing:.015em;
+  }
+  #space-bar .space-tab svg{display:block;flex:none;width:23px;height:23px}
+  #space-bar .space-tab .space-tab-label{display:block;white-space:nowrap}
+  #space-bar .space-tab[aria-current="page"]{color:#eaf9ef;font-weight:750}
+  #space-bar .space-tab[aria-current="page"]::before{
+    content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:26px;height:3px;border-radius:0 0 3px 3px;background:#abdbc6
+  }
+  #space-bar .space-tab:hover,#space-bar .space-tab:focus-visible{background:#294138;color:#fff}
+  #space-bar .space-listen{color:#c5e6d2}
+  #space-bar .space-listen[aria-pressed="true"]{color:#e8b38c}
+  #space-bar .space-listen .stop-glyph{display:none}
+  #space-bar .space-listen[aria-pressed="true"] .play-glyph{display:none}
+  #space-bar .space-listen[aria-pressed="true"] .stop-glyph{display:block}
+  #space-bar .space-tab:disabled{opacity:.45}
+  body.show-room .atlas-panel{
+    inset:0 0 var(--archive-mobile-bar) 0;
+    height:auto;
+  }
+}
+@media(max-width:360px){
+  #space-bar .space-tab{font-size:9.5px;letter-spacing:0}
+  #space-bar .space-tab svg{width:21px;height:21px}
+}
+@media(min-width:801px){#space-bar.space-bar{display:none!important}}
