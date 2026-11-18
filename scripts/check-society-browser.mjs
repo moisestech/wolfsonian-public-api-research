@@ -86,14 +86,36 @@ try {
     assert.ok(reading.compact&&reading.reachable,'Compact masthead leaves conversation accessible');
   }
   await page.locator('.rail-scroll').evaluate(el=>{el.scrollTop=0;el.dispatchEvent(new Event('scroll'));});
-  // Five persistent mobile destinations share the original dock space.
+  // The perspective is visible in the mobile room and does not rewrite authored dialogue.
   await page.setViewportSize({width:390,height:844});
+  assert.equal(await page.locator('#room-perspective-toggle').isVisible(),true);
+  assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
+  const originalDialogue=await page.locator('.chat').innerText();
+  await page.locator('#room-perspective-toggle').click();
+  assert.equal(await page.locator('#mobile-perspective-sheet').isVisible(),true);
+  assert.equal(await page.locator('#mobile-perspective-choices button').count(),5);
+  await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
+  assert.equal(await page.locator('#room-perspective-name').innerText(),'Worker');
+  assert.equal(await page.locator('#reading-name').innerText(),'Worker');
+  assert.equal(await page.locator('.chat').innerText(),originalDialogue,'Changing perspective does not alter an authored script');
+  await page.locator('#room-perspective-toggle').click();
+  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"]').getAttribute('aria-pressed'),'true');
+  await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
+  assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
+
+  // Five persistent mobile destinations share the original dock space.
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
   assert.equal(await page.locator('#space-conversation[aria-current="page"]').count(),1);
   assert.equal(await page.locator('#space-evidence').count(),0,'Evidence is available in the room header, not a redundant dock action');
   await page.locator('#space-feed').click();
   assert.equal(await page.locator('#path-timeline').isVisible(),true);
+  assert.equal(await page.locator('#feed-perspective-toggle').isVisible(),true);
+  await page.locator('#feed-perspective-toggle').click();
+  await page.locator('#mobile-perspective-choices [data-lens="futurist"]').click();
+  assert.equal(await page.locator('#feed-perspective-name').innerText(),'Futurist');
+  await page.locator('#feed-perspective-toggle').click();
+  await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
   assert.equal(await page.locator('#space-feed[aria-current="page"]').count(),1);
   assert.equal(await page.locator('#space-bar').isVisible(),true,'Bottom navigation stays available in feed');
   await page.locator('#space-conversation').click();
@@ -220,8 +242,15 @@ try {
   await page.locator('#space-play').click();
   assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('#room-participants .speaking').count(),1);
+  assert.equal(await page.locator('#voice-controls').isVisible(),true,'Live speaking activity appears above the mobile navigation');
+  assert.equal(await page.locator('#voice-controls').getAttribute('data-speaker'),'objectA');
+  assert.match(await page.locator('#audio-speaker').innerText(),/speaking/);
+  assert.equal(await page.locator('#audio-elapsed').innerText(),'Turn 1 of 5');
+  assert.equal(await page.locator('#voice-controls #play').isVisible(),false,'No duplicate mobile playback control');
   await page.locator('#space-play').click();
   assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
+  assert.equal(await page.locator('#voice-controls').isVisible(),false,'Waveform disappears when playback stops');
+  assert.equal(await page.locator('#voice-controls').getAttribute('data-speaker'),'');
   await page.locator('#space-play').click();
   await page.locator('#space-leave').click();await page.locator('.path-post').nth(1).click();
   assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
