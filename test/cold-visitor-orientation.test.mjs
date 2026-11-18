@@ -11,7 +11,8 @@ test('cold visitors get the question first and persistent fiction and record aff
  assert.match(beforeApp,/class="arrival-guide"/);
  assert.match(beforeApp,/The voices are imagined\. Check the records\./);
  assert.doesNotMatch(html,/IMAGINED EXCHANGE/);
- assert.doesNotMatch(html,/id="room-kind"/);
+ assert.match(html,/id="room-kind"/);
+ assert.match(html,/id="room-status-line" hidden/);
  assert.match(html,/id="room-question"/);
  assert.match(html,/Why these two\? Open evidence/);
  assert.match(html,/id="space-room" class="space-tab" aria-label="Explore object network"/);
