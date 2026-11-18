@@ -13,7 +13,11 @@ Count each playable pair once, including the separately identified curatorial co
 | Objects with at least two partners | 12 | 18 | At least 80% |
 | Largest connected group | 5 | 13 | At least 80% of speakers |
 
-## Sequence the next 13 conversations
+## Progress after the next four rooms
+
+The public census now counts 27 conversations connecting all 23 speakers in one group. Twenty speakers recur. The first batch below is complete. Nine conversations and five additional speakers remain to reach the exhibition target.
+
+## Batch sequence from 23 conversations
 
 | Batch | Editorial assignment | Visitor payoff |
 | --- | --- | --- |
