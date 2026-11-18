@@ -52,17 +52,21 @@ test('no source identity or scene yields an explanation',()=>{
  assert.throws(()=>explainEncounter({}),/selected source/);
  assert.throws(()=>explainEncounter({source:{title:'fake'},target:{accession:'B'},conversation:{}}),/selected source/);
 });
-test('visible UI includes evidence/question/change explanations on both conversational paths',async()=>{
+test('the room stays focused on questions, objects and dialogue while About explains authorship',async()=>{
  const js=await readFile(new URL('../demo/archive-society/society.mjs',import.meta.url),'utf8');
  const css=await readFile(new URL('../demo/archive-society/society.css',import.meta.url),'utf8');
+ const about=await readFile(new URL('../demo/about/index.html',import.meta.url),'utf8');
  const build=await readFile(new URL('../scripts/assemble-public-site.mjs',import.meta.url),'utf8');
  const serve=await readFile(new URL('../scripts/serve-archive-society.mjs',import.meta.url),'utf8');
- for(const text of ['Why these two?','What are they exploring?','What changes when you choose another?','How this conversation was written'])assert.ok(js.includes(text));
- assert.ok(js.includes('addEncounterOrientation(box,source,target,c);'));
- assert.ok(js.match(/addEncounterOrientation\(box,source,target,c\);/g).length===2);
+ assert.doesNotMatch(js,/How this conversation was written|addEncounterOrientation|encounter-orientation/);
+ assert.doesNotMatch(js,/Inspect the reason for this edge/);
+ assert.equal((js.match(/addRelatedQuestionsAction\(box\);/g)||[]).length,2);
  assert.match(js,/episode\.rationale/);
- assert.match(css,/\.encounter-orientation\{/);
- assert.match(css,/@media\(max-width:800px\)/);
+ assert.match(js,/if\(state\.researchPath\)\{/);
+ assert.match(about,/<h2 id="how-conversations-are-written">How conversations are written<\/h2>/);
+ for(const topic of ['Authored scene','Shared motif','Imagined comparison','AI-assisted','Why these two?','Record'])assert.ok(about.includes(topic));
+ assert.doesNotMatch(css,/\.encounter-orientation/);
+ assert.match(css,/\.more-questions-link/);
  assert.match(build,/src\/conversation-orientation\.mjs/);
  assert.match(serve,/conversation-orientation/);
  assert.doesNotMatch(js,/innerHTML\s*=/);
