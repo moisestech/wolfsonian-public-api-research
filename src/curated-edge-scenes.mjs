@@ -18,22 +18,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title calls munitions work skilled. Why does the word skilled need to be announced?",
+        "text": "My title calls munitions work skilled. Why would someone need to say that out loud?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.317.66",
-        "text": "My title advertises a lottery tied to an exhibition of women's labor. Is making work visible the same as valuing the people who do it?",
+        "text": "Mine advertises a lottery linked to an exhibition of women's labor. Seeing work isn't the same as valuing it, is it?",
+        "kind": "ARTIST_AUTHORED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "85.4.64.34",
+        "text": "Maybe not. Even the word skilled could leave the people doing the work unnamed.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The records share the Women motif and Labor theme. They do not establish a common workforce, audience, or historical collaboration.",
+        "text": "The records share a Women motif and a Labor theme. They do not establish a shared workforce, audience, or collaboration.",
+        "kind": "ARTIST_AUTHORED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "TD1989.317.66",
+        "text": "Then let's not give them a shared history. Who chose what the exhibition showed?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which source could tell us who was paid, named, or invited?",
-    "editorialNote": "Start with this pair: two different ways of staging and recognizing women's work.",
+    "editorialNote": "Start with this pair: two different ways of staging and recognizing women's work. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
     "pair": [
       "85.4.64.34",
       "TD1989.317.66"
@@ -98,22 +108,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "Skilled work appears in my title. Can production be celebrated without naming the people doing it?",
+        "text": "Skilled Work. That's in my title. I wonder who had to be convinced.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "I am titled Making the Engine. What happens when a machine becomes the hero of the image, rather than the act of making it?",
+        "text": "Mine is Making the Engine. It names what is made, but not necessarily everyone making it.",
+        "kind": "ARTIST_AUTHORED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "85.4.64.34",
+        "text": "So showing production isn't the same thing as hearing from the workers.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The Factories motif is shared. It does not establish the same factory, workers, or a connection between the makers of these prints.",
+        "text": "Factories is the shared motif. Nothing here proves the same factory, workers, or a connection between the makers of these prints.",
+        "kind": "ARTIST_AUTHORED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "85.4.64.43",
+        "text": "Then what kind of worker's account would change the story we're telling?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which record would identify an actual worker behind either image?",
-    "editorialNote": "Same-era production imagery; do not infer direct artist influence.",
+    "editorialNote": "Same-era production imagery; do not infer direct artist influence. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
     "pair": [
       "85.4.64.34",
       "85.4.64.43"
@@ -258,22 +278,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Making the Engine is my title. Does the act of making disappear when the engine becomes the subject?",
+        "text": "Making the Engine. The title puts the machine first. Where did the hands go?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.318.1",
-        "text": "My warning says one splinter can cost an eye. What is progress worth if the worker's body carries the risk?",
+        "text": "Hold on. My warning says a splinter can cost an eye. The worker's body isn't an afterthought.",
+        "kind": "ARTIST_AUTHORED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "85.4.64.43",
+        "text": "You're right. I was asking about the image. You're asking what the work might cost.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Machines is the shared motif. That justifies comparison, not a claim that the two images depict the same industry, location, or incident.",
+        "text": "Both records have the Machines motif. That does not place them in the same workshop, industry, or incident.",
+        "kind": "ARTIST_AUTHORED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "TD1989.318.1",
+        "text": "Good. Keep us separate, but keep that question. What would an actual workplace account tell us?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which safety record or workplace account would complicate the picture?",
-    "editorialNote": "A key dramatic counterweight: productivity vs. bodily risk.",
+    "editorialNote": "A key dramatic counterweight: productivity vs. bodily risk. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
     "pair": [
       "85.4.64.43",
       "TD1989.318.1"
@@ -298,22 +328,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.4091",
-        "text": "My title instructs viewers to vote for a workers' party. Can an image speak for labor?",
+        "text": "My title tells viewers to vote for a workers' party. At least it's asking for a political choice.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "I depict engine-making by title. What is the difference between showing people working and hearing what they demand?",
+        "text": "Making the Engine, that's my title. I show work by name; I don't ask anyone for a vote.",
+        "kind": "ARTIST_AUTHORED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "XX1990.4091",
+        "text": "That's the difference. Being pictured as a worker isn't the same as having a say.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Factories is the repeated motif, not a proven relation between the parties, artists, or workers represented.",
+        "text": "Factories is a repeated motif, not a proven relation between these parties, artists, or workers.",
+        "kind": "ARTIST_AUTHORED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "85.4.64.43",
+        "text": "Fair. And do we know whether anyone listened to either appeal? Not from a shared tag.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "What would a contemporaneous worker's account add?",
-    "editorialNote": "Political poster is an address to a viewer; title evidence does not establish reception.",
+    "editorialNote": "Political poster is an address to a viewer; title evidence does not establish reception. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
     "pair": [
       "XX1990.4091",
       "85.4.64.43"

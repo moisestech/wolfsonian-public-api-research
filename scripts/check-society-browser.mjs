@@ -37,8 +37,23 @@ try {
   for(let i=0;i<6;i++){
     await page.locator('.conversation-edge').nth(i).focus();
     await page.keyboard.press('Enter');
-    assert.equal(await page.locator('#conversation-content .bubble.turn').count(),3);
+    assert.ok((await page.locator('#conversation-content .bubble.turn').count())>=3);
   }
+  // Cold-reader contract: each selected pair explains why it speaks,
+  // what it explores, and how the content differs from the previous pair.
+  await page.locator('.conversation-edge').nth(0).focus();
+  await page.keyboard.press('Enter');
+  const firstMeaning=await page.locator('.encounter-orientation').innerText();
+  assert.match(firstMeaning,/Why these two\?/);
+  assert.match(firstMeaning,/What are they exploring\?/);
+  assert.match(firstMeaning,/not proof they met/);
+  await page.locator('.conversation-edge').nth(1).focus();
+  await page.keyboard.press('Enter');
+  const secondMeaning=await page.locator('.encounter-orientation').innerText();
+  assert.notEqual(firstMeaning,secondMeaning,'Different links require an explicit changed explanation');
+  assert.match(secondMeaning,/Previously:/);
+  assert.match(secondMeaning,/Now:/);
+  assert.match(secondMeaning,/How this conversation was written/);
   // Following an edge changes the seed; returning restores the prior inquiry.
   const oldTitle=await page.locator('#atlas-title').innerText();
   await page.locator('[data-follow-object]').click();
@@ -53,8 +68,8 @@ try {
   await page.screenshot({path:new URL('artifacts/archive-society-overview.png',root).pathname,fullPage:true});
   await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
   await page.locator('.conversation-edge').first().focus();await page.keyboard.press('Enter');
-  assert.equal(await page.locator('.turn').count(),3);
-  await page.locator('#conversation-content summary').click();
+  assert.ok((await page.locator('.turn').count())>=3);
+  await page.locator('#conversation-content > details > summary').click();
   assert.match(await page.locator('#conversation-content').innerText(),/Thematic Category|Symbols\/Motifs/);
   await page.screenshot({path:new URL('artifacts/archive-society-conversation.png',root).pathname,fullPage:true});
   const csv=await readFile(new URL('examples/archive-society.synthetic.csv',root),'utf8');
@@ -111,8 +126,47 @@ try {
   await page.waitForFunction(()=>getComputedStyle(document.querySelector('#path-timeline')).display!=='none');
   assert.match(await page.locator('#timeline-list').innerText(),/not a documented relationship|not proof that the histories intersected/i);
   await page.locator('.path-post').first().click();
-  assert.equal(await page.locator('#conversation-content .bubble.turn').count(),3);
+  assert.ok((await page.locator('#conversation-content .bubble.turn').count())>=3);
+  assert.match(await page.locator('.encounter-orientation').innerText(),/Why these two\?/);
+  assert.match(await page.locator('.encounter-orientation').innerText(),/What are they exploring\?/);
   assert.ok(await page.locator('.listener').count()>=2);
+  assert.equal(await page.locator('#space-stop').count(),0,'No duplicate mobile Stop button');
+  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
+  assert.match(await page.locator('#space-play').innerText(),/Play/);
+  await page.evaluate(()=>{
+    const voiceMode=document.querySelector('#voice-mode');
+    voiceMode.value='device';
+    voiceMode.dispatchEvent(new Event('change'));
+    Object.defineProperty(window,'SpeechSynthesisUtterance',{
+      configurable:true,
+      value:class MockUtterance{constructor(text){this.text=text;this.voice=null;}}
+    });
+    Object.defineProperty(window,'speechSynthesis',{
+      configurable:true,
+      value:{
+        getVoices:()=>[{name:'Test local',lang:'en-US',localService:true}],
+        speak:()=>{},
+        cancel:()=>{}
+      }
+    });
+  });
+  await page.locator('#space-play').click();
+  const active=await page.locator('#space-play').getAttribute('aria-pressed');
+  assert.equal(active,'true','Mobile playback should be active; status: '+await page.locator('#voice-status').textContent());
+  assert.equal(await page.locator('#space-play').getAttribute('aria-label'),'Stop conversation');
+  assert.match(await page.locator('#space-play').innerText(),/Stop/);
+  await page.locator('#space-play').click();
+  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
+  assert.equal(await page.locator('#space-play').getAttribute('aria-label'),'Play conversation');
+  assert.match(await page.locator('#space-play').innerText(),/Play/);
+  for(const [id,description] of [
+    ['sheet-close','Close conversation details'],
+    ['prompt-close','Close perspective details'],
+    ['admin-close','Close settings']
+  ]){
+    assert.equal((await page.locator('#'+id).textContent()).trim(),'×');
+    assert.equal(await page.locator('#'+id).getAttribute('aria-label'),description);
+  }
   const railHeight=()=>page.locator('.evidence-rail').evaluate(el=>Math.round(el.getBoundingClientRect().height));
   const beforeSheet=await railHeight();
   await page.locator('#space-evidence').click();
