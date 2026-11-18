@@ -448,8 +448,8 @@ function showEdge(edge){
   render();
   setPanel('conversation');
   if(mobileLayout())setMobileView('space');
-  startSceneEntrance();
   breathDream();
+  startSceneEntrance();
 }
 function onGraphSelect(id){
   if(roomMode()){stop();resetApproval();state.district=null;state.seed=id;render();setPanel('conversation');return;}
@@ -1103,8 +1103,8 @@ function openResearchPath(id){
   closeSheet();
   render();
   setMobileView('space');
-  startSceneEntrance();
   breathDream();
+  startSceneEntrance();
 }
 function render(){
   state.hover=null;
