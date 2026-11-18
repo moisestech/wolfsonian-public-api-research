@@ -41,7 +41,7 @@ test('six checklist records keep separate provenance and stay distinct from the 
 test('curatorial juxtapositions cannot pass the metadata gate and establish no historical relationship', () => {
   assert.equal(DOCUMENTED_HISTORICAL_RELATIONSHIPS.length, 0);
   assert.equal(RELATIONSHIP_TYPES.documented_historical_relationship.id, 'documented_historical_relationship');
-  assert.equal(CURATORIAL_PATHS.length, 15);
+  assert.equal(CURATORIAL_PATHS.length, 19);
   const registryOnly = new Set(['TD1989.19.9', 'XB1991.830']);
   for (const path of CURATORIAL_PATHS) {
     assert.equal(path.relationshipType, 'curatorial_juxtaposition');
@@ -77,7 +77,7 @@ test('curatorial juxtapositions cannot pass the metadata gate and establish no h
     assert.equal(spoken.evidence.length, 0);
   }
   const lines = CURATORIAL_PATHS.map(path => path.turns[2].text);
-  assert.equal(new Set(lines).size, 15);
+  assert.equal(new Set(lines).size, 19);
   assert.throws(() => conversationFor({ accession: '83.2.19', title: 'Futurama' }, { accession: 'XC2024.03.1.1', title: 'Harlem' }, { reasons: [] }, 'family'));
 });
 
@@ -92,8 +92,8 @@ test('the public allowlist still rejects the staff matrix and the saved Lakehous
 });
 
 
-test('three new speakers preserve exact public packet identities and rights boundaries', async () => {
-  const packetIds=['WOLF-002','WOLF-003','WOLF-004'];
+test('new speakers preserve exact public packet identities and rights boundaries', async () => {
+  const packetIds=['WOLF-002','WOLF-003','WOLF-004','WOLF-005','WOLF-006','WOLF-007','WOLF-008'];
   for(const packetId of packetIds) {
     const packet=JSON.parse(await readFile(new URL('../data/public/objects/'+packetId+'.json',import.meta.url),'utf8'));
     assert.equal(packet.research_status,'public-record-only');
@@ -111,4 +111,18 @@ test('three new speakers preserve exact public packet identities and rights boun
   }
   assert.ok(CURATORIAL_PATHS.filter(path=>path.aiAssisted).every(path=>path.turns[1].speakerAccession===path.target.accession));
   assert.equal(CURATORIAL_PATHS.find(path=>path.id==='catalogue-and-globe').sourceLinks.filter(link=>link.label.startsWith('Public research packet')).length,2);
+});
+
+
+test('archive aperture has both themed local masters and an accessible wordmark', async () => {
+  const html=await readFile(new URL('../demo/archive-society/index.html',import.meta.url),'utf8');
+  const css=await readFile(new URL('../demo/archive-society/society.css',import.meta.url),'utf8');
+  assert.match(html,/brand-mark-on-dark.*archive-dreams-aperture-white.svg/);
+  assert.match(html,/brand-mark-on-light.*archive-dreams-aperture-black.svg/);
+  assert.match(css,/data-color-theme="light"/);
+  for(const file of ['archive-dreams-aperture-white.svg','archive-dreams-aperture-black.svg']){
+    const svg=await readFile(new URL('../demo/archive-society/assets/'+file,import.meta.url),'utf8');
+    assert.match(svg,/<svg\s/);
+    assert.match(svg,/viewBox="0 0 1024 1024"/);
+  }
 });

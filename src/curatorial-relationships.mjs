@@ -211,6 +211,10 @@ const PUBLIC_PACKET_RECORDS = Object.freeze({
   'XM1999.108.8': { title:'Catalogue, Machine Age Exposition', packet:'WOLF-003', url:'https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf' },
   '85.7.383a,b': { title:'Vase with lid, Mappemonde [Globe]', packet:'WOLF-004', url:'https://wolfsonian.org/whats-on/digital-experiences/designing-deco/' },
   '86.17.1': { title:'Model, Trylon and Perisphere', packet:'WOLF-001', url:'https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html' },
+  '85.4.72': { title:'Poster, In 1939: The New York World’s Fair', packet:'WOLF-005', url:'https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf' },
+  '86.19.57': { title:'Program, Your World of Tomorrow', packet:'WOLF-006', url:'https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf' },
+  'XB1992.1640': { title:'Booklet, Futurama', packet:'WOLF-007', url:'https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf' },
+  '2012.6.1': { title:'Television, RCA Victor TRK 12', packet:'WOLF-008', url:'https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf' },
 });
 function publicPacketRecord(accession) {
   const entry=PUBLIC_PACKET_RECORDS[accession];
@@ -311,7 +315,35 @@ const BRIDGES=[
     'The catalogue packet does not quote its essays or connect its exhibition to the vase; the vase packet does not establish its reception or exhibition placement.',
     ['My cover can gather many objects under the phrase Machine Age. Is that enough to explain who made them?',
      'My public record names a form designer, a décor designer and a decorator. A single label would make those different tasks disappear.',
-     'Then my category may need a footnote rather than a slogan. Whose names should a visitor look for before calling something modern?'])
+     'Then my category may need a footnote rather than a slogan. Whose names should a visitor look for before calling something modern?']),
+  comparison('poster-and-theme-center','Can a poster invite you into a future that has not happened yet?',
+    publicPacketRecord('85.4.72'),publicPacketRecord('86.17.1'),
+    'An offset-lithograph poster designed in 1937 depicts people lining up for the Trylon and Perisphere, while the theme-center model represents the fair’s structures.',
+    'The published checklist describes the poster’s scene and the model. It does not establish whether viewers of the poster attended the fair or how the design shaped their decisions.',
+    ['I was printed in 1937, and I already show people lining up for a fair still two years away. I make a crowd appear before the crowd arrives.',
+     'I am a model of the Trylon and Perisphere. I can give your imaginary queue a destination, but I cannot tell you who eventually stood in it.',
+     'Then my line is not an attendance record. Whose photographs or tickets could put real people beside my imagined queue?']),
+  comparison('radio-and-television','When does a household become an audience?',
+    publicPacketRecord('2012.6.1'),publicPacketRecord('XX1990.1484'),
+    'A 1939 RCA Victor TRK 12 television and a 1937 Sparton 558-C radio offer two designed forms for receiving media in domestic interiors.',
+    'The packets establish designers, dates and materials, but no shared owner, broadcast schedule, specific audience or household use.',
+    ['I arrive in the record as a television cabinet. People may want to imagine a family gathered around me, but no household is named.',
+     'My glass and brass belong to a radio, not a listening diary. A gleaming surface tells you very little about what someone heard.',
+     'So we are both missing an audience. Would a service record, advertisement or account from a user make either of us less mysterious?']),
+  comparison('poster-and-program','Who gets to say the future is open?',
+    publicPacketRecord('85.4.72'),publicPacketRecord('86.19.57'),
+    'The 1937 promotional poster projects a crowd toward the fair; the 1939 Your World of Tomorrow program belongs to the Theme Center presentation.',
+    'The public packets do not identify poster viewers, attendees, full program text, or evidence that a specific visitor read both items.',
+    ['My picture has a line of people approaching the structures, but their faces do not answer my question: who came?',
+     'I am a program called Your World of Tomorrow. My title can address a reader directly; it cannot prove that every person was equally welcomed.',
+     'I mistook a painted crowd for a public. What sort of record would tell us who actually crossed the threshold?']),
+  comparison('television-and-booklet','Can tomorrow survive being turned into a souvenir?',
+    publicPacketRecord('2012.6.1'),publicPacketRecord('XB1992.1640'),
+    'The RCA Victor TRK 12 is dated 1939; the General Motors Futurama booklet is dated 1940 and associated with the fair exhibit.',
+    'The museum packets do not establish owners, actual viewers, whether the television broadcast the exhibit, or any personal encounter with the booklet.',
+    ['My record dates me to 1939, a television designed to present pictures. Which pictures someone saw through me remains an unanswered question.',
+     'I am a Futurama booklet from 1940. You can hold me after the fair’s promised tomorrow, but holding a booklet is not the same as taking the ride.',
+     'Then I should not invent a broadcast of your exhibit. What surviving account could tell us how either experience was actually received?'])
 ];
 
 export const CURATORIAL_PATHS = Object.freeze([...PATH_DRAFTS,...BRIDGES].map(path => scene({
