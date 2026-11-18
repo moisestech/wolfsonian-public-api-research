@@ -12,6 +12,7 @@ import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
+import { explainEncounter } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -19,7 +20,7 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
   mapMode:'conversation',matrixObjects:MATRIX_OBJECTS,matrixRecords:matrixToRecords(MATRIX_OBJECTS),matrixIndex:null,room:null,district:null,
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
-  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,researchPath:null};
+  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,researchPath:null,lastExplained:null};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
@@ -446,8 +447,10 @@ function paintTimeline(){
     const button=node('button',undefined,'path-post');
     button.type='button';
     button.append(node('span',edgeCategory(edge),'path-category'),node('strong',source.title+' · '+target.title));
-    if(scene.dramaticArc)button.append(node('span',scene.dramaticArc,'path-arc'));
-    if(scene.limits)button.append(node('span',scene.limits,'path-limit'));
+    if(scene.dramaticArc)button.append(node('span','Question: '+scene.dramaticArc,'path-arc'));
+    const lead=edge.reasons[0];
+    button.append(node('span','Linked by shared '+(lead.family==='motif'?'motif':'theme')+': '+lead.value+' · not a documented relationship','path-limit'));
+    button.append(node('span',scene.mode==='CURATED_EDGE_SCENE'?'Written specifically for this pair':'Shared five-turn script, adapted to this pair','path-kind'));
     button.addEventListener('click',()=>{state.researchPath=null;state.edge=edge.id;render();setMobileView('space');});
     list.append(button);
   }
@@ -462,6 +465,29 @@ function paintTimeline(){
     button.addEventListener('click',()=>openResearchPath(path.id));
     list.append(button);
   }
+}
+function addEncounterOrientation(box,source,target,conversation){
+  const lens=LENSES.find(item=>item.id===state.lens);
+  const guide=explainEncounter({source,target,conversation,lensLabel:lens?.label||'Family',previous:state.lastExplained});
+  const section=node('section',undefined,'encounter-orientation');
+  section.setAttribute('aria-label','Why this conversation?');
+  section.append(node('span',guide.type,'encounter-type'));
+  section.append(node('h3',guide.sourceName+' × '+guide.targetName));
+  const reason=node('p',undefined,'encounter-reason');
+  reason.append(node('strong','Why these two? '),document.createTextNode(guide.evidenceBasis));
+  section.append(reason);
+  const thesis=node('p',undefined,'encounter-question');
+  thesis.append(node('strong','What are they exploring? '),document.createTextNode(guide.question));
+  section.append(thesis);
+  const changes=node('p',undefined,'encounter-changes');
+  changes.append(node('strong','What changes when you choose another? '),document.createTextNode(guide.changed));
+  section.append(changes);
+  const details=node('details',undefined,'encounter-method');
+  details.append(node('summary','How this conversation was written'));
+  details.append(node('p',guide.form),node('p',guide.frame),node('p',guide.boundary));
+  section.append(details);
+  box.append(section);
+  state.lastExplained=guide;
 }
 function paintResearchScene(c){
   paintSceneLabel('Curatorial juxtaposition','#e8d5a3','Curatorial juxtaposition. Not a catalog match or a documented meeting.',c.dramaticArc,'RESEARCH PREVIEW · NOT A CATALOG MATCH');
@@ -487,6 +513,7 @@ function renderJuxtaposition(box){
     const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
   }
+  addEncounterOrientation(box,source,target,c);
   box.append(chat);
   const details=node('details');details.append(node('summary','Inspect the reason for this edge'));
   details.append(node('p',c.proposal,'muted'),node('p','This is not a catalog match or a documented meeting.','muted'),node('p',c.limits,'muted'));
@@ -523,7 +550,7 @@ function renderConversation(){
     objectB:{name:target.title,src:avatarFor(target),side:'b'},
     archivist:{name:'Archivist · fictional research voice',src:guide?portraitUrl(guide):'',side:'guide'}
   };
-  if(c.mode!=='CURATED_EDGE_SCENE')box.append(node('p','Reading: '+reader.label+' · these are imagined voices, not historical quotations.','notice'));
+  addEncounterOrientation(box,source,target,c);
   for(const turn of c.turns){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
