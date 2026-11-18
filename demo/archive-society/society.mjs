@@ -6,7 +6,7 @@ import { reconcileLookup } from '../../src/archive-evidence.mjs';
 import { applyLakehouseFields, conversationRecords, lookupSnapshots } from '../../src/lakehouse-matches.mjs';
 import { MATRIX_OBJECTS, layoutRoom, matrixToRecords } from '../../src/matrix-room.mjs';
 import { localImageUrl } from '../../src/local-images.mjs';
-import { OPENING_ACCESSION } from '../../src/presentation-pairs.mjs';
+import { OPENING_ACCESSION, PRESENTATION_PAIRS } from '../../src/presentation-pairs.mjs';
 import { withPublicAnchorFallback } from '../../src/object-lens-core.mjs';
 import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
@@ -404,6 +404,7 @@ function mobileLayout(){return window.matchMedia('(max-width: 800px)').matches;}
 function setMobileView(view){
   document.body.classList.remove('show-timeline','show-space','show-room');
   document.body.classList.add('show-'+view);
+  if(view==='timeline'){stop();paintTimeline();$('questions-back').focus();}
   if(view==='room')requestAnimationFrame(()=>stage.resize());
 }
 function placeZoomStage(){
@@ -441,37 +442,55 @@ function paintListeners(){
 function paintTimeline(){
   const list=$('timeline-list');if(!list)return;
   list.replaceChildren();
-  const source=record();
-  const title=$('timeline-title');
-  if(title)title.textContent='Choose a question';
-  const edges=state.researchPath&&!roomMode()
-    ? societyView(state.records,state.seed,state.lens,{atlas:false,theme:$('theme').value}).edges
-    : (state.view?.edges||[]);
-  if(!edges.length)list.append(node('p','No shared category in this view.'));
-  for(const edge of edges){
-    const target=viewingRecords().find(item=>item.accession===edge.target);
-    if(!source||!target||!edge.reasons?.length)continue;
-    const scene=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});
-    const episode=conversationEpisode({source,target,conversation:scene});
-    const button=node('button',undefined,'path-post');
-    button.type='button';
-    button.append(node('span',episode.label,'path-kind'),node('strong',episode.question));
-    button.append(node('span',episode.participants.map(p=>p.shortName).join(' × '),'path-arc'));
-    button.append(node('span',episode.rationale,'path-limit'));
-    button.addEventListener('click',()=>{showEdge(edge);setMobileView('space');});
-    list.append(button);
+  if(!document.body.classList.contains('show-timeline'))return;
+  $('timeline-title').textContent='Choose a question';
+  const records=new Map(state.records.map(record=>[record.accession,record]));
+  const seeds=new Set([state.seed,...PRESENTATION_PAIRS.flatMap(pair=>[pair.source,pair.target])]);
+  const seen=new Set(), scenes=[], prompts=[];
+  for(const accession of seeds){
+    const source=records.get(accession);
+    if(!source)continue;
+    for(const edge of societyView(state.records,accession,state.lens).edges){
+      const key=[edge.source,edge.target].sort().join('::');
+      if(seen.has(key))continue;
+      seen.add(key);
+      const target=records.get(edge.target);
+      const episode=conversationEpisode({source,target,conversation:conversationFor(source,target,edge,state.lens)});
+      const entry={episode,open:()=>{
+        state.seed=accession;
+        state.mapMode='conversation';
+        $('theme').value='';
+        $('atlas-mode').checked=false;
+        $('seed').value=accession;
+        showEdge(edge);
+      }};
+      (episode.mode==='CURATED_SCRIPT'?scenes:prompts).push(entry);
+    }
   }
-  if(roomMode())return;
-  for(const path of CURATORIAL_PATHS){
-    const button=node('button',undefined,'path-post research-path');
-    button.type='button';
-    button.dataset.path=path.id;
-    const episode=conversationEpisode({source:path.source,target:path.target,conversation:juxtapositionConversation(path)});
-    button.append(node('span','Artist-proposed comparison','path-kind'),node('strong',episode.question));
-    button.append(node('span',episode.participants.map(p=>p.shortName).join(' × '),'path-arc'));
-    button.append(node('span',path.proposal,'path-limit'));
-    button.addEventListener('click',()=>openResearchPath(path.id));
-    list.append(button);
+  const comparisons=CURATORIAL_PATHS.map(path=>({
+    episode:conversationEpisode({source:path.source,target:path.target,conversation:juxtapositionConversation(path)}),
+    open:()=>openResearchPath(path.id)
+  }));
+  for(const [label,entries] of [['Authored scenes',scenes],['Artist-proposed exchanges',comparisons],['Research prompts',prompts]]){
+    if(!entries.length)continue;
+    const section=node('section');
+    section.append(node('h2',label+' · '+entries.length,'directory-heading'));
+    for(const {episode,open} of entries){
+      const button=node('button',undefined,'path-post');
+      button.type='button';
+      if(episode.id===state.episode?.id)button.setAttribute('aria-current','true');
+      button.append(node('strong',episode.question),node('span',episode.participants.map(p=>p.shortName).join(' × '),'path-arc'));
+      if(button.hasAttribute('aria-current'))button.append(node('span','Current question','path-kind'));
+      button.addEventListener('click',()=>{
+        setMobileView('space');
+        open();
+        setPanel('conversation');
+        document.querySelector('.rail-scroll').scrollTop=0;
+        $('room-question').focus();
+      });
+      section.append(button);
+    }
+    list.append(section);
   }
 }
 function addEncounterOrientation(box,source,target,conversation){
@@ -664,6 +683,7 @@ function renderRecord(){
   box.replaceChildren();
   if(state.episode){
     const picker=node('div',undefined,'record-object-picker');
+    picker.setAttribute('role','group');picker.setAttribute('aria-label','Choose an object record');
     for(const p of state.episode.participants){
       const button=node('button',p.shortName);button.type='button';button.setAttribute('aria-pressed',String(p.accession===r.accession));
       button.addEventListener('click',()=>openEpisodeRecord(p.accession));picker.append(button);
@@ -672,11 +692,6 @@ function renderRecord(){
   }
   const frame=node('div',undefined,'record-frame');
   if(photo(r)){const img=node('img');img.src=photo(r);img.alt='Locally supplied image matched to '+r.accession;frame.append(img);}
-  const toggle=node('button','','record-toggle');
-  toggle.type='button';toggle.setAttribute('aria-expanded','true');toggle.setAttribute('aria-label','Hide the record');
-  const icon=svg('svg',{viewBox:'0 0 24 24','aria-hidden':'true'});
-  icon.append(svg('path',{d:'M6 7h12M6 12h12M6 17h8',fill:'none',stroke:'currentColor','stroke-width':'1.6'}));
-  toggle.append(icon);
   const overlay=node('div',undefined,'record-overlay');
   if(r.researchOnly)overlay.append(node('p','Published checklist record. No approved photograph and no Lakehouse match.','muted'));
   if(r.source!=='lakehouse')overlay.append(node('span',r.source==='invented'?'INVENTED EXAMPLE':r.source==='public-packet'?'PUBLIC PACKET · IDENTITY ONLY':r.source==='research-preview'?'PUBLISHED CHECKLIST · RESEARCH PREVIEW':r.source==='matrix'?'PHOTOGRAPHED MATRIX':'LOCAL CSV · SOURCE INPUT','evidence-type'));
@@ -690,13 +705,7 @@ function renderRecord(){
   if(r.catalogDescription)pair(list,'Description',r.catalogDescription);
   pair(list,'Image source',photo(r)?'Local file · permission and credit remain with the source':'Illustrative card · no collection photo loaded');
   overlay.append(list);
-  toggle.addEventListener('click',()=>{
-    overlay.hidden=!overlay.hidden;
-    const open=!overlay.hidden;
-    toggle.setAttribute('aria-label',open?'Hide the record':'Show the record');
-    toggle.setAttribute('aria-expanded',String(open));
-  });
-  frame.append(toggle,overlay);
+  frame.append(overlay);
   box.append(frame);
   $('lookup').disabled=r.source==='invented'||state.lookupBusy;renderSnapshot();
 }
@@ -1108,6 +1117,7 @@ $('space-room')?.addEventListener('click',()=>{
   setMobileView('room');
 });
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
+$('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();});
 $('space-leave')?.addEventListener('click',()=>setMobileView('timeline'));
 $('questions-back')?.addEventListener('click',()=>setMobileView('space'));
 const mobileMedia=window.matchMedia('(max-width: 800px)');
@@ -1122,7 +1132,7 @@ for(const id of ['layer-accession','layer-box','layer-box-sim'])$(id).addEventLi
 $('atlas-mode').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;render();stage.fit();});
 $('theme').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;render();});
 $('veil').addEventListener('input',renderGraph);
-document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>setPanel(b.dataset.panel)));
+document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>{setPanel(b.dataset.panel);if(mobileLayout())setMobileView('space');}));
 $('voice-mode').addEventListener('change',()=>{stop();resetApproval();$('approval-box').hidden=$('voice-mode').value!=='elevenlabs';});
 $('play').addEventListener('click',()=>{if(state.playing){stop();message('voice-status','Playback stopped.');return;}play();});$('stop').addEventListener('click',()=>{stop();message('voice-status','Playback stopped.');});$('export').addEventListener('click',saveConversation);
 const sourceNote=$('source-note'), sourceInfo=$('source-info');

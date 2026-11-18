@@ -152,11 +152,11 @@
       <span id="scene-tag" class="chat-topic rail-theme" hidden></span>
       <span id="counts"></span>
     </button>
-    <button type="button" id="space-leave" class="space-leave">← All questions</button>
+    <button type="button" id="space-leave" class="space-leave">Browse questions</button>
   </div>
   <section id="room-header" class="room-header" aria-labelledby="room-question" hidden>
     <p class="room-kicker"><span>IMAGINED EXCHANGE</span><span id="room-kind"></span></p>
-    <h1 id="room-question"></h1>
+    <h1 id="room-question" tabindex="-1"></h1>
     <p id="room-description" class="room-description">A conversation between two objects</p>
     <div id="room-participants" class="room-participants" aria-label="Object speakers"></div>
     <button type="button" id="room-rationale" class="room-rationale" aria-label="Why these two? Open evidence"></button>
@@ -207,7 +207,7 @@
       </div>
     </div>
     <section id="conversation-panel"><div id="conversation-content"></div></section>
-    <section id="record-panel" hidden><div id="record-content"></div></section>
+    <section id="record-panel" hidden><button type="button" id="record-return">← Back to conversation</button><div id="record-content"></div></section>
   </div>
   </div>
   <div id="voice-controls" class="audio-bar">

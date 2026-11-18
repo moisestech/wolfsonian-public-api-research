@@ -27,21 +27,32 @@
     .status{margin:0 0 8px;font:600 16px/1.4 ui-monospace,monospace;letter-spacing:.04em;color:#bdbdbd}
     .object{margin:8px 0 16px;font:400 32px/1.25 Georgia,serif}
     .credit{margin:28px 0 0;padding-top:18px;border-top:1px solid #333;font:600 16px/1.4 system-ui,sans-serif;letter-spacing:.06em;color:#c8c8c8}
+    @media(max-width:700px){
+      body{font-size:17px;line-height:1.55}
+      main{width:auto;padding:16px 20px calc(40px + env(safe-area-inset-bottom));overflow-wrap:anywhere}
+      .return{display:inline-flex;align-items:center;min-height:44px;margin-bottom:18px;font-size:15px;color:#bce4cf}
+      h1{font-size:clamp(34px,9vw,48px);margin-bottom:16px}
+      h2{font-size:28px;margin:32px 0 12px}
+      h3,.prompt,.object,.questions li{font-size:22px}
+      .lead,.steps li{font-size:20px}
+      .eyebrow,.credit,.status{font-size:12px}
+      .steps{margin-bottom:20px}
+    }
   </style>
 </head>
 <body>
 <main>
-  <a class="return" href="../archive-society/">The Archive Dreams in Public</a>
+  <a class="return" href="../archive-society/">← Back to conversations</a>
   <p class="eyebrow">THE ARCHIVE DREAMS IN PUBLIC · AN ARTIST-AUTHORED ENCOUNTER</p>
   <h1>What could two objects say to each other?</h1>
   <p class="lead">Follow a connection, listen to three fictional perspectives, and see what the record actually tells us.</p>
   <ol class="steps">
-    <li>Meet an object</li>
-    <li>Hear a conversation</li>
-    <li>Check the evidence</li>
+    <li>Choose a question</li>
+    <li>Read or play the imagined exchange</li>
+    <li>Open either object’s record</li>
   </ol>
   <p class="prompt">How did this change ordinary daily life?</p>
-  <p class="status">SAVED CATALOG + STAFF TAGS · 7 objects in this view</p>
+  <p class="status">EXAMPLE FROM THE COLLECTION</p>
   <p class="object">Making the Engine · 85.4.64.43</p>
   <p>Connected through the shared symbol “Machines”. It is a clue to explore, not proof that these objects met.</p>
   <p class="credit">Fictional readings</p>

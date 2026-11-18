@@ -18,6 +18,12 @@ const ROOM_QUESTIONS=new Map([
   ['opening-skilled-work-engine','Whose work makes the machine?'],
   ['machines-vote-engine','Does being seen mean having a say?']
 ]);
+const RESEARCH_QUESTIONS=new Map([
+  ['TD1989.317.66::TD1990.340.141','Who gets to represent women’s work?'],
+  ['XX1990.2907::XX1990.3843','What does a war poster ask us to believe?'],
+  ['XX1990.3275::XX1990.3277','What can a myth sell?'],
+  ['TD1990.340.146::XX1990.2880','Who is invited to stand behind a flag?']
+]);
 export function conversationEpisode({source,target,conversation}={}){
   if(!source?.accession||!target?.accession||!conversation)throw Error('A selected source, target and conversation are required.');
   const authored=['CURATED_EDGE_SCENE','CURATORIAL_JUXTAPOSITION'].includes(conversation.mode);
@@ -26,12 +32,13 @@ export function conversationEpisode({source,target,conversation}={}){
   const family=reason?.family==='motif'?'motif':reason?.family==='theme'?'theme':'tag';
   const term=short(reason?.value,80);
   const names=[source,target].map(item=>ROOM_NAMES.get(item.accession)||short(item.title.match(/\[([^\]]{3,65})\]/)?.[1]||item.title,65));
+  const pairId=[source.accession,target.accession].sort().join('::');
   const question=ROOM_QUESTIONS.get(conversation.sceneId)||
     (authored?(conversation.dramaticArc?.endsWith('?')?conversation.dramaticArc:conversation.nextPrompt):
-      'What could “'+term+'” connect—and what might it miss?')||'What happens when we compare these records?';
+      RESEARCH_QUESTIONS.get(pairId)||'What could “'+term+'” connect—and what might it miss?')||'What happens when we compare these records?';
   return Object.freeze({
     // A reading lens does not change the identity of a hand-written scene.
-    id:conversation.sceneId||[source.accession,target.accession].sort().join('::'),
+    id:conversation.sceneId||pairId,
     question:short(question,200),
     participants:Object.freeze([source,target].map((item,i)=>Object.freeze({accession:item.accession,title:item.title,shortName:names[i],role:i?'objectB':'objectA'}))),
     mode:authored?'CURATED_SCRIPT':'RESEARCH_PROMPT',

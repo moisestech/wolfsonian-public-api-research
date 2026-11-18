@@ -603,3 +603,20 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
 @media(prefers-reduced-motion:reduce){
   .evidence-rail *,#room-participants *{scroll-behavior:auto;animation:none!important;transition:none!important}
 }
+
+.path-timeline{flex-direction:column}
+.directory-heading{margin:16px 18px 6px;font:650 16px/1.4 system-ui,sans-serif;color:#bce4cf}
+.path-post[aria-current=true]{border-inline-start:3px solid #bce4cf;background:#20352e}
+#record-return{min-height:44px;background:transparent;border:0;color:#bce4cf;font:600 15px/1.4 system-ui,sans-serif}
+.evidence-rail.show-record{height:auto;max-height:100%;min-height:0}
+.evidence-rail.show-record .rail-scroll{display:block;overflow:auto}
+.evidence-rail.show-record #record-panel,.evidence-rail.show-record #record-content{display:block;min-width:0}
+.evidence-rail #record-content h2{font-size:clamp(24px,5vw,34px);overflow-wrap:anywhere}
+.evidence-rail #record-content dl,.evidence-rail #record-content dd{font:400 16px/1.5 system-ui,sans-serif}
+.evidence-rail #record-content dt{font:650 14px/1.4 system-ui,sans-serif}
+.record-object-picker button{min-width:0;overflow-wrap:anywhere}
+.record-overlay .evidence-type,.record-overlay .muted{font-size:14px}
+@media(max-width:800px){
+  .evidence-rail.show-record .space-bar{display:none}
+  .evidence-rail.show-record .rail-scroll{padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+}
