@@ -744,3 +744,30 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
   #space-bar .space-tab svg{width:21px;height:21px}
 }
 @media(min-width:801px){#space-bar.space-bar{display:none!important}}
+
+
+/* Editorial title: the project name stays fixed while the prominent line
+ * changes in place. Restrained motion and a stable two-line mobile footprint
+ * keep the conversation and its navigation as the principal experience. */
+.brand-area{display:flex;align-items:center;flex:1 1 auto;gap:8px;min-width:0}
+.brand-area .wordmark{display:flex;flex:1 1 auto;gap:12px;min-width:0;max-width:100%;align-items:center;letter-spacing:0}
+.brand-copy{display:flex;flex:1;flex-direction:column;gap:3px;min-width:0}
+.brand-name{display:block;font:700 10px/1.3 ui-monospace,monospace;letter-spacing:.14em;color:#a6ddc9}
+.brand-phrase{display:block;max-width:100%;font:650 clamp(21px,2.3vw,34px)/1.12 system-ui,sans-serif;letter-spacing:-.035em;color:#f3f6f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:1;transform:translateY(0);transition:opacity .22s ease,transform .22s ease}
+.brand-phrase.is-changing{opacity:0;transform:translateY(-.22em)}
+#editorial-toggle{display:grid;place-items:center;flex:0 0 36px;width:36px;min-width:36px;height:36px;min-height:36px;padding:0;margin:0;border:1px solid #526a60;border-radius:50%;background:transparent;color:#d0e7d8;font:650 15px/1 system-ui,sans-serif;cursor:pointer}
+#editorial-toggle:hover,#editorial-toggle:focus-visible{border-color:#a6ddc9;background:#284338}
+@media(max-width:800px){
+  .brand-area{width:100%;gap:5px}
+  .brand-area .wordmark{font-size:inherit;gap:8px}
+  .brand-copy{gap:2px}
+  .brand-name{font-size:9px}
+  .brand-phrase{font-size:clamp(18px,4.8vw,23px);white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;min-height:1.12em;max-height:2.24em}
+  #editorial-toggle{flex-basis:32px;width:32px;min-width:32px;height:32px;min-height:32px}
+}
+@media(max-width:700px){.brand-area{align-self:stretch}.brand-area .wordmark{width:auto}}
+@media(max-width:360px){.brand-phrase{font-size:18px}}
+@media(prefers-reduced-motion:reduce){
+  .brand-phrase{transition:none!important;transform:none!important;opacity:1!important}
+  #editorial-toggle{display:none}
+}
