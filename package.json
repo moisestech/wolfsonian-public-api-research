@@ -16,6 +16,7 @@
     "build:public": "npm run build:demo && node scripts/assemble-public-site.mjs public-site --require-console",
     "test": "node --test",
     "demo:society": "node scripts/serve-archive-society.mjs",
+    "lakehouse:probe": "node scripts/probe-lakehouse-discovery.mjs",
     "test:society": "node --test test/archive-society.test.mjs test/archive-services.test.mjs",
     "check:society:browser": "node scripts/check-society-browser.mjs"
   },

@@ -10,6 +10,9 @@ on:
       - 'src/curated-edge-scenes.mjs'
       - 'src/conversation-orientation.mjs'
       - 'src/scene-performance.mjs'
+      - 'src/lakehouse-local-discovery.mjs'
+      - 'scripts/probe-lakehouse-discovery.mjs'
+      - 'test/lakehouse-local-discovery.test.mjs'
       - 'test/scene-performance.test.mjs'
       - 'server/archive-*.mjs'
       - 'api/archive-society/**'
@@ -48,11 +51,13 @@ jobs:
           node --check src/conversation-orientation.mjs
           node --check src/scene-performance.mjs
           node --check src/archive-evidence.mjs
+          node --check src/lakehouse-local-discovery.mjs
+          node --check scripts/probe-lakehouse-discovery.mjs
           node --check server/archive-services.mjs
           node --check scripts/serve-archive-society.mjs
           node --check scripts/check-society-browser.mjs
-      - name: Run discovery tests
-        run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
+      - name: Run discovery tests, including private local Lakehouse integration
+        run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs test/lakehouse-local-discovery.test.mjs
       - name: Run archive society and service tests
         run: |
           npm run test:society

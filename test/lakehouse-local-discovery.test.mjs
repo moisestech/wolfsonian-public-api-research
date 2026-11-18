@@ -100,7 +100,7 @@ test('unbounded API output, wrong content type and HTTP failures stop before sto
   await assert.rejects(requestProbePage({limit:2,fetchImpl:tooMany}),/more rows/);
   await assert.rejects(requestProbePage({limit:2,fetchImpl:()=>Promise.resolve(new Response('<html>test</html>',{headers:{'content-type':'text/html'}}))}),/content-type/);
   await assert.rejects(requestProbePage({limit:2,fetchImpl:()=>Promise.resolve(new Response('Forbidden',{status:403}))}),/HTTP 403/);
-  await assert.rejects(requestProbePage({limit:2,fetchImpl:()=>Promise.resolve(new Response('x'.repeat(MAX_RESPONSE_BYTES+1),{headers:{'content-type':'application/json'}}))}),/too large/);
+  await assert.rejects(requestProbePage({limit:2,fetchImpl:()=>Promise.resolve(new Response('x'.repeat(MAX_RESPONSE_BYTES+1),{headers:{'content-type':'application/json'}}))}),/(too large|exceeds local probe byte cap)/);
 });
 test('offline preview and mocked live probe produce private, ignored, fully indexed files',async()=>{
   const tmp=await mkdtemp(join(tmpdir(),'wolfsonian-probe-'));
