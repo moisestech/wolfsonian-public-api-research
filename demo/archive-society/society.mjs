@@ -163,7 +163,10 @@ function stop(){
   window.speechSynthesis?.cancel();cancelDeviceSpeech?.();cancelDeviceSpeech=null;state.playing=false;setPlayDisabled(!state.conversation);
   document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));
   markSpeaker('');
-  $('voice-controls')?.classList.remove('playing');
+  const audioBar=$('voice-controls');
+  audioBar?.classList.remove('playing');
+  if(audioBar)audioBar.dataset.speaker='';
+  if($('audio-speaker'))$('audio-speaker').textContent='Ready to listen';
   stage.setSpeaking('');
 }
 function changeSeed(id){stop();resetApproval();state.researchPath=null;state.seed=id;state.edge=null;
@@ -491,7 +494,10 @@ function placeRoomHeader(){
 function syncMobileLayout(){
   placeZoomStage();
   placeRoomHeader();
-  if(!mobileLayout()){document.body.classList.remove('show-timeline','show-space','show-room');return;}
+  if(!mobileLayout()){
+    if($('mobile-perspective-sheet')?.open)$('mobile-perspective-sheet').close();
+    document.body.classList.remove('show-timeline','show-space','show-room');return;
+  }
   if(!document.body.classList.contains('show-timeline')&&!document.body.classList.contains('show-space')&&!document.body.classList.contains('show-room'))document.body.classList.add('show-space');
   if(document.body.classList.contains('show-room'))requestAnimationFrame(()=>stage.resize());
   syncMobileNavigation();
@@ -1026,6 +1032,14 @@ async function service(path,options={}){
   if(!response.ok){let error;try{error=await response.json();}catch{}throw new Error(error?.message||'Server unavailable ('+response.status+').');}
   return response;
 }
+function updateSpeakingAudio(turn,index,count){
+  const bar=$('voice-controls');
+  const person=state.episode?.participants?.find(participant=>participant.role===turn.role);
+  const speaker=person?.shortName||(turn.role==='archivist'?'Archivist':turn.speaker||'Voice');
+  if(bar){bar.dataset.speaker=turn.role||'';bar.classList.add('playing');}
+  if($('audio-speaker'))$('audio-speaker').textContent=speaker+' speaking';
+  if($('audio-elapsed'))$('audio-elapsed').textContent='Turn '+(index+1)+' of '+count;
+}
 async function play(){
   if(!state.conversation)return;stop();const session=playback;
   const conversation=state.conversation,mode=$('voice-mode').value;
@@ -1042,8 +1056,7 @@ async function play(){
     message('voice-status','');
     for(const [i,turn]of conversation.turns.entries()){
       if(session!==playback)return;
-      $('voice-controls')?.classList.add('playing');
-      if($('audio-elapsed'))$('audio-elapsed').textContent='Turn '+(i+1)+' of '+conversation.turns.length;
+      updateSpeakingAudio(turn,i,conversation.turns.length);
       stage.setSpeaking(turn.role==='objectA'?conversation.source:turn.role==='objectB'?conversation.target:'');
       markSpeaker(turn.role);
       document.querySelectorAll('#conversation-content .turn').forEach((el,index)=>el.classList.toggle('speaking',index===i));
@@ -1073,7 +1086,7 @@ async function play(){
     }
     if(session===playback && !/not enabled|disabled|ELEVENLABS_DISABLED/i.test($('voice-status').textContent))message('voice-status','');
   }catch(error){if(session===playback)message('voice-status',error.message);}
-  finally{if(session===playback){state.playing=false;setPlayDisabled(false);document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));$('voice-controls')?.classList.remove('playing');stage.setSpeaking('');markSpeaker('');}}
+  finally{if(session===playback){state.playing=false;setPlayDisabled(false);document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));const bar=$('voice-controls');bar?.classList.remove('playing');if(bar)bar.dataset.speaker='';if($('audio-speaker'))$('audio-speaker').textContent='Ready to listen';stage.setSpeaking('');markSpeaker('');}}
 }
 function speakOnDevice(turn){
   return new Promise((resolve,reject)=>{
@@ -1101,6 +1114,11 @@ function paintReading(){
   const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   $('reading-portrait').src=portraitUrl(card);
   $('reading-name').textContent=card.label;
+  for(const id of ['room','feed']){
+    if($(id+'-perspective-name'))$(id+'-perspective-name').textContent=card.label;
+    const toggle=$(id+'-perspective-toggle');
+    if(toggle)toggle.setAttribute('aria-label','Choose perspective, currently '+card.label);
+  }
   for(const button of document.querySelectorAll('[data-lens]'))button.setAttribute('aria-pressed',String(button.dataset.lens===state.lens));
 }
 function closePromptSheet(){
@@ -1160,6 +1178,39 @@ $('reading-popover').replaceChildren(...LENSES.map(lens=>{
   const img=node('img');img.src=portraitUrl(card);img.alt='';
   button.append(img,node('span',lens.label));
   button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));closeSheet();});
+  return button;
+}));
+const mobilePerspectiveSheet=$('mobile-perspective-sheet');
+let mobilePerspectiveOpener=null;
+function closeMobilePerspectives(){if(mobilePerspectiveSheet?.open)mobilePerspectiveSheet.close();}
+function openMobilePerspectives(opener){
+  if(!mobileLayout()||!mobilePerspectiveSheet)return;
+  mobilePerspectiveOpener=opener;
+  closeSheet();
+  mobilePerspectiveSheet.showModal();
+  mobilePerspectiveSheet.querySelector('[data-lens="'+state.lens+'"]')?.focus();
+}
+for(const id of ['room','feed']){
+  const button=$(id+'-perspective-toggle');
+  button?.addEventListener('click',()=>openMobilePerspectives(button));
+}
+$('mobile-perspective-close')?.addEventListener('click',closeMobilePerspectives);
+mobilePerspectiveSheet?.addEventListener('click',event=>{if(event.target===mobilePerspectiveSheet)closeMobilePerspectives();});
+mobilePerspectiveSheet?.addEventListener('close',()=>{mobilePerspectiveOpener?.focus({preventScroll:true});mobilePerspectiveOpener=null;});
+$('mobile-perspective-choices')?.replaceChildren(...LENSES.map(lens=>{
+  const card=CARD_BY_ID.get(lens.id);
+  const button=node('button',undefined,'mobile-perspective-choice');
+  button.type='button';button.dataset.lens=lens.id;button.setAttribute('aria-pressed',String(lens.id===state.lens));
+  const portrait=node('img');portrait.src=portraitUrl(card);portrait.alt='';
+  const copy=node('span',undefined,'mobile-perspective-copy');
+  copy.append(node('strong',lens.label),node('small',lens.question));
+  const check=node('span','✓','mobile-perspective-selected');check.setAttribute('aria-hidden','true');
+  button.append(portrait,copy,check);
+  button.addEventListener('click',()=>{
+    closeMobilePerspectives();
+    $('lens').value=lens.id;
+    $('lens').dispatchEvent(new Event('change'));
+  });
   return button;
 }));
 document.querySelector('.finder').addEventListener('submit',event=>event.preventDefault());
