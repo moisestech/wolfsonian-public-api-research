@@ -636,10 +636,12 @@ function renderRoomHeader(source,target,c){
       const img=node('img');img.src=visual.src;img.alt='';img.loading='lazy';img.decoding='async';
       img.addEventListener('error',placeholder,{once:true});media.append(img);
     }else placeholder();
+    // The card presents the artwork itself; accession and image provenance
+    // remain available in the record/evidence views and accessible button name.
     const metadata=node('span',undefined,'object-portrait-meta');
-    metadata.append(node('small',(i?'02':'01')+' · '+visual.label,'speaker-status'),
-      node('strong',p.shortName),
-      node('span',p.accession+' · Inspect record ↗','object-accession'));
+    const arrow=node('span','↗','object-open-arrow');
+    arrow.setAttribute('aria-hidden','true');
+    metadata.append(node('strong',p.shortName),arrow);
     inspect.append(media,metadata);
     inspect.addEventListener('click',()=>openEpisodeRecord(p.accession));
     card.append(inspect);
