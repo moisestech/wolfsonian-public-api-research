@@ -39,6 +39,8 @@ try {
    assert.equal(await page.locator('#room-participants .object-portrait-media').count(),2);
    assert.equal(await page.locator('#room-participants .object-portrait-meta').count(),2);
   assert.equal(await page.locator('#room-participants .object-open-arrow').count(),2);
+  assert.equal(await page.locator('#scene-replay').getAttribute('aria-label'),'Replay scripted exchange without audio');
+  assert.equal(await page.locator('#scene-replay').isDisabled(),false);
   const cardCopy=await page.locator('#room-participants .object-inspect').allInnerTexts();
   assert.ok(cardCopy.every(text=>!(/Collection image|Artist diagram|Record only|Inspect record|^0[12]\s*·/i.test(text))),
     'Card titles should not be crowded by format, serial numbers or record instructions');
@@ -49,6 +51,17 @@ try {
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
   assert.equal(voiceRequests.length,0,'No autoplay or unsolicited provider calls');
   assert.equal(await page.locator('#conversation-content .chat .turn').count(),5,'Complete authored transcript remains in DOM');
+  // The preview is user-triggered and silent; it does not fake a live model or
+  // hide lines to produce artificial streaming.
+  await page.locator('#scene-replay').click();
+  await page.waitForFunction(()=>document.querySelector('#scene-replay')?.getAttribute('aria-pressed')==='true');
+  await page.waitForFunction(()=>document.querySelector('#conversation-content .turn.previewing'));
+  assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
+  assert.equal(voiceRequests.length,0,'Silent choreography must not send audio requests');
+  assert.equal(await page.locator('#conversation-content .chat .turn').count(),5);
+  await page.waitForFunction(()=>document.querySelector('#scene-replay')?.getAttribute('aria-pressed')==='false');
+  assert.equal(await page.locator('.room-participant.previewing, .turn.previewing').count(),0);
+
   assert.equal(await page.locator('.encounter-orientation').count(),0);
   assert.equal(await page.locator('#conversation-content>details').count(),0);
   await screenshot('room-1280');
@@ -328,6 +341,7 @@ try {
   // 200% desktop zoom has half the CSS viewport. Check reflow and reachability.
   await open();await page.setViewportSize({width:640,height:450});
   await page.emulateMedia({reducedMotion:'reduce'});
+  assert.equal(await page.locator('#scene-replay').isVisible(),false,'Reduce-motion visitors use static text without a replay effect');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   await page.locator('#conversation-content .turn').last().scrollIntoViewIfNeeded();
   assert.ok(await page.locator('#conversation-content .turn').last().evaluate(el=>{const b=el.getBoundingClientRect();return b.top>=0&&b.bottom<=innerHeight;}));

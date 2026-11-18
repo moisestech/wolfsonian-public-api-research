@@ -960,3 +960,30 @@ html[data-color-theme="light"] .room-participant .object-more{
   background:#d8e4d8;color:#205740;border:0;border-top:1px solid #abbfab
 }
 html[data-color-theme="light"] .object-portrait-media.is-diagram{background:#e4e4d8}
+
+
+/* Museum-responsible scene choreography: the source text never disappears.
+   Previewing is deliberately NOT the same class as genuinely speaking audio. */
+#scene-replay.object-cast-link{width:44px;height:44px;min-width:44px;min-height:44px;
+  padding:0;pointer-events:auto;cursor:pointer;font-size:24px;
+  background:#112f24;color:#d9f5e4;border:1px solid #a4c7b6;
+  transition:border-color .18s ease,box-shadow .18s ease}
+#scene-replay.object-cast-link:focus-visible{outline:3px solid #e6b38b;outline-offset:3px}
+#scene-replay.object-cast-link[aria-pressed="true"]{border-color:#bce4cf;box-shadow:0 0 0 4px rgba(132,204,171,.15)}
+#scene-replay.object-cast-link:disabled{opacity:.5;cursor:default}
+.room-participant.previewing{border-color:#bce4cf;box-shadow:inset 0 0 0 2px #bce4cf}
+#conversation-content .bubble.turn.previewing .say{
+  outline:2px solid #bce4cf;outline-offset:2px;
+}
+#conversation-content .bubble.turn.previewing .avatar{box-shadow:0 0 0 2px #bce4cf}
+html[data-color-theme="light"] #scene-replay.object-cast-link{
+  background:#f2f4ee;color:#1d624c;border-color:#a4bcab
+}
+html[data-color-theme="light"] .room-participant.previewing{border-color:#24775c;box-shadow:inset 0 0 0 2px #24775c}
+html[data-color-theme="light"] #conversation-content .bubble.turn.previewing .say{outline-color:#24775c}
+@media(prefers-reduced-motion:reduce){
+  #scene-replay.object-cast-link{display:none!important}
+  .room-participant.previewing,#conversation-content .bubble.turn.previewing .say{
+    transition:none!important;animation:none!important;
+  }
+}

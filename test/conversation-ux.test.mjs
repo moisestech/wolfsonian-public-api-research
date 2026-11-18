@@ -159,3 +159,21 @@ test('entering a scripted room stages a brief non-audio entrance with reduced-mo
  assert.match(app,/animate\(element,\[\{opacity:\.35/);
  assert.match(app,/cancelSceneEntrance\(\);\n  playback\+\+/);
 });
+
+
+test('silent scene preview uses a separate role state from actual audio playback',async()=>{
+ const app=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
+ const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
+ assert.match(app,/import \{ scriptedScenePlan \}/);
+ assert.match(app,/function replayScriptedScene\(\)/);
+ assert.match(app,/function cancelScriptedPreview\(\)/);
+ assert.match(app,/const replay=node\('button','↻','object-cast-link'\)/);
+ assert.match(app,/replay\.setAttribute\('aria-label','Replay scripted exchange without audio'\)/);
+ assert.match(app,/replay\.disabled=episode\.mode!=='CURATED_SCRIPT'/);
+ assert.match(app,/replay\.addEventListener\('click',/);
+ assert.match(app,/replayScriptedScene\(\);\n  \}\);\n\}/);
+ assert.match(app,/if\(name==='record'\)cancelSceneEntrance\(\)/);
+ assert.match(css,/\.room-participant\.previewing/);
+ assert.match(css,/\.bubble\.turn\.previewing/);
+ assert.match(css,/prefers-reduced-motion:reduce/);
+});
