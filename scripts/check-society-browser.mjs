@@ -48,7 +48,8 @@ try {
   assert.equal(await page.locator('.turn').count(),5);
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
   assert.equal(voiceRequests.length,0,'No autoplay or unsolicited provider calls');
-  assert.equal(await page.locator('.encounter-orientation').getAttribute('open'),null);
+  assert.equal(await page.locator('.encounter-orientation').count(),0);
+  assert.equal(await page.locator('#conversation-content>details').count(),0);
   await screenshot('room-1280');
 
   // Object-first mobile: expansive photographs on arrival, compact when reading.
@@ -175,6 +176,7 @@ try {
   await page.waitForURL('**/demo/about/');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   assert.match(await page.locator('h2').allTextContents().then(parts=>parts.join(' | ')),/A conversation between two objects/);
+  assert.equal(await page.locator('#how-conversations-are-written').count(),1);
   const aboutWords=await page.locator('h3').allTextContents();
   for(const term of ['Authored scene','Shared motif','Imagined comparison'])assert.ok(aboutWords.includes(term));
   await screenshot('mobile-about');
