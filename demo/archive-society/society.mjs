@@ -14,6 +14,7 @@ import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
 import { explainEncounter, conversationEpisode, connectionCaption, visitorFollowUp } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
+import { scriptedScenePlan } from '../../src/scene-performance.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
@@ -42,10 +43,60 @@ $('appearance-toggle')?.addEventListener('click',()=>{
   try { localStorage.setItem(appearanceKey,mode); } catch { /* visual preference is still applied */ }
 });
 
+// The archived transcript remains present and inspectable before, during and
+// after any choreography. A silent scene preview is NOT narrated speech or AI
+// "thinking": it runs only the five author-approved speaking roles.
+let previewEpoch=0,previewTimers=[];
+function cancelScriptedPreview(){
+  previewEpoch++;
+  for(const timer of previewTimers)clearTimeout(timer);
+  previewTimers=[];
+  document.querySelectorAll('#room-participants .room-participant.previewing, #conversation-content .turn.previewing')
+    .forEach(element=>element.classList.remove('previewing'));
+  const replay=$('scene-replay');
+  if(replay){
+    replay.textContent='↻';
+    replay.removeAttribute('data-role');
+    replay.setAttribute('aria-pressed','false');
+  }
+  if($('room-header'))$('room-header').removeAttribute('data-scene-preview');
+  if(typeof stage!=='undefined'&&!state.playing)stage.setSpeaking('');
+}
+function markPreviewTurn(role,index){
+  document.querySelectorAll('#room-participants .room-participant').forEach(
+    card=>card.classList.toggle('previewing',card.dataset.speaker===role));
+  document.querySelectorAll('#conversation-content .chat .turn').forEach(
+    (turn,i)=>turn.classList.toggle('previewing',i===index));
+  const replay=$('scene-replay');
+  if(replay){
+    replay.dataset.role=role;
+    replay.textContent=role==='objectA'?'→':role==='objectB'?'←':'·';
+  }
+  if(role==='objectA'||role==='objectB')stage.setSpeaking(
+    role==='objectA'?state.conversation?.source:state.conversation?.target);
+  else stage.setSpeaking('');
+}
+function replayScriptedScene(){
+  cancelScriptedPreview();
+  if(state.playing||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const plan=scriptedScenePlan(state.episode);
+  if(!plan.length||!state.conversation)return;
+  const current=previewEpoch;
+  $('room-header').dataset.scenePreview='scripted';
+  $('scene-replay')?.setAttribute('aria-pressed','true');
+  for(const cue of plan){
+    previewTimers.push(setTimeout(()=>{
+      if(current!==previewEpoch||state.playing)return;
+      if(cue.kind==='turn')markPreviewTurn(cue.role,cue.index);
+      else if(cue.kind==='complete')cancelScriptedPreview();
+    },cue.at));
+  }
+}
 // Scripted room entrance: staged theater, never an assertion that AI is thinking.
 // The written transcript remains in the DOM from the first frame.
 let entranceEpoch=0,entranceAnimations=[];
 function cancelSceneEntrance(){
+  cancelScriptedPreview();
   entranceEpoch++;
   for(const animation of entranceAnimations)animation.cancel();
   entranceAnimations=[];
@@ -67,6 +118,9 @@ function startSceneEntrance(){
       animate(element,[{opacity:.35,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],220+i*100,240));
     animate(document.querySelector('#room-participants .object-cast-link'),
       [{opacity:.3,transform:'translate(-50%,-50%) scale(.85)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],160,430);
+    // The selected scene performs a short, silent exchange. No transcription
+    // is streamed, hidden, or recomputed; Listen remains explicit.
+    replayScriptedScene();
   });
 }
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
@@ -197,6 +251,7 @@ function setPlayDisabled(disabled){
   }
 }
 function setPanel(name){
+  if(name==='record')cancelSceneEntrance();
   for(const p of ['conversation','record'])$(p+'-panel').hidden=p!==name;
   for(const b of document.querySelectorAll('[data-panel]'))b.setAttribute('aria-pressed',String(b.dataset.panel===name));
   document.querySelector('.evidence-rail')?.classList.toggle('show-record',name==='record');
@@ -731,7 +786,16 @@ function renderRoomHeader(source,target,c){
     }
     return card;
   }));
-  cast.append(node('span','↔','object-cast-link'));
+  // The connection itself is a compact replay affordance: preserves the
+  // two large object cards and doesn't add an extra row to a 320px screen.
+  const replay=node('button','↻','object-cast-link');
+  replay.id='scene-replay';replay.type='button';
+  replay.title='Replay the scripted exchange (silent)';
+  replay.setAttribute('aria-label','Replay scripted exchange without audio');
+  replay.setAttribute('aria-pressed','false');
+  replay.disabled=episode.mode!=='CURATED_SCRIPT';
+  replay.addEventListener('click',()=>{if(state.playing)stop();replayScriptedScene();});
+  cast.append(replay);
   syncMobileRoomStage();
   const evidence=$('episode-evidence');
   evidence.replaceChildren(node('h2','Why these two?'),node('p',episode.rationale),

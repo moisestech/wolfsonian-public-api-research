@@ -88,3 +88,44 @@ surfaces and bottom nav; test motion reduction and short repeated navigation.
 - Verify that visitors understand “not a historical meeting” from the UI itself
 - Retain a documented 36-script public corpus and regression tests; any proposed
   live agent output should have a separate review/publish lifecycle
+
+
+## Implementation study B — silent scripted scene score (Nov 18)
+
+The second experiment uses `src/scene-performance.mjs`, a pure finite score
+derived from the *already-authored five-turn transcript*. Events are intentionally
+named `convene`, `turn` and `complete` rather than AG-UI run/message/tool
+events: **these are theatrical cues, not agent computation**.
+
+The two-object linking medallion is now an optional ↻ replay control with a
+44px touch target and an accessible label. On selection, a compact silent
+preview visits each authored speaker in order. It highlights the relevant
+object portrait, its existing message bubble, and the corresponding Three.js
+object, then resets. No dialogue is rewritten, hidden or fabricated. The
+existing Listen action remains separate and explicit; it cancels the preview,
+as do record inspection, navigation and re-entry.
+
+Reduced-motion visitors see a complete, static transcript without the preview
+and without a needless replay control. Research prompts (unedited pairs) have
+no preview. Tests reject unknown speaker roles and oversized inputs.
+
+**Museum trust contract:** no bogus "thinking", no synthetic citations, no
+claim that a 1930s object was an autonomous being. The Archivist's interruption
+is a fictional dramaturgical voice and not institutional authority.
+Any eventual live agent must use a separate backend with source allowlisting,
+retrieval event logs, cited records, explicit status, and human editorial review.
+
+Current reference updates (November 2026):
+- [ICOM's revised Code of Ethics](https://icom.museum/en/news/the-revised-icom-code-of-ethics-is-officially-adopted/) adopted June 2026: public trust and responsible stewardship
+- [The Wolfsonian mission](https://wolfsonian.org/about/): study the persuasive power of design and social transformations through objects of 1850–1950
+- [W3C WCAG 2.2 animation from interactions](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions): users may suppress nonessential motion
+- [AG-UI events](https://docs.copilotkit.ai/ag-ui/concepts/events): real run, tool and message lifecycle, not a decoration library
+- [Google A2UI 1.0](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/): declarative component interoperability, a possible future agent-to-interface bridge
+
+**Review gates before any live AI:**
+1. Source allowlist and exact accession grounding
+2. Image rights / credit policy and curatorial approval for public release
+3. Provenance of every cited interpretation vs metadata match
+4. Accessible pause/reduced-motion/replay and a nonanimated reading path
+5. No default telemetry, external voice transmission or visitor prompt retention
+6. Clear institutional attribution boundaries for fictional characters
