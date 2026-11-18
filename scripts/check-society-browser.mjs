@@ -113,6 +113,35 @@ try {
   await page.locator('.path-post').first().click();
   assert.ok((await page.locator('#conversation-content .bubble.turn').count())>=3);
   assert.ok(await page.locator('.listener').count()>=2);
+  assert.equal(await page.locator('#space-stop').count(),0,'No duplicate mobile Stop button');
+  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
+  assert.match(await page.locator('#space-play').innerText(),/Play/);
+  await page.evaluate(()=>{
+    Object.defineProperty(window,'speechSynthesis',{
+      configurable:true,
+      value:{
+        getVoices:()=>[{name:'Test local',lang:'en-US',localService:true}],
+        speak:()=>{},
+        cancel:()=>{}
+      }
+    });
+  });
+  await page.locator('#space-play').click();
+  await page.waitForFunction(()=>document.querySelector('#space-play').getAttribute('aria-pressed')==='true');
+  assert.equal(await page.locator('#space-play').getAttribute('aria-label'),'Stop conversation');
+  assert.match(await page.locator('#space-play').innerText(),/Stop/);
+  await page.locator('#space-play').click();
+  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
+  assert.equal(await page.locator('#space-play').getAttribute('aria-label'),'Play conversation');
+  assert.match(await page.locator('#space-play').innerText(),/Play/);
+  for(const [id,description] of [
+    ['sheet-close','Close conversation details'],
+    ['prompt-close','Close perspective details'],
+    ['admin-close','Close settings']
+  ]){
+    assert.equal((await page.locator('#'+id).textContent()).trim(),'×');
+    assert.equal(await page.locator('#'+id).getAttribute('aria-label'),description);
+  }
   const railHeight=()=>page.locator('.evidence-rail').evaluate(el=>Math.round(el.getBoundingClientRect().height));
   const beforeSheet=await railHeight();
   await page.locator('#space-evidence').click();
