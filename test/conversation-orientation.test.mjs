@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {explainEncounter,conversationEpisode} from '../src/conversation-orientation.mjs';
+import {explainEncounter,conversationEpisode,connectionCaption} from '../src/conversation-orientation.mjs';
 import {CURATED_EDGE_SCENES} from '../src/curated-edge-scenes.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
 const rec=(id,title)=>({accession:id,title,source:'synthetic'});
@@ -102,4 +102,24 @@ test('artist proposals remain separate from shared tags and verified identities'
  assert.equal(episode.relationship.type,'ARTIST_COMPARISON');
  assert.equal(episode.relationship.term,null);
  assert.match(episode.rationale,/Not a catalog match/);
+});
+
+test('the room subtitle names its real basis, while the about page explains the fictional format',async()=>{
+ const source=rec('85.4.64.43','Making the Engine'),target=rec('TD1989.318.1','Safety warning');
+ const actual=conversationFor(source,target,edge(source.accession,target.accession,'motif','Machines'),'family');
+ const episode=conversationEpisode({source,target,conversation:actual});
+ assert.equal(connectionCaption({episode}),'Shared motif: Machines · metadata only');
+ const curatorial=conversationEpisode({source:rec('A','First'),target:rec('B','Second'),
+   conversation:{mode:'CURATORIAL_JUXTAPOSITION',relationshipType:'curatorial_juxtaposition',turns:[],nextPrompt:'Why this pairing?'}});
+ const proposed=connectionCaption({episode:curatorial,proposal:'These two printed artifacts use different media to narrate the future. The pairing does not establish that their visitors met.'});
+ assert.match(proposed,/^Artist-proposed connection · These two printed artifacts/);
+ assert.ok(proposed.length<175);
+ assert.match(connectionCaption({episode:curatorial}),/Not a catalog match/);
+ assert.throws(()=>connectionCaption({}),/episode is required/);
+ const about=await readFile(new URL('../demo/about/index.html',import.meta.url),'utf8');
+ const app=await readFile(new URL('../demo/archive-society/society.mjs',import.meta.url),'utf8');
+ assert.match(about,/<h2>A conversation between two objects<\/h2>/);
+ assert.match(about,/Neither establishes historical contact or influence/);
+ assert.match(app,/connectionCaption\(\{episode,proposal:state.researchPath\?\.proposal\}\)/);
+ assert.doesNotMatch(app,/room-description'\)\.textContent=episode\.mode/);
 });

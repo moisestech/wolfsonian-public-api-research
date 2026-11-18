@@ -52,6 +52,26 @@ export function conversationEpisode({source,target,conversation}={}){
     historicalRelationshipEstablished:false
   });
 }
+/**
+ * Compact per-room connection, never a claim of historical contact.
+ * Curatorial proposals carry their own published research explanation;
+ * leave the complete account available in Evidence rather than crowding
+ * the two object panels on small screens.
+ */
+export function connectionCaption({episode,proposal}={}){
+  if(!episode?.relationship)throw Error('A selected conversation episode is required.');
+  if(episode.relationship.type==='ARTIST_COMPARISON'){
+    const detail=String(proposal??'').replace(/\s+/g,' ').trim();
+    if(!detail)return 'Artist-proposed connection · Not a catalog match';
+    const limit=135;
+    const excerpt=detail.length<=limit?detail:detail.slice(0,limit-1).replace(/\s+\S*$/,'')+'…';
+    return 'Artist-proposed connection · '+excerpt;
+  }
+  const family=episode.relationship.family||'tag';
+  const term=episode.relationship.term;
+  return term?'Shared '+family+': '+term+' · metadata only':'Connection not established · Research question';
+}
+
 export function explainEncounter({source,target,conversation,lensLabel='Family',previous=null}={}){
   if(!source?.accession||!target?.accession||!conversation)throw Error('A selected source, target and conversation are required.');
   const curated=conversation.mode==='CURATED_EDGE_SCENE';

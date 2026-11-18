@@ -28,6 +28,7 @@ try {
   assert.equal(await page.locator('#room-question').innerText(),'Who pays the price of progress?');
   assert.equal(await page.locator('#room-header').getAttribute('data-mode'),'CURATED_SCRIPT');
   assert.match(await page.locator('#room-rationale').innerText(),/Shared motif: Machines/);
+  assert.match(await page.locator('#room-description').innerText(),/Shared motif: Machines · metadata only/);
   assert.equal(await page.locator('#room-participants .object-inspect').count(),2);
    assert.equal(await page.locator('#room-participants .object-portrait-media').count(),2);
    assert.equal(await page.locator('#room-participants .object-portrait-meta').count(),2);
@@ -146,6 +147,7 @@ try {
   await page.locator('#source-info').click();
   await page.waitForURL('**/demo/about/');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  assert.match(await page.locator('h2').allTextContents().then(parts=>parts.join(' | ')),/A conversation between two objects/);
   await screenshot('mobile-about');
   await open();
 
