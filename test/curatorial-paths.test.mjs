@@ -41,7 +41,7 @@ test('six checklist records keep separate provenance and stay distinct from the 
 test('curatorial juxtapositions cannot pass the metadata gate and establish no historical relationship', () => {
   assert.equal(DOCUMENTED_HISTORICAL_RELATIONSHIPS.length, 0);
   assert.equal(RELATIONSHIP_TYPES.documented_historical_relationship.id, 'documented_historical_relationship');
-  assert.equal(CURATORIAL_PATHS.length, 11);
+  assert.equal(CURATORIAL_PATHS.length, 15);
   const registryOnly = new Set(['TD1989.19.9', 'XB1991.830']);
   for (const path of CURATORIAL_PATHS) {
     assert.equal(path.relationshipType, 'curatorial_juxtaposition');
@@ -60,9 +60,10 @@ test('curatorial juxtapositions cannot pass the metadata gate and establish no h
     assert.equal(spoken.historicalRelationshipEstablished, false);
     assert.equal(spoken.turns.length, 3);
     if(path.aiAssisted){
-      assert.ok(path.source.researchOnly||path.source.source==='presentation');
-      assert.equal(path.sourceUrl,path.source.researchOnly?CHECKLIST:null);
-      assert.equal(path.target.source,'presentation');
+      assert.ok([path.source,path.target].every(r=>r.researchOnly||['presentation','public-packet'].includes(r.source)));
+      assert.equal(path.sourceUrl,[path.source,path.target].some(r=>r.researchOnly)?CHECKLIST:null);
+      assert.ok(path.sourceLinks.length>=1);
+      assert.ok(path.sourceLinks.every(link=>link.label&&new URL(link.url).protocol==='https:'));
       assert.equal(spoken.aiAssisted,true);
       assert.deepEqual(spoken.turns.map(t=>t.role),['objectA','objectB','objectA']);
       assert.ok(spoken.turns.every(t=>t.kind==='AI_ASSISTED_INTERPRETATION'));
@@ -76,7 +77,7 @@ test('curatorial juxtapositions cannot pass the metadata gate and establish no h
     assert.equal(spoken.evidence.length, 0);
   }
   const lines = CURATORIAL_PATHS.map(path => path.turns[2].text);
-  assert.equal(new Set(lines).size, 11);
+  assert.equal(new Set(lines).size, 15);
   assert.throws(() => conversationFor({ accession: '83.2.19', title: 'Futurama' }, { accession: 'XC2024.03.1.1', title: 'Harlem' }, { reasons: [] }, 'family'));
 });
 
@@ -88,4 +89,26 @@ test('the public allowlist still rejects the staff matrix and the saved Lakehous
   assert.ok(PUBLIC_FILES.includes('src/worlds-fairs-research.mjs'));
   assert.ok(PUBLIC_FILES.includes('src/curatorial-relationships.mjs'));
   assert.equal(PUBLIC_FILES.includes('data/research/worlds-fairs-critical-records-20261117.json'), false);
+});
+
+
+test('three new speakers preserve exact public packet identities and rights boundaries', async () => {
+  const packetIds=['WOLF-002','WOLF-003','WOLF-004'];
+  for(const packetId of packetIds) {
+    const packet=JSON.parse(await readFile(new URL('../data/public/objects/'+packetId+'.json',import.meta.url),'utf8'));
+    assert.equal(packet.research_status,'public-record-only');
+    const paths=CURATORIAL_PATHS.filter(path=>[path.source,path.target].some(r=>r.accession===packet.accessionNumber));
+    assert.ok(paths.length>=1,'No conversation for '+packetId);
+    for(const path of paths) {
+      const person=[path.source,path.target].find(r=>r.accession===packet.accessionNumber);
+      assert.equal(person.title,packet.title);
+      assert.equal(person.source,'public-packet');
+      assert.equal(person.rightsApproved,false);
+      assert.ok(path.sourceLinks.some(link=>link.url===packet.source_urls[0]));
+      assert.ok(path.sourceLinks.some(link=>link.url.endsWith('/'+packetId+'.json')));
+      assert.equal(path.historicalRelationshipEstablished,false);
+    }
+  }
+  assert.ok(CURATORIAL_PATHS.filter(path=>path.aiAssisted).every(path=>path.turns[1].speakerAccession===path.target.accession));
+  assert.equal(CURATORIAL_PATHS.find(path=>path.id==='catalogue-and-globe').sourceLinks.filter(link=>link.label.startsWith('Public research packet')).length,2);
 });
