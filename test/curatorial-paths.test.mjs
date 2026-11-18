@@ -120,6 +120,9 @@ test('archive aperture has both themed local masters and an accessible wordmark'
   assert.match(html,/brand-mark-on-dark.*archive-dreams-aperture-white.svg/);
   assert.match(html,/brand-mark-on-light.*archive-dreams-aperture-black.svg/);
   assert.match(css,/data-color-theme="light"/);
+  assert.match(html,/https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/aperture-white-v1\.svg/);
+  assert.match(html,/https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/aperture-black-v1\.svg/);
+  assert.match(html,/data-local-src/);
   for(const file of ['archive-dreams-aperture-white.svg','archive-dreams-aperture-black.svg']){
     const svg=await readFile(new URL('../demo/archive-society/assets/'+file,import.meta.url),'utf8');
     assert.match(svg,/<svg\s/);

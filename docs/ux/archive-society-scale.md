@@ -25,6 +25,8 @@ Four scenes introduce the 1937 *In 1939* poster, the 1939 RCA Victor TRK 12 tele
 
 The artist's aperture mark replaces the old header graphic in two explicit black/white local masters, automatically selected by the host theme attribute (dark by default, light when the UI declares `data-color-theme="light"`). The black master is for future light theme surfaces, and the white master for the current dark UI. The project is still dark-first; this change does not pretend to complete a full light UI theme.
 
+Cloudinary delivery: `archive-dreams/brand/aperture-white-v1` and `archive-dreams/brand/aperture-black-v1` in account `dck5rzi4h`. Header loads versioned Cloudinary SVGs and falls back to same-silhouette local SVG masters if CDN delivery fails. These are independent artist identity assets, not an official museum logo.
+
 ## Batch sequence from 23 conversations
 
 | Batch | Editorial assignment | Visitor payoff |
