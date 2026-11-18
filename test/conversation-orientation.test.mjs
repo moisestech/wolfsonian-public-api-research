@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {explainEncounter} from '../src/conversation-orientation.mjs';
+import {explainEncounter,conversationEpisode} from '../src/conversation-orientation.mjs';
 import {CURATED_EDGE_SCENES} from '../src/curated-edge-scenes.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
 const rec=(id,title)=>({accession:id,title,source:'synthetic'});
@@ -60,10 +60,46 @@ test('visible UI includes evidence/question/change explanations on both conversa
  for(const text of ['Why these two?','What are they exploring?','What changes when you choose another?','How this conversation was written'])assert.ok(js.includes(text));
  assert.ok(js.includes('addEncounterOrientation(box,source,target,c);'));
  assert.ok(js.match(/addEncounterOrientation\(box,source,target,c\);/g).length===2);
- assert.match(js,/Linked by shared/);
+ assert.match(js,/episode\.rationale/);
  assert.match(css,/\.encounter-orientation\{/);
  assert.match(css,/@media\(max-width:800px\)/);
  assert.match(build,/src\/conversation-orientation\.mjs/);
  assert.match(serve,/conversation-orientation/);
  assert.doesNotMatch(js,/innerHTML\s*=/);
+});
+
+test('one episode carries an exact pair, editorial question and truthful source status across lenses',()=>{
+ const source=rec('85.4.64.43','Making the Engine'),target=rec('TD1989.318.1','Grind safely [A splinter can cost an eye]');
+ const link=edge(source.accession,target.accession,'motif','Machines');
+ const make=lens=>conversationEpisode({source,target,conversation:conversationFor(source,target,link,lens)});
+ const family=make('family'),worker=make('worker');
+ assert.equal(family.question,'Who pays the price of progress?');
+ assert.equal(family.id,worker.id);
+ assert.deepEqual(family.turns,worker.turns);
+ assert.equal(family.mode,'CURATED_SCRIPT');
+ assert.equal(family.sourceStatus,'LOCAL_INPUT');
+ assert.deepEqual(family.participants.map(p=>p.accession),[source.accession,target.accession]);
+ assert.equal(family.participants[1].shortName,'Safety warning');
+ assert.equal(family.participants[1].title,target.title);
+ assert.equal(family.historicalRelationshipEstablished,false);
+ assert.match(family.editorialStatus,/NOT_APPROVED/);
+});
+test('a template becomes an unvoiced research prompt; a tag never verifies a catalog relationship',()=>{
+ const source={...rec('A','Object A'),source:'matrix'},target={...rec('B','Object B'),source:'matrix'};
+ const c=conversationFor(source,target,edge('A','B','motif','Trees'),'worker');
+ const episode=conversationEpisode({source,target,conversation:c});
+ assert.equal(episode.mode,'RESEARCH_PROMPT');assert.deepEqual(episode.turns,[]);
+ assert.equal(episode.sourceStatus,'STAFF_METADATA');
+ assert.match(episode.question,/Trees/);
+ assert.equal(episode.historicalRelationshipEstablished,false);
+ assert.equal(episode.relationship.type,'SHARED_TAG');
+});
+test('artist proposals remain separate from shared tags and verified identities',()=>{
+ const source=rec('A','First'),target=rec('B','Second');
+ const episode=conversationEpisode({source,target,conversation:{mode:'CURATORIAL_JUXTAPOSITION',relationshipType:'curatorial_juxtaposition',turns:[],nextPrompt:'Who is absent?'}});
+ assert.equal(episode.sourceStatus,'ARTIST_PROPOSAL');
+ assert.equal(episode.question,'Who is absent?');
+ assert.equal(episode.relationship.type,'ARTIST_COMPARISON');
+ assert.equal(episode.relationship.term,null);
+ assert.match(episode.rationale,/Not a catalog match/);
 });

@@ -475,3 +475,129 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
   .top-actions{width:100%;justify-content:flex-start}
   .top-nav{width:100%;justify-content:flex-start}
 }
+
+/* Question-led rooms: one topic, two object identities, a readable exchange. */
+body{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden;font-size:18px}
+.topbar{flex:none}
+.arrival-guide{display:block;padding:8px 24px;flex:none}
+.arrival-guide p{margin:0;font-size:13px}
+.workspace{flex:1;min-height:0;grid-template-columns:minmax(0,1fr) clamp(360px,40vw,520px);overflow:hidden}
+.atlas-panel{min-height:0;min-width:0;overflow:hidden}
+.canvas{flex:1;min-height:0;height:auto}
+.canvas svg{min-height:0}
+.canvas .zoom-stage{display:none}
+.atlas-toolbar h2{font-size:24px;line-height:1.25;padding-bottom:12px}
+.atlas-footer{flex:none}
+.evidence-rail{grid-column:auto;min-height:0;max-height:none;border-top:0;overflow:hidden;background:#14211e}
+.space-view{overflow:hidden}
+.rail-head{padding:6px 18px;align-items:center;gap:12px;flex-direction:row-reverse;justify-content:space-between}
+#conversation-head{flex:0 1 auto;width:auto;min-height:32px;align-items:flex-end}
+#conversation-head #scene-tag{display:none}
+#counts{display:none}
+#conversation-head::after{content:'Evidence ↗';color:#b9ccc5;font:600 13px/1.3 system-ui,sans-serif}
+.space-leave{display:inline-flex;align-items:center;min-height:44px;padding:4px 0;border:0;background:transparent;color:#b9ccc5;font:600 14px/1.3 system-ui,sans-serif}
+.room-header{padding:0 18px 12px;flex:none;border-bottom:1px solid #354844;overflow-wrap:anywhere}
+.room-kicker{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 8px;font:700 10px/1.4 ui-monospace,monospace;letter-spacing:.08em;color:#9fdcc9}
+#room-kind{font:500 11px/1.3 system-ui,sans-serif;letter-spacing:0;color:#bac9c2}
+#room-question{font:400 clamp(26px,2.7vw,36px)/1.12 Georgia,serif;margin:0 0 8px;text-wrap:balance}
+.room-description{margin:0 0 12px;font:400 13px/1.4 system-ui,sans-serif;color:#bac9c2}
+.room-participants{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.room-participant{display:flex;align-items:center;gap:8px;text-align:left;padding:5px;border:1px solid #456056;background:#192b25;min-width:0;min-height:58px;border-radius:8px}
+.room-participant img,.participant-placeholder{width:38px;height:46px;object-fit:contain;flex:none;background:#101c18;border-radius:4px}
+.participant-placeholder{display:grid;place-items:center;text-align:center;padding:3px;font:9px/1.2 system-ui,sans-serif;color:#afc0b9}
+.participant-name{min-width:0}
+.participant-name strong{display:block;font:650 13px/1.2 system-ui,sans-serif;overflow-wrap:anywhere}
+.participant-name small{display:block;margin-top:4px;color:#b9ccc5;font:11px/1.2 system-ui,sans-serif}
+.room-participant.speaking{border-color:#b7f1d9;box-shadow:inset 0 0 0 1px #b7f1d9}
+.room-participant.speaking small{color:#b7f1d9}
+.room-rationale{display:block;min-height:44px;width:100%;padding:6px 0;border:0;border-radius:0;background:transparent;text-align:left;color:#c5d5cd;font:400 12px/1.5 system-ui,sans-serif}
+.room-rationale:hover{background:#20352e}
+#space-stage,.listener-row{display:none!important}
+.rail-scroll{padding:16px 18px;max-height:none;overflow:auto;overscroll-behavior:contain}
+.chat{gap:14px}
+.evidence-rail .bubble{gap:7px;align-items:flex-start}
+.evidence-rail .bubble .avatar{width:26px;height:30px;object-fit:contain;border-radius:4px}
+.evidence-rail .bubble .say{max-width:calc(100% - 33px);padding:10px 12px;background:#243a31}
+.evidence-rail .bubble.side-b .say{background:#2a3431}
+.evidence-rail .bubble.side-guide .say{background:#1c2d29;border:1px solid #456056}
+.evidence-rail .bubble strong{font:650 12px/1.3 system-ui,sans-serif;letter-spacing:0;margin:0 0 5px;color:#bce4cf}
+.evidence-rail .bubble p{font:400 17px/1.45 system-ui,sans-serif;overflow-wrap:anywhere}
+.evidence-rail .turn.speaking .say{outline:2px solid #b7f1d9;outline-offset:2px}
+.evidence-rail .notice,.research-prompt-copy{display:block;font:400 15px/1.5 system-ui,sans-serif;margin:16px 0;color:#d2ded6}
+.research-prompt-title{font:400 24px/1.2 Georgia,serif;margin:4px 0 10px}
+.edge-path-actions{margin:14px 0}
+.edge-path-actions button,.evidence-record{font:600 14px/1.4 system-ui,sans-serif;min-height:44px;padding:10px}
+.evidence-record{display:block;width:100%;margin:8px 0;text-align:left;white-space:normal;overflow-wrap:anywhere}
+#conversation-content>details{font:400 14px/1.5 system-ui,sans-serif;margin:18px 0 0}
+#conversation-content>details>summary{min-height:44px;padding:10px 0;cursor:pointer;color:#bce4cf}
+.encounter-orientation{padding:0;border-width:1px 0 0;border-radius:0;background:transparent}
+.encounter-orientation[open]{padding-bottom:12px}
+.encounter-orientation h3{font-size:19px}
+.evidence-rail .audio-bar{flex:none;padding:12px 18px;margin:0;min-height:68px;border-top:1px solid #456056;background:#14211e}
+#audio-elapsed{font-size:13px}
+.evidence-rail .audio-bar #play{width:44px;height:44px;min-height:44px;flex:none}
+.evidence-rail .audio-bar #stop{display:none}
+#voice-status{padding:6px 18px;margin:0;font-size:13px;flex:none}
+#voice-status:empty{display:none}
+#episode-evidence{font:400 18px/1.5 system-ui,sans-serif}
+#episode-evidence h2{font-size:32px}
+#episode-evidence .muted{font-size:15px}
+.record-object-picker{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.record-object-picker button{font-size:14px;min-height:44px;flex:1}
+.record-object-picker [aria-pressed=true]{background:#bce4cf;color:#14211e}
+.record-overlay{position:relative;inset:auto;max-height:none;font-size:16px}
+.record-overlay h2{font-size:28px}.record-overlay dl{font-size:16px}
+.record-frame{overflow:visible}.record-frame>img{max-height:200px;object-fit:contain}
+.show-record .room-header,.show-record .rail-head{display:none}
+.show-record .rail-scroll{padding-top:14px}
+body.show-timeline .path-timeline{display:flex;flex:1;min-height:0;overflow:auto}
+body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!important}
+#questions-back{flex:none;margin:8px 16px;text-align:left;background:transparent;border:0;font-size:14px;min-height:44px}
+.timeline-title{font:400 30px/1.15 Georgia,serif;padding:4px 18px 16px}
+.path-post{padding:16px 18px;gap:6px;min-height:44px;white-space:normal}
+.path-post strong{font:400 24px/1.2 Georgia,serif;overflow-wrap:anywhere}
+.path-arc{font:600 13px/1.4 system-ui,sans-serif}
+.path-limit{font:400 12px/1.5 system-ui,sans-serif}
+.path-kind{font:600 11px/1.4 system-ui,sans-serif}
+@media(max-width:800px){
+  .arrival-guide{display:none}
+  .evidence-rail{flex:1}
+  .room-header{padding:0 14px 8px}
+  .rail-head{padding:0 14px}
+  #room-question{font-size:28px;margin-bottom:5px}
+  .room-kicker{margin-bottom:6px}
+  .room-description{font-size:12px;margin-bottom:8px}
+  .room-participants{gap:6px;margin-bottom:0}
+  .room-participant{min-height:54px}
+  .room-rationale{font-size:11px;padding:4px 0}
+  body.show-space .rail-scroll{flex:1;min-height:0;max-height:none;padding:12px 14px}
+  .evidence-rail .bubble p{font-size:16px;line-height:1.4}
+  .evidence-rail .bubble .say{padding:9px 10px}
+  .chat{gap:12px}
+  .space-bar{flex:none;gap:6px;min-height:64px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:#14211e}
+  .space-bar button{min-height:44px;font:600 14px/1.3 system-ui,sans-serif}
+  .evidence-rail .audio-bar{display:none}
+  body.show-timeline .space-bar{display:none}
+  .show-record .space-view{display:flex}
+  .topbar{padding:9px 12px 8px;gap:8px}
+}
+@media(min-width:801px){
+  .workspace{display:grid}
+  .atlas-panel{display:flex}
+  .evidence-rail{display:flex}
+  .rail-scroll{flex:1;min-height:0}
+}
+@media(max-width:360px){
+  #room-question{font-size:25px}
+  .participant-name strong{font-size:12px}
+  .room-participant img,.participant-placeholder{width:30px;height:40px}
+  .room-participant{gap:5px}
+}
+/* Short screens and enlarged text retain content through scrolling, not clipping. */
+@media(max-height:620px){
+  body.show-space .space-view{overflow:auto;display:block}
+  body.show-space .rail-scroll{overflow:visible}
+}
+@media(prefers-reduced-motion:reduce){
+  .evidence-rail *,#room-participants *{scroll-behavior:auto;animation:none!important;transition:none!important}
+}

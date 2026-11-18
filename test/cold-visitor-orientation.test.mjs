@@ -3,20 +3,20 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {visitorGuide} from '../src/visitor-guide.mjs';
 
-test('cold visitors immediately see purpose, link semantics, and speaker roles',async()=>{
+test('cold visitors get the question first and persistent fiction and record affordances',async()=>{
  const html=await readFile(new URL('../demo/archive-society/index.html',import.meta.url),'utf8');
  const css=await readFile(new URL('../demo/archive-society/society.css',import.meta.url),'utf8');
  const js=await readFile(new URL('../demo/archive-society/society.mjs',import.meta.url),'utf8');
  const beforeApp=html.slice(0,html.indexOf('<main class="workspace">'));
- assert.match(beforeApp,/<section class="arrival-guide"/);
- assert.match(beforeApp,/This is a map of objects and possible connections/);
- assert.match(beforeApp,/does <em>not<\/em> mean the objects met/);
- assert.match(beforeApp,/Select a line.*Check the <strong>Record<\/strong>/);
- assert.match(beforeApp,/Perspective.*Object voices.*Archivist/);
- assert.match(beforeApp,/not a museum employee/);
+ assert.match(beforeApp,/class="arrival-guide"/);
+ assert.match(beforeApp,/The voices are imagined\. Check the records\./);
+ assert.match(html,/IMAGINED EXCHANGE/);
+ assert.match(html,/id="room-question"/);
+ assert.match(html,/Why these two\? Open evidence/);
+ assert.match(html,/id="space-room">Map</);
  assert.match(beforeApp,/id="arrival-connection"/);
- assert.match(css,/\.arrival-guide\{display:grid/);
- assert.match(css,/@media\(max-width:800px\)\{\.arrival-guide/);
+ assert.match(css,/\.room-header\{/);
+ assert.match(js,/not historical speech or live autonomous AI/);
  assert.match(js,/message\('arrival-connection'/);
  assert.match(js,/info\.line/);
  assert.match(js,/Artist-proposed comparison/);

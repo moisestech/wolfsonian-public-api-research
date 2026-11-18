@@ -67,20 +67,10 @@
     <p class="admin-links"><a href="../discovery-lab/">Discovery Lab</a><a href="../../docs/archive-society.md">Setup &amp; evidence contract</a></p>
   </div>
 </section>
-<section class="arrival-guide" aria-label="How to experience this artwork">
-  <div class="arrival-intro">
-    <p class="arrival-kicker">START HERE · ARCHIVE DREAMS IN PUBLIC</p>
-    <p><strong>This is a map of objects and possible connections.</strong> A line may represent a shared research tag or an artist's proposed comparison. It does <em>not</em> mean the objects met.</p>
-    <p id="arrival-connection" role="status">Choose an object or a connection to discover why it appears here.</p>
-  </div>
-  <div class="arrival-actions">
-    <p class="arrival-path">Select a line → Hear an imagined exchange → Check the <strong>Record</strong> for evidence.</p>
-    <details class="arrival-voices">
-      <summary>Who is speaking?</summary>
-      <p><strong>Perspective</strong> is the question you bring to the object. <strong>Object voices</strong> are artist-written characters, not historical quotations. <strong>Archivist</strong> is a fictional evidence-checking role, not a museum employee.</p>
-    </details>
-  </div>
-</section>
+<div class="arrival-guide" aria-label="How to experience this artwork">
+  <p>Follow a question between objects. <strong>The voices are imagined. Check the records.</strong></p>
+  <p id="arrival-connection" class="sr-only" role="status"></p>
+</div>
 <main class="workspace">
 <section class="atlas-panel" id="atlas" aria-label="The Archive Dreams in Public">
   <div class="atlas-toolbar"><button type="button" id="room-back" class="room-back">Back</button><h2 id="atlas-title">A constellation of possible readings</h2><div id="room-legend" class="room-legend" hidden></div></div>
@@ -152,17 +142,25 @@
 </section>
 <aside class="evidence-rail" aria-label="Conversation, record and services">
   <div id="path-timeline" class="path-timeline">
+    <button type="button" id="questions-back">← Current conversation</button>
     <p id="timeline-title" class="timeline-title"></p>
     <div id="timeline-list"></div>
   </div>
   <div class="space-view">
   <div class="rail-head">
-    <button type="button" id="conversation-head" aria-expanded="false" aria-controls="conversation-sheet">
+    <button type="button" id="conversation-head" aria-label="Open conversation evidence" aria-expanded="false" aria-controls="conversation-sheet">
       <span id="scene-tag" class="chat-topic rail-theme" hidden></span>
       <span id="counts"></span>
     </button>
-    <button type="button" id="space-leave" class="space-leave">Leave</button>
+    <button type="button" id="space-leave" class="space-leave">← All questions</button>
   </div>
+  <section id="room-header" class="room-header" aria-labelledby="room-question" hidden>
+    <p class="room-kicker"><span>IMAGINED EXCHANGE</span><span id="room-kind"></span></p>
+    <h1 id="room-question"></h1>
+    <p id="room-description" class="room-description">A conversation between two objects</p>
+    <div id="room-participants" class="room-participants" aria-label="Object speakers"></div>
+    <button type="button" id="room-rationale" class="room-rationale" aria-label="Why these two? Open evidence"></button>
+  </section>
   <div id="space-stage"></div>
   <div id="listener-row" class="listener-row" aria-label="Other conversation paths"></div>
   <div class="rail-scroll">
@@ -173,6 +171,7 @@
         <p id="scene-title" hidden></p>
         <p id="sheet-note"></p>
         <ul id="sheet-facts"></ul>
+        <div id="episode-evidence"></div>
       </div>
     </div>
     <div id="source-note" class="source-note" hidden role="dialog" aria-label="About this encounter">
@@ -221,7 +220,7 @@
   <div id="space-bar" class="space-bar">
     <button type="button" id="space-play" aria-label="Play conversation" aria-pressed="false">▶ Play</button>
     <button type="button" id="space-evidence">Evidence</button>
-    <button type="button" id="space-room">Room</button>
+    <button type="button" id="space-room">Map</button>
   </div>
 </aside>
 </main>

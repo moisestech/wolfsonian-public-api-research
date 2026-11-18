@@ -4,6 +4,47 @@
  * A similarity tag is not an historical relationship.
  */
 const short=(value,max=115)=>String(value??'').replace(/\s+/g,' ').trim().slice(0,max);
+// Editorial display names are never substituted for catalog titles or identities.
+const ROOM_NAMES=new Map([
+  ['85.4.64.43','Making the Engine'],
+  ['TD1989.318.1','Safety warning'],
+  ['85.4.64.34','Skilled Work'],
+  ['TD1989.317.66',"Women's Labor lottery"],
+  ['XX1990.4091','Workers’ party poster']
+]);
+const ROOM_QUESTIONS=new Map([
+  ['machines-engine-safety','Who pays the price of progress?'],
+  ['opening-skilled-work-lottery','Who gets credit for labor?'],
+  ['opening-skilled-work-engine','Whose work makes the machine?'],
+  ['machines-vote-engine','Does being seen mean having a say?']
+]);
+export function conversationEpisode({source,target,conversation}={}){
+  if(!source?.accession||!target?.accession||!conversation)throw Error('A selected source, target and conversation are required.');
+  const authored=['CURATED_EDGE_SCENE','CURATORIAL_JUXTAPOSITION'].includes(conversation.mode);
+  const proposed=conversation.relationshipType==='curatorial_juxtaposition';
+  const reason=conversation.scriptBasis||conversation.evidence?.[0];
+  const family=reason?.family==='motif'?'motif':reason?.family==='theme'?'theme':'tag';
+  const term=short(reason?.value,80);
+  const names=[source,target].map(item=>ROOM_NAMES.get(item.accession)||short(item.title.match(/\[([^\]]{3,65})\]/)?.[1]||item.title,65));
+  const question=ROOM_QUESTIONS.get(conversation.sceneId)||
+    (authored?(conversation.dramaticArc?.endsWith('?')?conversation.dramaticArc:conversation.nextPrompt):
+      'What could “'+term+'” connect—and what might it miss?')||'What happens when we compare these records?';
+  return Object.freeze({
+    // A reading lens does not change the identity of a hand-written scene.
+    id:conversation.sceneId||[source.accession,target.accession].sort().join('::'),
+    question:short(question,200),
+    participants:Object.freeze([source,target].map((item,i)=>Object.freeze({accession:item.accession,title:item.title,shortName:names[i],role:i?'objectB':'objectA'}))),
+    mode:authored?'CURATED_SCRIPT':'RESEARCH_PROMPT',
+    label:authored?'Authored scene':'Research prompt',
+    sourceStatus:proposed?'ARTIST_PROPOSAL':term?([source,target].every(item=>['matrix','lakehouse'].includes(item.source))?'STAFF_METADATA':'LOCAL_INPUT'):'UNRESOLVED',
+    relationship:Object.freeze({type:proposed?'ARTIST_COMPARISON':'SHARED_TAG',family:reason?.family||null,term:term||null}),
+    rationale:proposed?'Artist-proposed comparison · Not a catalog match':term?'Shared '+family+': '+term+' · Imagined comparison':'Comparison proposed · No verified shared tag',
+    turns:Object.freeze(authored?conversation.turns.map(turn=>Object.freeze({...turn})):[]),
+    nextQuestion:conversation.nextPrompt||'What source would change this interpretation?',
+    editorialStatus:conversation.editorialStatus||'DRAFT',
+    historicalRelationshipEstablished:false
+  });
+}
 export function explainEncounter({source,target,conversation,lensLabel='Family',previous=null}={}){
   if(!source?.accession||!target?.accession||!conversation)throw Error('A selected source, target and conversation are required.');
   const curated=conversation.mode==='CURATED_EDGE_SCENE';

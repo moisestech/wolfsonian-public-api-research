@@ -10,70 +10,135 @@ try {
     child.stdout.on('data',b=>{if(b.toString().includes('Archive Society:')){clearTimeout(timer);resolve();}});
     child.once('exit',code=>{clearTimeout(timer);reject(new Error('Server exited before ready: '+code));});
   });
-  browser=await chromium.launch({headless:true});
-  const page=await browser.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:1}),errors=[],external=[],voiceRequests=[];
+  browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH}:{})});
+  const page=await browser.newPage({viewport:{width:1280,height:900},deviceScaleFactor:1}),errors=[],external=[],voiceRequests=[];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('request',req=>{const url=req.url();if(!url.startsWith(base)&&!url.startsWith('blob:')&&!url.startsWith('data:')&&!url.startsWith('https://res.cloudinary.com/'))external.push(url);if(url.includes('/api/archive-society/voice'))voiceRequests.push(url);});
-  await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
-  await page.waitForFunction(()=>document.querySelectorAll('.graph-node').length>0).catch(error=>{throw new Error((errors.join('\n')||error.message));});
-  const cards=await page.locator('.graph-node').count();
-  assert.ok(cards>=2&&cards<=7);
-  assert.equal(await page.locator('#add-image, #add-images, #photos, #clear-images').count(),0);
-  assert.equal(await page.getByText('Lakehouse lookup').count(),0);
-  assert.ok(await page.locator('.conversation-edge').count()>0);
-
-  // Making the Engine opens on a curated machine-and-body scene, with six paths still clickable.
-  assert.match(await page.locator('#atlas-title').innerText(),/Making the Engine/);
-  assert.equal(await page.locator('.topbar').getByText('The machine meets the body').count(),0);
-  assert.match(await page.locator('#scene-tag').innerText(),/Machines/);
-  await page.locator('#conversation-head').click();
-  assert.match(await page.locator('#scene-title').getAttribute('title'),/ARTIST-AUTHORED SCENE/);
-  assert.match(await page.locator('#conversation-sheet').innerText(),/Machines[\s\S]*The machine meets the body/);
-  await page.locator('#sheet-close').click();
-  assert.match(await page.locator('#conversation-content').textContent(),/not a documented relationship/i);
-  assert.ok(Number(await page.locator('#stage').getAttribute('data-zoom'))>20);
-
+  const open=async()=>{
+    await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
+    await page.waitForFunction(()=>document.querySelector('#room-question')?.textContent);
+  };
+  const selectEdge=async index=>{await page.locator('.conversation-edge').nth(index).focus();await page.keyboard.press('Enter');};
+  const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
+  await mkdir(new URL('artifacts/',root),{recursive:true});
+  await open();
+  assert.ok(await page.locator('.graph-node').count()>=2);
   assert.equal(await page.locator('.conversation-edge').count(),6);
-  for(let i=0;i<6;i++){
-    await page.locator('.conversation-edge').nth(i).focus();
-    await page.keyboard.press('Enter');
-    assert.ok((await page.locator('#conversation-content .bubble.turn').count())>=3);
+  assert.equal(await page.locator('#admin-toggle,#space-stop,#add-images,#clear-images').count(),0);
+  assert.equal(await page.locator('#room-question').innerText(),'Who pays the price of progress?');
+  assert.equal(await page.locator('#room-header').getAttribute('data-mode'),'CURATED_SCRIPT');
+  assert.match(await page.locator('#room-rationale').innerText(),/Shared motif: Machines/);
+  assert.equal(await page.locator('#room-participants button').count(),2);
+  assert.equal(await page.locator('.turn').count(),5);
+  assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
+  assert.equal(voiceRequests.length,0,'No autoplay or unsolicited provider calls');
+  assert.equal(await page.locator('.encounter-orientation').getAttribute('open'),null);
+  await screenshot('room-1280');
+
+  // Topic, two identities and two complete messages must be above the dock.
+  for(const width of [320,390,768]){
+    await page.setViewportSize({width,height:844});
+    const fold=await page.evaluate(()=>{
+      const scroll=document.querySelector('.rail-scroll').getBoundingClientRect();
+      const dock=document.querySelector('#space-bar').getBoundingClientRect();
+      const bubbles=[...document.querySelectorAll('.turn')].slice(0,2).map(x=>x.getBoundingClientRect());
+      const controls=[...document.querySelector('.top-nav').querySelectorAll('button,a')].map(x=>x.getBoundingClientRect());
+      return {fits:bubbles.length===2&&bubbles.every(b=>b.top>=scroll.top-1&&b.bottom<=Math.min(scroll.bottom,dock.top)+1),
+        singleRow:controls.every(b=>Math.abs(b.top-controls[0].top)<2),
+        navFits:controls.every(b=>b.left>=0&&b.right<=innerWidth),
+        overflow:document.documentElement.scrollWidth>innerWidth+1,
+        dockVisible:dock.bottom<=innerHeight+1,
+        bounds:bubbles.map(b=>({top:b.top,bottom:b.bottom})),scrollBottom:scroll.bottom};
+    });
+    assert.ok(fold.fits,'Two complete opening messages at '+width+'px: '+JSON.stringify(fold));
+    assert.ok(fold.singleRow&&fold.navFits,'Four controls stay on one row at '+width+'px');
+    assert.ok(fold.dockVisible&&!fold.overflow,'Dock and content fit at '+width+'px');
+    await screenshot('room-'+width);
   }
-  // Cold-reader contract: each selected pair explains why it speaks,
-  // what it explores, and how the content differs from the previous pair.
-  await page.locator('.conversation-edge').nth(0).focus();
-  await page.keyboard.press('Enter');
-  const firstMeaning=await page.locator('.encounter-orientation').innerText();
-  assert.match(firstMeaning,/Why these two\?/);
-  assert.match(firstMeaning,/What are they exploring\?/);
-  assert.match(firstMeaning,/not proof they met/);
-  await page.locator('.conversation-edge').nth(1).focus();
-  await page.keyboard.press('Enter');
-  const secondMeaning=await page.locator('.encounter-orientation').innerText();
-  assert.notEqual(firstMeaning,secondMeaning,'Different links require an explicit changed explanation');
-  assert.match(secondMeaning,/Previously:/);
-  assert.match(secondMeaning,/Now:/);
-  assert.match(secondMeaning,/How this conversation was written/);
-  // Following an edge changes the seed; returning restores the prior inquiry.
+  assert.equal(await page.locator('#space-room').innerText(),'Map');
+  // Exact record inspection is independent of selecting/recentering an episode.
+  const episodeId=await page.locator('#room-header').getAttribute('data-episode');
+  await page.locator('#room-participants button').nth(1).click();
+  assert.match(await page.locator('#record-content').innerText(),/TD1989\.318\.1/);
+  assert.equal(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
+  await page.locator('[data-panel=conversation]').click();
+  await page.locator('#space-evidence').click();
+  assert.match(await page.locator('#episode-evidence').innerText(),/not historical speech or live autonomous AI/);
+  assert.match(await page.locator('#episode-evidence').innerText(),/85\.4\.64\.43[\s\S]*TD1989\.318\.1/);
+  await page.locator('#sheet-close').click();
+  await page.locator('#space-leave').click();
+  assert.equal(await page.locator('#timeline-title').innerText(),'Choose a question');
+  assert.match(await page.locator('#timeline-list').innerText(),/Authored scene/);
+  await page.locator('#questions-back').click();
+
+  // Test selection coherently on the graph; unedited pairs never get fake dialogue.
+  await page.setViewportSize({width:1280,height:900});
+  const pairIds=new Set();let promptIndex=-1;
+  for(let i=0;i<6;i++){
+    await selectEdge(i);
+    pairIds.add(await page.locator('#room-header').getAttribute('data-episode'));
+    const mode=await page.locator('#room-header').getAttribute('data-mode');
+    const focused=(await page.locator('#stage').getAttribute('data-pair')).split('|');
+    const labels=await page.locator('#room-participants button').evaluateAll(buttons=>buttons.map(b=>b.getAttribute('aria-label')));
+    for(const accession of focused.filter(Boolean))assert.ok(labels.some(label=>label.includes(accession)));
+    if(mode==='RESEARCH_PROMPT'){
+      promptIndex=i;
+      assert.equal(await page.locator('.turn').count(),0);
+      assert.equal(await page.locator('#play').isDisabled(),true);
+      assert.match(await page.locator('#conversation-content').innerText(),/no edited dialogue/);
+    }else assert.ok(await page.locator('.turn').count()>=3);
+  }
+  assert.equal(pairIds.size,6,'Each pair has its own episode identity');
+  assert.ok(promptIndex>=0,'Include a real unedited-pair fallback');
+  await selectEdge(promptIndex);await screenshot('research-prompt');
+  await page.locator('.conversation-edge[data-accession="TD1989.318.1"]').focus();await page.keyboard.press('Enter');
+  const script=await page.locator('.chat').innerText();
+  await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
+  await page.locator('.conversation-edge[data-accession="TD1989.318.1"]').focus();await page.keyboard.press('Enter');
+  assert.equal(await page.locator('.chat').innerText(),script,'A perspective never rewrites authored text');
+  await page.locator('#room-rationale').click();
+  assert.match(await page.locator('#episode-evidence').innerText(),/does not change its script/);
+  await page.locator('#sheet-close').click();
+
+  // Playback stays explicit and cancels when a different pair is selected.
+  await page.setViewportSize({width:390,height:844});
+  await page.evaluate(()=>{
+    Object.defineProperty(window,'SpeechSynthesisUtterance',{configurable:true,value:class MockUtterance{constructor(text){this.text=text;}}});
+    Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{getVoices:()=>[{name:'Test local',lang:'en-US',localService:true}],speak:()=>{},cancel:()=>{}}});
+  });
+  await page.locator('#space-play').click();
+  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('#room-participants .speaking').count(),1);
+  await page.locator('#space-play').click();
+  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
+  await page.locator('#space-play').click();
+  await page.locator('#space-leave').click();await page.locator('.path-post').nth(1).click();
+  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
+  assert.equal(await page.locator('#room-participants .speaking').count(),0);
+
+  // Route and voice boundaries remain covered against an actual authored scene.
+  await page.setViewportSize({width:1280,height:900});await selectEdge(0);
+  await page.locator('#admin').evaluate(el=>{el.hidden=false;});
+  await page.selectOption('#voice-mode','elevenlabs');await page.locator('#play').evaluate(button=>button.click());
+  assert.match(await page.locator('#voice-status').textContent(),/approval/);assert.equal(voiceRequests.length,0);
+  await page.fill('#access-token','TEST_ONLY_PRIVATE_DEMO_TOKEN_12345');await page.locator('#check-services').click();
+  await page.waitForFunction(()=>document.querySelector('#service-status').textContent.includes('ElevenLabs: disabled'));
+  await page.locator('#external-approved').check();await page.locator('#play').evaluate(button=>button.click());
+  await page.waitForFunction(()=>document.querySelector('#voice-status').textContent.includes('not enabled'));
+  assert.equal(voiceRequests.length,1);
+  await page.locator('#admin-close').click();
+  await page.locator('#reading-toggle').click();await page.locator('[data-lens="archivist"]').click();
+  assert.equal(await page.locator('#external-approved').isChecked(),false);
+
+  // Following an object is an explicit new investigation, with an in-memory return.
   const oldTitle=await page.locator('#atlas-title').innerText();
   await page.locator('[data-follow-object]').click();
   assert.notEqual(await page.locator('#atlas-title').innerText(),oldTitle);
-  assert.ok(await page.locator('[data-return-object]').isVisible());
   await page.locator('[data-return-object]').click();
   assert.equal(await page.locator('#atlas-title').innerText(),oldTitle);
-  await page.locator('.conversation-edge').first().focus();
-  await page.keyboard.press('Enter');
 
-  await mkdir(new URL('artifacts/',root),{recursive:true});
-  await page.screenshot({path:new URL('artifacts/archive-society-overview.png',root).pathname,fullPage:true});
-  await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
-  await page.locator('.conversation-edge').first().focus();await page.keyboard.press('Enter');
-  assert.ok((await page.locator('.turn').count())>=3);
-  await page.locator('#conversation-content > details > summary').click();
-  assert.match(await page.locator('#conversation-content').innerText(),/Thematic Category|Symbols\/Motifs/);
-  await page.screenshot({path:new URL('artifacts/archive-society-conversation.png',root).pathname,fullPage:true});
+  // Local CSV and saved JSON retain source identity and safe text rendering.
   const csv=await readFile(new URL('examples/archive-society.synthetic.csv',root),'utf8');
-  await page.locator('.source-studio').evaluate(el=>{el.open=true;});
   const hostile=csv.replace('Invented household radio','<img src=x onerror=globalThis.__archiveXss=1>');
   await page.locator('#csv-file').setInputFiles({name:'synthetic-test.csv',mimeType:'text/csv',buffer:Buffer.from(hostile)});
   await page.waitForFunction(()=>document.querySelector('#import-status').textContent.includes('4 CSV'));
@@ -81,136 +146,36 @@ try {
   assert.match(await page.locator('#atlas-title').innerText(),/<img src=x/);
   const lookup=[{'Accession Number':'TEST2026.101',Title:'TEST ONLY',Date:'TEST_DATE_NOT_HISTORY'}];
   await page.locator('#snapshot-file').setInputFiles({name:'synthetic-lookup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(lookup))});
-  await page.waitForFunction(()=>document.querySelector('#snapshot-content').textContent.includes('EXACT_PRIMARY_ACCESSION'));
-  await page.locator('[data-panel=conversation]').click();
-  assert.match(await page.locator('#conversation-content').innerText(),/TEST_DATE_NOT_HISTORY/);
-  // Settings no longer has a public entry point. Open the internal fixture only
-  // inside this isolated test so voice permission and source-security checks remain covered.
-  assert.equal(await page.locator('#admin-toggle').count(),0);
-  await page.locator('#admin').evaluate(el=>{el.hidden=false;});
-  await page.selectOption('#voice-mode','elevenlabs');await page.locator('#play').evaluate(button=>button.click());
-  assert.match(await page.locator('#voice-status').innerText(),/approval/);assert.equal(voiceRequests.length,0);
-  await page.fill('#access-token','TEST_ONLY_PRIVATE_DEMO_TOKEN_12345');await page.locator('#check-services').click();
-  await page.waitForFunction(()=>document.querySelector('#service-status').textContent.includes('ElevenLabs: disabled'));
-  await page.locator('[data-panel=conversation]').evaluate(button=>button.click());await page.locator('#external-approved').check();await page.locator('#play').evaluate(button=>button.click());
-  await page.waitForFunction(()=>document.querySelector('#voice-status').textContent.includes('not enabled'));
-  assert.equal(voiceRequests.length,1);
-  await page.locator('#restore').click();
-  await page.waitForFunction(()=>document.querySelector('#import-status').textContent.includes('Invented example restored'));
-  assert.equal(await page.locator('.thumbnail').count(),0);
-  await page.locator('#admin-close').click();
-  await page.locator('#reading-toggle').click();await page.locator('[data-lens="archivist"]').click();assert.equal(await page.locator('#external-approved').isChecked(),false);
-  const about=await page.request.get(base+'/demo/about/');
-  assert.equal(about.status(),200);
-  assert.match(await about.text(),/Lakehouse lookup/);
-  assert.equal(await page.locator('#more-toggle').count(),0);
-  assert.equal(await page.locator('#layer-accession').count(),1);
-  assert.equal(await page.locator('#layer-box').count(),1);
-  assert.equal(await page.locator('#atlas-mode').count(),1);
-  const footerFits=()=>page.locator('.atlas-footer').evaluate(el=>el.scrollHeight<=el.clientHeight+1);
-  assert.equal(await footerFits(),true);
+  assert.match(await page.locator('#snapshot-content').textContent(),/EXACT_PRIMARY_ACCESSION/);
+  assert.equal(await page.locator('#room-header').getAttribute('data-mode'),'RESEARCH_PROMPT');
+  assert.equal(await page.locator('.turn').count(),0);
+  assert.match(await page.locator('#snapshot-content').textContent(),/TEST_DATE_NOT_HISTORY/);
+  for(const path of ['/.env.local','/server/archive-services.mjs'])assert.equal((await page.request.get(base+path)).status(),404);
+  for(const path of ['/demo/about/','/demo/discovery-lab/'])assert.equal((await page.request.get(base+path)).status(),200);
+
+  await open();
   await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),100);
   const scaleOf=()=>page.locator('#stage').evaluate(el=>Number(el.dataset.scale));
   const fitted=await scaleOf();
-  await page.locator('#zoom-toggle').click();
-  await page.locator('[data-stop="100"]').click();assert.ok(await scaleOf()>fitted);
-  await page.locator('#zoom-toggle').click();
-  await page.locator('#fit').click();assert.ok(Math.abs(await scaleOf()-fitted)<0.02);
-  await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
-  assert.ok(await page.locator('.graph-node.emphasized').count()>0);
+  await page.locator('#zoom-toggle').click();await page.locator('[data-stop="100"]').click();assert.ok(await scaleOf()>fitted);
+  await page.locator('#zoom-toggle').click();await page.locator('#fit').click();assert.ok(Math.abs(await scaleOf()-fitted)<0.02);
+  await page.locator('#atlas-mode').uncheck();
   await page.locator('#theme-toggle').click();await page.locator('#theme-choices [data-theme="Domestic life"]').click();
   assert.equal(await page.locator('#stage').getAttribute('data-theme'),'Domestic life');
-  assert.ok(await page.locator('.graph-node').count()>0);
-  assert.equal((await page.request.get(base+'/.env.local')).status(),404);
-  assert.equal((await page.request.get(base+'/server/archive-services.mjs')).status(),404);
-  assert.equal((await page.request.get(base+'/demo/discovery-lab/')).status(),200);
-  await page.locator('#admin').evaluate(el=>{el.hidden=true;});
-  // Navigation must be a SINGLE row at small and medium phone/tablet widths.
-  assert.equal(await page.locator('#admin-toggle').count(),0,'Do not render the settings gear');
-  const expectedNav=['Conversations','Record','Open Object Lens','Information about this artwork'];
-  for(const width of [320,390,768]){
-    await page.setViewportSize({width,height:844});
-    const nav=await page.locator('.top-nav').evaluate(el=>{
-      const controls=[
-        el.querySelector('[data-panel="conversation"]'),
-        el.querySelector('[data-panel="record"]'),
-        el.querySelector('.icon-link'),
-        el.querySelector('#source-info')
-      ];
-      const bounds=controls.map(x=>x.getBoundingClientRect());
-      return {
-        labels:[controls[0].textContent.trim(),controls[1].textContent.trim(),controls[2].getAttribute('aria-label'),controls[3].getAttribute('aria-label')],
-        visible:controls.every(x=>x&&getComputedStyle(x).display!=='none'),
-        singleRow:bounds.every(x=>Math.abs(x.top-bounds[0].top)<2),
-        fits:bounds.every(x=>x.left>=-1&&x.right<=innerWidth+1),
-        overlap:bounds.some((x,i)=>i>0&&x.left<bounds[i-1].right-1)
-      };
-    });
-    assert.deepEqual(nav.labels,expectedNav);
-    assert.ok(nav.visible,'All four controls visible at '+width+'px');
-    assert.ok(nav.singleRow,'Four controls on one row at '+width+'px');
-    assert.ok(nav.fits,'Four controls within viewport at '+width+'px');
-    assert.equal(nav.overlap,false,'No overlapping controls at '+width+'px');
-  }
-  await page.setViewportSize({width:390,height:844});
-  await page.waitForFunction(()=>getComputedStyle(document.querySelector('#path-timeline')).display!=='none');
-  assert.match(await page.locator('#timeline-list').innerText(),/not a documented relationship|not proof that the histories intersected/i);
-  await page.locator('.path-post').first().click();
-  assert.ok((await page.locator('#conversation-content .bubble.turn').count())>=3);
-  assert.match(await page.locator('.encounter-orientation').innerText(),/Why these two\?/);
-  assert.match(await page.locator('.encounter-orientation').innerText(),/What are they exploring\?/);
-  assert.ok(await page.locator('.listener').count()>=2);
-  assert.equal(await page.locator('#space-stop').count(),0,'No duplicate mobile Stop button');
-  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
-  assert.match(await page.locator('#space-play').innerText(),/Play/);
-  await page.evaluate(()=>{
-    const voiceMode=document.querySelector('#voice-mode');
-    voiceMode.value='device';
-    voiceMode.dispatchEvent(new Event('change'));
-    Object.defineProperty(window,'SpeechSynthesisUtterance',{
-      configurable:true,
-      value:class MockUtterance{constructor(text){this.text=text;this.voice=null;}}
-    });
-    Object.defineProperty(window,'speechSynthesis',{
-      configurable:true,
-      value:{
-        getVoices:()=>[{name:'Test local',lang:'en-US',localService:true}],
-        speak:()=>{},
-        cancel:()=>{}
-      }
-    });
-  });
-  await page.locator('#space-play').click();
-  const active=await page.locator('#space-play').getAttribute('aria-pressed');
-  assert.equal(active,'true','Mobile playback should be active; status: '+await page.locator('#voice-status').textContent());
-  assert.equal(await page.locator('#space-play').getAttribute('aria-label'),'Stop conversation');
-  assert.match(await page.locator('#space-play').innerText(),/Stop/);
-  await page.locator('#space-play').click();
-  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
-  assert.equal(await page.locator('#space-play').getAttribute('aria-label'),'Play conversation');
-  assert.match(await page.locator('#space-play').innerText(),/Play/);
-  for(const [id,description] of [
-    ['sheet-close','Close conversation details'],
-    ['prompt-close','Close perspective details'],
-    ['admin-close','Close settings']
-  ]){
-    assert.equal((await page.locator('#'+id).textContent()).trim(),'×');
-    assert.equal(await page.locator('#'+id).getAttribute('aria-label'),description);
-  }
-  const railHeight=()=>page.locator('.evidence-rail').evaluate(el=>Math.round(el.getBoundingClientRect().height));
-  const beforeSheet=await railHeight();
-  await page.locator('#space-evidence').click();
-  assert.equal(await page.locator('#conversation-sheet').evaluate(el=>el.hidden),false);
-  assert.equal(await railHeight(),beforeSheet);
-  await page.locator('#sheet-close').click();
-  await page.screenshot({path:new URL('artifacts/archive-society-space.png',root).pathname});
-  await page.locator('#space-leave').click();
-  await page.waitForFunction(()=>getComputedStyle(document.querySelector('#path-timeline')).display!=='none');
-  await page.locator('#space-room').click();
-  assert.equal(await footerFits(),true);
-  await page.locator('#atlas-mode').uncheck();
-  await page.screenshot({path:new URL('artifacts/archive-society-mobile.png',root).pathname,fullPage:true});
+
+  // 200% desktop zoom has half the CSS viewport. Check reflow and reachability.
+  await open();await page.setViewportSize({width:640,height:450});
+  await page.emulateMedia({reducedMotion:'reduce'});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  await page.locator('#conversation-content .turn').last().scrollIntoViewIfNeeded();
+  assert.ok(await page.locator('#conversation-content .turn').last().evaluate(el=>{const b=el.getBoundingClientRect();return b.top>=0&&b.bottom<=innerHeight;}));
+  await screenshot('zoom-200-reflow');
+  await page.setViewportSize({width:390,height:844});
+  await page.locator('#space-room').click();
+  assert.ok(await page.locator('#stage').isVisible());
+  await screenshot('mobile-map');
+  await page.locator('#room-back').click();
+  assert.ok(await page.locator('#room-question').isVisible());
   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
-  console.log('Archive Society browser checks passed: force-graph nodes, conversation edges, local CSV/photos/JSON, XSS, approval reset, service failure, zoom, mobile, private-route denial; no external requests.');
+  console.log('Archive Society browser checks passed: question-first rooms at 320/390/768/1280; two visible messages; selected-pair and exact-record identity; authored vs research prompts; lens semantics; no autoplay; playback cancellation; source/XSS/service boundaries; graph/Map; reduced-motion and 200% reflow.');
 } finally {await browser?.close();child.kill('SIGTERM');}
