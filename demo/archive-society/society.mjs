@@ -12,7 +12,7 @@ import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
-import { explainEncounter } from '../../src/conversation-orientation.mjs';
+import { explainEncounter, conversationEpisode } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -20,7 +20,7 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
   mapMode:'conversation',matrixObjects:MATRIX_OBJECTS,matrixRecords:matrixToRecords(MATRIX_OBJECTS),matrixIndex:null,room:null,district:null,
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
-  playing:false,epoch:0,view:null,conversation:null,lookupBusy:false,hover:null,researchPath:null,lastExplained:null};
+  playing:false,epoch:0,view:null,conversation:null,episode:null,recordAccession:null,lookupBusy:false,hover:null,researchPath:null,lastExplained:null};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
@@ -103,6 +103,7 @@ function transportIcon(kind){
   return icon;
 }
 function setPlayDisabled(disabled){
+  disabled=disabled||state.episode?.mode==='RESEARCH_PROMPT';
   const playing=state.playing;
   const play=$('play');
   play.disabled=playing?false:disabled;
@@ -129,6 +130,7 @@ function stop(){
   stage.setSpeaking('');
 }
 function changeSeed(id){stop();resetApproval();state.researchPath=null;state.seed=id;state.edge=null;
+  state.recordAccession=null;
   if(state.payload)state.snapshots.set(id,reconcileLookup(state.payload,id,'UNKNOWN_LOCAL_CAPTURE_TIME'));
   render();setPanel('record');}
 function options(){
@@ -251,6 +253,7 @@ function person(accession){
   return researchPeople().find(r=>r.accession===accession)||viewingRecords().find(r=>r.accession===accession)||null;
 }
 function focusRecord(){
+  if(state.recordAccession)return person(state.recordAccession)||record();
   if(state.hover?.kind==='object')return person(state.hover.accession)||record();
   if(state.researchPath)return state.researchPath.source;
   return record();
@@ -296,6 +299,7 @@ function showEdge(edge){
   state.researchPath=null;
   state.edge=edge.id;
   state.identityEdge=null;
+  state.recordAccession=null;
   render();
   setPanel('conversation');
   if(mobileLayout())setMobileView('space');
@@ -331,6 +335,11 @@ function markSpeaker(role){
   const active=!state.speaker||state.speaker==='objectA'||(lensIsGuide&&state.speaker==='archivist')?'lens':state.speaker;
   document.querySelectorAll('#zoom-stage [data-speaker]').forEach(plate=>{
     plate.classList.toggle('largest',plate.dataset.speaker===active);
+  });
+  document.querySelectorAll('#room-participants [data-speaker]').forEach(plate=>{
+    const speaking=Boolean(role)&&plate.dataset.speaker===role;
+    plate.classList.toggle('speaking',speaking);
+    if(speaking)plate.setAttribute('aria-current','true');else plate.removeAttribute('aria-current');
   });
 }
 function renderStage(){
@@ -393,7 +402,6 @@ function paintScene(c,edge){
 }
 function mobileLayout(){return window.matchMedia('(max-width: 800px)').matches;}
 function setMobileView(view){
-  if(!mobileLayout())return;
   document.body.classList.remove('show-timeline','show-space','show-room');
   document.body.classList.add('show-'+view);
   if(view==='room')requestAnimationFrame(()=>stage.resize());
@@ -406,7 +414,7 @@ function placeZoomStage(){
 function syncMobileLayout(){
   placeZoomStage();
   if(!mobileLayout()){document.body.classList.remove('show-timeline','show-space','show-room');return;}
-  if(!document.body.classList.contains('show-timeline')&&!document.body.classList.contains('show-space')&&!document.body.classList.contains('show-room'))document.body.classList.add('show-timeline');
+  if(!document.body.classList.contains('show-timeline')&&!document.body.classList.contains('show-space')&&!document.body.classList.contains('show-room'))document.body.classList.add('show-space');
   if(document.body.classList.contains('show-room'))requestAnimationFrame(()=>stage.resize());
 }
 function followObject(accession){
@@ -435,7 +443,7 @@ function paintTimeline(){
   list.replaceChildren();
   const source=record();
   const title=$('timeline-title');
-  if(title)title.textContent=source?source.title+' · '+source.accession:'';
+  if(title)title.textContent='Choose a question';
   const edges=state.researchPath&&!roomMode()
     ? societyView(state.records,state.seed,state.lens,{atlas:false,theme:$('theme').value}).edges
     : (state.view?.edges||[]);
@@ -444,14 +452,13 @@ function paintTimeline(){
     const target=viewingRecords().find(item=>item.accession===edge.target);
     if(!source||!target||!edge.reasons?.length)continue;
     const scene=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});
+    const episode=conversationEpisode({source,target,conversation:scene});
     const button=node('button',undefined,'path-post');
     button.type='button';
-    button.append(node('span',edgeCategory(edge),'path-category'),node('strong',source.title+' · '+target.title));
-    if(scene.dramaticArc)button.append(node('span','Question: '+scene.dramaticArc,'path-arc'));
-    const lead=edge.reasons[0];
-    button.append(node('span','Linked by shared '+(lead.family==='motif'?'motif':'theme')+': '+lead.value+' · not a documented relationship','path-limit'));
-    button.append(node('span',scene.mode==='CURATED_EDGE_SCENE'?'Written specifically for this pair':'Shared five-turn script, adapted to this pair','path-kind'));
-    button.addEventListener('click',()=>{state.researchPath=null;state.edge=edge.id;render();setMobileView('space');});
+    button.append(node('span',episode.label,'path-kind'),node('strong',episode.question));
+    button.append(node('span',episode.participants.map(p=>p.shortName).join(' × '),'path-arc'));
+    button.append(node('span',episode.rationale,'path-limit'));
+    button.addEventListener('click',()=>{showEdge(edge);setMobileView('space');});
     list.append(button);
   }
   if(roomMode())return;
@@ -459,8 +466,9 @@ function paintTimeline(){
     const button=node('button',undefined,'path-post research-path');
     button.type='button';
     button.dataset.path=path.id;
-    button.append(node('span','Curatorial juxtaposition','path-category'),node('strong',path.source.title+' · '+path.target.title));
-    button.append(node('span',path.arc,'path-arc'));
+    const episode=conversationEpisode({source:path.source,target:path.target,conversation:juxtapositionConversation(path)});
+    button.append(node('span','Artist-proposed comparison','path-kind'),node('strong',episode.question));
+    button.append(node('span',episode.participants.map(p=>p.shortName).join(' × '),'path-arc'));
     button.append(node('span',path.proposal,'path-limit'));
     button.addEventListener('click',()=>openResearchPath(path.id));
     list.append(button);
@@ -469,8 +477,9 @@ function paintTimeline(){
 function addEncounterOrientation(box,source,target,conversation){
   const lens=LENSES.find(item=>item.id===state.lens);
   const guide=explainEncounter({source,target,conversation,lensLabel:lens?.label||'Family',previous:state.lastExplained});
-  const section=node('section',undefined,'encounter-orientation');
+  const section=node('details',undefined,'encounter-orientation');
   section.setAttribute('aria-label','Why this conversation?');
+  section.append(node('summary','How this conversation was written'));
   section.append(node('span',guide.type,'encounter-type'));
   section.append(node('h3',guide.sourceName+' × '+guide.targetName));
   const reason=node('p',undefined,'encounter-reason');
@@ -482,12 +491,48 @@ function addEncounterOrientation(box,source,target,conversation){
   const changes=node('p',undefined,'encounter-changes');
   changes.append(node('strong','What changes when you choose another? '),document.createTextNode(guide.changed));
   section.append(changes);
-  const details=node('details',undefined,'encounter-method');
-  details.append(node('summary','How this conversation was written'));
+  const details=node('div',undefined,'encounter-method');
   details.append(node('p',guide.form),node('p',guide.frame),node('p',guide.boundary));
   section.append(details);
   box.append(section);
   state.lastExplained=guide;
+}
+function openEpisodeRecord(accession){
+  state.recordAccession=accession;
+  renderRecord();setPanel('record');closeConversationSheet();
+  document.querySelector('.rail-scroll').scrollTop=0;
+}
+function renderRoomHeader(source,target,c){
+  const episode=conversationEpisode({source,target,conversation:c});
+  if(state.episode?.id!==episode.id){
+    state.recordAccession=null;
+    document.querySelector('.rail-scroll').scrollTop=0;
+  }
+  state.episode=episode;
+  const header=$('room-header');header.hidden=false;header.dataset.episode=episode.id;header.dataset.mode=episode.mode;
+  $('room-question').textContent=episode.question;
+  $('room-kind').textContent=episode.label;
+  $('room-description').textContent=episode.mode==='CURATED_SCRIPT'?'A conversation between two objects':'Two records. An open research question.';
+  $('room-rationale').textContent=episode.rationale+' ↗';
+  $('room-participants').replaceChildren(...episode.participants.map((p,i)=>{
+    const button=node('button',undefined,'room-participant');button.type='button';button.dataset.speaker=p.role;
+    button.setAttribute('aria-label','Open record: '+p.title+' · '+p.accession);
+    const r=i?target:source,src=photo(r);
+    if(src){const img=node('img');img.src=src;img.alt='';button.append(img);}
+    else button.append(node('span','Image unavailable','participant-placeholder'));
+    const text=node('span',undefined,'participant-name');text.append(node('strong',p.shortName),node('small','View record'));
+    button.append(text);button.addEventListener('click',()=>openEpisodeRecord(p.accession));return button;
+  }));
+  const evidence=$('episode-evidence');
+  evidence.replaceChildren(node('h2','Why these two?'),node('p',episode.rationale),
+    node('p','These are imagined exchanges, not historical speech or live autonomous AI. Shared tags do not establish contact, influence, or shared storage.'));
+  for(const p of episode.participants){
+    const button=node('button',p.title+' · '+p.accession,'evidence-record');button.type='button';
+    button.addEventListener('click',()=>openEpisodeRecord(p.accession));evidence.append(button);
+  }
+  const lens=LENSES.find(item=>item.id===state.lens);
+  evidence.append(node('p',explainEncounter({source,target,conversation:c,lensLabel:lens?.label}).frame),
+    node('p','Source review and image permissions are separate from this artist-authored interpretation.','muted'));
 }
 function paintResearchScene(c){
   paintSceneLabel('Curatorial juxtaposition','#e8d5a3','Curatorial juxtaposition. Not a catalog match or a documented meeting.',c.dramaticArc,'RESEARCH PREVIEW · NOT A CATALOG MATCH');
@@ -498,10 +543,11 @@ function renderJuxtaposition(box){
   state.conversation=c;
   paintResearchScene(c);
   const source=path.source,target=path.target;
+  renderRoomHeader(source,target,c);
   const guide=CARD_BY_ID.get('archivist');
   const faces={
-    objectA:{name:source.title,src:avatarFor(source),side:'a'},
-    objectB:{name:target.title,src:avatarFor(target),side:'b'},
+    objectA:{name:state.episode.participants[0].shortName,src:photo(source)||objectBadge(source),side:'a'},
+    objectB:{name:state.episode.participants[1].shortName,src:photo(target)||objectBadge(target),side:'b'},
     archivist:{name:'Archivist',src:guide?portraitUrl(guide):'',side:'guide'}
   };
   const chat=node('div',undefined,'chat');
@@ -513,8 +559,8 @@ function renderJuxtaposition(box){
     const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
   }
-  addEncounterOrientation(box,source,target,c);
   box.append(chat);
+  addEncounterOrientation(box,source,target,c);
   const details=node('details');details.append(node('summary','Inspect the reason for this edge'));
   details.append(node('p',c.proposal,'muted'),node('p','This is not a catalog match or a documented meeting.','muted'),node('p',c.limits,'muted'));
   box.append(details);
@@ -525,6 +571,7 @@ function renderJuxtaposition(box){
 function renderConversation(){
   const edge=shownEdge(),box=$('conversation-content');box.replaceChildren();
   state.conversation=null;
+  $('room-header').hidden=true;
   clearScene();
   if(edge?.relationshipType==='curatorial_juxtaposition'&&state.researchPath){renderJuxtaposition(box);return;}
   if(state.hover?.kind==='identity'){
@@ -536,33 +583,42 @@ function renderConversation(){
     box.append(node('span','SCRIPTED · '+identity.validationState,'evidence-type'),node('h2',identity.type.replaceAll('_',' ')),node('p',identity.basis),node('p','Hidden layers remove both the line and its hit target. This edge is not a historical relationship.','muted'));
     $('voice-controls').hidden=true;setPlayDisabled(true);return;
   }
-  if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
-  const source=record(),target=viewingRecords().find(r=>r.accession===edge.target);
+  if(!edge){state.episode=null;box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
+  const source=person(edge.source),target=person(edge.target);
   if(!source||!target){box.append(node('h2','No shared category in this view.'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
   const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
   paintScene(c,edge);
+  renderRoomHeader(source,target,c);
   const chat=node('div',undefined,'chat');
   chat.style.setProperty('--link',tagColor(edge.reasons[0].value));
   const reader=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   const guide=CARD_BY_ID.get('archivist');
   const faces={
-    objectA:{name:source.title,src:avatarFor(source),side:'a'},
-    objectB:{name:target.title,src:avatarFor(target),side:'b'},
+    objectA:{name:state.episode.participants[0].shortName,src:photo(source)||objectBadge(source),side:'a'},
+    objectB:{name:state.episode.participants[1].shortName,src:photo(target)||objectBadge(target),side:'b'},
     archivist:{name:'Archivist · fictional research voice',src:guide?portraitUrl(guide):'',side:'guide'}
   };
-  addEncounterOrientation(box,source,target,c);
-  for(const turn of c.turns){
+  for(const turn of state.episode.turns){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
     const img=node('img');img.className='avatar';img.alt='';img.src=face.src;
     const say=node('div',undefined,'say');
     const line=node('span',undefined,'speaker-line');
     line.append(node('strong',face.name));
-    if(turn.role==='objectA')line.append(promptMenu());
+    if(turn.role==='objectA'&&c.mode!=='CURATED_EDGE_SCENE')line.append(promptMenu());
     say.append(line,node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
   }
   box.append(chat);
+  if(state.episode.mode==='RESEARCH_PROMPT'){
+    state.conversation=null;
+    box.append(node('p','Compare these records','research-prompt-title'),
+      node('p','This pair has no edited dialogue. Start with the shared tag, inspect each record, and decide whether the comparison holds.','research-prompt-copy'));
+    for(const p of state.episode.participants){
+      const button=node('button','Inspect '+p.shortName,'evidence-record');button.type='button';
+      button.addEventListener('click',()=>openEpisodeRecord(p.accession));box.append(button);
+    }
+  }
   if(c.mode!=='CURATED_EDGE_SCENE'&&c.dramaticArc)box.append(node('p',c.dramaticArc,'notice'));
   if(c.nextPrompt)box.append(node('p',c.nextPrompt,'notice'));
   // A narrative edge can become a new starting object. Make this an explicit
@@ -584,7 +640,9 @@ function renderConversation(){
   box.append(actions);
   const details=node('details');details.append(node('summary','Inspect the reason for this edge'));
   for(const reason of c.evidence){const e=node('div',undefined,'reason');e.append(node('strong',reason.family+' / '+reason.value),node('small',reason.sourceColumns.join(' + ')+' → '+reason.targetColumns.join(' + ')),node('small','Shared by '+reason.candidateCount+' records in this local index.'));details.append(e);}
-  details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);$('voice-controls').hidden=$('conversation-panel').hidden;setPlayDisabled(state.playing);
+  details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);
+  addEncounterOrientation(box,source,target,c);
+  $('voice-controls').hidden=$('conversation-panel').hidden||!state.conversation;setPlayDisabled(!state.conversation);
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn 1 of '+c.turns.length;
 }
 function pair(list,label,value){list.append(node('dt',label),node('dd',value||'Not supplied'));}
@@ -604,14 +662,22 @@ function renderRecord(){
   const r=focusRecord();
   if(!r){box.replaceChildren();return;}
   box.replaceChildren();
+  if(state.episode){
+    const picker=node('div',undefined,'record-object-picker');
+    for(const p of state.episode.participants){
+      const button=node('button',p.shortName);button.type='button';button.setAttribute('aria-pressed',String(p.accession===r.accession));
+      button.addEventListener('click',()=>openEpisodeRecord(p.accession));picker.append(button);
+    }
+    box.append(picker);
+  }
   const frame=node('div',undefined,'record-frame');
   if(photo(r)){const img=node('img');img.src=photo(r);img.alt='Locally supplied image matched to '+r.accession;frame.append(img);}
   const toggle=node('button','','record-toggle');
-  toggle.type='button';toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Show the record');
+  toggle.type='button';toggle.setAttribute('aria-expanded','true');toggle.setAttribute('aria-label','Hide the record');
   const icon=svg('svg',{viewBox:'0 0 24 24','aria-hidden':'true'});
   icon.append(svg('path',{d:'M6 7h12M6 12h12M6 17h8',fill:'none',stroke:'currentColor','stroke-width':'1.6'}));
   toggle.append(icon);
-  const overlay=node('div',undefined,'record-overlay');overlay.hidden=true;
+  const overlay=node('div',undefined,'record-overlay');
   if(r.researchOnly)overlay.append(node('p','Published checklist record. No approved photograph and no Lakehouse match.','muted'));
   if(r.source!=='lakehouse')overlay.append(node('span',r.source==='invented'?'INVENTED EXAMPLE':r.source==='public-packet'?'PUBLIC PACKET · IDENTITY ONLY':r.source==='research-preview'?'PUBLISHED CHECKLIST · RESEARCH PREVIEW':r.source==='matrix'?'PHOTOGRAPHED MATRIX':'LOCAL CSV · SOURCE INPUT','evidence-type'));
   if(r.source==='public-packet')overlay.append(node('p','This packet identifies an accession and title only. No direct historical relationship, source-linked image, or staff-tag neighbor has been established for it in this view.','muted'));
@@ -880,7 +946,7 @@ function saveConversation(){
   const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})),a=node('a');a.href=url;a.download='archive-conversation.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 $('lens').replaceChildren(...LENSES.map(p=>{const o=node('option',p.label);o.value=p.id;return o;}));
-$('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;state.edge=null;render();paintReading();});
+$('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;render();paintReading();});
 function paintReading(){
   const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   $('reading-portrait').src=portraitUrl(card);
@@ -1036,12 +1102,14 @@ $('space-evidence')?.addEventListener('click',event=>{
   if(document.body.classList.contains('show-timeline'))setMobileView('space');
   $('conversation-head').click();
 });
+$('room-rationale')?.addEventListener('click',event=>{event.stopPropagation();$('conversation-head').click();});
 $('space-room')?.addEventListener('click',()=>{
   state.mobileFrom=document.body.classList.contains('show-timeline')?'timeline':'space';
   setMobileView('room');
 });
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
 $('space-leave')?.addEventListener('click',()=>setMobileView('timeline'));
+$('questions-back')?.addEventListener('click',()=>setMobileView('space'));
 const mobileMedia=window.matchMedia('(max-width: 800px)');
 mobileMedia.addEventListener('change',syncMobileLayout);
 window.addEventListener('resize',syncMobileLayout);

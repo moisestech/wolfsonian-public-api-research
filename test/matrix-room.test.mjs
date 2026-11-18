@@ -48,9 +48,9 @@ test('zoom stops sit between the world view and a single object', () => {
 
 test('a clicked matrix object speaks with its strongest shared-tag neighbor', () => {
   const talk = objectConversation(MATRIX_OBJECTS, '2009.5.1');
-  assert.equal(talk.turns.length, 3);
+  assert.deepEqual(talk.turns.map(turn=>turn.role), ['objectA','objectB','objectA','archivist','objectB']);
   assert.equal(talk.historicalRelationshipEstablished, false);
-  assert.match(talk.turns[2].text, /cannot establish|does not establish|not a documented/);
+  assert.match(talk.turns[3].text, /cannot establish|does not establish|not a documented|not evidence/);
   assert.notEqual(talk.target, '2009.5.1');
   assert.match(talk.limits, /not a historical|cannot|alone|not proof|not evidence|not a complete|cannot establish|does not|never asserts|not a statement/i);
 });
