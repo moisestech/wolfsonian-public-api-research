@@ -74,6 +74,19 @@ function edgeFor(id, source, target) {
   });
 }
 
+function evidenceLinks(path) {
+  const links=[];
+  for (const record of [path.source,path.target]) {
+    if (record.researchOnly) links.push({label:'Museum World’s Fairs checklist',url:CHECKLIST});
+    else if (record.source==='presentation') links.push({label:'Public presentation titles and accessions',url:'https://github.com/moisestech/wolfsonian-public-api-research/blob/main/src/presentation-pairs.mjs'});
+    else if (record.source==='public-packet') {
+      links.push({label:'Public research packet · '+record.accession,url:'https://github.com/moisestech/wolfsonian-public-api-research/blob/main/data/public/objects/'+record.packet+'.json'});
+      links.push({label:'Museum source · '+record.accession,url:record.sourceUrl});
+    }
+  }
+  return Object.freeze([...new Map(links.map(link=>[link.url,Object.freeze(link)])).values()]);
+}
+
 function scene(path) {
   return Object.freeze({
     ...path,
@@ -81,6 +94,7 @@ function scene(path) {
     relationshipType: 'curatorial_juxtaposition',
     historicalRelationshipEstablished: false,
     sourceUrl: [path.source,path.target].some(record=>record.researchOnly) ? CHECKLIST : null,
+    sourceLinks: evidenceLinks(path),
   });
 }
 
@@ -190,6 +204,20 @@ function presentationRecord(accession) {
   throw new Error('Unknown presentation accession ' + accession);
 }
 
+// Public packets are artist-prepared research records, not Lakehouse matches
+// or rights-cleared photographs. Titles/accessions match WOLF-002/003/004/001.
+const PUBLIC_PACKET_RECORDS = Object.freeze({
+  'XX1990.1484': { title:'Radio, Sparton, model 558-C', packet:'WOLF-002', url:'https://wolfsonian.org/whats-on/digital-experiences/designing-deco/' },
+  'XM1999.108.8': { title:'Catalogue, Machine Age Exposition', packet:'WOLF-003', url:'https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf' },
+  '85.7.383a,b': { title:'Vase with lid, Mappemonde [Globe]', packet:'WOLF-004', url:'https://wolfsonian.org/whats-on/digital-experiences/designing-deco/' },
+  '86.17.1': { title:'Model, Trylon and Perisphere', packet:'WOLF-001', url:'https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html' },
+});
+function publicPacketRecord(accession) {
+  const entry=PUBLIC_PACKET_RECORDS[accession];
+  if(!entry)throw new Error('Missing reviewed public packet '+accession);
+  return Object.freeze({...existingRecord(accession,entry.title),source:'public-packet',packet:entry.packet,sourceUrl:entry.url,rightsApproved:false});
+}
+
 function comparison(id, arc, source, target, proposal, limits, lines) {
   const turns=lines.map((text,index)=>{
     const first=index%2===0;
@@ -255,7 +283,35 @@ const BRIDGES=[
     'The checklist records the sculpture’s rejection. The other title supplies no evidence that its maker addressed the same organizers.',
     ['I was meant to stand in public. The fair organizers turned me down. Read me the first word of your title.',
      '“Let.” Try saying “Let the Living Rise” twice: once as the person asking, once as the person who can grant permission.',
-     'I heard two different voices. Which one would you have given the wall label to?'])
+     'I heard two different voices. Which one would you have given the wall label to?']),
+  comparison('catalogue-meets-engine','Who gets to call an age the Machine Age?',
+    publicPacketRecord('XM1999.108.8'),presentationRecord('85.4.64.43'),
+    'The 1927 Machine Age Exposition catalogue meets an artwork titled Making the Engine. The comparison contrasts a cultural category with the work named in the print.',
+    'The public packet identifies the catalogue and its cover attribution, not the text of its essays. Neither source establishes who built an engine or attended the exposition.',
+    ['I am a catalogue for the Machine Age Exposition. Before anyone opens me, my title has already declared an era.',
+     'My title is Making the Engine. Declaring an era is easy to print; making an engine sounds like something somebody must do.',
+     'You make my title sound unfinished. Which hands or pages would we need to examine before agreeing about the age?']),
+  comparison('radio-meets-futurama','Can you change the channel on tomorrow?',
+    publicPacketRecord('XX1990.1484'),researchRecord('83.2.19'),
+    'The Sparton 558-C is a 1937 radio; the published checklist describes Futurama’s narrated journey over an imagined city at the 1939 fair.',
+    'No public packet establishes this radio’s actual listeners, tuning habits or association with the General Motors exhibit.',
+    ['My body is glass, brass, wood and Bakelite. A radio can receive a voice, but does that mean it can answer back?',
+     'My visitors moved above an imagined city while a narration explained what they saw. Could they have changed the station?',
+     'Changing a station is not the same as choosing the city. Who would get to talk back to your narrator?']),
+  comparison('globe-and-theme-center','How much of a world fits inside an object?',
+    publicPacketRecord('85.7.383a,b'),publicPacketRecord('86.17.1'),
+    'A 1932 globe-shaped stoneware vase meets a model of the Trylon and Perisphere, designed for the 1939 fair’s Theme Center.',
+    'The two public packets document distinct objects and materials. They do not establish a shared exhibition, audience or design influence.',
+    ['I am a globe-shaped vessel, made of glazed stoneware. A world can appear small enough to put on a table.',
+     'I am a model for a fair’s Theme Center. Scale me up in your imagination, and you might walk around my world.',
+     'You changed the scale, not the boundary. Whose world would you notice beyond the fairgrounds?']),
+  comparison('catalogue-and-globe','Who gets named when we call a design modern?',
+    publicPacketRecord('XM1999.108.8'),publicPacketRecord('85.7.383a,b'),
+    'The Machine Age Exposition catalogue proposes a broad category. The Mappemonde vase’s public packet names separate form, décor and decoration roles.',
+    'The catalogue packet does not quote its essays or connect its exhibition to the vase; the vase packet does not establish its reception or exhibition placement.',
+    ['My cover can gather many objects under the phrase Machine Age. Is that enough to explain who made them?',
+     'My public record names a form designer, a décor designer and a decorator. A single label would make those different tasks disappear.',
+     'Then my category may need a footnote rather than a slogan. Whose names should a visitor look for before calling something modern?'])
 ];
 
 export const CURATORIAL_PATHS = Object.freeze([...PATH_DRAFTS,...BRIDGES].map(path => scene({

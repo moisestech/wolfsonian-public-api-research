@@ -583,7 +583,8 @@ function renderRoomHeader(source,target,c){
   }
   if(state.researchPath?.aiAssisted){
     evidence.append(node('p',state.researchPath.proposal),node('p',state.researchPath.limits));
-    for(const [label,url] of [['Museum exhibition checklist',state.researchPath.sourceUrl],['Public presentation titles and accessions','https://github.com/moisestech/wolfsonian-public-api-research/blob/main/src/presentation-pairs.mjs']]){
+    const sources=state.researchPath.sourceLinks||[];
+    for(const {label,url} of sources){
       if(!url)continue;
       const link=node('a',label,'evidence-record');link.href=url;link.target='_blank';link.rel='noopener noreferrer';evidence.append(link);
     }
