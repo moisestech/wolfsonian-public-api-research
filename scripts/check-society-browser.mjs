@@ -81,6 +81,14 @@ try {
   await page.locator('#space-leave').click();
   await page.locator('#timeline-list button').filter({hasText:'Who pays the price of progress?'}).click();
   assert.equal(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
+  await page.getByRole('button',{name:'More questions with these objects'}).click();
+  assert.equal(await page.locator('#timeline-title').innerText(),'Follow these objects');
+  assert.equal(await page.locator('#timeline-list button').filter({hasText:'Who pays the price of progress?'}).count(),0);
+  await page.locator('#timeline-list button').filter({hasText:'What does a monument owe the hands that built it?'}).click();
+  assert.equal(await page.locator('#room-kind').textContent(),'AI-assisted script');
+  await page.getByRole('button',{name:'More questions with these objects'}).click();
+  await page.locator('#timeline-list button').filter({hasText:'Who builds the future?'}).click();
+  assert.equal(await page.locator('#room-question').innerText(),'Who builds the future?');
   await page.locator('#source-info').click();
   await page.waitForURL('**/demo/about/');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));

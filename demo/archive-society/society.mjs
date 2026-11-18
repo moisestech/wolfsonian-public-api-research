@@ -439,11 +439,13 @@ function paintListeners(){
     row.append(button);
   }
 }
+let relatedQuestions=false;
 function paintTimeline(){
   const list=$('timeline-list');if(!list)return;
   list.replaceChildren();
   if(!document.body.classList.contains('show-timeline'))return;
-  $('timeline-title').textContent='Choose a question';
+  $('timeline-title').textContent=relatedQuestions?'Follow these objects':'Choose a question';
+  $('all-directory-questions').hidden=!relatedQuestions;
   const records=new Map(state.records.map(record=>[record.accession,record]));
   const seeds=new Set([state.seed,...PRESENTATION_PAIRS.flatMap(pair=>[pair.source,pair.target])]);
   const seen=new Set(), scenes=[], prompts=[];
@@ -471,7 +473,9 @@ function paintTimeline(){
     episode:conversationEpisode({source:path.source,target:path.target,conversation:juxtapositionConversation(path)}),
     open:()=>openResearchPath(path.id)
   }));
-  for(const [label,entries] of [['Authored scenes',scenes],['Artist-proposed exchanges',comparisons],['Research prompts',prompts]]){
+  const currentIds=new Set(state.episode?.participants.map(p=>p.accession));
+  for(const [label,group] of [['Authored scenes',scenes],['Artist-proposed exchanges',comparisons],['Research prompts',prompts]]){
+    const entries=relatedQuestions?group.filter(({episode})=>episode.id!==state.episode?.id && episode.participants.some(p=>currentIds.has(p.accession))):group;
     if(!entries.length)continue;
     const section=node('section');
     section.append(node('h2',label+' · '+entries.length,'directory-heading'));
@@ -492,8 +496,12 @@ function paintTimeline(){
     }
     list.append(section);
   }
+  if(!list.childElementCount)list.append(node('p','These objects have no further questions in this view.'));
 }
 function addEncounterOrientation(box,source,target,conversation){
+  const onward=node('button','More questions with these objects','evidence-record');
+  onward.type='button';onward.addEventListener('click',()=>{relatedQuestions=true;setMobileView('timeline');});
+  box.append(onward);
   const lens=LENSES.find(item=>item.id===state.lens);
   const guide=explainEncounter({source,target,conversation,lensLabel:lens?.label||'Family',previous:state.lastExplained});
   const section=node('details',undefined,'encounter-orientation');
@@ -548,6 +556,12 @@ function renderRoomHeader(source,target,c){
   for(const p of episode.participants){
     const button=node('button',p.title+' · '+p.accession,'evidence-record');button.type='button';
     button.addEventListener('click',()=>openEpisodeRecord(p.accession));evidence.append(button);
+  }
+  if(state.researchPath?.aiAssisted){
+    evidence.append(node('p',state.researchPath.proposal),node('p',state.researchPath.limits));
+    for(const [label,url] of [['Museum exhibition checklist',state.researchPath.sourceUrl],['Public presentation titles and accessions','https://github.com/moisestech/wolfsonian-public-api-research/blob/main/src/presentation-pairs.mjs']]){
+      const link=node('a',label,'evidence-record');link.href=url;link.target='_blank';link.rel='noopener noreferrer';evidence.append(link);
+    }
   }
   const lens=LENSES.find(item=>item.id===state.lens);
   evidence.append(node('p',explainEncounter({source,target,conversation:c,lensLabel:lens?.label}).frame),
@@ -694,7 +708,7 @@ function renderRecord(){
   if(photo(r)){const img=node('img');img.src=photo(r);img.alt='Locally supplied image matched to '+r.accession;frame.append(img);}
   const overlay=node('div',undefined,'record-overlay');
   if(r.researchOnly)overlay.append(node('p','Published checklist record. No approved photograph and no Lakehouse match.','muted'));
-  if(r.source!=='lakehouse')overlay.append(node('span',r.source==='invented'?'INVENTED EXAMPLE':r.source==='public-packet'?'PUBLIC PACKET · IDENTITY ONLY':r.source==='research-preview'?'PUBLISHED CHECKLIST · RESEARCH PREVIEW':r.source==='matrix'?'PHOTOGRAPHED MATRIX':'LOCAL CSV · SOURCE INPUT','evidence-type'));
+  if(r.source!=='lakehouse')overlay.append(node('span',r.source==='invented'?'INVENTED EXAMPLE':r.source==='public-packet'?'PUBLIC PACKET · IDENTITY ONLY':r.source==='research-preview'?'PUBLISHED CHECKLIST · RESEARCH PREVIEW':r.source==='presentation'?'PUBLIC PRESENTATION RECORD':r.source==='matrix'?'PHOTOGRAPHED MATRIX':'LOCAL CSV · SOURCE INPUT','evidence-type'));
   if(r.source==='public-packet')overlay.append(node('p','This packet identifies an accession and title only. No direct historical relationship, source-linked image, or staff-tag neighbor has been established for it in this view.','muted'));
   overlay.append(node('h2',r.title));
   const list=node('dl');
@@ -1118,7 +1132,9 @@ $('space-room')?.addEventListener('click',()=>{
 });
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
 $('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();});
-$('space-leave')?.addEventListener('click',()=>setMobileView('timeline'));
+function browseAll(){relatedQuestions=false;setMobileView('timeline');}
+$('space-leave')?.addEventListener('click',browseAll);
+$('all-directory-questions').addEventListener('click',browseAll);
 $('questions-back')?.addEventListener('click',()=>setMobileView('space'));
 const mobileMedia=window.matchMedia('(max-width: 800px)');
 mobileMedia.addEventListener('change',syncMobileLayout);
