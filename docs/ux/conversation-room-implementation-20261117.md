@@ -52,3 +52,10 @@ The focused unit suite covers episode/pair identity, unchanged scripts across le
 The repository's older matrix-room test expected three turns although main's existing comparison engine returns five. Its assertion is updated to check the complete role sequence and the archivist's source boundary. No dialogue engine behavior changes.
 
 Physical Safari/VoiceOver, projector/audio rehearsal, five-person cold-visitor evaluation and institutional source/reuse review remain human checks. Automated layout checks do not establish visitor comprehension or curatorial approval.
+
+
+## Mobile object-first, scroll-to-read revision (November 18)
+
+The older “IMAGINED EXCHANGE” kicker has been removed. The question and actual object titles carry the room. The full archival photographs and diagrams remain uncropped in two tall, side-by-side cards; the explanatory evidence boundary remains accessible through **Why these two?** and **Evidence**.
+
+On mobile only, the room heading lives inside the transcript's single scrolling container and stays visible as a compact masthead. The object image stage contracts smoothly over the first 220 CSS pixels of scrolling (bounded by viewport height), without changing what the cards link to. Reading scroll offset is compensated while the cards change size so dialogue remains reachable. Titles and padding are slightly smaller. Desktop keeps its existing header layout. Tests now assert the object-first state and the compact reading state rather than requiring two full bubbles to be above the fold before a user scrolls.
