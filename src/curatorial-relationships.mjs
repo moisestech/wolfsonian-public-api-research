@@ -4,6 +4,7 @@
  * comparison. A documented historical relationship would need reviewed
  * evidence of contact, and this set has none.
  */
+import { PRESENTATION_PAIRS } from './presentation-pairs.mjs';
 import { WORLDS_FAIRS_RESEARCH } from './worlds-fairs-research.mjs';
 
 export const RELATIONSHIP_TYPES = Object.freeze({
@@ -179,7 +180,57 @@ const PATH_DRAFTS = [
   },
 ];
 
-export const CURATORIAL_PATHS = Object.freeze(PATH_DRAFTS.map(path => scene({
+// Each comparison joins two existing rooms through their exact object identities.
+function presentationRecord(accession) {
+  for (const pair of PRESENTATION_PAIRS) {
+    for (const side of ['source', 'target']) {
+      if (pair[side] === accession) return {...existingRecord(accession, pair[side + 'Title']), source:'presentation'};
+    }
+  }
+  throw new Error('Unknown presentation accession ' + accession);
+}
+
+function comparison(id, arc, source, target, proposal, limits, lines) {
+  const turns=lines.map((text,index)=>{
+    const first=index%2===0;
+    const record=first?source:target;
+    return Object.freeze({role:first?'objectA':'objectB',speakerAccession:record.accession,speaker:record.title,text,kind:'AI_ASSISTED_INTERPRETATION'});
+  });
+  return {id,arc,source,target,proposal,limits,turns:Object.freeze(turns),aiAssisted:true};
+}
+
+const BRIDGES=[
+  comparison('cost-of-iron','What does a monument owe the hands that built it?',
+    researchRecord('84.6.14'),presentationRecord('TD1989.318.1'),
+    'A sculpture of ironwork celebrates building. A grinding warning asks what a single splinter could cost.',
+    'The sources identify different objects. They give no evidence of an injury on the tower.',
+    ['Stand far enough back and you can take in a whole tower. Can you still make out the people raising it?',
+     'Read my warning from that distance. Can you make out the word “eye”? Come closer. One splinter is all I ask you to picture.',
+     'Then look at the workers again. How close must you stand before the tower stops being the first thing you see?']),
+  comparison('room-for-a-warning','Who gets to put a warning in public?',
+    researchRecord('83.6.2'),presentationRecord('TD1989.318.1'),
+    'An unbuilt warning about political aggression meets a printed warning about grinding.',
+    'The fair’s rejection is recorded. The safety poster’s placement and audience remain unverified.',
+    ['The fair turned down my warning. Yours made it into print. Was it easier to ask someone to stop a wheel?',
+     'My title gives you one splinter and one eye. I can name what is at risk. I can’t tell you whether anyone stopped.',
+     'What would my warning have had to name for someone to make space for it?']),
+  comparison('city-from-a-window','What disappears when you see a city from above?',
+    researchRecord('83.2.19'),presentationRecord('XX1991.13'),
+    'Futurama offers a view over a city. An architectural fantasy singles out one house on a steep hillside.',
+    'The titles and checklist support a comparison of viewpoints. They do not identify the same city or architect.',
+    ['From above, I can give you the whole city in a glance. Pick a house. What would you want to know?',
+     'Mine stands on a steep hillside. Put down the plan for a moment. How would you get home with a bag in each hand?',
+     'I was about to point out the road. Now I’m looking for the last few steps to the door.']),
+  comparison('terms-of-entry','What does an invitation actually give you?',
+    researchRecord('XC2024.03.1.1'),presentationRecord('TD1989.317.66'),
+    'A Harlem fair invitation and an exhibition lottery address the reader in different ways.',
+    'Neither record identifies an individual who attended both exhibitions or won the lottery.',
+    ['I invite you to visit a fair. You can read my words and still have a whole journey ahead of you.',
+     'I offer a chance in a lottery. Someone could keep my ticket and never see the work named on it.',
+     'If we wanted to know who actually walked through the doors, whose paper would we ask to see next?'])
+];
+
+export const CURATORIAL_PATHS = Object.freeze([...PATH_DRAFTS,...BRIDGES].map(path => scene({
   ...path,
   edge: edgeFor(path.id, path.source, path.target),
 })));
@@ -195,6 +246,7 @@ export function juxtapositionConversation(path) {
     mode: 'CURATORIAL_JUXTAPOSITION',
     relationshipType: 'curatorial_juxtaposition',
     researchPreview: true,
+    aiAssisted: Boolean(path.aiAssisted),
     editorialStatus: 'research_preview',
     historicalRelationshipEstablished: false,
     dramaticArc: path.arc,
