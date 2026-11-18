@@ -226,7 +226,7 @@ try {
   await selectEdge(promptIndex);await screenshot('research-prompt');
   await page.locator('.conversation-edge[data-accession="TD1989.318.1"]').focus();await page.keyboard.press('Enter');
   const script=await page.locator('.chat').innerText();
-  await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
+  await page.locator('#reading-toggle').click();await page.locator('#reading-popover [data-lens="worker"]').click();
   await page.locator('.conversation-edge[data-accession="TD1989.318.1"]').focus();await page.keyboard.press('Enter');
   assert.equal(await page.locator('.chat').innerText(),script,'A perspective never rewrites authored text');
   await page.locator('#room-rationale').click();
@@ -267,7 +267,7 @@ try {
   await page.waitForFunction(()=>document.querySelector('#voice-status').textContent.includes('not enabled'));
   assert.equal(voiceRequests.length,1);
   await page.locator('#admin-close').click();
-  await page.locator('#reading-toggle').click();await page.locator('[data-lens="archivist"]').click();
+  await page.locator('#reading-toggle').click();await page.locator('#reading-popover [data-lens="archivist"]').click();
   assert.equal(await page.locator('#external-approved').isChecked(),false);
 
   // Following an object is an explicit new investigation, with an in-memory return.
