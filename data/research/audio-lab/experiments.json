@@ -105,7 +105,11 @@
           "direction": "question",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "02-promise-souvenir",
@@ -206,7 +210,11 @@
           "direction": "soft_end",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "03-globe-theme-center",
@@ -308,7 +316,11 @@
           "direction": "closing",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "04-poster-program",
@@ -409,7 +421,11 @@
           "direction": "end",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "05-who-is-modern",
@@ -511,7 +527,11 @@
           "direction": "end",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "06-machine-and-body",
@@ -610,7 +630,11 @@
           "direction": "end",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "07-trees-not-proof",
@@ -709,7 +733,11 @@
           "direction": "end",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "08-naming-an-era",
@@ -810,7 +838,11 @@
           "direction": "end",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "09-invited-future",
@@ -911,7 +943,11 @@
           "direction": "end",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     },
     {
       "id": "10-invisible-work",
@@ -1010,7 +1046,11 @@
           "direction": "end",
           "sourceClaimType": "ARTIST_AUTHORED_FICTION"
         }
-      ]
+      ],
+      "historicalRelationshipEstablished": false,
+      "institutionalVoice": false,
+      "audioApproval": "not_reviewed",
+      "publicationApproval": "not_approved"
     }
   ]
 }
