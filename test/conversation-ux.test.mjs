@@ -14,11 +14,11 @@ const scriptedIds=[
 test('mobile has one accessible Play/Stop toggle, not simultaneous controls',async()=>{
  const html=await readFile(new URL(repoUrl+'index.html',import.meta.url),'utf8');
  const js=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
- assert.match(html,/<button type="button" id="space-play" aria-label="Play conversation" aria-pressed="false">▶ Play<\/button>/);
+ assert.match(html,/<button type="button" id="space-play" class="space-tab space-listen" aria-label="Play conversation" aria-pressed="false"/);
  assert.doesNotMatch(html,/id="space-stop"/);
  assert.doesNotMatch(js,/\$\('space-stop'\)/);
  assert.match(js,/space\.setAttribute\('aria-pressed',String\(playing\)\)/);
- assert.match(js,/space\.textContent=playing\?'■ Stop':'▶ Play'/);
+ assert.match(js,/label\.textContent=playing\?'Stop':'Listen'/);
  assert.match(js,/\$\('space-play'\)\?\.addEventListener\('click',\(\)=>\$\('play'\)\.click\(\)\)/);
 });
 test('all app overlay dismissal buttons display × and retain descriptive accessibility labels',async()=>{
