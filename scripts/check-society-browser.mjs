@@ -33,10 +33,10 @@ try {
    assert.equal(await page.locator('#room-participants .object-portrait-meta').count(),2);
   assert.equal(await page.locator('#room-participants .object-open-arrow').count(),2);
   const cardCopy=await page.locator('#room-participants .object-inspect').allInnerTexts();
-  assert.ok(cardCopy.every(text=>!(/Collection image|Artist diagram|Record only|Inspect record|^0[12]\\s*·/i.test(text))),
+  assert.ok(cardCopy.every(text=>!(/Collection image|Artist diagram|Record only|Inspect record|^0[12]\s*·/i.test(text))),
     'Card titles should not be crowded by format, serial numbers or record instructions');
   const labels=await page.locator('#room-participants .object-inspect').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
-  assert.ok(labels.every(label=>label.startsWith('Inspect collection record: ') && /\\d/.test(label)),
+  assert.ok(labels.every(label=>label.startsWith('Inspect collection record: ') && /\d/.test(label)),
     'Accession detail must remain in the accessible action');
   assert.equal(await page.locator('.turn').count(),5);
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
