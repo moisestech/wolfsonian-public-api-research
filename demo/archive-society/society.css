@@ -653,3 +653,52 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
   html[data-color-theme="light"] .wordmark .brand-mark-on-dark{display:none!important}
   @media(max-width:420px){.wordmark .brand-icon{width:32px;height:32px;min-width:32px}}
 }
+
+// The conversation cast is an object exhibition, not two chat avatars.
+// Each image is either a local collection image already in the experience
+// or a visibly labeled artist diagram based on a public research packet.
+.room-participants{position:relative;gap:12px;align-items:stretch}
+.room-participant{display:flex;flex-direction:column;align-items:stretch;justify-content:space-between;min-width:0;min-height:0;
+  padding:0;border:1px solid #476057;border-radius:12px;background:#142822;overflow:hidden}
+.room-participant .object-inspect{display:flex;flex-direction:column;align-items:stretch;gap:0;min-width:0;min-height:0;width:100%;padding:0;
+  border:0;border-radius:0;text-align:left;color:#edf4ec;background:transparent}
+.room-participant .object-inspect:hover,.room-participant .object-inspect:focus-visible{background:#223b32}
+.object-portrait-media{display:grid;place-items:center;width:100%;height:clamp(108px,16vh,160px);padding:8px;
+  background:radial-gradient(ellipse at center,#33443e,#17271f);overflow:hidden}
+.object-portrait-media.is-diagram{background:#e4e4d8}
+.room-participant .object-portrait-media img{display:block;width:100%;height:100%;max-height:none;object-fit:contain;
+  margin:0;border:0;border-radius:0;background:transparent}
+.object-portrait-media.is-placeholder{background:repeating-linear-gradient(135deg,#22392f,#22392f 9px,#263d33 9px,#263d33 10px)}
+.object-portrait-placeholder{font:500 clamp(15px,2.2vw,22px)/1.18 Georgia,serif;text-align:center;color:#d9e8dc;
+  overflow-wrap:anywhere;max-width:90%}
+.object-portrait-meta{display:flex;flex-direction:column;gap:3px;padding:9px 10px 10px;min-width:0}
+.room-participant .object-portrait-meta strong{font:600 15px/1.18 Georgia,serif;letter-spacing:-.015em;
+  overflow-wrap:anywhere;color:#f3f5f1}
+.object-portrait-meta .speaker-status{font:650 10px/1.25 ui-monospace,monospace;letter-spacing:.06em;color:#adcec0;text-transform:uppercase}
+.object-accession{font:500 11px/1.35 ui-monospace,monospace;color:#b9c9c0;overflow-wrap:anywhere}
+.room-participant .object-more{display:block;width:100%;padding:7px 10px;min-height:44px;flex:none;border:0;
+  border-top:1px solid #456056;border-radius:0;background:#18382e;color:#cdf2de;text-align:left;font:600 12px/1.3 system-ui,sans-serif}
+.room-participant .object-more:hover,.room-participant .object-more:focus-visible{background:#315743}
+.object-cast-link{position:absolute;left:50%;top:clamp(48px,8vh,80px);z-index:2;display:grid;place-items:center;
+  width:34px;height:34px;transform:translate(-50%,-50%);border:1px solid #89a499;border-radius:50%;
+  background:#0e211b;color:#d5f2e5;font:600 24px/1 system-ui,sans-serif;pointer-events:none}
+.room-participant.speaking{border-color:#bce4cf;box-shadow:0 0 0 2px #bce4cf}
+.room-participant.speaking .speaker-status::after{content:' · SPEAKING';color:#bce4cf}
+@media(max-width:800px){
+  .room-participants{gap:8px;margin-bottom:6px}
+  .object-portrait-media{height:clamp(92px,14vh,128px);padding:6px}
+  .object-portrait-meta{padding:7px 8px 8px}
+  .room-participant .object-portrait-meta strong{font-size:clamp(13px,3.6vw,16px)}
+  .object-portrait-meta .speaker-status{font-size:9px}
+  .object-accession{font-size:10px}
+  .room-participant .object-more{font-size:11px;padding:6px 8px;min-height:44px}
+  .object-cast-link{top:clamp(42px,7vh,65px);width:29px;height:29px;font-size:20px}
+}
+@media(max-width:360px){
+  .room-participants{gap:6px}
+  .object-portrait-media{height:94px}
+  .object-portrait-meta{padding:6px 7px}
+  .room-participant .object-portrait-meta strong{font-size:13px}
+  .room-participant .object-more{font-size:10px;overflow-wrap:anywhere}
+}
+@media(prefers-reduced-motion:reduce){.room-participant.speaking{transition:none}}

@@ -343,7 +343,14 @@ const BRIDGES=[
     'The museum packets do not establish owners, actual viewers, whether the television broadcast the exhibit, or any personal encounter with the booklet.',
     ['My record dates me to 1939, a television designed to present pictures. Which pictures someone saw through me remains an unanswered question.',
      'I am a Futurama booklet from 1940. You can hold me after the fair’s promised tomorrow, but holding a booklet is not the same as taking the ride.',
-     'Then I should not invent a broadcast of your exhibit. What surviving account could tell us how either experience was actually received?'])
+     'Then I should not invent a broadcast of your exhibit. What surviving account could tell us how either experience was actually received?']),
+  comparison('program-and-booklet','When does a promise become a souvenir?',
+    publicPacketRecord('86.19.57'),publicPacketRecord('XB1992.1640'),
+    'A 1939 program titled Your World of Tomorrow, associated with the fair’s Theme Center, meets a 1940 Futurama booklet associated with the separate General Motors exhibit. Both frame the future as an experience, but their public records document different publications.',
+    'The packets do not establish a shared reader, visit, distribution path, reception, or historical interaction between these printed works; the full program text is not available here.',
+    ['My 1939 title addresses the reader directly: Your World of Tomorrow. How do you decide when a printed future belongs to you?',
+     'My 1940 cover says Futurama. I can travel home as a booklet, but being kept does not prove any promised tomorrow arrived.',
+     'Then a program and a souvenir may preserve two versions of a future without proving either was shared. Whose itinerary or first-hand account could test that claim?'])
 ];
 
 export const CURATORIAL_PATHS = Object.freeze([...PATH_DRAFTS,...BRIDGES].map(path => scene({

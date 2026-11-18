@@ -39,3 +39,11 @@ Cloudinary delivery: `archive-dreams/brand/aperture-white-v1` and `archive-dream
 A visitor test succeeds when four of five people can follow a speaker into two further conversations without coaching and identify one detail from the record alongside one imagined line. These targets are working hypotheses. Capture the chosen rooms and where each person hesitates before expanding beyond 36.
 
 For each batch, keep a source locator per object, identify any line requiring more evidence, and label the basis of the pairing. Use existing public object titles for title-based readings. Staff tags, proposed comparisons and documented contact have different evidentiary requirements. Physical storage belongs to the Annex view.
+
+## Conversation 36 and the object-stage interface (November 18)
+
+The 36th curatorial juxtaposition places accession **86.19.57** (*Program, Your World of Tomorrow*, 1939, Theme Center) beside **XB1992.1640** (*Booklet, Futurama*, 1940, General Motors). This is a deliberately skeptical comparison of two different fair publications, **not** evidence that anyone read both or that they belong to the same display. It raises the degree of both formerly single-conversation objects from one to two, adding a cycle and strengthening navigation through the World’s Fairs subgraph. It closes the working **36-conversation** numerical target, not the institutionally verified archive.
+
+The conversation room now stages two larger object panels above the message transcript. When a public packet has no approved object photograph, use its **artist-produced diagram**, explicitly labeled, rather than faking a museum image. A missing image receives a typographic placard instead. Each object has an independent **Inspect record** action and, when other rooms exist, **Explore other conversations**, filtering the question directory by exact accession. The arrows between panels indicate a fictional dialogue, not verified historical contact. The dialogue, archive limit and evidence controls remain visible. Mobile object panels are deliberately shallow enough to leave the message thread scrollable at 320px wide.
+
+Follow-up visitor test: can visitors identify one accession, understand the difference between a diagram and a photograph, and move from a speaker into another scripted room without returning to the force graph?

@@ -28,7 +28,9 @@ try {
   assert.equal(await page.locator('#room-question').innerText(),'Who pays the price of progress?');
   assert.equal(await page.locator('#room-header').getAttribute('data-mode'),'CURATED_SCRIPT');
   assert.match(await page.locator('#room-rationale').innerText(),/Shared motif: Machines/);
-  assert.equal(await page.locator('#room-participants button').count(),2);
+  assert.equal(await page.locator('#room-participants .object-inspect').count(),2);
+   assert.equal(await page.locator('#room-participants .object-portrait-media').count(),2);
+   assert.equal(await page.locator('#room-participants .object-portrait-meta').count(),2);
   assert.equal(await page.locator('.turn').count(),5);
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
   assert.equal(voiceRequests.length,0,'No autoplay or unsolicited provider calls');
@@ -55,10 +57,17 @@ try {
     assert.ok(fold.dockVisible&&!fold.overflow,'Dock and content fit at '+width+'px');
     await screenshot('room-'+width);
   }
+  // The image panels lead to exact-accession conversations, not arbitrary related tags.
+  assert.ok(await page.locator('#room-participants .object-more').count()>=1,'At least one speaker has another curated room');
+  await page.locator('#room-participants .object-more').first().click();
+  assert.match(await page.locator('#timeline-title').innerText(),/More conversations with /);
+  assert.ok(await page.locator('#timeline-list .path-post').count()>0,'Related room list should not be empty');
+  await page.locator('#questions-back').click();
+  assert.equal(await page.locator('#room-question').innerText(),'Who pays the price of progress?');
   assert.equal(await page.locator('#space-room').innerText(),'Map');
   // Exact record inspection is independent of selecting/recentering an episode.
   const episodeId=await page.locator('#room-header').getAttribute('data-episode');
-  await page.locator('#room-participants button').nth(1).click();
+  await page.locator('#room-participants .object-inspect').nth(1).click();
   assert.match(await page.locator('#record-content').innerText(),/TD1989\.318\.1/);
   assert.equal(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
   for(const width of [320,390]){
@@ -112,7 +121,7 @@ try {
     pairIds.add(await page.locator('#room-header').getAttribute('data-episode'));
     const mode=await page.locator('#room-header').getAttribute('data-mode');
     const focused=(await page.locator('#stage').getAttribute('data-pair')).split('|');
-    const labels=await page.locator('#room-participants button').evaluateAll(buttons=>buttons.map(b=>b.getAttribute('aria-label')));
+    const labels=await page.locator('#room-participants .object-inspect').evaluateAll(buttons=>buttons.map(b=>b.getAttribute('aria-label')));
     for(const accession of focused.filter(Boolean))assert.ok(labels.some(label=>label.includes(accession)));
     if(mode==='RESEARCH_PROMPT'){
       promptIndex=i;

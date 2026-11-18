@@ -41,7 +41,7 @@ test('six checklist records keep separate provenance and stay distinct from the 
 test('curatorial juxtapositions cannot pass the metadata gate and establish no historical relationship', () => {
   assert.equal(DOCUMENTED_HISTORICAL_RELATIONSHIPS.length, 0);
   assert.equal(RELATIONSHIP_TYPES.documented_historical_relationship.id, 'documented_historical_relationship');
-  assert.equal(CURATORIAL_PATHS.length, 19);
+  assert.equal(CURATORIAL_PATHS.length, 20);
   const registryOnly = new Set(['TD1989.19.9', 'XB1991.830']);
   for (const path of CURATORIAL_PATHS) {
     assert.equal(path.relationshipType, 'curatorial_juxtaposition');
@@ -77,7 +77,7 @@ test('curatorial juxtapositions cannot pass the metadata gate and establish no h
     assert.equal(spoken.evidence.length, 0);
   }
   const lines = CURATORIAL_PATHS.map(path => path.turns[2].text);
-  assert.equal(new Set(lines).size, 19);
+  assert.equal(new Set(lines).size, 20);
   assert.throws(() => conversationFor({ accession: '83.2.19', title: 'Futurama' }, { accession: 'XC2024.03.1.1', title: 'Harlem' }, { reasons: [] }, 'family'));
 });
 
@@ -128,4 +128,20 @@ test('archive aperture has both themed local masters and an accessible wordmark'
     assert.match(svg,/<svg\s/);
     assert.match(svg,/viewBox="0 0 1024 1024"/);
   }
+});
+
+
+test('the 36th conversation turns two one-neighbor speakers into a cross-linked pair', () => {
+  const pair=CURATORIAL_PATHS.find(path=>path.id==='program-and-booklet');
+  assert.ok(pair);
+  assert.deepEqual([pair.source.accession,pair.target.accession],['86.19.57','XB1992.1640']);
+  assert.equal(pair.aiAssisted,true);
+  assert.equal(pair.historicalRelationshipEstablished,false);
+  assert.match(pair.limits,/do not establish/);
+  const linked=id=>CURATORIAL_PATHS.filter(path=>[path.source.accession,path.target.accession].includes(id));
+  assert.equal(linked('86.19.57').length,2);
+  assert.equal(linked('XB1992.1640').length,2);
+  assert.equal(linked('85.4.72').length,2);
+  assert.equal(linked('2012.6.1').length,2);
+  assert.equal(new Set(CURATORIAL_PATHS.flatMap(path=>[path.source.accession,path.target.accession])).size>=16,true);
 });
