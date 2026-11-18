@@ -70,3 +70,20 @@ test('fallback holds a short repartee with a distinct archivist evidence interru
  assert.match(c.turns[4].text,/question/i);
  assert.ok(c.turns.every(t=>typeof t.text==='string'&&t.text.length>10));
 });
+
+// Keep both object panels, the authored transcript, and focused cross-room navigation.
+test('each room gives its two objects a large visual stage and separate ways to inspect or follow',async()=>{
+ const js=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
+ const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
+ assert.match(js,/function objectVisual\(record\)/);
+ assert.match(js,/PACKET_STUDIES/);
+ assert.match(js,/className='object-portrait-media'/);
+ assert.match(js,/object-portrait-meta/);
+ assert.match(js,/function openObjectQuestions\(accession\)/);
+ assert.match(js,/const currentIds=new Set\(relatedAnchor/);
+ assert.match(js,/other\.addEventListener\('click',\(\)=>openObjectQuestions\(p\.accession\)\)/);
+ assert.match(js,/box\.append\(chat\)/);
+ assert.match(css,/\.room-participant \.object-inspect/);
+ assert.match(css,/\.object-portrait-media/);
+ assert.match(css,/@media\(max-width:360px\)/);
+});

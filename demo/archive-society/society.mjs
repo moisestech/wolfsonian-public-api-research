@@ -74,6 +74,36 @@ function setMapMode(mode){
   if(mode==='conversation')setZoomT(34);else stage.fit();
 }
 const photo=r=>r?.researchOnly?'' :localImageUrl(r?.accession);
+// These drawings are produced by the artist from public packet descriptions.
+// They do not represent institutionally released object photography.
+const PACKET_STUDIES=Object.freeze({
+  '86.17.1':'trylon-perisphere.svg',
+  'XX1990.1484':'sparton-radio.svg',
+  'XM1999.108.8':'machine-age-catalogue.svg',
+  '85.7.383a,b':'mappemonde-vase.svg',
+  '85.4.72':'poster-in-1939.svg',
+  '86.19.57':'program-tomorrow.svg',
+  'XB1992.1640':'futurama-booklet.svg',
+  '2012.6.1':'rca-television.svg'
+});
+function objectVisual(record){
+  const image=photo(record);
+  if(image)return {src:image,label:'Collection image'};
+  const study=PACKET_STUDIES[record?.accession];
+  return study?{src:'../assets/objects/'+study,label:'Artist diagram'}:{src:null,label:'Record only'};
+}
+function questionCountFor(accession){
+  const pairs=new Set();
+  for(const path of CURATORIAL_PATHS){
+    if(path.source.accession===accession||path.target.accession===accession)
+      pairs.add([path.source.accession,path.target.accession].sort().join('::'));
+  }
+  for(const pair of PRESENTATION_PAIRS){
+    if(pair.source===accession||pair.target===accession)
+      pairs.add([pair.source,pair.target].sort().join('::'));
+  }
+  return pairs.size;
+}
 function fit(){stage.fit();syncZoomUi();}
 function setZoomT(t){stage.setZoomT(t);syncZoomUi();}
 function zoom(amount){stage.zoom(amount);syncZoomUi();}
@@ -468,11 +498,18 @@ function questionCard(episode,objects){
   return button;
 }
 let relatedQuestions=false;
+let relatedAnchor=null;
+function openObjectQuestions(accession){
+  relatedQuestions=true;
+  relatedAnchor=accession;
+  setMobileView('timeline');
+}
 function paintTimeline(){
   const list=$('timeline-list');if(!list)return;
   list.replaceChildren();
   if(!document.body.classList.contains('show-timeline'))return;
-  $('timeline-title').textContent=relatedQuestions?'Follow these objects':'Choose a question';
+  const focus=relatedAnchor && (person(relatedAnchor)||state.records.find(record=>record.accession===relatedAnchor));
+  $('timeline-title').textContent=relatedQuestions?(focus?'More conversations with '+(focus.title.length>50?focus.title.slice(0,47)+'…':focus.title):'Follow these objects'):'Choose a question';
   $('all-directory-questions').hidden=!relatedQuestions;
   const records=new Map(state.records.map(record=>[record.accession,record]));
   const seeds=new Set([state.seed,...PRESENTATION_PAIRS.flatMap(pair=>[pair.source,pair.target])]);
@@ -501,7 +538,7 @@ function paintTimeline(){
     episode:conversationEpisode({source:path.source,target:path.target,conversation:juxtapositionConversation(path)}),
     objects:[path.source,path.target],open:()=>openResearchPath(path.id)
   }));
-  const currentIds=new Set(state.episode?.participants.map(p=>p.accession));
+  const currentIds=new Set(relatedAnchor?[relatedAnchor]:(state.episode?.participants.map(p=>p.accession)||[]));
   for(const [label,group] of [['Authored scenes',scenes],['Artist-proposed exchanges',comparisons],['Research prompts',prompts]]){
     const entries=relatedQuestions?group.filter(({episode})=>episode.id!==state.episode?.id && episode.participants.some(p=>currentIds.has(p.accession))):group;
     if(!entries.length)continue;
@@ -524,7 +561,7 @@ function paintTimeline(){
 }
 function addEncounterOrientation(box,source,target,conversation){
   const onward=node('button','More questions with these objects','evidence-record');
-  onward.type='button';onward.addEventListener('click',()=>{relatedQuestions=true;setMobileView('timeline');});
+  onward.type='button';onward.addEventListener('click',()=>{relatedAnchor=null;relatedQuestions=true;setMobileView('timeline');});
   box.append(onward);
   const lens=LENSES.find(item=>item.id===state.lens);
   const guide=explainEncounter({source,target,conversation,lensLabel:lens?.label||'Family',previous:state.lastExplained});
@@ -565,15 +602,38 @@ function renderRoomHeader(source,target,c){
   $('room-kind').textContent=episode.label;
   $('room-description').textContent=episode.mode==='CURATED_SCRIPT'?'A conversation between two objects':'Two records. An open research question.';
   $('room-rationale').textContent=episode.rationale+' ↗';
-  $('room-participants').replaceChildren(...episode.participants.map((p,i)=>{
-    const button=node('button',undefined,'room-participant');button.type='button';button.dataset.speaker=p.role;
-    button.setAttribute('aria-label','Open record: '+p.title+' · '+p.accession);
-    const r=i?target:source,src=photo(r);
-    if(src){const img=node('img');img.src=src;img.alt='';button.append(img);}
-    else button.append(node('span','Image unavailable','participant-placeholder'));
-    const text=node('span',undefined,'participant-name');text.append(node('strong',p.shortName),node('small','View record'));
-    button.append(text);button.addEventListener('click',()=>openEpisodeRecord(p.accession));return button;
+  const cast=$('room-participants');
+  cast.replaceChildren(...episode.participants.map((p,i)=>{
+    const r=i?target:source,visual=objectVisual(r);
+    const card=node('article',undefined,'room-participant');
+    card.dataset.speaker=p.role;
+    const inspect=node('button',undefined,'object-inspect');inspect.type='button';
+    inspect.setAttribute('aria-label','Inspect collection record: '+p.title+' · '+p.accession);
+    const media=node('span',undefined,'object-portrait-media'+(visual.label==='Artist diagram'?' is-diagram':''));
+    media.setAttribute('aria-hidden','true');
+    const placeholder=()=>{media.replaceChildren(node('span',p.shortName.slice(0,55),'object-portrait-placeholder'));media.classList.add('is-placeholder');};
+    if(visual.src){
+      const img=node('img');img.src=visual.src;img.alt='';img.loading='lazy';img.decoding='async';
+      img.addEventListener('error',placeholder,{once:true});media.append(img);
+    }else placeholder();
+    const metadata=node('span',undefined,'object-portrait-meta');
+    metadata.append(node('small',(i?'02':'01')+' · '+visual.label,'speaker-status'),
+      node('strong',p.shortName),
+      node('span',p.accession+' · Inspect record ↗','object-accession'));
+    inspect.append(media,metadata);
+    inspect.addEventListener('click',()=>openEpisodeRecord(p.accession));
+    card.append(inspect);
+    const total=questionCountFor(p.accession),remaining=Math.max(0,total-1);
+    if(remaining){
+      const other=node('button',remaining+' other '+(remaining===1?'conversation':'conversations')+' ↗','object-more');
+      other.type='button';
+      other.setAttribute('aria-label','Explore other conversations with '+p.title);
+      other.addEventListener('click',()=>openObjectQuestions(p.accession));
+      card.append(other);
+    }
+    return card;
   }));
+  cast.append(node('span','↔','object-cast-link'));
   const evidence=$('episode-evidence');
   evidence.replaceChildren(node('h2','Why these two?'),node('p',episode.rationale),
     node('p','These are imagined exchanges, not historical speech or live autonomous AI. Shared tags do not establish contact, influence, or shared storage.'));
@@ -1158,7 +1218,7 @@ $('space-room')?.addEventListener('click',()=>{
 });
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
 $('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();});
-function browseAll(){relatedQuestions=false;setMobileView('timeline');}
+function browseAll(){relatedQuestions=false;relatedAnchor=null;setMobileView('timeline');}
 $('space-leave')?.addEventListener('click',browseAll);
 $('all-directory-questions').addEventListener('click',browseAll);
 $('questions-back')?.addEventListener('click',()=>setMobileView('space'));
