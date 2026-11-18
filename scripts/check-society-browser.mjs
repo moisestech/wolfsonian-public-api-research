@@ -146,6 +146,7 @@ try {
   assert.match(await page.locator('#atlas-title').innerText(),/<img src=x/);
   const lookup=[{'Accession Number':'TEST2026.101',Title:'TEST ONLY',Date:'TEST_DATE_NOT_HISTORY'}];
   await page.locator('#snapshot-file').setInputFiles({name:'synthetic-lookup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(lookup))});
+  await page.waitForFunction(()=>document.querySelector('#snapshot-content').textContent.includes('EXACT_PRIMARY_ACCESSION'));
   assert.match(await page.locator('#snapshot-content').textContent(),/EXACT_PRIMARY_ACCESSION/);
   assert.equal(await page.locator('#room-header').getAttribute('data-mode'),'RESEARCH_PROMPT');
   assert.equal(await page.locator('.turn').count(),0);
