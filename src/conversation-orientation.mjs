@@ -69,7 +69,16 @@ export function connectionCaption({episode,proposal}={}){
   }
   const family=episode.relationship.family||'tag';
   const term=episode.relationship.term;
-  return term?'Shared '+family+': '+term+' · metadata only':'Connection not established · Research question';
+  return term?'Both list “'+term+'” · link unproven':'Connection not established · Research question';
+}
+
+/** Keep internal editorial rejection actions out of visitor-facing dialogue. */
+export function visitorFollowUp(conversation) {
+  if(!conversation)return '';
+  if(conversation.edgeMode==='question_edge'||conversation.edgeMode==='QUESTION_THIS_LINK'){
+    return 'What evidence beyond a shared motif would make this connection convincing?';
+  }
+  return conversation.nextPrompt||'';
 }
 
 export function explainEncounter({source,target,conversation,lensLabel='Family',previous=null}={}){

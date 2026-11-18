@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {explainEncounter,conversationEpisode,connectionCaption} from '../src/conversation-orientation.mjs';
+import {explainEncounter,conversationEpisode,connectionCaption,visitorFollowUp} from '../src/conversation-orientation.mjs';
 import {CURATED_EDGE_SCENES} from '../src/curated-edge-scenes.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
 const rec=(id,title)=>({accession:id,title,source:'synthetic'});
@@ -108,7 +108,7 @@ test('the room subtitle names its real basis, while the about page explains the 
  const source=rec('85.4.64.43','Making the Engine'),target=rec('TD1989.318.1','Safety warning');
  const actual=conversationFor(source,target,edge(source.accession,target.accession,'motif','Machines'),'family');
  const episode=conversationEpisode({source,target,conversation:actual});
- assert.equal(connectionCaption({episode}),'Shared motif: Machines · metadata only');
+ assert.equal(connectionCaption({episode}),'Both list “Machines” · link unproven');
  const curatorial=conversationEpisode({source:rec('A','First'),target:rec('B','Second'),
    conversation:{mode:'CURATORIAL_JUXTAPOSITION',relationshipType:'curatorial_juxtaposition',turns:[],nextPrompt:'Why this pairing?'}});
  const proposed=connectionCaption({episode:curatorial,proposal:'These two printed artifacts use different media to narrate the future. The pairing does not establish that their visitors met.'});
@@ -122,4 +122,29 @@ test('the room subtitle names its real basis, while the about page explains the 
  assert.match(about,/Neither establishes historical contact or influence/);
  assert.match(app,/connectionCaption\(\{episode,proposal:state.researchPath\?\.proposal\}\)/);
  assert.doesNotMatch(app,/room-description'\)\.textContent=episode\.mode/);
+});
+
+
+test('about explains authored scene, shared motif and imagined comparison outside discovery cards',async()=>{
+ const about=await readFile(new URL('../demo/about/index.html',import.meta.url),'utf8');
+ const js=await readFile(new URL('../demo/archive-society/society.mjs',import.meta.url),'utf8');
+ for(const heading of ['Authored scene','Shared motif','Imagined comparison']){
+  assert.ok(about.includes('<h3>'+heading+'</h3>'),heading+' explained in About');
+ }
+ assert.match(about,/decision to keep or withdraw a network edge belongs to the editorial process/);
+ assert.doesNotMatch(js,/meta\.append\(node\('span',episode\.label\)\)/);
+ assert.match(js,/\['Conversations',scenes\]/);
+ assert.match(js,/\['Proposed pairings',comparisons\]/);
+ assert.match(js,/\['Open questions',prompts\]/);
+ assert.match(js,/\$\('room-rationale'\)\.textContent='Why these two\? ↗'/);
+});
+
+
+test('internal withdraw-edge editorial choices are not exposed as visitor prompts',()=>{
+ const c={edgeMode:'question_edge',nextPrompt:'Keep the comparison as a question, or withdraw this edge?'};
+ assert.match(c.nextPrompt,/withdraw this edge/);
+ assert.equal(visitorFollowUp(c),'What evidence beyond a shared motif would make this connection convincing?');
+ assert.doesNotMatch(visitorFollowUp(c),/withdraw|reject|edge/);
+ assert.equal(visitorFollowUp({edgeMode:'QUESTION_THIS_LINK',nextPrompt:'Reject the link?'}),visitorFollowUp(c));
+ assert.equal(visitorFollowUp({edgeMode:'contest',nextPrompt:'What would the publisher say?'}),'What would the publisher say?');
 });

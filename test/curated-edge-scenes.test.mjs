@@ -134,3 +134,20 @@ test('all four additional pairs open from the public directory with correctly at
     assert.ok(episode.turns.every(t=>t.kind==='AI_ASSISTED_INTERPRETATION'));
   }
 });
+
+
+test('the two weak-link challenge scenes ask visitor questions without showing editorial withdraw controls as titles',async()=>{
+ const {conversationEpisode}=await import('../src/conversation-orientation.mjs');
+ const named=new Map([
+  ['challenge-robeson-architectural-fantasy','Can a tree connect Paul Robeson to an imagined house?'],
+  ['challenge-utrecht-living-rise','Can water connect a trade fair to Let the Living Rise?']
+ ]);
+ for(const scene of CURATED_EDGE_SCENES.filter(s=>s.mode==='question_edge')){
+  const c=conversationFor(fakeObject(scene.a),fakeObject(scene.b),makeEdge(scene.a,scene.b,scene.family,scene.tag));
+  const episode=conversationEpisode({source:fakeObject(scene.a),target:fakeObject(scene.b),conversation:c});
+  assert.equal(episode.question,named.get(scene.id));
+  assert.doesNotMatch(episode.question,/withdraw|reject|edge|algorithm/i);
+  assert.match(c.nextPrompt,/withdraw|reject/i,'Internal editorial boundary remains available');
+  assert.equal(episode.historicalRelationshipEstablished,false);
+ }
+});

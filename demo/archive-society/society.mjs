@@ -12,7 +12,7 @@ import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
-import { explainEncounter, conversationEpisode, connectionCaption } from '../../src/conversation-orientation.mjs';
+import { explainEncounter, conversationEpisode, connectionCaption, visitorFollowUp } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -495,10 +495,12 @@ function questionCard(episode,objects){
   const current=episode.id===state.episode?.id;
   if(current)button.setAttribute('aria-current','true');
   const face=node('span',undefined,'question-card-face');
-  const meta=node('span',undefined,'question-card-meta');
-  meta.append(node('span',episode.label));
-  if(current)meta.append(node('span','Current room','current-room'));
-  face.append(meta,node('strong',episode.question));
+  if(current){
+    const meta=node('span',undefined,'question-card-meta');
+    meta.append(node('span','Current room','current-room'));
+    face.append(meta);
+  }
+  face.append(node('strong',episode.question));
   const cast=node('span',undefined,'question-card-cast');
   const portraits=node('span',undefined,'question-card-portraits');
   portraits.setAttribute('aria-hidden','true');
@@ -512,8 +514,12 @@ function questionCard(episode,objects){
   const preview=node('span',undefined,'question-card-preview');
   const first=episode.turns[0];
   const speaker=episode.participants.find(person=>person.role===first?.role);
-  preview.append(node('span',first?(speaker?.shortName||first.speaker):'Why these two?','preview-speaker'),
-    node('span',first?'“'+first.text+'”':episode.rationale,'preview-line'));
+  const connectionTerm=episode.relationship.term;
+  const unanswered=connectionTerm
+    ?'Both records contain “'+connectionTerm+'”. Does that make a meaningful connection?'
+    :'What could examining both records reveal?';
+  preview.append(node('span',first?(speaker?.shortName||first.speaker):'Open question','preview-speaker'),
+    node('span',first?'“'+first.text+'”':unanswered,'preview-line'));
   button.append(face,preview);
   return button;
 }
@@ -559,7 +565,7 @@ function paintTimeline(){
     objects:[path.source,path.target],open:()=>openResearchPath(path.id)
   }));
   const currentIds=new Set(relatedAnchor?[relatedAnchor]:(state.episode?.participants.map(p=>p.accession)||[]));
-  for(const [label,group] of [['Authored scenes',scenes],['Artist-proposed exchanges',comparisons],['Research prompts',prompts]]){
+  for(const [label,group] of [['Conversations',scenes],['Proposed pairings',comparisons],['Open questions',prompts]]){
     const entries=relatedQuestions?group.filter(({episode})=>episode.id!==state.episode?.id && episode.participants.some(p=>currentIds.has(p.accession))):group;
     if(!entries.length)continue;
     const section=node('section');
@@ -619,13 +625,13 @@ function renderRoomHeader(source,target,c){
   state.episode=episode;
   const header=$('room-header');header.hidden=false;header.dataset.episode=episode.id;header.dataset.mode=episode.mode;
   $('room-question').textContent=episode.question;
-  $('room-kind').textContent=episode.label;
+  $('room-kind').textContent=episode.label==='Authored scene'?'':episode.label;
   // Show the relationship that led to this room, rather than a generic
   // description of its format. Research-proposal detail stays in Evidence.
   const connection=connectionCaption({episode,proposal:state.researchPath?.proposal});
   $('room-description').textContent=connection;
   $('room-description').title=state.researchPath?.proposal||connection;
-  $('room-rationale').textContent=episode.rationale+' ↗';
+  $('room-rationale').textContent='Why these two? ↗';
   const cast=$('room-participants');
   cast.replaceChildren(...episode.participants.map((p,i)=>{
     const r=i?target:source,visual=objectVisual(r);
@@ -765,7 +771,7 @@ function renderConversation(){
     }
   }
   if(c.mode!=='CURATED_EDGE_SCENE'&&c.dramaticArc)box.append(node('p',c.dramaticArc,'notice'));
-  if(c.nextPrompt)box.append(node('p',c.nextPrompt,'notice'));
+  if(c.nextPrompt)box.append(node('p',visitorFollowUp(c),'notice'));
   // A narrative edge can become a new starting object. Make this an explicit
   // visitor action; graph connectivity is never inferred from the dialogue.
   const actions=node('div',undefined,'edge-path-actions');
