@@ -881,3 +881,82 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
 @media(prefers-reduced-motion:reduce){
   .audio-bar.playing .bars i{animation:none!important}
 }
+
+
+/* Archive Society: two physical moods, one object identity.
+   The map remains the same dark dreamscape in either mode; the archive
+   reading interface changes from charcoal to warm paper. */
+#appearance-toggle{display:inline-grid;place-items:center;flex:none;width:42px;height:42px;
+  min-width:42px;min-height:42px;padding:0;background:transparent;border:1px solid #526a60;border-radius:50%}
+#appearance-toggle svg{grid-area:1/1;width:19px;height:19px}
+#appearance-toggle .appearance-moon{display:none}
+html[data-color-theme="light"] #appearance-toggle .appearance-sun{display:none}
+html[data-color-theme="light"] #appearance-toggle .appearance-moon{display:block}
+@media(max-width:700px){
+  .top-nav #appearance-toggle{width:36px;min-width:36px;flex-basis:36px;height:44px;min-height:44px}
+}
+html[data-color-theme="light"]{
+  color-scheme:light;
+  --ink:#f6f4eb;--paper:#172a25;--sage:#4d6258;--teal:#176956;--copper:#a25f36;--line:#cbd5ca
+}
+html[data-color-theme="light"] body{background:#f6f4eb;color:#172a25}
+html[data-color-theme="light"] :is(.topbar,.reader-rail,.evidence-rail,.rail-head,.space-view,.room-header,.rail-scroll,.arrival-guide){
+  background:#f6f4eb;color:#172a25;border-color:#ccd5c9
+}
+html[data-color-theme="light"] .atlas-panel{background:#dbe4da}
+html[data-color-theme="light"] :is(.brand-phrase,.wordmark,.icon-button,.icon-link,.brand-name,.room-kicker,.room-description,.room-rationale,#room-kind,#room-question,.evidence-rail .bubble strong,.rail-head button){
+  color:#18362d
+}
+html[data-color-theme="light"] :is(#editorial-toggle,#appearance-toggle){border-color:#bccabf;color:#26443a;background:transparent}
+html[data-color-theme="light"] :is(#editorial-toggle,#appearance-toggle):hover{background:#e1e8de}
+html[data-color-theme="light"] :is(.room-header,.rail-head,.room-participant,.record-frame,.path-timeline,.timeline-title){border-color:#c8d5c8}
+html[data-color-theme="light"] :is(.evidence-rail .bubble .say,.evidence-rail .bubble.side-b .say){background:#e8ece4;color:#1f302a}
+html[data-color-theme="light"] .evidence-rail .bubble.side-guide .say{background:#dde8e2;color:#1d302b;border-color:#a8bfb1}
+html[data-color-theme="light"] .evidence-rail .bubble p{color:#182b23}
+html[data-color-theme="light"] :is(.room-participant,.room-participant .object-inspect){background:#e6eae2;color:#19372c;border-color:#b9c7b8}
+html[data-color-theme="light"] .room-participant .object-inspect:hover{background:#dbe4da}
+html[data-color-theme="light"] .room-participant .object-portrait-meta strong{color:#18372b}
+html[data-color-theme="light"] .object-portrait-media{background:radial-gradient(ellipse at center,#e1e9dd,#cbd8ce)}
+html[data-color-theme="light"] .object-open-arrow{color:#286e55}
+html[data-color-theme="light"] .room-participant .object-more{background:#d8e4d8;color:#205740;border-color:#abbfab}
+html[data-color-theme="light"] .room-participant .object-more:hover{background:#c8d9cc}
+html[data-color-theme="light"] .object-cast-link{background:#e8ece4;color:#315345;border-color:#a3b8a8}
+html[data-color-theme="light"] :is(.evidence-rail .audio-bar,.conversation-sheet,.prompt-sheet){background:#f0f1e9;color:#1d342a;border-color:#c8d5c9}
+html[data-color-theme="light"] :is(.room-rationale,.more-questions-link,.evidence-record,#record-return,.space-leave){color:#285e4e}
+html[data-color-theme="light"] :is(.voice-status,.muted,.path-note,.record-overlay .muted){color:#4b6258}
+html[data-color-theme="light"] :is(button,.tabs button){border-color:#adc1b5}
+html[data-color-theme="light"] :is(.tabs button[aria-pressed="true"],.record-object-picker button[aria-pressed="true"]){background:#286d57;color:#fff}
+html[data-color-theme="light"] #space-bar.space-bar,
+html[data-color-theme="light"] body.show-timeline #space-bar.space-bar{background:#f6f4eb;border-color:#bfcfc1;box-shadow:0 -3px 12px rgba(38,62,44,.08)}
+html[data-color-theme="light"] #space-bar .space-tab{color:#4c6155;background:transparent;border:0}
+html[data-color-theme="light"] #space-bar .space-tab[aria-current="page"]{color:#1a6249}
+html[data-color-theme="light"] #space-bar .space-tab[aria-current="page"]::before{background:#327b60}
+html[data-color-theme="light"] #space-bar .space-listen{color:#21634c}
+html[data-color-theme="light"] #space-bar .space-listen[aria-pressed="true"]{color:#914c2a}
+html[data-color-theme="light"] #space-bar .space-tab:hover{background:#e5ede3;color:#1d4b39}
+@media(max-width:800px){
+  html[data-color-theme="light"] body.show-space .rail-scroll>.room-header{background:#f6f4eb;border-color:#bfcfc1}
+}
+@media(prefers-reduced-motion:reduce){
+  #room-question,#room-participants .room-participant,#conversation-content .chat .turn,
+  #room-participants .object-cast-link{animation:none!important;transition:none!important}
+}
+
+/* Field and button contrast in paper mode. Explicit specialty controls above
+   keep their own semantics and more specific selectors. */
+html[data-color-theme="light"] :is(button,input,select,textarea){
+  background:#e9eee6;color:#17352a;border-color:#b4c8b9
+}
+html[data-color-theme="light"] :is(button,input,select,textarea):focus-visible{
+  outline-color:#a55c33
+}
+html[data-color-theme="light"] :is(.evidence-rail #conversation-head,.evidence-rail .rail-head button,.tabs button){
+  background:transparent;color:#204c3b
+}
+html[data-color-theme="light"] .room-participant .object-inspect{
+  background:#e6eae2;color:#19372c;border:0
+}
+html[data-color-theme="light"] .room-participant .object-more{
+  background:#d8e4d8;color:#205740;border:0;border-top:1px solid #abbfab
+}
+html[data-color-theme="light"] .object-portrait-media.is-diagram{background:#e4e4d8}

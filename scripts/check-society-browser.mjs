@@ -48,6 +48,7 @@ try {
   assert.equal(await page.locator('.turn').count(),5);
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
   assert.equal(voiceRequests.length,0,'No autoplay or unsolicited provider calls');
+  assert.equal(await page.locator('#conversation-content .chat .turn').count(),5,'Complete authored transcript remains in DOM');
   assert.equal(await page.locator('.encounter-orientation').count(),0);
   assert.equal(await page.locator('#conversation-content>details').count(),0);
   await screenshot('room-1280');
@@ -104,6 +105,20 @@ try {
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
 
   // Five persistent mobile destinations share the original dock space.
+  assert.equal(await page.locator('#space-bar .space-tab').count(),5);
+  assert.equal(await page.locator('#space-feed .space-tab-label').innerText(),'Society');
+  assert.match(await page.locator('#space-feed').getAttribute('aria-label'),/archive society/);
+  const appearance=page.locator('#appearance-toggle');
+  assert.equal(await appearance.getAttribute('aria-pressed'),'false');
+  await appearance.click();
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
+  assert.equal(await appearance.getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
+  assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
+  assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
+  await appearance.click();
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
+  assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
   assert.equal(await page.locator('#space-conversation[aria-current="page"]').count(),1);
@@ -194,8 +209,11 @@ try {
   await page.getByRole('button',{name:'More questions with these objects'}).click();
   await page.locator('#timeline-list button').filter({hasText:'Who builds the future?'}).click();
   assert.equal(await page.locator('#room-question').innerText(),'Who builds the future?');
+  await page.locator('#appearance-toggle').click();
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
   await page.locator('#source-info').click();
   await page.waitForURL('**/demo/about/');
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light','About inherits the same appearance preference');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   assert.match(await page.locator('h2').allTextContents().then(parts=>parts.join(' | ')),/A conversation between two objects/);
   assert.equal(await page.locator('#how-conversations-are-written').count(),1);
@@ -203,6 +221,8 @@ try {
   for(const term of ['Authored scene','Shared motif','Imagined comparison'])assert.ok(aboutWords.includes(term));
   await screenshot('mobile-about');
   await open();
+  await page.locator('#appearance-toggle').click();
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
 
   // Test selection coherently on the graph; unedited pairs never get fake dialogue.
   await page.setViewportSize({width:1280,height:900});

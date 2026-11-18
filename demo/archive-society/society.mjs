@@ -22,6 +22,53 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
   playing:false,epoch:0,view:null,conversation:null,episode:null,recordAccession:null,lookupBusy:false,hover:null,researchPath:null};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
+const appearanceKey='archive-dreams-appearance';
+function applyAppearance(mode){
+  const light=mode==='light';
+  document.documentElement.dataset.colorTheme=light?'light':'dark';
+  const toggle=$('appearance-toggle');
+  if(toggle){
+    const action=light?'Switch to dark appearance':'Switch to light appearance';
+    toggle.setAttribute('aria-label',action);
+    toggle.setAttribute('aria-pressed',String(light));
+    toggle.title=action;
+  }
+}
+try { applyAppearance(localStorage.getItem(appearanceKey)==='light'?'light':'dark'); }
+catch { applyAppearance('dark'); }
+$('appearance-toggle')?.addEventListener('click',()=>{
+  const mode=document.documentElement.dataset.colorTheme==='light'?'dark':'light';
+  applyAppearance(mode);
+  try { localStorage.setItem(appearanceKey,mode); } catch { /* visual preference is still applied */ }
+});
+
+// Scripted room entrance: staged theater, never an assertion that AI is thinking.
+// The written transcript remains in the DOM from the first frame.
+let entranceEpoch=0,entranceAnimations=[];
+function cancelSceneEntrance(){
+  entranceEpoch++;
+  for(const animation of entranceAnimations)animation.cancel();
+  entranceAnimations=[];
+}
+function startSceneEntrance(){
+  cancelSceneEntrance();
+  if(state.episode?.mode!=='CURATED_SCRIPT'||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const epoch=entranceEpoch;
+  requestAnimationFrame(()=>{
+    if(epoch!==entranceEpoch||document.body.classList.contains('show-timeline'))return;
+    const animate=(element,frames,delay,duration)=>{
+      if(!element?.animate)return;
+      entranceAnimations.push(element.animate(frames,{duration,delay,easing:'cubic-bezier(.2,.8,.2,1)',fill:'both'}));
+    };
+    animate($('room-question'),[{opacity:.4,transform:'translateY(6px)'},{opacity:1,transform:'translateY(0)'}],0,260);
+    document.querySelectorAll('#room-participants .room-participant').forEach((element,i)=>
+      animate(element,[{opacity:.55,transform:'translateY(8px) scale(.985)'},{opacity:1,transform:'translateY(0) scale(1)'}],90+i*100,340));
+    document.querySelectorAll('#conversation-content .chat .turn').forEach((element,i)=>
+      animate(element,[{opacity:.35,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],220+i*100,240));
+    animate(document.querySelector('#room-participants .object-cast-link'),
+      [{opacity:.3,transform:'translate(-50%,-50%) scale(.85)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],160,430);
+  });
+}
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
 const message=(id,text)=>{const el=$(id);el.textContent=text;if(id==='voice-status')el.hidden=!text;};
@@ -158,6 +205,7 @@ function setPanel(name){
 }
 function resetApproval(){ $('external-approved').checked=false; }
 function stop(){
+  cancelSceneEntrance();
   playback++;voiceAbort?.abort();voiceAbort=null;
   if(currentAudio){currentAudio.pause();currentAudio=null;}
   window.speechSynthesis?.cancel();cancelDeviceSpeech?.();cancelDeviceSpeech=null;state.playing=false;setPlayDisabled(!state.conversation);
@@ -343,6 +391,7 @@ function showEdge(edge){
   render();
   setPanel('conversation');
   if(mobileLayout())setMobileView('space');
+  startSceneEntrance();
 }
 function onGraphSelect(id){
   if(roomMode()){stop();resetApproval();state.district=null;state.seed=id;render();setPanel('conversation');return;}
@@ -985,6 +1034,7 @@ function openResearchPath(id){
   closeSheet();
   render();
   setMobileView('space');
+  startSceneEntrance();
 }
 function render(){
   state.hover=null;
