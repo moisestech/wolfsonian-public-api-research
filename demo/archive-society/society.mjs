@@ -732,6 +732,8 @@ function addRelatedQuestionsAction(box){
   box.append(onward);
 }
 function openEpisodeRecord(accession){
+  // Inspecting evidence interrupts the spectacle, including voice playback.
+  if(state.playing)stop();
   state.recordAccession=accession;
   renderRecord();setPanel('record');closeConversationSheet();
   document.querySelector('.rail-scroll').scrollTop=0;

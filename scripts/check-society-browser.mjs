@@ -341,6 +341,7 @@ try {
   // 200% desktop zoom has half the CSS viewport. Check reflow and reachability.
   await open();await page.setViewportSize({width:640,height:450});
   await page.emulateMedia({reducedMotion:'reduce'});
+  assert.equal(await page.locator('#scene-replay').isVisible(),false,'Reduce-motion visitors use static text without a replay effect');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   await page.locator('#conversation-content .turn').last().scrollIntoViewIfNeeded();
   assert.ok(await page.locator('#conversation-content .turn').last().evaluate(el=>{const b=el.getBoundingClientRect();return b.top>=0&&b.bottom<=innerHeight;}));
