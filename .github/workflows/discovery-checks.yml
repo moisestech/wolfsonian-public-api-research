@@ -15,6 +15,7 @@ on:
       - 'test/archive-*.test.mjs'
       - 'test/curated-edge-scenes.test.mjs'
       - 'test/conversation-ux.test.mjs'
+      - 'test/atlas-four-control-header.test.mjs'
       - 'test/conversation-orientation.test.mjs'
       - 'test/cold-visitor-orientation.test.mjs'
       - 'examples/archive-society*'
@@ -52,6 +53,7 @@ jobs:
         run: |
           npm run test:society
           node --test test/cold-visitor-orientation.test.mjs
+          node --test test/atlas-four-control-header.test.mjs
       - name: Verify curated relationships and skeptical fallbacks
         run: node --test test/curated-edge-scenes.test.mjs test/conversation-ux.test.mjs test/conversation-orientation.test.mjs
       - name: Browser smoke and screenshots

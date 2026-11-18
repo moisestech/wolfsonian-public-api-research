@@ -84,7 +84,10 @@ try {
   await page.waitForFunction(()=>document.querySelector('#snapshot-content').textContent.includes('EXACT_PRIMARY_ACCESSION'));
   await page.locator('[data-panel=conversation]').click();
   assert.match(await page.locator('#conversation-content').innerText(),/TEST_DATE_NOT_HISTORY/);
-  await page.locator('#admin-toggle').click();
+  // Settings no longer has a public entry point. Open the internal fixture only
+  // inside this isolated test so voice permission and source-security checks remain covered.
+  assert.equal(await page.locator('#admin-toggle').count(),0);
+  await page.locator('#admin').evaluate(el=>{el.hidden=false;});
   await page.selectOption('#voice-mode','elevenlabs');await page.locator('#play').evaluate(button=>button.click());
   assert.match(await page.locator('#voice-status').innerText(),/approval/);assert.equal(voiceRequests.length,0);
   await page.fill('#access-token','TEST_ONLY_PRIVATE_DEMO_TOKEN_12345');await page.locator('#check-services').click();
@@ -122,6 +125,33 @@ try {
   assert.equal((await page.request.get(base+'/server/archive-services.mjs')).status(),404);
   assert.equal((await page.request.get(base+'/demo/discovery-lab/')).status(),200);
   await page.locator('#admin').evaluate(el=>{el.hidden=true;});
+  // Navigation must be a SINGLE row at small and medium phone/tablet widths.
+  assert.equal(await page.locator('#admin-toggle').count(),0,'Do not render the settings gear');
+  const expectedNav=['Conversations','Record','Open Object Lens','Information about this artwork'];
+  for(const width of [320,390,768]){
+    await page.setViewportSize({width,height:844});
+    const nav=await page.locator('.top-nav').evaluate(el=>{
+      const controls=[
+        el.querySelector('[data-panel="conversation"]'),
+        el.querySelector('[data-panel="record"]'),
+        el.querySelector('.icon-link'),
+        el.querySelector('#source-info')
+      ];
+      const bounds=controls.map(x=>x.getBoundingClientRect());
+      return {
+        labels:[controls[0].textContent.trim(),controls[1].textContent.trim(),controls[2].getAttribute('aria-label'),controls[3].getAttribute('aria-label')],
+        visible:controls.every(x=>x&&getComputedStyle(x).display!=='none'),
+        singleRow:bounds.every(x=>Math.abs(x.top-bounds[0].top)<2),
+        fits:bounds.every(x=>x.left>=-1&&x.right<=innerWidth+1),
+        overlap:bounds.some((x,i)=>i>0&&x.left<bounds[i-1].right-1)
+      };
+    });
+    assert.deepEqual(nav.labels,expectedNav);
+    assert.ok(nav.visible,'All four controls visible at '+width+'px');
+    assert.ok(nav.singleRow,'Four controls on one row at '+width+'px');
+    assert.ok(nav.fits,'Four controls within viewport at '+width+'px');
+    assert.equal(nav.overlap,false,'No overlapping controls at '+width+'px');
+  }
   await page.setViewportSize({width:390,height:844});
   await page.waitForFunction(()=>getComputedStyle(document.querySelector('#path-timeline')).display!=='none');
   assert.match(await page.locator('#timeline-list').innerText(),/not a documented relationship|not proof that the histories intersected/i);
