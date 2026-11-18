@@ -39,6 +39,21 @@ try {
     await page.keyboard.press('Enter');
     assert.ok((await page.locator('#conversation-content .bubble.turn').count())>=3);
   }
+  // Cold-reader contract: each selected pair explains why it speaks,
+  // what it explores, and how the content differs from the previous pair.
+  await page.locator('.conversation-edge').nth(0).focus();
+  await page.keyboard.press('Enter');
+  const firstMeaning=await page.locator('.encounter-orientation').innerText();
+  assert.match(firstMeaning,/Why these two\?/);
+  assert.match(firstMeaning,/What are they exploring\?/);
+  assert.match(firstMeaning,/not proof they met/);
+  await page.locator('.conversation-edge').nth(1).focus();
+  await page.keyboard.press('Enter');
+  const secondMeaning=await page.locator('.encounter-orientation').innerText();
+  assert.notEqual(firstMeaning,secondMeaning,'Different links require an explicit changed explanation');
+  assert.match(secondMeaning,/Previously:/);
+  assert.match(secondMeaning,/Now:/);
+  assert.match(secondMeaning,/How this conversation was written/);
   // Following an edge changes the seed; returning restores the prior inquiry.
   const oldTitle=await page.locator('#atlas-title').innerText();
   await page.locator('[data-follow-object]').click();
@@ -112,6 +127,8 @@ try {
   assert.match(await page.locator('#timeline-list').innerText(),/not a documented relationship|not proof that the histories intersected/i);
   await page.locator('.path-post').first().click();
   assert.ok((await page.locator('#conversation-content .bubble.turn').count())>=3);
+  assert.match(await page.locator('.encounter-orientation').innerText(),/Why these two\?/);
+  assert.match(await page.locator('.encounter-orientation').innerText(),/What are they exploring\?/);
   assert.ok(await page.locator('.listener').count()>=2);
   assert.equal(await page.locator('#space-stop').count(),0,'No duplicate mobile Stop button');
   assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
