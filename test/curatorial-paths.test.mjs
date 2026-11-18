@@ -41,7 +41,7 @@ test('six checklist records keep separate provenance and stay distinct from the 
 test('curatorial juxtapositions cannot pass the metadata gate and establish no historical relationship', () => {
   assert.equal(DOCUMENTED_HISTORICAL_RELATIONSHIPS.length, 0);
   assert.equal(RELATIONSHIP_TYPES.documented_historical_relationship.id, 'documented_historical_relationship');
-  assert.equal(CURATORIAL_PATHS.length, 7);
+  assert.equal(CURATORIAL_PATHS.length, 11);
   const registryOnly = new Set(['TD1989.19.9', 'XB1991.830']);
   for (const path of CURATORIAL_PATHS) {
     assert.equal(path.relationshipType, 'curatorial_juxtaposition');
@@ -60,7 +60,8 @@ test('curatorial juxtapositions cannot pass the metadata gate and establish no h
     assert.equal(spoken.historicalRelationshipEstablished, false);
     assert.equal(spoken.turns.length, 3);
     if(path.aiAssisted){
-      assert.equal(path.source.researchOnly,true);
+      assert.ok(path.source.researchOnly||path.source.source==='presentation');
+      assert.equal(path.sourceUrl,path.source.researchOnly?CHECKLIST:null);
       assert.equal(path.target.source,'presentation');
       assert.equal(spoken.aiAssisted,true);
       assert.deepEqual(spoken.turns.map(t=>t.role),['objectA','objectB','objectA']);
@@ -75,7 +76,7 @@ test('curatorial juxtapositions cannot pass the metadata gate and establish no h
     assert.equal(spoken.evidence.length, 0);
   }
   const lines = CURATORIAL_PATHS.map(path => path.turns[2].text);
-  assert.equal(new Set(lines).size, 7);
+  assert.equal(new Set(lines).size, 11);
   assert.throws(() => conversationFor({ accession: '83.2.19', title: 'Futurama' }, { accession: 'XC2024.03.1.1', title: 'Harlem' }, { reasons: [] }, 'family'));
 });
 

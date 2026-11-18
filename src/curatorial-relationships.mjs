@@ -80,7 +80,7 @@ function scene(path) {
     status: 'research_preview',
     relationshipType: 'curatorial_juxtaposition',
     historicalRelationshipEstablished: false,
-    sourceUrl: CHECKLIST,
+    sourceUrl: [path.source,path.target].some(record=>record.researchOnly) ? CHECKLIST : null,
   });
 }
 
@@ -227,7 +227,35 @@ const BRIDGES=[
     'Neither record identifies an individual who attended both exhibitions or won the lottery.',
     ['I invite you to visit a fair. You can read my words and still have a whole journey ahead of you.',
      'I offer a chance in a lottery. Someone could keep my ticket and never see the work named on it.',
-     'If we wanted to know who actually walked through the doors, whose paper would we ask to see next?'])
+     'If we wanted to know who actually walked through the doors, whose paper would we ask to see next?']),
+  comparison('date-on-tomorrow','Who gets to put a date on the future?',
+    researchRecord('83.2.19'),presentationRecord('84.4.157'),
+    'A 1939 fair attraction imagines tomorrow. Another object puts 1939 in its title.',
+    'A year in a title does not establish the object’s production date or a connection to the fair.',
+    ['My visitors ride above a city that still lies ahead of them. What year would you put on the sign at the entrance?',
+     'I already carry a date: 1939 A.D. Someone reading me today has to look backward to find it.',
+     'Leave the sign there. I’d like to hear what someone who lived through that year would say over my narration.']),
+  comparison('fair-counts','Who gets counted at a fair?',
+    researchRecord('XC2024.03.1.1'),presentationRecord('XX1990.2870'),
+    'An invitation issued by Harlem Hospitality Tours and a title announcing the tenth Utrecht Fair count a public gathering in different ways.',
+    'The records identify separate fairs. They supply no shared attendance list.',
+    ['Say my first word aloud: Harlem. Before you even reach the fair, you know who is doing the inviting.',
+     'Say mine: tenth. I can tell you how many fairs that number asks you to remember. It tells you nothing about who walked in.',
+     'Suppose we counted the invitations that never got an answer. Would that change your picture of a successful fair?']),
+  comparison('heel-and-working-day','Where does a working day leave its mark?',
+    presentationRecord('TD1989.317.66'),presentationRecord('XX1990.3277'),
+    'A lottery names an exhibition of women’s labor. A branded heel offers an everyday way to ask what work leaves visible.',
+    'The public titles identify the exhibition lottery and Pirelli heels. They establish no wearer, occupation or link between the objects.',
+    ['My ticket names an exhibition of women’s labor. If you had one small case to fill, what would you put in it?',
+     'Give me a brand-new heel and a worn one. Set them side by side. Which one tells you how somebody spent the day?',
+     'The worn one makes me curious. But I’d leave space in the case for its owner to correct my guess.']),
+  comparison('permission-to-rise','Who has the power to let something rise?',
+    researchRecord('83.6.2'),presentationRecord('83.4.40'),
+    'A rejected proposal for a fair sculpture meets an object whose title begins with the word “Let.”',
+    'The checklist records the sculpture’s rejection. The other title supplies no evidence that its maker addressed the same organizers.',
+    ['I was meant to stand in public. The fair organizers turned me down. Read me the first word of your title.',
+     '“Let.” Try saying “Let the Living Rise” twice: once as the person asking, once as the person who can grant permission.',
+     'I heard two different voices. Which one would you have given the wall label to?'])
 ];
 
 export const CURATORIAL_PATHS = Object.freeze([...PATH_DRAFTS,...BRIDGES].map(path => scene({
