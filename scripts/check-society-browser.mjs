@@ -111,6 +111,10 @@ try {
   await page.waitForFunction(()=>getComputedStyle(document.querySelector('#path-timeline')).display!=='none');
   assert.match(await page.locator('#timeline-list').innerText(),/not a documented relationship|not proof that the histories intersected/i);
   await page.locator('.path-post').first().click();
+  assert.equal(await page.locator('#space-stop').count(),0,'Mobile should have no separate Stop button');
+  assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
+  assert.match(await page.locator('#space-play').innerText(),/Play/);
+  assert.equal(await page.locator('#space-play').getAttribute('aria-label'),'Play conversation');
   assert.equal(await page.locator('#conversation-content .bubble.turn').count(),3);
   assert.ok(await page.locator('.listener').count()>=2);
   const railHeight=()=>page.locator('.evidence-rail').evaluate(el=>Math.round(el.getBoundingClientRect().height));
