@@ -87,3 +87,17 @@ test('each room gives its two objects a large visual stage and separate ways to 
  assert.match(css,/\.object-portrait-media/);
  assert.match(css,/@media\(max-width:360px\)/);
 });
+
+
+test('object speaker cards show only the object title and record arrow',async()=>{
+ const js=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
+ const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
+ assert.match(js,/metadata\.append\(node\('strong',p\.shortName\),arrow\)/);
+ assert.match(js,/node\('span','↗','object-open-arrow'\)/);
+ assert.match(js,/arrow\.setAttribute\('aria-hidden','true'\)/);
+ assert.match(js,/inspect\.setAttribute\('aria-label','Inspect collection record: '/);
+ assert.doesNotMatch(js,/metadata\.append\(node\('small',\(i\?'02'/);
+ assert.doesNotMatch(js,/p\.accession\+' · Inspect record/);
+ assert.doesNotMatch(css,/\.speaker-status/);
+ assert.match(css,/\.object-open-arrow/);
+});
