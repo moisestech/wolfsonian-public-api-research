@@ -583,7 +583,7 @@ function renderConversation(){
     box.append(node('span','SCRIPTED · '+identity.validationState,'evidence-type'),node('h2',identity.type.replaceAll('_',' ')),node('p',identity.basis),node('p','Hidden layers remove both the line and its hit target. This edge is not a historical relationship.','muted'));
     $('voice-controls').hidden=true;setPlayDisabled(true);return;
   }
-  if(!edge){box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
+  if(!edge){state.episode=null;box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
   const source=person(edge.source),target=person(edge.target);
   if(!source||!target){box.append(node('h2','No shared category in this view.'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
   const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
@@ -1102,7 +1102,7 @@ $('space-evidence')?.addEventListener('click',event=>{
   if(document.body.classList.contains('show-timeline'))setMobileView('space');
   $('conversation-head').click();
 });
-$('room-rationale')?.addEventListener('click',()=>$('conversation-head').click());
+$('room-rationale')?.addEventListener('click',event=>{event.stopPropagation();$('conversation-head').click();});
 $('space-room')?.addEventListener('click',()=>{
   state.mobileFrom=document.body.classList.contains('show-timeline')?'timeline':'space';
   setMobileView('room');

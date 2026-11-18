@@ -516,6 +516,8 @@ body{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidd
 .rail-scroll{padding:16px 18px;max-height:none;overflow:auto;overscroll-behavior:contain}
 .chat{gap:14px}
 .evidence-rail .bubble{gap:7px;align-items:flex-start}
+.evidence-rail .bubble.turn{margin:0;padding:0;border:0}
+.evidence-rail .bubble.turn .say{box-shadow:none}
 .evidence-rail .bubble .avatar{width:26px;height:30px;object-fit:contain;border-radius:4px}
 .evidence-rail .bubble .say{max-width:calc(100% - 33px);padding:10px 12px;background:#243a31}
 .evidence-rail .bubble.side-b .say{background:#2a3431}
@@ -547,7 +549,7 @@ body{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidd
 .record-object-picker [aria-pressed=true]{background:#bce4cf;color:#14211e}
 .record-overlay{position:relative;inset:auto;max-height:none;font-size:16px}
 .record-overlay h2{font-size:28px}.record-overlay dl{font-size:16px}
-.record-frame{overflow:visible}.record-frame>img{max-height:200px;object-fit:contain}
+.record-frame{overflow:visible}#record-content .record-frame>img{position:relative;inset:auto;height:auto;max-height:200px;object-fit:contain}
 .show-record .room-header,.show-record .rail-head{display:none}
 .show-record .rail-scroll{padding-top:14px}
 body.show-timeline .path-timeline{display:flex;flex:1;min-height:0;overflow:auto}
