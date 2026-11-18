@@ -154,7 +154,8 @@ try {
   for(const path of ['/demo/about/','/demo/discovery-lab/'])assert.equal((await page.request.get(base+path)).status(),200);
 
   await open();
-  await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),100);
+  const corpusCount=await page.locator('#seed option').count();
+  await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),Math.min(100,corpusCount),'Overview must use the loaded corpus, without inventing nodes to reach 100');
   const scaleOf=()=>page.locator('#stage').evaluate(el=>Number(el.dataset.scale));
   const fitted=await scaleOf();
   await page.locator('#zoom-toggle').click();await page.locator('[data-stop="100"]').click();assert.ok(await scaleOf()>fitted);

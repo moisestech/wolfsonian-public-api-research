@@ -946,7 +946,7 @@ function saveConversation(){
   const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})),a=node('a');a.href=url;a.download='archive-conversation.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 $('lens').replaceChildren(...LENSES.map(p=>{const o=node('option',p.label);o.value=p.id;return o;}));
-$('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;state.edge=null;render();paintReading();});
+$('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;render();paintReading();});
 function paintReading(){
   const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   $('reading-portrait').src=portraitUrl(card);
