@@ -77,7 +77,7 @@ test('each room gives its two objects a large visual stage and separate ways to 
  const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
  assert.match(js,/function objectVisual\(record\)/);
  assert.match(js,/PACKET_STUDIES/);
- assert.match(js,/className='object-portrait-media'/);
+ assert.match(js,/node\('span',undefined,'object-portrait-media'/);
  assert.match(js,/object-portrait-meta/);
  assert.match(js,/function openObjectQuestions\(accession\)/);
  assert.match(js,/const currentIds=new Set\(relatedAnchor/);
