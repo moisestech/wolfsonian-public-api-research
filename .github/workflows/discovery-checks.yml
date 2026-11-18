@@ -13,6 +13,7 @@ on:
       - 'scripts/*society*'
       - 'test/archive-*.test.mjs'
       - 'test/curated-edge-scenes.test.mjs'
+      - 'test/conversation-ux.test.mjs'
       - 'test/cold-visitor-orientation.test.mjs'
       - 'examples/archive-society*'
       - 'test/discovery-*.test.mjs'
@@ -49,7 +50,7 @@ jobs:
           npm run test:society
           node --test test/cold-visitor-orientation.test.mjs
       - name: Verify curated relationships and skeptical fallbacks
-        run: node --test test/curated-edge-scenes.test.mjs
+        run: node --test test/curated-edge-scenes.test.mjs test/conversation-ux.test.mjs
       - name: Browser smoke and screenshots
         run: |
           npm ci
