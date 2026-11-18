@@ -36,6 +36,7 @@ export const PUBLIC_FILES = [
   'src/presentation-pairs.mjs',
   'src/session-images.mjs',
   'src/sprite-fit.mjs',
+  'src/conversation-orientation.mjs',
   'src/visitor-guide.mjs',
   'src/worlds-fairs-research.mjs',
   'src/zoom-stops.mjs',
