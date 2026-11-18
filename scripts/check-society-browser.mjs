@@ -126,8 +126,8 @@ try {
   assert.ok(questionTitles.includes('Can a tree connect Paul Robeson to an imagined house?'));
   assert.ok(questionTitles.includes('Can water connect a trade fair to Let the Living Rise?'));
   assert.ok(questionTitles.every(title=>!(/withdraw|reject this connection|editorial/i.test(title))));
-  const labels=await page.locator('#timeline-list .path-post').allInnerTexts();
-  assert.ok(labels.every(text=>!(/Authored scene|Shared motif:|Imagined comparison/i.test(text))),
+  const directoryCardText=await page.locator('#timeline-list .path-post').allInnerTexts();
+  assert.ok(directoryCardText.every(text=>!(/Authored scene|Shared motif:|Imagined comparison/i.test(text))),
     'Browse cards should emphasize artwork and actual spoken questions rather than editorial terminology');
   const card=page.locator('.path-post').first();
   assert.equal(await card.locator('.question-card-portraits img').count(),2);
