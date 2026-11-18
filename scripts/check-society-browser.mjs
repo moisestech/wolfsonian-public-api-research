@@ -61,6 +61,13 @@ try {
   await page.locator('#room-participants button').nth(1).click();
   assert.match(await page.locator('#record-content').innerText(),/TD1989\.318\.1/);
   assert.equal(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
+  for(const width of [320,390]){
+    await page.setViewportSize({width,height:740});
+    const picker=await page.locator('.record-object-picker').boundingBox();
+    const card=await page.locator('.record-frame').boundingBox();
+    assert.ok(card.y>=picker.y+picker.height-1 && card.width>=width-50,'Full-width record below picker at '+width);
+  }
+  await screenshot('mobile-record');
   await page.locator('[data-panel=conversation]').click();
   await page.locator('#space-evidence').click();
   assert.match(await page.locator('#episode-evidence').innerText(),/not historical speech or live autonomous AI/);
@@ -69,7 +76,16 @@ try {
   await page.locator('#space-leave').click();
   assert.equal(await page.locator('#timeline-title').innerText(),'Choose a question');
   assert.match(await page.locator('#timeline-list').innerText(),/Authored scene/);
-  await page.locator('#questions-back').click();
+  await page.locator('#timeline-list section').first().locator('button').last().click();
+  assert.notEqual(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
+  await page.locator('#space-leave').click();
+  await page.locator('#timeline-list button').filter({hasText:'Who pays the price of progress?'}).click();
+  assert.equal(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
+  await page.locator('#source-info').click();
+  await page.waitForURL('**/demo/about/');
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await screenshot('mobile-about');
+  await open();
 
   // Test selection coherently on the graph; unedited pairs never get fake dialogue.
   await page.setViewportSize({width:1280,height:900});
@@ -117,7 +133,7 @@ try {
   assert.equal(await page.locator('#room-participants .speaking').count(),0);
 
   // Route and voice boundaries remain covered against an actual authored scene.
-  await page.setViewportSize({width:1280,height:900});await selectEdge(0);
+  await page.setViewportSize({width:1280,height:900});await open();await selectEdge(0);
   await page.locator('#admin').evaluate(el=>{el.hidden=false;});
   await page.selectOption('#voice-mode','elevenlabs');await page.locator('#play').evaluate(button=>button.click());
   assert.match(await page.locator('#voice-status').textContent(),/approval/);assert.equal(voiceRequests.length,0);
