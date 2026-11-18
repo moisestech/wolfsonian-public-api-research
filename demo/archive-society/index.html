@@ -5,6 +5,7 @@
   <meta name="description" content="An artist-authored archive landscape: object photographs as nodes, inspectable conversations as edges.">
   <title>The Archive Dreams in Public</title>
   <link rel="stylesheet" href="./society.css">
+  <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 </head>
 <body>
 <div id="demo-gate">
@@ -18,7 +19,7 @@
 </div>
 <a class="skip" href="#atlas">Skip to the atlas</a>
 <header class="topbar">
-  <a class="wordmark" href="#atlas"><svg class="symbol" viewBox="0 0 32 32" aria-hidden="true"><rect x="2.5" y="2.5" width="27" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 23V13h4.5v10M14.5 23V8h5v15M21.5 23v-7H25v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>The Archive Dreams <em>in Public</em></span></a>
+  <a class="wordmark" href="#atlas"><span class="brand-icon" aria-hidden="true"><img class="brand-mark-on-dark" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981354/archive-dreams/brand/aperture-white-v1.svg" data-local-src="./assets/archive-dreams-aperture-white.svg" width="40" height="40" alt=""><img class="brand-mark-on-light" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981350/archive-dreams/brand/aperture-black-v1.svg" data-local-src="./assets/archive-dreams-aperture-black.svg" width="40" height="40" alt=""></span><span>The Archive Dreams <em>in Public</em></span></a>
   <div class="top-actions">
     <nav class="top-nav" aria-label="Explore Archive Dreams">
       <div class="tabs" role="group" aria-label="Explore conversations and records">
@@ -230,6 +231,10 @@
 </script>
 <script type="module">
 const local=location.hostname==='127.0.0.1'||location.hostname==='localhost';
+// CDN first, immutable local SVG master if a network or content blocker rejects it.
+for(const mark of document.querySelectorAll('.brand-icon img'))mark.addEventListener('error',()=>{
+  if(mark.dataset.localSrc && mark.getAttribute('src')!==mark.dataset.localSrc)mark.src=mark.dataset.localSrc;
+});
 async function start(){
   document.documentElement.classList.add('demo-open');
   await import('./society.mjs');

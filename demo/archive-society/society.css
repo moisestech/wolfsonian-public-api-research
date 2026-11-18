@@ -641,3 +641,15 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
 .question-card-preview{display:grid;gap:2px;padding:8px 15px 10px;background:var(--band)}
 .preview-speaker{font:650 11px/1.4 system-ui,sans-serif}
 .preview-line{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font:400 14px/1.4 system-ui,sans-serif}
+
+/* Archive Dreams symbol. White on the current dark UI; black when the
+ * surrounding surface explicitly declares a light theme. SVG is an exact
+ * silhouette master and the image never carries essential text. */
+@layer app {
+  .wordmark .brand-icon{display:inline-grid;place-items:center;flex:none;width:40px;height:40px;min-width:40px}
+  .wordmark .brand-icon img{grid-area:1/1;display:block;width:100%;height:100%;object-fit:contain}
+  .wordmark .brand-mark-on-light{display:none!important}
+  html[data-color-theme="light"] .wordmark .brand-mark-on-light{display:block!important}
+  html[data-color-theme="light"] .wordmark .brand-mark-on-dark{display:none!important}
+  @media(max-width:420px){.wordmark .brand-icon{width:32px;height:32px;min-width:32px}}
+}
