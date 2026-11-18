@@ -28,7 +28,7 @@ try {
   assert.equal(await page.locator('#room-question').innerText(),'Who pays the price of progress?');
   assert.equal(await page.locator('#room-header').getAttribute('data-mode'),'CURATED_SCRIPT');
   assert.match(await page.locator('#room-rationale').innerText(),/Why these two\?/);
-  assert.match(await page.locator('#room-description').innerText(),/Both records include “Machines” · no historical link established/);
+  assert.match(await page.locator('#room-description').innerText(),/Both list “Machines” · link unproven/);
   assert.equal(await page.locator('#room-participants .object-inspect').count(),2);
    assert.equal(await page.locator('#room-participants .object-portrait-media').count(),2);
    assert.equal(await page.locator('#room-participants .object-portrait-meta').count(),2);
