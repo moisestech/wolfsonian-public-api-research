@@ -69,7 +69,7 @@ try {
   await page.locator('#reading-toggle').click();await page.locator('[data-lens="worker"]').click();
   await page.locator('.conversation-edge').first().focus();await page.keyboard.press('Enter');
   assert.ok((await page.locator('.turn').count())>=3);
-  await page.locator('#conversation-content summary').click();
+  await page.locator('#conversation-content > details > summary').click();
   assert.match(await page.locator('#conversation-content').innerText(),/Thematic Category|Symbols\/Motifs/);
   await page.screenshot({path:new URL('artifacts/archive-society-conversation.png',root).pathname,fullPage:true});
   const csv=await readFile(new URL('examples/archive-society.synthetic.csv',root),'utf8');
