@@ -31,16 +31,16 @@ test('all sixteen scripts require the exact metadata family and value before spe
   assert.equal(scene.historicalRelationshipEstablished,false);
   assert.equal(scene.status,'EDITORIAL_DRAFT_NOT_APPROVED');
   assert.equal(scene.requires.kind,'shared_staff_metadata');
-  assert.equal(scene.turns.length,3);
-  assert.equal(scene.turns[2].speakerAccession,'archivist');
+  assert.ok(scene.turns.length===3||scene.turns.length===5);
+  assert.ok(scene.turns.some(turn=>turn.speakerAccession==='archivist'));
   assert.ok(scene.arc.length>=10&&scene.next.length>=10&&scene.editorialNote.length>=20);
   assert.ok(scene.turns.every(t=>t.kind==='ARTIST_AUTHORED_INTERPRETATION'&&t.text.length>=35));
   const evidence=[{family:scene.requires.family,value:scene.requires.value}];
   const forward=sceneForConfirmedEdge(...scene.pair,evidence);
   const reversed=sceneForConfirmedEdge(scene.pair[1],scene.pair[0],evidence);
   assert.ok(forward&&reversed);
-  assert.deepEqual(forward.turns.map(t=>t.role),['objectA','objectB','archivist']);
-  assert.deepEqual(reversed.turns.map(t=>t.role),['objectB','objectA','archivist']);
+  assert.deepEqual(forward.turns.map(t=>t.role),scene.turns.map(t=>t.speakerAccession==='archivist'?'archivist':nk(t.speakerAccession)===nk(scene.pair[0])?'objectA':'objectB'));
+  assert.deepEqual(reversed.turns.map(t=>t.role),scene.turns.map(t=>t.speakerAccession==='archivist'?'archivist':nk(t.speakerAccession)===nk(scene.pair[0])?'objectB':'objectA'));
   assert.deepEqual(forward.turns.map(t=>t.text),reversed.turns.map(t=>t.text));
   assert.equal(sceneForConfirmedEdge(...scene.pair,[]),null);
   assert.equal(sceneForConfirmedEdge(...scene.pair,[{family:'motif',value:'Unrelated'}]),null);
@@ -59,10 +59,10 @@ test('actual On Munitions opening edges use distinct dialogue, with metadata as 
     assert.equal(c.historicalRelationshipEstablished,false);
     assert.equal(c.evidence[0].value,s.tag);
     assert.deepEqual(c.scriptBasis,{family:s.family,value:s.tag});
-    assert.equal(c.turns.length,3);
+    assert.ok(c.turns.length===3||c.turns.length===5);
     assert.equal(c.turns[0].role,'objectA');
     assert.equal(c.turns[1].role,'objectB');
-    assert.equal(c.turns[2].role,'archivist');
+    assert.ok(c.turns.some(t=>t.role==='archivist'));
     assert.ok(c.dramaticArc.length>10);
     assert.ok(c.nextPrompt.length>10);
     assert.ok(c.limits.includes('not a documented relationship'));
@@ -93,6 +93,8 @@ test('unscripted edges use theme-specific or motif-only editorial fallback witho
  assert.ok(motif.nextPrompt.includes('withdraw'));
  assert.equal(theme.historicalRelationshipEstablished,false);
  assert.equal(motif.historicalRelationshipEstablished,false);
+ assert.equal(theme.turns.length,5);
+ assert.equal(motif.turns.length,5);
  assert.ok(theme.turns.every(t=>t.role==='objectA'||t.role==='objectB'||t.role==='archivist'));
 });
 
