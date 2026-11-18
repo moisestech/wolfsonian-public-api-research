@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import ThreeForceGraph from 'three-forcegraph';
 import { fittedSize, frameBars } from '../src/sprite-fit.mjs';
 import { nearestZoomStop } from '../src/zoom-stops.mjs';
+import { createDreamField } from './archive-society/dream-field.mjs';
 
 const PLACEHOLDER = '/demo/archive-society/assets/object-placeholder.png';
 const FAR = 640;
@@ -36,7 +37,7 @@ function nodeIdOf(object) {
   return '';
 }
 
-export function mountForceStage(host, { onSelect, onLink, background = '#111111', linkFocus = '#f4f4f4', linkIdle = '#6e6e6e' } = {}) {
+export function mountForceStage(host, { onSelect, onLink, onDrag, background = '#111111', dream = false, linkFocus = '#f4f4f4', linkIdle = '#6e6e6e' } = {}) {
   host.replaceChildren();
   host.classList.add('force-stage');
   const canvas = document.createElement('canvas');
@@ -85,6 +86,8 @@ export function mountForceStage(host, { onSelect, onLink, background = '#111111'
   const charge = graph.d3Force('charge');
   if (charge) charge.strength(-120);
   scene.add(graph);
+  const dreamField = dream ? createDreamField() : null;
+  if (dreamField) scene.add(dreamField.mesh);
   scene.add(new THREE.AmbientLight(0xffffff, 1.6));
   const key = new THREE.DirectionalLight(0xffffff, 1.1);
   key.position.set(30, 80, 140);
@@ -219,6 +222,7 @@ export function mountForceStage(host, { onSelect, onLink, background = '#111111'
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height, false);
+    dreamField?.fit(camera);
   }
 
   function setGraph(nodes, links) {
@@ -345,6 +349,7 @@ export function mountForceStage(host, { onSelect, onLink, background = '#111111'
   }
   canvas.addEventListener('pointermove', event => {
     canvas.style.cursor = linkUnder(event.clientX, event.clientY) ? 'pointer' : '';
+    if (pointerDown && Math.hypot(event.clientX - pointerDown.x, event.clientY - pointerDown.y) > 5) onDrag?.();
   });
   canvas.addEventListener('pointerdown', event => { pointerDown = { x: event.clientX, y: event.clientY }; });
   canvas.addEventListener('pointerup', event => {
@@ -367,6 +372,10 @@ export function mountForceStage(host, { onSelect, onLink, background = '#111111'
     graph.tickFrame();
     pulse();
     controls.update();
+    if (dreamField) {
+      dreamField.fit(camera);
+      dreamField.tick(performance.now() / 1000);
+    }
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
   }
@@ -382,5 +391,17 @@ export function mountForceStage(host, { onSelect, onLink, background = '#111111'
     setZoomT(t) { commitZoom(distanceForT(t), true); },
     zoomT() { return Number(host.dataset.zoom || 0); },
     scale() { return Number(host.dataset.scale); },
+    setDream(options) {
+      if (!dreamField) return;
+      const color = dreamField.setDream(options);
+      if (color) scene.background.set(color);
+    },
+    setLandscape(url, clarity) {
+      if (!dreamField || !url) return;
+      const texture = textureFor(url);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      dreamField.setLandscape(texture, clarity);
+    },
+    clearLandscape() { dreamField?.clearLandscape(); },
   };
 }
