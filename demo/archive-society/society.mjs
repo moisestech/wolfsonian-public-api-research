@@ -12,7 +12,7 @@ import { focusedPairGraph } from '../../src/force-graph-data.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
-import { explainEncounter, conversationEpisode } from '../../src/conversation-orientation.mjs';
+import { explainEncounter, conversationEpisode, connectionCaption } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -620,7 +620,11 @@ function renderRoomHeader(source,target,c){
   const header=$('room-header');header.hidden=false;header.dataset.episode=episode.id;header.dataset.mode=episode.mode;
   $('room-question').textContent=episode.question;
   $('room-kind').textContent=episode.label;
-  $('room-description').textContent=episode.mode==='CURATED_SCRIPT'?'A conversation between two objects':'Two records. An open research question.';
+  // Show the relationship that led to this room, rather than a generic
+  // description of its format. Research-proposal detail stays in Evidence.
+  const connection=connectionCaption({episode,proposal:state.researchPath?.proposal});
+  $('room-description').textContent=connection;
+  $('room-description').title=state.researchPath?.proposal||connection;
   $('room-rationale').textContent=episode.rationale+' ↗';
   const cast=$('room-participants');
   cast.replaceChildren(...episode.participants.map((p,i)=>{
