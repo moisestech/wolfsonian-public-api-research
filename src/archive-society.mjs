@@ -202,15 +202,24 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
   const hasMotif=edge.reasons.some(r=>r.family==='motif');
   const onlyMotif=hasMotif&&!hasTheme;
   const edgeMode=onlyMotif?'QUESTION_THIS_LINK':hasTheme&&hasMotif?'COMPARE_MULTIPLE_LABELS':'THEMATIC_COMPARISON';
+  // Five short beats instead of three consecutive mini-lectures:
+  // an observation, objection, repair, evidence check, and visitor-facing question.
+  // This is generated editorial theatre, never an object memory or a source fact.
   const aLine=onlyMotif
-    ? 'The repeated motif “'+term+'” brought our records together. My title is “'+a+'”. Is that enough reason to compare us?'
-    : 'My record is titled “'+a+'”. The category “'+term+'” offers a way to see a larger question, not a single historical story.';
+    ? 'The index places us under the motif “'+term+'”. Is that a good enough reason to put us together?'
+    : 'We both have the category “'+term+'” in our records. That sounds like a connection, but what does it really explain?';
   const bLine=onlyMotif
-    ? 'Mine is “'+b+'”. We might look alike in one detail and mean completely different things. Why was this edge proposed?'
-    : 'My title is “'+b+'”. '+lens.question+' Does that question produce a real tension between these two objects, or just another similarity?';
+    ? 'Maybe not. My title is “'+b+'”. One recurring motif could mean quite different things to different viewers.'
+    : 'Hold on. My title is “'+b+'”. If we share a category, does that mean we are making the same argument?';
+  const replyLine=onlyMotif
+    ? 'Fair point. We are comparing labels before inspecting the objects. What would you want to look at first?'
+    : 'No, I suppose not. '+lens.question+' The title “'+a+'” leaves that question open.';
   const archivistLine=onlyMotif
-    ? 'This is a motif-only metadata hypothesis. It does not establish a shared maker, audience, event, or intention. A visitor could reject this connection.'
-    : 'The source index records “'+term+'” in both entries, but that classification cannot establish influence, contact, or a common historical purpose. Verify the actual objects before making a stronger claim.';
+    ? 'This is a motif-only suggestion based on staff metadata. Nothing here establishes a shared maker, audience, event, or intention.'
+    : 'Both entries have “'+term+'” in the source index. That is a research path, not evidence of contact, influence, or a common historical purpose.';
+  const lastLine=onlyMotif
+    ? 'Then leave the line as a question, not an answer. What would justify keeping it?'
+    : 'All right. What evidence would persuade you that our comparison reveals something beyond a shared category?';
   const nextPrompt=onlyMotif?'Keep this as a question, investigate, or withdraw the link?':
     'Which additional source would change the interpretation of this pair?';
   return {
@@ -222,9 +231,11 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
     classification:'shared_staff_metadata',historicalRelationshipEstablished:false,
     evidence:edge.reasons.map(r=>({...r})),
     turns:[
-      {role:'objectA',speaker:a,text:aPrefix+aLine,citations:aFact?[aFact]:[]},
-      {role:'objectB',speaker:b,text:bPrefix+bLine,citations:bFact?[bFact]:[]},
-      {role:'archivist',speaker:'Archivist · fictional reading protocol',text:archivistLine}
+      {role:'objectA',speaker:a,text:aPrefix+aLine,citations:aFact?[aFact]:[],kind:'ARTIST_AUTHORED_INTERPRETATION'},
+      {role:'objectB',speaker:b,text:bPrefix+bLine,citations:bFact?[bFact]:[],kind:'ARTIST_AUTHORED_INTERPRETATION'},
+      {role:'objectA',speaker:a,text:replyLine,citations:[],kind:'ARTIST_AUTHORED_INTERPRETATION'},
+      {role:'archivist',speaker:'Archivist · fictional reading protocol',text:archivistLine,citations:[],kind:'SOURCE_BOUNDARY'},
+      {role:'objectB',speaker:b,text:lastLine,citations:[],kind:'ARTIST_AUTHORED_QUESTION'}
     ],
     resourceLayer:aFact||bFact?'catalog_field_quotes':'no_matched_catalog_field',
     limits:lens.limits+' This is a comparative prompt, not proof that the histories intersected.'
