@@ -17,7 +17,7 @@ test('CSV categories remain exact and private data is not needed in the repo',as
   const {records}=parseMatrixCsv(input);assert.equal(records.length,4);
   const view=societyView(records,records[0].accession,'family');
   const c=conversationFor(records[0],records.find(r=>r.accession===view.edges[0].target),view.edges[0],'worker');
-  assert.equal(c.turns.length,3);assert.equal(c.mode,'scripted_interpretation');
+  assert.equal(c.turns.length,5);assert.equal(c.mode,'scripted_interpretation');
   assert.equal(c.historicalRelationshipEstablished,false);assert.ok(c.evidence[0].sourceColumns[0]);
 });
 test('filters and isolated objects do not manufacture edges',()=>{
