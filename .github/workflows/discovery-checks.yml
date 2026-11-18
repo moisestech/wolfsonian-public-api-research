@@ -40,6 +40,7 @@ jobs:
           node --check src/discovery-dialogue.mjs
           node --check demo/discovery-lab/showcase.mjs
           node --check demo/archive-society/society.mjs
+          node --check demo/archive-society/editorial-headline.mjs
           node --check src/archive-society.mjs
           node --check src/curated-edge-scenes.mjs
           node --check src/conversation-orientation.mjs
@@ -53,6 +54,7 @@ jobs:
         run: |
           npm run test:society
           node --test test/cold-visitor-orientation.test.mjs
+          node --test test/editorial-headline.test.mjs
           node --test test/atlas-four-control-header.test.mjs
       - name: Verify curated relationships and skeptical fallbacks
         run: node --test test/curated-edge-scenes.test.mjs test/conversation-ux.test.mjs test/conversation-orientation.test.mjs
