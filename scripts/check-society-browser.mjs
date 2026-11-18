@@ -22,6 +22,12 @@ try {
   const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await open();
+  // The editorial title changes without replacing the accessible archive identity.
+  assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
+  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='What could two objects say?',null,{timeout:7500});
+  await page.locator('#editorial-toggle').click();
+  assert.equal(await page.locator('#editorial-toggle').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('.wordmark').getAttribute('aria-label'),'Archive Dreams in Public — explore conversations');
   assert.ok(await page.locator('.graph-node').count()>=2);
   assert.equal(await page.locator('.conversation-edge').count(),6);
   assert.equal(await page.locator('#admin-toggle,#space-stop,#add-images,#clear-images').count(),0);
