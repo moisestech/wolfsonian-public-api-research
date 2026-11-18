@@ -120,6 +120,10 @@ try {
     const voiceMode=document.querySelector('#voice-mode');
     voiceMode.value='device';
     voiceMode.dispatchEvent(new Event('change'));
+    Object.defineProperty(window,'SpeechSynthesisUtterance',{
+      configurable:true,
+      value:class MockUtterance{constructor(text){this.text=text;this.voice=null;}}
+    });
     Object.defineProperty(window,'speechSynthesis',{
       configurable:true,
       value:{
@@ -130,7 +134,8 @@ try {
     });
   });
   await page.locator('#space-play').click();
-  await page.waitForFunction(()=>document.querySelector('#space-play').getAttribute('aria-pressed')==='true');
+  const active=await page.locator('#space-play').getAttribute('aria-pressed');
+  assert.equal(active,'true','Mobile playback should be active; status: '+await page.locator('#voice-status').textContent());
   assert.equal(await page.locator('#space-play').getAttribute('aria-label'),'Stop conversation');
   assert.match(await page.locator('#space-play').innerText(),/Stop/);
   await page.locator('#space-play').click();
