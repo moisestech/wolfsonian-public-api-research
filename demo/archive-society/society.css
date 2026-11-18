@@ -1,9 +1,23 @@
 html:not(.demo-open) body>*:not(#demo-gate){visibility:hidden}
 #demo-gate{display:none}
-html:not(.demo-open) #demo-gate{display:grid;position:fixed;inset:0;z-index:80;place-items:center;background:#111;color:#f4f4f4}
-#demo-gate form{width:min(22rem,calc(100% - 32px))}
+html:not(.demo-open) #demo-gate{display:grid;position:fixed;inset:0;z-index:80;place-items:center;overflow:hidden;background:#111;color:#f4f4f4}
+#demo-gate::before,#demo-gate::after{content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none}
+#demo-gate::before{background-image:radial-gradient(circle,rgba(218,157,118,.5) .75px,transparent 1px);background-size:9px 9px;animation:dream-drift 34s linear infinite}
+#demo-gate::after{background-image:radial-gradient(ellipse at 50% 42%,transparent 0%,#111 76%),radial-gradient(circle,rgba(113,196,177,.42) .7px,transparent .95px);background-size:100% 100%,9px 9px;background-repeat:no-repeat,repeat;background-position:center,3px 2px;animation:dream-ink 42s linear infinite}
+@keyframes dream-drift{to{transform:translate3d(-36px,-28px,0)}}
+@keyframes dream-ink{to{background-position:center,-33px -26px}}
+#demo-gate form{position:relative;z-index:1;width:min(22rem,calc(100% - 32px));padding:28px 24px 22px;background:#111;border:1px solid #354844}
 #demo-gate h1{font:400 56px/1.15 Georgia,serif;margin:0 0 16px}
 #demo-gate button{width:100%;margin-top:8px}
+html[data-color-theme="light"] #demo-gate{background:#f6f4eb;color:#142523}
+html[data-color-theme="light"] #demo-gate form{background:#f6f4eb;border-color:#c5d4c7}
+html[data-color-theme="light"] #demo-gate label{color:#26443a}
+html[data-color-theme="light"] #demo-gate::before{background-image:radial-gradient(circle,rgba(20,37,35,.22) .55px,transparent 1px);background-size:14px 14px}
+html[data-color-theme="light"] #demo-gate::after{background-image:radial-gradient(ellipse at 50% 42%,transparent 0%,#f6f4eb 78%),radial-gradient(circle,rgba(184,92,56,.28) .55px,transparent .9px)}
+@media(prefers-reduced-motion:reduce){
+  #demo-gate::before,#demo-gate::after{animation:none}
+  #demo-gate::after{background-position:center,0 0}
+}
 #gate-error{color:#f0c7b0}
 @layer app {
 :root{color-scheme:dark;--ink:#142523;--paper:#f6f4eb;--sage:#c5d4c7;--teal:#71c4b1;--copper:#da9d76;--line:#354844}

@@ -41,6 +41,7 @@ $('appearance-toggle')?.addEventListener('click',()=>{
   const mode=document.documentElement.dataset.colorTheme==='light'?'dark':'light';
   applyAppearance(mode);
   try { localStorage.setItem(appearanceKey,mode); } catch { /* visual preference is still applied */ }
+  syncDream();
 });
 
 // The archived transcript remains present and inspectable before, during and
@@ -275,7 +276,7 @@ function stop(){
 function changeSeed(id){stop();resetApproval();state.researchPath=null;state.seed=id;state.edge=null;
   state.recordAccession=null;
   if(state.payload)state.snapshots.set(id,reconcileLookup(state.payload,id,'UNKNOWN_LOCAL_CAPTURE_TIME'));
-  render();setPanel('record');}
+  render();setPanel('record');breathDream();}
 function options(){
   const query=$('search').value.toLowerCase();
   const entries=state.records.filter(r=>(r.title+' '+r.accession).toLowerCase().includes(query));
@@ -435,6 +436,7 @@ function renderGraph(){
   $('stage').dataset.theme = $('theme').value;
   stage.setGraph(graph.nodes, graph.links);
   if (edge) stage.focusPair(edge.source, edge.target);
+  syncDream();
 }
 function showEdge(edge){
   if(!edge)return;
@@ -446,6 +448,7 @@ function showEdge(edge){
   render();
   setPanel('conversation');
   if(mobileLayout())setMobileView('space');
+  breathDream();
   startSceneEntrance();
 }
 function onGraphSelect(id){
@@ -1100,6 +1103,7 @@ function openResearchPath(id){
   closeSheet();
   render();
   setMobileView('space');
+  breathDream();
   startSceneEntrance();
 }
 function render(){
@@ -1157,7 +1161,7 @@ function updateSpeakingAudio(turn,index,count){
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn '+(index+1)+' of '+count;
 }
 async function play(){
-  if(!state.conversation)return;stop();const session=playback;
+  if(!state.conversation)return;stop();wakeDream();const session=playback;
   const conversation=state.conversation,mode=$('voice-mode').value;
   if(mode==='elevenlabs'&&!$('external-approved').checked){message('voice-status','Review the displayed transcript and confirm external-processing approval first.');return;}
   state.playing=true;setPlayDisabled(true);document.querySelectorAll('.conversation-edge.selected').forEach(e=>e.classList.add('speaking'));
@@ -1202,7 +1206,7 @@ async function play(){
     }
     if(session===playback && !/not enabled|disabled|ELEVENLABS_DISABLED/i.test($('voice-status').textContent))message('voice-status','');
   }catch(error){if(session===playback)message('voice-status',error.message);}
-  finally{if(session===playback){state.playing=false;setPlayDisabled(false);document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));const bar=$('voice-controls');bar?.classList.remove('playing');if(bar)bar.dataset.speaker='';if($('audio-speaker'))$('audio-speaker').textContent='Ready to listen';stage.setSpeaking('');markSpeaker('');}}
+  finally{if(session===playback){state.playing=false;setPlayDisabled(false);document.querySelectorAll('.conversation-edge.speaking, #conversation-content .turn.speaking').forEach(e=>e.classList.remove('speaking'));const bar=$('voice-controls');bar?.classList.remove('playing');if(bar)bar.dataset.speaker='';if($('audio-speaker'))$('audio-speaker').textContent='Ready to listen';stage.setSpeaking('');markSpeaker('');armIdle();}}
 }
 function speakOnDevice(turn){
   return new Promise((resolve,reject)=>{
@@ -1439,7 +1443,60 @@ const mobileMedia=window.matchMedia('(max-width: 800px)');
 mobileMedia.addEventListener('change',syncMobileLayout);
 window.addEventListener('resize',syncMobileLayout);
 readingScroller()?.addEventListener('scroll',syncMobileRoomStage,{passive:true});
-const stage=mountForceStage($('stage'),{onSelect:id=>onGraphSelect(id),onLink:(source,target)=>onGraphLink(source,target),background:'#111111'});
+let stageApi=null;
+const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');
+let dreamReason='awake';
+let dreamTimer=0;
+let idleTimer=0;
+const ARRIVAL_MS=7000;
+const BREATH_MS=4500;
+const IDLE_MS=24000;
+function staffLandscape(){return typeof state.background==='string'&&state.background.startsWith('blob:');}
+function syncDream(){
+  if(!stageApi)return;
+  const host=$('stage');
+  if(staffLandscape()){
+    stageApi.setLandscape(state.background,Number($('veil')?.value||68));
+    if(host){host.dataset.dream='landscape';host.dataset.dreamMotion='still';}
+    return;
+  }
+  stageApi.clearLandscape();
+  const reduced=motionQuery.matches;
+  const dreaming=dreamReason!=='awake';
+  stageApi.setDream({amount:dreaming?1:0,reduced,paper:document.documentElement.dataset.colorTheme==='light'});
+  if(host){host.dataset.dream=dreamReason;host.dataset.dreamMotion=dreaming?(reduced?'still':'drift'):'awake';}
+}
+function armIdle(){
+  clearTimeout(idleTimer);
+  if(state.playing)return;
+  idleTimer=setTimeout(()=>{
+    if(state.playing||dreamReason!=='awake')return;
+    dreamReason='idle';
+    syncDream();
+  },IDLE_MS);
+}
+function wakeDream(){
+  const was=dreamReason;
+  dreamReason='awake';
+  clearTimeout(dreamTimer);
+  if(was!=='awake')syncDream();
+  armIdle();
+}
+function startDream(reason,ms){
+  dreamReason=reason;
+  clearTimeout(dreamTimer);
+  clearTimeout(idleTimer);
+  syncDream();
+  dreamTimer=setTimeout(wakeDream,ms);
+}
+function breathDream(){startDream('room',BREATH_MS);}
+motionQuery.addEventListener?.('change',()=>syncDream());
+document.addEventListener('pointermove',()=>{
+  if(dreamReason==='idle')wakeDream();
+  else if(dreamReason==='awake')armIdle();
+},{passive:true});
+const stage=mountForceStage($('stage'),{onSelect:id=>onGraphSelect(id),onLink:(source,target)=>onGraphLink(source,target),onDrag:wakeDream,background:'#111111',dream:true});
+stageApi=stage;
 syncMobileLayout();
 paintReading();
 $('seed').addEventListener('change',()=>{state.journey=[];changeSeed($('seed').value);});
@@ -1546,4 +1603,5 @@ if(requested&&state.records.some(item=>item.accession===requested))state.seed=re
 categories();options();render();setZoomT(34);
 const requestedPath=new URLSearchParams(location.search).get('path');
 if(requestedPath&&pathById(requestedPath))openResearchPath(requestedPath);
+else startDream('arrival',ARRIVAL_MS);
 if(requested&&!state.records.some(item=>item.accession===requested))message('import-status','Requested accession is not in the loaded set. No identity was assumed.');
