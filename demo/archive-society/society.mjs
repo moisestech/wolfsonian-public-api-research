@@ -519,10 +519,11 @@ function renderConversation(){
   const reader=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   const guide=CARD_BY_ID.get('archivist');
   const faces={
-    objectA:{name:reader.label,src:portraitUrl(reader),side:'a'},
+    objectA:{name:source.title,src:avatarFor(source),side:'a'},
     objectB:{name:target.title,src:avatarFor(target),side:'b'},
-    archivist:{name:'Archivist',src:guide?portraitUrl(guide):'',side:'guide'}
+    archivist:{name:'Archivist · fictional research voice',src:guide?portraitUrl(guide):'',side:'guide'}
   };
+  if(c.mode!=='CURATED_EDGE_SCENE')box.append(node('p','Reading: '+reader.label+' · these are imagined voices, not historical quotations.','notice'));
   for(const turn of c.turns){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
