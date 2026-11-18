@@ -209,8 +209,11 @@ try {
   await page.getByRole('button',{name:'More questions with these objects'}).click();
   await page.locator('#timeline-list button').filter({hasText:'Who builds the future?'}).click();
   assert.equal(await page.locator('#room-question').innerText(),'Who builds the future?');
+  await page.locator('#appearance-toggle').click();
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
   await page.locator('#source-info').click();
   await page.waitForURL('**/demo/about/');
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light','About inherits the same appearance preference');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   assert.match(await page.locator('h2').allTextContents().then(parts=>parts.join(' | ')),/A conversation between two objects/);
   assert.equal(await page.locator('#how-conversations-are-written').count(),1);
@@ -218,6 +221,8 @@ try {
   for(const term of ['Authored scene','Shared motif','Imagined comparison'])assert.ok(aboutWords.includes(term));
   await screenshot('mobile-about');
   await open();
+  await page.locator('#appearance-toggle').click();
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
 
   // Test selection coherently on the graph; unedited pairs never get fake dialogue.
   await page.setViewportSize({width:1280,height:900});

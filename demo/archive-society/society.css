@@ -941,3 +941,22 @@ html[data-color-theme="light"] #space-bar .space-tab:hover{background:#e5ede3;co
   #room-question,#room-participants .room-participant,#conversation-content .chat .turn,
   #room-participants .object-cast-link{animation:none!important;transition:none!important}
 }
+
+/* Field and button contrast in paper mode. Explicit specialty controls above
+   keep their own semantics and more specific selectors. */
+html[data-color-theme="light"] :is(button,input,select,textarea){
+  background:#e9eee6;color:#17352a;border-color:#b4c8b9
+}
+html[data-color-theme="light"] :is(button,input,select,textarea):focus-visible{
+  outline-color:#a55c33
+}
+html[data-color-theme="light"] :is(.evidence-rail #conversation-head,.evidence-rail .rail-head button,.tabs button){
+  background:transparent;color:#204c3b
+}
+html[data-color-theme="light"] .room-participant .object-inspect{
+  background:#e6eae2;color:#19372c;border:0
+}
+html[data-color-theme="light"] .room-participant .object-more{
+  background:#d8e4d8;color:#205740;border:0;border-top:1px solid #abbfab
+}
+html[data-color-theme="light"] .object-portrait-media.is-diagram{background:#e4e4d8}
