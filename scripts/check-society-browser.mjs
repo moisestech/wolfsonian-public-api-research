@@ -57,6 +57,35 @@ try {
     assert.ok(fold.dockVisible&&!fold.overflow,'Dock and content fit at '+width+'px');
     await screenshot('room-'+width);
   }
+  // Five persistent mobile destinations share the original dock space.
+  await page.setViewportSize({width:390,height:844});
+  assert.equal(await page.locator('#space-bar .space-tab').count(),5);
+  assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
+  assert.equal(await page.locator('#space-conversation[aria-current="page"]').count(),1);
+  assert.equal(await page.locator('#space-evidence').count(),0,'Evidence is available in the room header, not a redundant dock action');
+  await page.locator('#space-feed').click();
+  assert.equal(await page.locator('#path-timeline').isVisible(),true);
+  assert.equal(await page.locator('#space-feed[aria-current="page"]').count(),1);
+  assert.equal(await page.locator('#space-bar').isVisible(),true,'Bottom navigation stays available in feed');
+  await page.locator('#space-conversation').click();
+  assert.equal(await page.locator('#room-question').isVisible(),true);
+  assert.equal(await page.locator('#space-conversation[aria-current="page"]').count(),1);
+  await page.locator('#space-record').click();
+  assert.equal(await page.locator('#record-panel').isVisible(),true);
+  assert.equal(await page.locator('#space-record[aria-current="page"]').count(),1);
+  await page.locator('#space-conversation').click();
+  await page.locator('#space-room').click();
+  assert.equal(await page.locator('#stage').isVisible(),true);
+  assert.equal(await page.locator('#space-room[aria-current="page"]').count(),1);
+  const navAndMap=await page.evaluate(()=>({
+    nav:document.querySelector('#space-bar').getBoundingClientRect().top,
+    map:document.querySelector('.atlas-panel').getBoundingClientRect().bottom,
+    width:document.documentElement.scrollWidth
+  }));
+  assert.ok(navAndMap.map<=navAndMap.nav+1,'Map never obscures persistent bottom navigation');
+  assert.ok(navAndMap.width<=390+1,'Mobile tabs must not overflow');
+  await page.locator('#space-conversation').click();
+  assert.equal(await page.locator('#room-question').isVisible(),true);
   // The image panels lead to exact-accession conversations, not arbitrary related tags.
   assert.ok(await page.locator('#room-participants .object-more').count()>=1,'At least one speaker has another curated room');
   await page.locator('#room-participants .object-more').first().click();
@@ -78,7 +107,7 @@ try {
   }
   await screenshot('mobile-record');
   await page.locator('[data-panel=conversation]').click();
-  await page.locator('#space-evidence').click();
+  await page.locator('#conversation-head').click();
   assert.match(await page.locator('#episode-evidence').innerText(),/not historical speech or live autonomous AI/);
   assert.match(await page.locator('#episode-evidence').innerText(),/85\.4\.64\.43[\s\S]*TD1989\.318\.1/);
   await page.locator('#sheet-close').click();

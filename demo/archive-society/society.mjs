@@ -141,13 +141,20 @@ function setPlayDisabled(disabled){
   play.setAttribute('aria-pressed',String(playing));
   play.replaceChildren(transportIcon(playing?'stop':'play'));
   const space=$('space-play');
-  if(space){space.disabled=play.disabled;space.textContent=playing?'■ Stop':'▶ Play';space.setAttribute('aria-label',playing?'Stop conversation':'Play conversation');space.setAttribute('aria-pressed',String(playing));}
+  if(space){
+    space.disabled=play.disabled;
+    const label=space.querySelector('.space-tab-label');
+    if(label)label.textContent=playing?'Stop':'Listen';
+    space.setAttribute('aria-label',playing?'Stop conversation':'Play conversation');
+    space.setAttribute('aria-pressed',String(playing));
+  }
 }
 function setPanel(name){
   for(const p of ['conversation','record'])$(p+'-panel').hidden=p!==name;
   for(const b of document.querySelectorAll('[data-panel]'))b.setAttribute('aria-pressed',String(b.dataset.panel===name));
   document.querySelector('.evidence-rail')?.classList.toggle('show-record',name==='record');
   if($('voice-controls'))$('voice-controls').hidden=name!=='conversation'||!state.conversation;
+  syncMobileNavigation();
 }
 function resetApproval(){ $('external-approved').checked=false; }
 function stop(){
@@ -431,11 +438,23 @@ function paintScene(c,edge){
   paintSceneLabel(label,tagColor(edge.reasons[0].value),curated?colorNote:kind+' · '+colorNote,curated?c.dramaticArc:'',kind);
 }
 function mobileLayout(){return window.matchMedia('(max-width: 800px)').matches;}
+function syncMobileNavigation(){
+  const view=document.body.classList.contains('show-timeline')?'feed':
+    document.body.classList.contains('show-room')?'map':
+    document.querySelector('.evidence-rail')?.classList.contains('show-record')?'record':'conversation';
+  for(const [key,id] of [['feed','space-feed'],['conversation','space-conversation'],['map','space-room'],['record','space-record']]){
+    const button=$(id);
+    if(!button)continue;
+    if(key===view)button.setAttribute('aria-current','page');
+    else button.removeAttribute('aria-current');
+  }
+}
 function setMobileView(view){
   document.body.classList.remove('show-timeline','show-space','show-room');
   document.body.classList.add('show-'+view);
   if(view==='timeline'){stop();paintTimeline();$('questions-back').focus();}
   if(view==='room')requestAnimationFrame(()=>stage.resize());
+  syncMobileNavigation();
 }
 function placeZoomStage(){
   const zoom=$('zoom-stage');if(!zoom)return;
@@ -447,6 +466,7 @@ function syncMobileLayout(){
   if(!mobileLayout()){document.body.classList.remove('show-timeline','show-space','show-room');return;}
   if(!document.body.classList.contains('show-timeline')&&!document.body.classList.contains('show-space')&&!document.body.classList.contains('show-room'))document.body.classList.add('show-space');
   if(document.body.classList.contains('show-room'))requestAnimationFrame(()=>stage.resize());
+  syncMobileNavigation();
 }
 function followObject(accession){
   if(state.journey.length>=8)state.journey.shift();
@@ -1206,11 +1226,6 @@ $('sheet-close')?.addEventListener('click',event=>{
   closeConversationSheet();
 });
 $('space-play')?.addEventListener('click',()=>$('play').click());
-$('space-evidence')?.addEventListener('click',event=>{
-  event.stopPropagation();
-  if(document.body.classList.contains('show-timeline'))setMobileView('space');
-  $('conversation-head').click();
-});
 $('room-rationale')?.addEventListener('click',event=>{event.stopPropagation();$('conversation-head').click();});
 $('space-room')?.addEventListener('click',()=>{
   state.mobileFrom=document.body.classList.contains('show-timeline')?'timeline':'space';
@@ -1219,6 +1234,16 @@ $('space-room')?.addEventListener('click',()=>{
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
 $('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();});
 function browseAll(){relatedQuestions=false;relatedAnchor=null;setMobileView('timeline');}
+$('space-feed')?.addEventListener('click',browseAll);
+$('space-conversation')?.addEventListener('click',()=>{
+  setPanel('conversation');
+  setMobileView('space');
+  $('room-question')?.focus({preventScroll:true});
+});
+$('space-record')?.addEventListener('click',()=>{
+  setPanel('record');
+  setMobileView('space');
+});
 $('space-leave')?.addEventListener('click',browseAll);
 $('all-directory-questions').addEventListener('click',browseAll);
 $('questions-back')?.addEventListener('click',()=>setMobileView('space'));
