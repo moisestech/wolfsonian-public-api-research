@@ -22,6 +22,12 @@ try {
   const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await open();
+  // The editorial title changes without replacing the accessible archive identity.
+  assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
+  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='What could two objects say?',null,{timeout:7500});
+  await page.locator('#editorial-toggle').click();
+  assert.equal(await page.locator('#editorial-toggle').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('.wordmark').getAttribute('aria-label'),'Archive Dreams in Public — explore conversations');
   assert.ok(await page.locator('.graph-node').count()>=2);
   assert.equal(await page.locator('.conversation-edge').count(),6);
   assert.equal(await page.locator('#admin-toggle,#space-stop,#add-images,#clear-images').count(),0);
@@ -45,26 +51,40 @@ try {
   assert.equal(await page.locator('.encounter-orientation').getAttribute('open'),null);
   await screenshot('room-1280');
 
-  // Topic, two identities and two complete messages must be above the dock.
+  // Object-first mobile: expansive photographs on arrival, compact when reading.
   for(const width of [320,390,768]){
     await page.setViewportSize({width,height:844});
-    const fold=await page.evaluate(()=>{
-      const scroll=document.querySelector('.rail-scroll').getBoundingClientRect();
-      const dock=document.querySelector('#space-bar').getBoundingClientRect();
-      const bubbles=[...document.querySelectorAll('.turn')].slice(0,2).map(x=>x.getBoundingClientRect());
+    await page.locator('.rail-scroll').evaluate(el=>{el.scrollTop=0;el.dispatchEvent(new Event('scroll'));});
+    const opening=await page.evaluate(()=>{
+      const scroll=document.querySelector('.rail-scroll'),dock=document.querySelector('#space-bar').getBoundingClientRect();
+      const cards=[...document.querySelectorAll('#room-participants .object-portrait-media')];
       const controls=[...document.querySelector('.top-nav').querySelectorAll('button,a')].map(x=>x.getBoundingClientRect());
-      return {fits:bubbles.length===2&&bubbles.every(b=>b.top>=scroll.top-1&&b.bottom<=Math.min(scroll.bottom,dock.top)+1),
+      return {photoHeight:cards[0].getBoundingClientRect().height,images:cards.length,
+        title:document.querySelector('#room-question').textContent,
+        headerInScroller:document.querySelector('#room-header').parentElement===scroll,
         singleRow:controls.every(b=>Math.abs(b.top-controls[0].top)<2),
         navFits:controls.every(b=>b.left>=0&&b.right<=innerWidth),
         overflow:document.documentElement.scrollWidth>innerWidth+1,
-        dockVisible:dock.bottom<=innerHeight+1,
-        bounds:bubbles.map(b=>({top:b.top,bottom:b.bottom})),scrollBottom:scroll.bottom};
+        dockVisible:dock.bottom<=innerHeight+1};
     });
-    assert.ok(fold.fits,'Two complete opening messages at '+width+'px: '+JSON.stringify(fold));
-    assert.ok(fold.singleRow&&fold.navFits,'Four controls stay on one row at '+width+'px');
-    assert.ok(fold.dockVisible&&!fold.overflow,'Dock and content fit at '+width+'px');
+    assert.equal(opening.images,2,'Two visual object identities at '+width+'px');
+    assert.ok(opening.photoHeight>=170,'Large object images on arrival at '+width+'px: '+JSON.stringify(opening));
+    assert.ok(opening.headerInScroller,'Heading and dialogue use the same scroll surface');
+    assert.ok(opening.singleRow&&opening.navFits,'Four controls stay in one row at '+width+'px');
+    assert.ok(!opening.overflow&&opening.dockVisible,'Mobile viewport has no overflow at '+width+'px');
     await screenshot('room-'+width);
+    await page.locator('.rail-scroll').evaluate(el=>{el.scrollTop=300;el.dispatchEvent(new Event('scroll'));});
+    const reading=await page.evaluate(()=>({
+      height:document.querySelector('#room-participants .object-portrait-media').getBoundingClientRect().height,
+      compact:document.querySelector('#room-header').classList.contains('is-compact'),
+      reachable:document.querySelector('#conversation-content .turn')?.textContent?.length>0,
+      scrollTop:document.querySelector('.rail-scroll').scrollTop
+    }));
+    assert.ok(reading.scrollTop>=150,'Dialogue scroll must advance: '+JSON.stringify(reading));
+    assert.ok(reading.height<opening.photoHeight-55,'Object images shrink on reading scroll: '+JSON.stringify(reading));
+    assert.ok(reading.compact&&reading.reachable,'Compact masthead leaves conversation accessible');
   }
+  await page.locator('.rail-scroll').evaluate(el=>{el.scrollTop=0;el.dispatchEvent(new Event('scroll'));});
   // Five persistent mobile destinations share the original dock space.
   await page.setViewportSize({width:390,height:844});
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
@@ -265,6 +285,8 @@ try {
   await page.locator('#space-room').click();
   assert.ok(await page.locator('#stage').isVisible());
   await screenshot('mobile-map');
+  assert.equal(await page.locator('#room-back').getAttribute('aria-label'),'Back to conversation');
+  assert.equal(await page.locator('#room-back svg').count(),1);
   await page.locator('#room-back').click();
   assert.ok(await page.locator('#room-question').isVisible());
   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);

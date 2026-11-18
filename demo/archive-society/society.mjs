@@ -461,8 +461,36 @@ function placeZoomStage(){
   if(mobileLayout())$('space-stage')?.append(zoom);
   else document.querySelector('.canvas')?.append(zoom);
 }
+// The mobile reading surface owns both the objects and dialogue. Desktop
+// retains the independent, fixed-height scene header and transcript scroller.
+const readingScroller=()=>document.querySelector('.rail-scroll');
+function syncMobileRoomStage(){
+  const header=$('room-header'),scroller=readingScroller();
+  if(!header||!scroller)return;
+  if(!mobileLayout()||header.hidden){
+    header.classList.remove('is-compact');
+    header.style.removeProperty('--room-image-height');
+    scroller.style.removeProperty('--room-scroll-offset');
+    return;
+  }
+  const extent=220,progress=Math.min(1,Math.max(0,scroller.scrollTop)/extent);
+  const expanded=Math.min(320,Math.max(175,window.innerHeight*0.37));
+  const compact=68;
+  header.style.setProperty('--room-image-height',Math.round(expanded+(compact-expanded)*progress)+'px');
+  // Retain the opening text's scroll position as the cards contract.
+  scroller.style.setProperty('--room-scroll-offset',Math.round(extent*progress)+'px');
+  header.classList.toggle('is-compact',progress>=.96);
+}
+function placeRoomHeader(){
+  const header=$('room-header'),scroller=readingScroller(),stage=$('space-stage');
+  if(!header||!scroller||!stage)return;
+  if(mobileLayout()&&header.parentElement!==scroller)scroller.prepend(header);
+  else if(!mobileLayout()&&header.parentElement===scroller)stage.before(header);
+  syncMobileRoomStage();
+}
 function syncMobileLayout(){
   placeZoomStage();
+  placeRoomHeader();
   if(!mobileLayout()){document.body.classList.remove('show-timeline','show-space','show-room');return;}
   if(!document.body.classList.contains('show-timeline')&&!document.body.classList.contains('show-space')&&!document.body.classList.contains('show-room'))document.body.classList.add('show-space');
   if(document.body.classList.contains('show-room'))requestAnimationFrame(()=>stage.resize());
@@ -626,6 +654,7 @@ function renderRoomHeader(source,target,c){
   const header=$('room-header');header.hidden=false;header.dataset.episode=episode.id;header.dataset.mode=episode.mode;
   $('room-question').textContent=episode.question;
   $('room-kind').textContent=episode.label==='Authored scene'?'':episode.label;
+  $('room-status-line').hidden=!$('room-kind').textContent;
   // Show the relationship that led to this room, rather than a generic
   // description of its format. Research-proposal detail stays in Evidence.
   const connection=connectionCaption({episode,proposal:state.researchPath?.proposal});
@@ -666,9 +695,10 @@ function renderRoomHeader(source,target,c){
     return card;
   }));
   cast.append(node('span','↔','object-cast-link'));
+  syncMobileRoomStage();
   const evidence=$('episode-evidence');
   evidence.replaceChildren(node('h2','Why these two?'),node('p',episode.rationale),
-    node('p','These are imagined exchanges, not historical speech or live autonomous AI. Shared tags do not establish contact, influence, or shared storage.'));
+    node('p','The voices are artist-authored interpretations, not historical speech or live autonomous AI. Shared tags do not establish contact, influence, or shared storage.'));
   for(const p of episode.participants){
     const button=node('button',p.title+' · '+p.accession,'evidence-record');button.type='button';
     button.addEventListener('click',()=>openEpisodeRecord(p.accession));evidence.append(button);
@@ -723,6 +753,7 @@ function renderConversation(){
   const edge=shownEdge(),box=$('conversation-content');box.replaceChildren();
   state.conversation=null;
   $('room-header').hidden=true;
+  syncMobileRoomStage();
   clearScene();
   if(edge?.relationshipType==='curatorial_juxtaposition'&&state.researchPath){renderJuxtaposition(box);return;}
   if(state.hover?.kind==='identity'){
@@ -1262,6 +1293,7 @@ $('questions-back')?.addEventListener('click',()=>setMobileView('space'));
 const mobileMedia=window.matchMedia('(max-width: 800px)');
 mobileMedia.addEventListener('change',syncMobileLayout);
 window.addEventListener('resize',syncMobileLayout);
+readingScroller()?.addEventListener('scroll',syncMobileRoomStage,{passive:true});
 const stage=mountForceStage($('stage'),{onSelect:id=>onGraphSelect(id),onLink:(source,target)=>onGraphLink(source,target),background:'#111111'});
 syncMobileLayout();
 paintReading();

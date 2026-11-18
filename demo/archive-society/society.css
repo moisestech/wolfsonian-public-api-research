@@ -744,3 +744,83 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
   #space-bar .space-tab svg{width:21px;height:21px}
 }
 @media(min-width:801px){#space-bar.space-bar{display:none!important}}
+
+
+/* Editorial title: the project name stays fixed while the prominent line
+ * changes in place. Restrained motion and a stable two-line mobile footprint
+ * keep the conversation and its navigation as the principal experience. */
+.brand-area{display:flex;align-items:center;flex:1 1 auto;gap:8px;min-width:0}
+.brand-area .wordmark{display:flex;flex:1 1 auto;gap:12px;min-width:0;max-width:100%;align-items:center;letter-spacing:0}
+.brand-copy{display:flex;flex:1;flex-direction:column;gap:3px;min-width:0}
+.brand-name{display:block;font:700 10px/1.3 ui-monospace,monospace;letter-spacing:.14em;color:#a6ddc9}
+.brand-phrase{display:block;max-width:100%;font:650 clamp(21px,2.3vw,34px)/1.12 system-ui,sans-serif;letter-spacing:-.035em;color:#f3f6f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:1;transform:translateY(0);transition:opacity .22s ease,transform .22s ease}
+.brand-phrase.is-changing{opacity:0;transform:translateY(-.22em)}
+#editorial-toggle{display:grid;place-items:center;flex:0 0 36px;width:36px;min-width:36px;height:36px;min-height:36px;padding:0;margin:0;border:1px solid #526a60;border-radius:50%;background:transparent;color:#d0e7d8;font:650 15px/1 system-ui,sans-serif;cursor:pointer}
+#editorial-toggle:hover,#editorial-toggle:focus-visible{border-color:#a6ddc9;background:#284338}
+@media(max-width:800px){
+  .brand-area{width:100%;gap:5px}
+  .brand-area .wordmark{font-size:inherit;gap:8px}
+  .brand-copy{gap:2px}
+  .brand-name{font-size:9px}
+  .brand-phrase{font-size:clamp(18px,4.8vw,23px);white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;min-height:1.12em;max-height:2.24em}
+  #editorial-toggle{flex-basis:32px;width:32px;min-width:32px;height:32px;min-height:32px}
+}
+@media(max-width:700px){.brand-area{align-self:stretch}.brand-area .wordmark{width:auto}}
+@media(max-width:360px){.brand-phrase{font-size:18px}}
+@media(max-width:420px){
+  .topbar{padding:4px 10px 4px;gap:3px}
+  /* At very narrow widths the mark and link provide the stable identity;
+   * reserve two lines for every editorial statement without header jumps. */
+  .brand-name{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+  .brand-copy{gap:0}
+  .brand-phrase{height:2.24em;min-height:2.24em;max-height:2.24em}
+}
+@media(prefers-reduced-motion:reduce){
+  .brand-phrase{transition:none!important;transform:none!important;opacity:1!important}
+  #editorial-toggle{display:none}
+}
+
+/* Mobile object-first room: tall uncropped archival images become a compact
+ * reading masthead as the ONE scroller advances. The dialogue never loses its
+ * scroll position while image dimensions change. Desktop remains untouched. */
+@media(max-width:800px){
+  body.show-space .rail-scroll{overflow-anchor:none;padding:0 14px 12px}
+  body.show-space .rail-scroll>.room-header{
+    position:sticky;top:0;z-index:7;overflow:visible;
+    padding:6px 0 8px;background:#14211e;
+    border-bottom:1px solid #354844;
+  }
+  body.show-space .rail-scroll>.room-header #room-question{font-size:clamp(22px,5.7vw,28px);line-height:1.12;margin-bottom:5px}
+  body.show-space .rail-scroll>.room-header .room-description{margin-bottom:7px}
+  body.show-space .room-participants{gap:6px;margin-bottom:3px}
+  body.show-space .object-portrait-media{
+    height:var(--room-image-height,clamp(175px,37dvh,320px));
+    padding:3px;
+  }
+  body.show-space .room-participant .object-portrait-media img{object-fit:contain}
+  body.show-space .object-portrait-meta{padding:4px 6px;min-height:32px;gap:4px}
+  body.show-space .room-participant .object-portrait-meta strong{font-size:clamp(12px,3.15vw,14px);line-height:1.16}
+  body.show-space .room-participant .object-more{min-height:44px;padding:5px 6px;font-size:10.5px}
+  body.show-space .object-cast-link{
+    top:calc(var(--room-image-height,220px) / 2);
+    width:28px;height:28px;font-size:19px;
+  }
+  body.show-space .room-rationale{padding:2px 0;min-height:30px}
+  body.show-space .rail-scroll #conversation-panel{margin-top:var(--room-scroll-offset,0px)}
+  body.show-space .room-header.is-compact #room-question{font-size:19px;margin-bottom:3px}
+  body.show-space .room-header.is-compact .room-description,
+  body.show-space .room-header.is-compact .room-rationale{display:none}
+  body.show-space .room-header.is-compact .room-participants{margin-bottom:0}
+  body.show-space .room-header.is-compact .object-portrait-meta{padding:3px 5px;min-height:29px}
+  body.show-space .room-header.is-compact .room-participant .object-more{min-height:32px}
+}
+@media(prefers-reduced-motion:reduce){
+  body.show-space .object-portrait-media{transition:none!important}
+}
+
+/* Icon-only back navigation: recognisable left arrow, 44px touch target. */
+#room-back.room-back{width:44px;min-width:44px;height:44px;min-height:44px;
+  padding:0;margin-right:8px;align-items:center;justify-content:center;
+  border:1px solid #536b60;border-radius:50%;background:#1c322a;color:#e2f2e9}
+#room-back.room-back svg{display:block;width:21px;height:21px;flex:none}
+#room-back.room-back:hover,#room-back.room-back:focus-visible{background:#315043;border-color:#bce4cf}

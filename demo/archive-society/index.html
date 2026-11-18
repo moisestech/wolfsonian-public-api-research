@@ -19,7 +19,10 @@
 </div>
 <a class="skip" href="#atlas">Skip to the atlas</a>
 <header class="topbar">
-  <a class="wordmark" href="#atlas"><span class="brand-icon" aria-hidden="true"><img class="brand-mark-on-dark" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981354/archive-dreams/brand/aperture-white-v1.svg" data-local-src="./assets/archive-dreams-aperture-white.svg" width="40" height="40" alt=""><img class="brand-mark-on-light" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981350/archive-dreams/brand/aperture-black-v1.svg" data-local-src="./assets/archive-dreams-aperture-black.svg" width="40" height="40" alt=""></span><span>The Archive Dreams <em>in Public</em></span></a>
+  <div class="brand-area">
+    <a class="wordmark" href="#atlas" aria-label="Archive Dreams in Public — explore conversations"><span class="brand-icon" aria-hidden="true"><img class="brand-mark-on-dark" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981354/archive-dreams/brand/aperture-white-v1.svg" data-local-src="./assets/archive-dreams-aperture-white.svg" width="40" height="40" alt=""><img class="brand-mark-on-light" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981350/archive-dreams/brand/aperture-black-v1.svg" data-local-src="./assets/archive-dreams-aperture-black.svg" width="40" height="40" alt=""></span><span class="brand-copy"><span class="brand-name">ARCHIVE DREAMS IN PUBLIC</span><span class="brand-phrase" id="editorial-phrase" aria-hidden="true">Archive dreams in public.</span></span></a>
+    <button id="editorial-toggle" type="button" aria-label="Pause rotating title" aria-pressed="false" title="Pause rotating title"><span aria-hidden="true">Ⅱ</span></button>
+  </div>
   <div class="top-actions">
     <nav class="top-nav" aria-label="Explore Archive Dreams">
       <div class="tabs" role="group" aria-label="Explore conversations and records">
@@ -74,7 +77,7 @@
 </div>
 <main class="workspace">
 <section class="atlas-panel" id="atlas" aria-label="The Archive Dreams in Public">
-  <div class="atlas-toolbar"><button type="button" id="room-back" class="room-back">Back</button><h2 id="atlas-title">A constellation of possible readings</h2><div id="room-legend" class="room-legend" hidden></div></div>
+  <div class="atlas-toolbar"><button type="button" id="room-back" class="room-back" aria-label="Back to conversation" title="Back to conversation"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m7-7-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h2 id="atlas-title">A constellation of possible readings</h2><div id="room-legend" class="room-legend" hidden></div></div>
   <div class="canvas">
     <div id="stage" role="img" aria-label="Objects in a force graph"></div>
     <p id="research-edge" class="research-edge edge-curatorial" hidden>Curatorial juxtaposition</p>
@@ -157,7 +160,7 @@
     <button type="button" id="space-leave" class="space-leave">Browse questions</button>
   </div>
   <section id="room-header" class="room-header" aria-labelledby="room-question" hidden>
-    <p class="room-kicker"><span>IMAGINED EXCHANGE</span><span id="room-kind"></span></p>
+    <p class="room-kicker" id="room-status-line" hidden><span id="room-kind"></span></p>
     <h1 id="room-question" tabindex="-1"></h1>
     <p id="room-description" class="room-description">Connection: research in progress</p>
     <div id="room-participants" class="room-participants" aria-label="Object speakers"></div>
@@ -254,6 +257,8 @@ for(const mark of document.querySelectorAll('.brand-icon img'))mark.addEventList
 });
 async function start(){
   document.documentElement.classList.add('demo-open');
+  const {initEditorialHeadline}=await import('./editorial-headline.mjs');
+  initEditorialHeadline();
   await import('./society.mjs');
 }
 if(local||sessionStorage.getItem('archive-demo-open')==='1')start();
