@@ -23,7 +23,7 @@ test('each scene is original fiction, not a museum voice or historical testimony
     assert.ok(scene.turns.length>=6&&scene.turns.length<=12);
     assert.ok(scene.a.title&&scene.b.title);
     assert.ok(scene.turns.every(t=>t.sourceClaimType==='ARTIST_AUTHORED_FICTION'));
-    assert.ok(scene.turns.every(t=>t.text.length>15));
+    assert.ok(scene.turns.every(t=>t.text.trim().length>=3),'brief audible reactions are intentional');
     assert.equal(new Set(scene.turns.map(t=>t.id)).size,scene.turns.length);
   }
 });
