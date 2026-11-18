@@ -109,7 +109,7 @@ function setPlayDisabled(disabled){
   play.setAttribute('aria-pressed',String(playing));
   play.replaceChildren(transportIcon(playing?'stop':'play'));
   const space=$('space-play');
-  if(space){space.disabled=play.disabled;space.textContent=playing?'Stop':'Play';space.setAttribute('aria-label',playing?'Stop':'Play');}
+  if(space){space.disabled=play.disabled;space.textContent=playing?'■ Stop':'▶ Play';space.setAttribute('aria-label',playing?'Stop conversation':'Play conversation');space.setAttribute('aria-pressed',String(playing));}
 }
 function setPanel(name){
   for(const p of ['conversation','record'])$(p+'-panel').hidden=p!==name;
@@ -1003,7 +1003,6 @@ $('sheet-close')?.addEventListener('click',event=>{
   closeConversationSheet();
 });
 $('space-play')?.addEventListener('click',()=>$('play').click());
-$('space-stop')?.addEventListener('click',()=>$('stop').click());
 $('space-evidence')?.addEventListener('click',event=>{
   event.stopPropagation();
   if(document.body.classList.contains('show-timeline'))setMobileView('space');
