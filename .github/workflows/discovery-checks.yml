@@ -12,6 +12,9 @@ on:
       - 'src/scene-performance.mjs'
       - 'test/scene-performance.test.mjs'
       - 'test/audio-lab-experiments.test.mjs'
+      - 'test/audio-lab-review.test.mjs'
+      - 'scripts/build-audio-lab-review.mjs'
+      - 'tools/audio-lab/**'
       - 'data/research/audio-lab/**'
       - 'docs/audio-lab/**'
       - 'server/archive-*.mjs'
@@ -54,6 +57,7 @@ jobs:
           node --check server/archive-services.mjs
           node --check scripts/serve-archive-society.mjs
           node --check scripts/check-society-browser.mjs
+          node --check scripts/build-audio-lab-review.mjs
       - name: Run discovery tests
         run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
       - name: Run archive society and service tests
@@ -63,7 +67,7 @@ jobs:
           node --test test/editorial-headline.test.mjs
           node --test test/atlas-four-control-header.test.mjs
       - name: Verify curated relationships and skeptical fallbacks
-        run: node --test test/curated-edge-scenes.test.mjs test/conversation-ux.test.mjs test/conversation-orientation.test.mjs test/scene-performance.test.mjs test/audio-lab-experiments.test.mjs
+        run: node --test test/curated-edge-scenes.test.mjs test/conversation-ux.test.mjs test/conversation-orientation.test.mjs test/scene-performance.test.mjs test/audio-lab-experiments.test.mjs test/audio-lab-review.test.mjs
       - name: Browser smoke and screenshots
         run: |
           npm ci

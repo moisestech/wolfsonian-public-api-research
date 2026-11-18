@@ -53,3 +53,17 @@ These clean briefs contain permitted source locators and interpretive prompts, *
 - [05 — Naming the modern](https://docs.google.com/document/d/1riFWezFUpMUJiJXK6hNIVeVhYbCAaXlN-d4eFvd7JB4/edit)
 
 [Implementation and audio/speaker/event architecture](voice-engine-architecture.md)
+
+## Local A/B audition room
+
+Run from a checked-out audio-lab feature branch (with Node 24 installed):
+
+```bash
+npm run audio:lab:review
+```
+
+Open the generated **`.local-research/audio-lab/review.html`** in your browser. The file is entirely self-contained and stays inside the ignored local research directory. It includes all ten original scripted scenes but **no audio**. Pick one local NotebookLM download under panel A and its corresponding ElevenLabs Dialogue render under panel B. Listening to one pauses the other. Score five dimensions (distinctiveness, rhythm, integrity, vitality, and visual synchronization) and export review notes as a local JSON file.
+
+**Privacy:** The file picker creates session-only browser blob URLs. There are no outgoing requests, analytics, media uploads or stored provider secrets. A review export contains only numbers, selected next-step decisions and written notes—not the audio tracks. The complete text remains visible for inspection. Nothing is wired into the museum-facing site.
+
+**Important differences:** NotebookLM's two-host overview is spontaneous source discussion and may differ from the fixed script. The ElevenLabs render should follow the exact original object/Archivist turns. The app must never automatically label a NotebookLM host as the museum object or present it as a historical recording. Neither is public release-ready without source and licensing review.
