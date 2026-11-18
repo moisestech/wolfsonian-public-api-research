@@ -148,6 +148,9 @@
   <div id="path-timeline" class="path-timeline">
     <button type="button" id="questions-back">← Current conversation</button>
     <p id="timeline-title" class="timeline-title"></p>
+    <button id="feed-perspective-toggle" class="mobile-perspective-trigger" type="button" aria-haspopup="dialog" aria-controls="mobile-perspective-sheet" aria-label="Choose perspective, currently Family">
+      <span>Perspective</span><strong id="feed-perspective-name">Family</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
     <button type="button" id="all-directory-questions" hidden>Browse all questions</button>
     <div id="timeline-list"></div>
   </div>
@@ -162,6 +165,9 @@
   <section id="room-header" class="room-header" aria-labelledby="room-question" hidden>
     <p class="room-kicker" id="room-status-line" hidden><span id="room-kind"></span></p>
     <h1 id="room-question" tabindex="-1"></h1>
+    <button id="room-perspective-toggle" class="mobile-perspective-trigger" type="button" aria-haspopup="dialog" aria-controls="mobile-perspective-sheet" aria-label="Choose perspective, currently Family">
+      <span>Perspective</span><strong id="room-perspective-name">Family</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
     <p id="room-description" class="room-description">Connection: research in progress</p>
     <div id="room-participants" class="room-participants" aria-label="Object speakers"></div>
     <button type="button" id="room-rationale" class="room-rationale" aria-label="Why these two? Open evidence"></button>
@@ -215,15 +221,26 @@
     <section id="record-panel" hidden><button type="button" id="record-return">← Back to conversation</button><div id="record-content"></div></section>
   </div>
   </div>
-  <div id="voice-controls" class="audio-bar">
+  <div id="voice-controls" class="audio-bar" data-speaker="">
     <button id="play" class="play-round" type="button" aria-label="Play">▶</button>
     <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    <span id="audio-speaker">Ready to listen</span>
     <span id="audio-elapsed">Ready to play</span>
     <button id="stop" class="quiet" type="button">Stop</button>
   </div>
   <p id="voice-status" class="muted" role="status" hidden></p>
 </aside>
 </main>
+<dialog id="mobile-perspective-sheet" class="mobile-perspective-sheet" aria-labelledby="mobile-perspective-title">
+  <div class="mobile-perspective-content">
+    <div class="mobile-perspective-head">
+      <h2 id="mobile-perspective-title">Choose a perspective</h2>
+      <button id="mobile-perspective-close" type="button" aria-label="Close perspective choices">×</button>
+    </div>
+    <p>Change how you explore connections. Authored conversations stay the same.</p>
+    <div id="mobile-perspective-choices" class="mobile-perspective-choices"></div>
+  </div>
+</dialog>
 <nav id="space-bar" class="space-bar" aria-label="Mobile archive navigation">
   <button type="button" id="space-feed" class="space-tab" aria-label="Browse conversation feed" title="Conversation feed">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
