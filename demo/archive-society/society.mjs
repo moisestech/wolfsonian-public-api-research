@@ -20,7 +20,7 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
   mapMode:'conversation',matrixObjects:MATRIX_OBJECTS,matrixRecords:matrixToRecords(MATRIX_OBJECTS),matrixIndex:null,room:null,district:null,
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
-  playing:false,epoch:0,view:null,conversation:null,episode:null,recordAccession:null,lookupBusy:false,hover:null,researchPath:null,lastExplained:null};
+  playing:false,epoch:0,view:null,conversation:null,episode:null,recordAccession:null,lookupBusy:false,hover:null,researchPath:null};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
@@ -613,31 +613,13 @@ function paintTimeline(){
   }
   if(!list.childElementCount)list.append(node('p','These objects have no further questions in this view.'));
 }
-function addEncounterOrientation(box,source,target,conversation){
-  const onward=node('button','More questions with these objects','evidence-record');
-  onward.type='button';onward.addEventListener('click',()=>{relatedAnchor=null;relatedQuestions=true;setMobileView('timeline');});
+// Contextual navigation stays in the room; writing method lives on About.
+function addRelatedQuestionsAction(box){
+  const onward=node('button','More conversations ↗','more-questions-link');
+  onward.type='button';
+  onward.setAttribute('aria-label','More questions with these objects');
+  onward.addEventListener('click',()=>{relatedAnchor=null;relatedQuestions=true;setMobileView('timeline');});
   box.append(onward);
-  const lens=LENSES.find(item=>item.id===state.lens);
-  const guide=explainEncounter({source,target,conversation,lensLabel:lens?.label||'Family',previous:state.lastExplained});
-  const section=node('details',undefined,'encounter-orientation');
-  section.setAttribute('aria-label','Why this conversation?');
-  section.append(node('summary','How this conversation was written'));
-  section.append(node('span',guide.type,'encounter-type'));
-  section.append(node('h3',guide.sourceName+' × '+guide.targetName));
-  const reason=node('p',undefined,'encounter-reason');
-  reason.append(node('strong','Why these two? '),document.createTextNode(guide.evidenceBasis));
-  section.append(reason);
-  const thesis=node('p',undefined,'encounter-question');
-  thesis.append(node('strong','What are they exploring? '),document.createTextNode(guide.question));
-  section.append(thesis);
-  const changes=node('p',undefined,'encounter-changes');
-  changes.append(node('strong','What changes when you choose another? '),document.createTextNode(guide.changed));
-  section.append(changes);
-  const details=node('div',undefined,'encounter-method');
-  details.append(node('p',guide.form),node('p',guide.frame),node('p',guide.boundary));
-  section.append(details);
-  box.append(section);
-  state.lastExplained=guide;
 }
 function openEpisodeRecord(accession){
   state.recordAccession=accession;
@@ -703,8 +685,10 @@ function renderRoomHeader(source,target,c){
     const button=node('button',p.title+' · '+p.accession,'evidence-record');button.type='button';
     button.addEventListener('click',()=>openEpisodeRecord(p.accession));evidence.append(button);
   }
-  if(state.researchPath?.aiAssisted){
-    evidence.append(node('p',state.researchPath.proposal),node('p',state.researchPath.limits));
+  if(state.researchPath){
+    // Curatorial paths keep their research basis in Evidence, not under the dialogue.
+    if(state.researchPath.proposal)evidence.append(node('p',state.researchPath.proposal));
+    if(state.researchPath.limits)evidence.append(node('p',state.researchPath.limits));
     const sources=state.researchPath.sourceLinks||[];
     for(const {label,url} of sources){
       if(!url)continue;
@@ -741,10 +725,7 @@ function renderJuxtaposition(box){
     bubble.append(img,say);chat.append(bubble);
   }
   box.append(chat);
-  addEncounterOrientation(box,source,target,c);
-  const details=node('details');details.append(node('summary','Inspect the reason for this edge'));
-  details.append(node('p',c.proposal,'muted'),node('p','This is not a catalog match or a documented meeting.','muted'),node('p',c.limits,'muted'));
-  box.append(details);
+  addRelatedQuestionsAction(box);
   $('voice-controls').hidden=$('conversation-panel').hidden;
   setPlayDisabled(state.playing);
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn 1 of '+c.turns.length;
@@ -820,10 +801,7 @@ function renderConversation(){
     actions.append(back);
   }
   box.append(actions);
-  const details=node('details');details.append(node('summary','Inspect the reason for this edge'));
-  for(const reason of c.evidence){const e=node('div',undefined,'reason');e.append(node('strong',reason.family+' / '+reason.value),node('small',reason.sourceColumns.join(' + ')+' → '+reason.targetColumns.join(' + ')),node('small','Shared by '+reason.candidateCount+' records in this local index.'));details.append(e);}
-  details.append(node('p',c.limits,'muted'),node('p','A shared tag is not a historical relationship.','muted'));box.append(details);
-  addEncounterOrientation(box,source,target,c);
+  addRelatedQuestionsAction(box);
   $('voice-controls').hidden=$('conversation-panel').hidden||!state.conversation;setPlayDisabled(!state.conversation);
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn 1 of '+c.turns.length;
 }
