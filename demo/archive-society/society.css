@@ -817,3 +817,10 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
 @media(prefers-reduced-motion:reduce){
   body.show-space .object-portrait-media{transition:none!important}
 }
+
+/* Icon-only back navigation: recognisable left arrow, 44px touch target. */
+#room-back.room-back{width:44px;min-width:44px;height:44px;min-height:44px;
+  padding:0;margin-right:8px;align-items:center;justify-content:center;
+  border:1px solid #536b60;border-radius:50%;background:#1c322a;color:#e2f2e9}
+#room-back.room-back svg{display:block;width:21px;height:21px;flex:none}
+#room-back.room-back:hover,#room-back.room-back:focus-visible{background:#315043;border-color:#bce4cf}
