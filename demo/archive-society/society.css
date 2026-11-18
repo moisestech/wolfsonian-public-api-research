@@ -768,9 +768,12 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
 @media(max-width:700px){.brand-area{align-self:stretch}.brand-area .wordmark{width:auto}}
 @media(max-width:360px){.brand-phrase{font-size:18px}}
 @media(max-width:420px){
-  .topbar{padding:6px 10px 5px;gap:5px}
-  .brand-name{font-size:8.5px}
+  .topbar{padding:4px 10px 4px;gap:3px}
+  /* At very narrow widths the mark and link provide the stable identity;
+   * reserve two lines for every editorial statement without header jumps. */
+  .brand-name{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
   .brand-copy{gap:0}
+  .brand-phrase{height:2.24em;min-height:2.24em;max-height:2.24em}
 }
 @media(prefers-reduced-motion:reduce){
   .brand-phrase{transition:none!important;transform:none!important;opacity:1!important}
