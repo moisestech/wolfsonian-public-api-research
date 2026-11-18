@@ -48,6 +48,7 @@ try {
   assert.equal(await page.locator('.turn').count(),5);
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
   assert.equal(voiceRequests.length,0,'No autoplay or unsolicited provider calls');
+  assert.equal(await page.locator('#conversation-content .chat .turn').count(),5,'Complete authored transcript remains in DOM');
   assert.equal(await page.locator('.encounter-orientation').count(),0);
   assert.equal(await page.locator('#conversation-content>details').count(),0);
   await screenshot('room-1280');
@@ -104,6 +105,20 @@ try {
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
 
   // Five persistent mobile destinations share the original dock space.
+  assert.equal(await page.locator('#space-bar .space-tab').count(),5);
+  assert.equal(await page.locator('#space-feed .space-tab-label').innerText(),'Society');
+  assert.match(await page.locator('#space-feed').getAttribute('aria-label'),/archive society/);
+  const appearance=page.locator('#appearance-toggle');
+  assert.equal(await appearance.getAttribute('aria-pressed'),'false');
+  await appearance.click();
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
+  assert.equal(await appearance.getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
+  assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
+  assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
+  await appearance.click();
+  assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
+  assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
   assert.equal(await page.locator('#space-conversation[aria-current="page"]').count(),1);

@@ -131,3 +131,31 @@ test('speaking waveform is keyed to every scripted voice and cancels cleanly',as
  assert.match(css,/body\.show-space \.evidence-rail \.audio-bar\.playing/);
  assert.match(js,/audioBar\.dataset\.speaker=''/);
 });
+
+
+test('Society navigation and appearance controls preserve archive accessibility',async()=>{
+ const html=await readFile(new URL(repoUrl+'index.html',import.meta.url),'utf8');
+ const app=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
+ const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
+ assert.match(html,/id="space-feed"[^>]+aria-label="Explore the archive society"/);
+ assert.match(html,/<span class="space-tab-label">Society<\/span>/);
+ assert.match(html,/id="appearance-toggle"/);
+ assert.match(app,/function applyAppearance\(mode\)/);
+ assert.match(app,/localStorage\.setItem\(appearanceKey,mode\)/);
+ assert.match(app,/document\.documentElement\.dataset\.colorTheme/);
+ assert.match(css,/html\[data-color-theme="light"\] body/);
+ assert.match(css,/html\[data-color-theme="light"\] #space-bar \.space-tab/);
+ assert.match(css,/#appearance-toggle/);
+});
+
+test('entering a scripted room stages a brief non-audio entrance with reduced-motion support',async()=>{
+ const app=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
+ assert.match(app,/function startSceneEntrance\(\)/);
+ assert.match(app,/function cancelSceneEntrance\(\)/);
+ assert.match(app,/state\.episode\?\.mode!=='CURATED_SCRIPT'/);
+ assert.match(app,/prefers-reduced-motion: reduce/);
+ assert.match(app,/startSceneEntrance\(\);\n}\nfunction onGraphSelect/);
+ assert.match(app,/startSceneEntrance\(\);\n}\nfunction render\(\)/);
+ assert.match(app,/animate\(element,\[\{opacity:\.35/);
+ assert.match(app,/cancelSceneEntrance\(\);\n  playback\+\+/);
+});

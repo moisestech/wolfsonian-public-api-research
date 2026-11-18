@@ -30,6 +30,10 @@
         <button type="button" data-panel="record" aria-pressed="false">Record</button>
       </div>
       <a class="icon-link" href="../object-lens/" aria-label="Open Object Lens" title="Object Lens"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg></a>
+      <button type="button" id="appearance-toggle" class="icon-button" aria-label="Switch to light appearance" aria-pressed="false" title="Switch to light appearance">
+        <svg class="appearance-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+        <svg class="appearance-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20.5 15.6A8.5 8.5 0 0 1 8.4 3.5 8.5 8.5 0 1 0 20.5 15.6Z"/></svg>
+      </button>
       <button type="button" id="source-info" class="icon-button" aria-label="Information about this artwork" title="Information">i</button>
     </nav>
   </div>
@@ -242,9 +246,9 @@
   </div>
 </dialog>
 <nav id="space-bar" class="space-bar" aria-label="Mobile archive navigation">
-  <button type="button" id="space-feed" class="space-tab" aria-label="Browse conversation feed" title="Conversation feed">
+  <button type="button" id="space-feed" class="space-tab" aria-label="Explore the archive society" title="Archive society">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
-    <span class="space-tab-label">Feed</span>
+    <span class="space-tab-label">Society</span>
   </button>
   <button type="button" id="space-conversation" class="space-tab" aria-label="Current conversation" aria-current="page" title="Current conversation">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M4 5h16v12H9l-5 4z"/><path d="M8 10h8M8 13h5"/></svg>
