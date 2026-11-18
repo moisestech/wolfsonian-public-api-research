@@ -1,0 +1,1016 @@
+{
+  "schemaVersion": 1,
+  "status": "artist-authored-audio-research-not-publication",
+  "created": "2026-11-18",
+  "licenseNote": "Original scripted fiction, not object testimony, not museum-approved; museum public source links are cited by title and accession.",
+  "formatNote": "NotebookLM generates its own two-host audio based on supplied sources; it cannot guarantee this exact script. ElevenLabs dialogue is appropriate for fixed per-character script tests.",
+  "experiments": [
+    {
+      "id": "01-household-audience",
+      "tier": "P0",
+      "question": "When does a household become an audience?",
+      "mode": "quick_banter",
+      "duration": "50–75s",
+      "lenses": [
+        "brain",
+        "archive"
+      ],
+      "sourceScene": "radio-and-television",
+      "sourceStatus": "artist_prepared_public_packets",
+      "rights": "author_public_only_not_museum_approved",
+      "notebookFormat": "Deep Dive",
+      "notebookDirection": "Make the hosts sound like two attentive people thinking together, not a formal lecture. Let one host care about what a radio invites the listener to imagine, and the other care about what a television makes visible. Include one very quick interruption and an affectionate disagreement. Do not invent households, broadcasts or actual listeners. Finish by asking what document could tell us who used either device.",
+      "a": {
+        "accession": "2012.6.1",
+        "title": "Television, RCA Victor TRK 12"
+      },
+      "b": {
+        "accession": "XX1990.1484",
+        "title": "Radio, Sparton, model 558-C"
+      },
+      "sources": [
+        "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf",
+        "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/"
+      ],
+      "turns": [
+        {
+          "id": "01-household-audience:t1",
+          "role": "A",
+          "accession": "2012.6.1",
+          "voiceRole": "objectA",
+          "text": "If you put me in a room, people could watch a picture.",
+          "direction": "opening",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "01-household-audience:t2",
+          "role": "B",
+          "accession": "XX1990.1484",
+          "voiceRole": "objectB",
+          "text": "[interrupting] And if you put me in a room, they might imagine one.",
+          "direction": "interrupt",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "01-household-audience:t3",
+          "role": "A",
+          "accession": "2012.6.1",
+          "voiceRole": "objectA",
+          "text": "So you think the imagination belongs to the radio?",
+          "direction": "challenge",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "01-household-audience:t4",
+          "role": "B",
+          "accession": "XX1990.1484",
+          "voiceRole": "objectB",
+          "text": "Not exactly. A voice leaves a lot of space around itself.",
+          "direction": "measured",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "01-household-audience:t5",
+          "role": "A",
+          "accession": "2012.6.1",
+          "voiceRole": "objectA",
+          "text": "A screen leaves questions too. We don't know what any particular person watched.",
+          "direction": "correction",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "01-household-audience:t6",
+          "role": "B",
+          "accession": "XX1990.1484",
+          "voiceRole": "objectB",
+          "text": "Or what they heard through me. Our beautiful cabinets are not audience diaries.",
+          "direction": "warm",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "01-household-audience:t7",
+          "role": "A",
+          "accession": "2012.6.1",
+          "voiceRole": "objectA",
+          "text": "Then the room we're missing isn't furniture. It's a person.",
+          "direction": "insight",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "01-household-audience:t8",
+          "role": "B",
+          "accession": "XX1990.1484",
+          "voiceRole": "objectB",
+          "text": "Whose account would let that person speak for themselves?",
+          "direction": "question",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "02-promise-souvenir",
+      "tier": "P0",
+      "question": "When does a promise become a souvenir?",
+      "mode": "duel",
+      "duration": "45–70s",
+      "lenses": [
+        "dream",
+        "archive"
+      ],
+      "sourceScene": "program-and-booklet",
+      "sourceStatus": "artist_prepared_public_packets",
+      "rights": "author_public_only_not_museum_approved",
+      "notebookFormat": "Debate",
+      "notebookDirection": "A lively two-host debate about a 1939 program titled Your World of Tomorrow and a distinct 1940 Futurama booklet. One speaker treats a title as a promise, the other asks how a promise survives as a souvenir. Each changes their mind once. Neither publication proves who attended or read both; don't blur the 1940 booklet with the separate 1939 Futurama book spread. Let the exchange end unresolved.",
+      "a": {
+        "accession": "86.19.57",
+        "title": "Program, Your World of Tomorrow"
+      },
+      "b": {
+        "accession": "XB1992.1640",
+        "title": "Booklet, Futurama"
+      },
+      "sources": [
+        "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+      ],
+      "turns": [
+        {
+          "id": "02-promise-souvenir:t1",
+          "role": "A",
+          "accession": "86.19.57",
+          "voiceRole": "objectA",
+          "text": "I address you directly: Your World of Tomorrow.",
+          "direction": "opening",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "02-promise-souvenir:t2",
+          "role": "B",
+          "accession": "XB1992.1640",
+          "voiceRole": "objectB",
+          "text": "I arrive with a shorter name: Futurama. Almost like a place you can take home.",
+          "direction": "tease",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "02-promise-souvenir:t3",
+          "role": "A",
+          "accession": "86.19.57",
+          "voiceRole": "objectA",
+          "text": "But a program is also something you can keep.",
+          "direction": "pushback",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "02-promise-souvenir:t4",
+          "role": "B",
+          "accession": "XB1992.1640",
+          "voiceRole": "objectB",
+          "text": "Sure. Keeping a printed future isn't the same as receiving it.",
+          "direction": "quick",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "02-promise-souvenir:t5",
+          "role": "A",
+          "accession": "86.19.57",
+          "voiceRole": "objectA",
+          "text": "So whose future is it, once the date on the paper has passed?",
+          "direction": "suspend",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "02-promise-souvenir:t6",
+          "role": "B",
+          "accession": "XB1992.1640",
+          "voiceRole": "objectB",
+          "text": "I don't know. I can't even say who kept me.",
+          "direction": "self_correct",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "02-promise-souvenir:t7",
+          "role": "A",
+          "accession": "86.19.57",
+          "voiceRole": "objectA",
+          "text": "Then perhaps we preserve not the future, but somebody's way of selling it.",
+          "direction": "insight",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "02-promise-souvenir:t8",
+          "role": "B",
+          "accession": "XB1992.1640",
+          "voiceRole": "objectB",
+          "text": "And the question of what happened after the promise.",
+          "direction": "soft_end",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "03-globe-theme-center",
+      "tier": "P0",
+      "question": "How much of a world can an object hold?",
+      "mode": "slow_contemplative",
+      "duration": "60–85s",
+      "lenses": [
+        "dream",
+        "archive"
+      ],
+      "sourceScene": "globe-and-theme-center",
+      "sourceStatus": "artist_prepared_public_packets",
+      "rights": "author_public_only_not_museum_approved",
+      "notebookFormat": "Deep Dive",
+      "notebookDirection": "Try a slower, curious audio essay as a conversation. The Mappemonde globe-shaped vase and the Trylon/Perisphere model explore scale, control and imagined worlds. Give the listener small reflective pauses; avoid claiming the two objects were exhibited together or inspired each other. Treat a globe as a design image, not as a complete map of the world. Close with a question about what falls outside the frame.",
+      "a": {
+        "accession": "85.7.383a,b",
+        "title": "Vase with lid, Mappemonde [Globe]"
+      },
+      "b": {
+        "accession": "86.17.1",
+        "title": "Model, Trylon and Perisphere"
+      },
+      "sources": [
+        "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/",
+        "https://wolfsonian.org/whats-on/exhibitions+installations/2025/05/worlds-fairs-visions-of-tomorrow.html"
+      ],
+      "turns": [
+        {
+          "id": "03-globe-theme-center:t1",
+          "role": "A",
+          "accession": "85.7.383a,b",
+          "voiceRole": "objectA",
+          "text": "I fit a world into the shape of a vessel.",
+          "direction": "opening_slow",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "03-globe-theme-center:t2",
+          "role": "B",
+          "accession": "86.17.1",
+          "voiceRole": "objectB",
+          "text": "I make a world's fair appear small enough to study as a model.",
+          "direction": "soft",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "03-globe-theme-center:t3",
+          "role": "A",
+          "accession": "85.7.383a,b",
+          "voiceRole": "objectA",
+          "text": "Small enough to arrange. Small enough to own?",
+          "direction": "pause",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "03-globe-theme-center:t4",
+          "role": "B",
+          "accession": "86.17.1",
+          "voiceRole": "objectB",
+          "text": "[hesitates] A model invites that feeling. But it doesn't give anyone the whole world.",
+          "direction": "caution",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "03-globe-theme-center:t5",
+          "role": "A",
+          "accession": "85.7.383a,b",
+          "voiceRole": "objectA",
+          "text": "Neither does my globe. There is always a side you cannot see from here.",
+          "direction": "insight",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "03-globe-theme-center:t6",
+          "role": "B",
+          "accession": "86.17.1",
+          "voiceRole": "objectB",
+          "text": "And people beyond the edges of an exhibition.",
+          "direction": "measured",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "03-globe-theme-center:t7",
+          "role": "A",
+          "accession": "85.7.383a,b",
+          "voiceRole": "objectA",
+          "text": "So perhaps scale is not only what you make visible.",
+          "direction": "reveal",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "03-globe-theme-center:t8",
+          "role": "B",
+          "accession": "86.17.1",
+          "voiceRole": "objectB",
+          "text": "It's what you're willing to admit remains outside.",
+          "direction": "closing",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "04-poster-program",
+      "tier": "P0",
+      "question": "Who gets to say tomorrow is open?",
+      "mode": "documentary_counterpoint",
+      "duration": "50–80s",
+      "lenses": [
+        "dream",
+        "archive"
+      ],
+      "sourceScene": "poster-and-program",
+      "sourceStatus": "artist_prepared_public_packets",
+      "rights": "author_public_only_not_museum_approved",
+      "notebookFormat": "Critique",
+      "notebookDirection": "Critique the rhetoric of a 1937 fair poster showing people lining up for structures that were still projected and a 1939 Theme Center program. Let one host be captivated by the image and the other ask whether a drawn queue can stand for documented visitors. Maintain a conversational, warm tone, not a museum lecture. Do not invent attendance, personal experiences or readership.",
+      "a": {
+        "accession": "85.4.72",
+        "title": "Poster, In 1939: The New York World’s Fair"
+      },
+      "b": {
+        "accession": "86.19.57",
+        "title": "Program, Your World of Tomorrow"
+      },
+      "sources": [
+        "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+      ],
+      "turns": [
+        {
+          "id": "04-poster-program:t1",
+          "role": "A",
+          "accession": "85.4.72",
+          "voiceRole": "objectA",
+          "text": "In my picture, there is already a crowd approaching tomorrow.",
+          "direction": "open",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "04-poster-program:t2",
+          "role": "B",
+          "accession": "86.19.57",
+          "voiceRole": "objectB",
+          "text": "But your crowd is printed.",
+          "direction": "simple",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "04-poster-program:t3",
+          "role": "A",
+          "accession": "85.4.72",
+          "voiceRole": "objectA",
+          "text": "Yes. That's the trick. An invitation can show its audience before they arrive.",
+          "direction": "pacing",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "04-poster-program:t4",
+          "role": "B",
+          "accession": "86.19.57",
+          "voiceRole": "objectB",
+          "text": "My title says 'Your World of Tomorrow'. That little word, 'your', is doing a lot of work.",
+          "direction": "emphasis",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "04-poster-program:t5",
+          "role": "A",
+          "accession": "85.4.72",
+          "voiceRole": "objectA",
+          "text": "You mean it sounds as though everyone is included?",
+          "direction": "curious",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "04-poster-program:t6",
+          "role": "B",
+          "accession": "86.19.57",
+          "voiceRole": "objectB",
+          "text": "It addresses someone. It doesn't identify who entered.",
+          "direction": "correction",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "04-poster-program:t7",
+          "role": "A",
+          "accession": "85.4.72",
+          "voiceRole": "objectA",
+          "text": "Then a painted line is not a list of visitors.",
+          "direction": "realize",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "04-poster-program:t8",
+          "role": "B",
+          "accession": "86.19.57",
+          "voiceRole": "objectB",
+          "text": "What would an actual attendance record tell us that neither of us can?",
+          "direction": "end",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "05-who-is-modern",
+      "tier": "P0",
+      "question": "Who gets named when we call a design modern?",
+      "mode": "light_irony",
+      "duration": "55–75s",
+      "lenses": [
+        "archive",
+        "brain"
+      ],
+      "sourceScene": "catalogue-and-globe",
+      "sourceStatus": "artist_prepared_public_packets",
+      "rights": "author_public_only_not_museum_approved",
+      "notebookFormat": "Debate",
+      "notebookDirection": "A gently witty argument between an exhibition catalogue declaring a Machine Age and a globe-form vase whose public record names different design and decoration roles. Let one host question big cultural labels while the other values them as useful but incomplete. Stress that design labor may include multiple credited contributors. Do not quote unseen essays from the catalogue, invent makers or claim these objects were shown together.",
+      "a": {
+        "accession": "XM1999.108.8",
+        "title": "Catalogue, Machine Age Exposition"
+      },
+      "b": {
+        "accession": "85.7.383a,b",
+        "title": "Vase with lid, Mappemonde [Globe]"
+      },
+      "sources": [
+        "https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf",
+        "https://wolfsonian.org/whats-on/digital-experiences/designing-deco/"
+      ],
+      "turns": [
+        {
+          "id": "05-who-is-modern:t1",
+          "role": "A",
+          "accession": "XM1999.108.8",
+          "voiceRole": "objectA",
+          "text": "Machine Age. Two words and suddenly I've named a whole era.",
+          "direction": "opening",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "05-who-is-modern:t2",
+          "role": "B",
+          "accession": "85.7.383a,b",
+          "voiceRole": "objectB",
+          "text": "That is a rather efficient label.",
+          "direction": "dry",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "05-who-is-modern:t3",
+          "role": "A",
+          "accession": "XM1999.108.8",
+          "voiceRole": "objectA",
+          "text": "You sound unconvinced.",
+          "direction": "quick",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "05-who-is-modern:t4",
+          "role": "B",
+          "accession": "85.7.383a,b",
+          "voiceRole": "objectB",
+          "text": "My record has different names for form, décor and decoration. A period label doesn't tell you who did which part.",
+          "direction": "challenge",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "05-who-is-modern:t5",
+          "role": "A",
+          "accession": "XM1999.108.8",
+          "voiceRole": "objectA",
+          "text": "So I'm a bad catalogue?",
+          "direction": "beat",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "05-who-is-modern:t6",
+          "role": "B",
+          "accession": "85.7.383a,b",
+          "voiceRole": "objectB",
+          "text": "No. You're a beginning. A label is useful when it leads somewhere.",
+          "direction": "soften",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "05-who-is-modern:t7",
+          "role": "A",
+          "accession": "XM1999.108.8",
+          "voiceRole": "objectA",
+          "text": "[soft laugh] And dangerous when it stops the search.",
+          "direction": "self_correct",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "05-who-is-modern:t8",
+          "role": "B",
+          "accession": "85.7.383a,b",
+          "voiceRole": "objectB",
+          "text": "Exactly. Open the page. Look for the names.",
+          "direction": "end",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "06-machine-and-body",
+      "tier": "P1",
+      "question": "Can a machine speak about the body it depends on?",
+      "mode": "interruptive_trio",
+      "duration": "65–90s",
+      "lenses": [
+        "brain",
+        "archive"
+      ],
+      "sourceScene": "machines-engine-safety",
+      "sourceStatus": "draft_staff_metadata_reference",
+      "rights": "HOLD_EXTERNAL_UNTIL_TITLE_SOURCE_APPROVED",
+      "notebookFormat": "Debate",
+      "notebookDirection": "Two hosts discuss an artist-authored dialogue between a print titled Making the Engine and a print whose translated title warns that one splinter can cost an eye. Make the argument sharp but empathetic. A fictional Archivist stops the hosts to insist a shared motif does not prove a shared workshop. Don't invent a real accident or direct connection. Use only separately approved public title-level source notes.",
+      "a": {
+        "accession": "85.4.64.43",
+        "title": "Making the Engine"
+      },
+      "b": {
+        "accession": "TD1989.318.1",
+        "title": "Grind Safely. One Splinter Can Cost You an Eye"
+      },
+      "sources": [],
+      "turns": [
+        {
+          "id": "06-machine-and-body:t1",
+          "role": "A",
+          "accession": "85.4.64.43",
+          "voiceRole": "objectA",
+          "text": "The engine looks like the center of everything.",
+          "direction": "opening",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "06-machine-and-body:t2",
+          "role": "B",
+          "accession": "TD1989.318.1",
+          "voiceRole": "objectB",
+          "text": "[interrupting] Not if you are the eye beside the grinding wheel.",
+          "direction": "interrupt",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "06-machine-and-body:t3",
+          "role": "A",
+          "accession": "85.4.64.43",
+          "voiceRole": "objectA",
+          "text": "You sound like a warning.",
+          "direction": "challenge",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "06-machine-and-body:t4",
+          "role": "B",
+          "accession": "TD1989.318.1",
+          "voiceRole": "objectB",
+          "text": "I am a warning. My title says what one splinter could cost.",
+          "direction": "precise",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "06-machine-and-body:t5",
+          "role": "A",
+          "accession": "85.4.64.43",
+          "voiceRole": "objectA",
+          "text": "Then 'making' isn't the whole picture. There's also exposure, danger, a body.",
+          "direction": "correction",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "06-machine-and-body:t6",
+          "role": "C",
+          "accession": null,
+          "voiceRole": "fictional_archivist",
+          "text": "Our records share a Machines motif, but no common workplace or injury has been established.",
+          "direction": "archivist",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "06-machine-and-body:t7",
+          "role": "B",
+          "accession": "TD1989.318.1",
+          "voiceRole": "objectB",
+          "text": "Good. Don't invent the injury. Ask who kept a safety report.",
+          "direction": "stern",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "06-machine-and-body:t8",
+          "role": "A",
+          "accession": "85.4.64.43",
+          "voiceRole": "objectA",
+          "text": "And whose work was missing when we praised the engine.",
+          "direction": "end",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "07-trees-not-proof",
+      "tier": "P1",
+      "question": "Can a tree prove that two objects belong together?",
+      "mode": "epistemic_refusal",
+      "duration": "55–75s",
+      "lenses": [
+        "archive",
+        "brain"
+      ],
+      "sourceScene": "challenge-robeson-architectural-fantasy",
+      "sourceStatus": "draft_staff_metadata_reference",
+      "rights": "HOLD_EXTERNAL_UNTIL_TITLE_SOURCE_APPROVED",
+      "notebookFormat": "Critique",
+      "notebookDirection": "Critique one intentionally weak algorithmic connection: a work titled Paul Robeson and an architectural fantasy of a house on a hillside are grouped by a Trees motif in a staff research matrix. Explain why a keyword overlap alone cannot justify a historical or personal connection. Do not give invented speech to Paul Robeson the historical person; the speaker is an artwork with that title. Show a polite refusal to force the link.",
+      "a": {
+        "accession": "84.4.66",
+        "title": "Paul Robeson (artwork)"
+      },
+      "b": {
+        "accession": "XX1991.13",
+        "title": "Architectural fantasy: House on a steep hillside"
+      },
+      "sources": [],
+      "turns": [
+        {
+          "id": "07-trees-not-proof:t1",
+          "role": "A",
+          "accession": "84.4.66",
+          "voiceRole": "objectA",
+          "text": "My record bears the title Paul Robeson. I am an object, not the man speaking.",
+          "direction": "opening",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "07-trees-not-proof:t2",
+          "role": "B",
+          "accession": "XX1991.13",
+          "voiceRole": "objectB",
+          "text": "And I am a house on a steep hillside—an imagined one.",
+          "direction": "opening",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "07-trees-not-proof:t3",
+          "role": "A",
+          "accession": "84.4.66",
+          "voiceRole": "objectA",
+          "text": "Why were we put in the same room?",
+          "direction": "query",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "07-trees-not-proof:t4",
+          "role": "B",
+          "accession": "XX1991.13",
+          "voiceRole": "objectB",
+          "text": "A tag that says Trees.",
+          "direction": "plain",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "07-trees-not-proof:t5",
+          "role": "A",
+          "accession": "84.4.66",
+          "voiceRole": "objectA",
+          "text": "[pause] Trees?",
+          "direction": "incredulous",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "07-trees-not-proof:t6",
+          "role": "C",
+          "accession": null,
+          "voiceRole": "fictional_archivist",
+          "text": "That is a metadata overlap. It establishes no meeting, influence or shared history.",
+          "direction": "archivist",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "07-trees-not-proof:t7",
+          "role": "B",
+          "accession": "XX1991.13",
+          "voiceRole": "objectB",
+          "text": "Then perhaps the most useful connection is one we decline to make.",
+          "direction": "soft",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "07-trees-not-proof:t8",
+          "role": "A",
+          "accession": "84.4.66",
+          "voiceRole": "objectA",
+          "text": "The archive can also learn to say: not enough evidence.",
+          "direction": "end",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "08-naming-an-era",
+      "tier": "P1",
+      "question": "Who has the authority to name an age?",
+      "mode": "adversarial_comedy",
+      "duration": "55–80s",
+      "lenses": [
+        "archive",
+        "dream"
+      ],
+      "sourceScene": "catalogue-meets-engine",
+      "sourceStatus": "mixed_public_packet_and_draft_title",
+      "rights": "HOLD_EXTERNAL_UNTIL_TITLE_SOURCE_APPROVED",
+      "notebookFormat": "Debate",
+      "notebookDirection": "Create a spirited dialogue about what a 1927 Machine Age Exposition catalogue can call an era and what a separately titled print Making the Engine can ask about production. Two interpretive positions only: a cultural label vs the physical labor it often leaves unnamed. Do not invent details of unseen catalogue essays, workers or a direct relationship. Finish on a question that requires real archival evidence.",
+      "a": {
+        "accession": "XM1999.108.8",
+        "title": "Catalogue, Machine Age Exposition"
+      },
+      "b": {
+        "accession": "85.4.64.43",
+        "title": "Making the Engine"
+      },
+      "sources": [
+        "https://wolfsonian.org/_assets/docs/checklist_modern-design-across-borders.pdf"
+      ],
+      "turns": [
+        {
+          "id": "08-naming-an-era:t1",
+          "role": "A",
+          "accession": "XM1999.108.8",
+          "voiceRole": "objectA",
+          "text": "Welcome to the Machine Age. I even put it on the cover.",
+          "direction": "brisk",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "08-naming-an-era:t2",
+          "role": "B",
+          "accession": "85.4.64.43",
+          "voiceRole": "objectB",
+          "text": "Congratulations. I have an engine to make.",
+          "direction": "deadpan",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "08-naming-an-era:t3",
+          "role": "A",
+          "accession": "XM1999.108.8",
+          "voiceRole": "objectA",
+          "text": "That's a little unfair. I was trying to describe a whole movement.",
+          "direction": "defend",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "08-naming-an-era:t4",
+          "role": "B",
+          "accession": "85.4.64.43",
+          "voiceRole": "objectB",
+          "text": "I'm asking what your description leaves outside the frame.",
+          "direction": "counter",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "08-naming-an-era:t5",
+          "role": "A",
+          "accession": "XM1999.108.8",
+          "voiceRole": "objectA",
+          "text": "People? Tools? Factories?",
+          "direction": "quick",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "08-naming-an-era:t6",
+          "role": "B",
+          "accession": "85.4.64.43",
+          "voiceRole": "objectB",
+          "text": "Careful. We haven't checked the pages or a worker's account.",
+          "direction": "guard",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "08-naming-an-era:t7",
+          "role": "A",
+          "accession": "XM1999.108.8",
+          "voiceRole": "objectA",
+          "text": "So my grand title needs footnotes.",
+          "direction": "admit",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "08-naming-an-era:t8",
+          "role": "B",
+          "accession": "85.4.64.43",
+          "voiceRole": "objectB",
+          "text": "Maybe every age needs someone who can interrupt its announcer.",
+          "direction": "end",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "09-invited-future",
+      "tier": "P1",
+      "question": "Who is invited into the future?",
+      "mode": "critical_dialogue",
+      "duration": "65–90s",
+      "lenses": [
+        "dream",
+        "archive"
+      ],
+      "sourceScene": "who-narrates-tomorrow",
+      "sourceStatus": "published_checklist_research_preview_not_approved_scene",
+      "rights": "PUBLIC_CHECKLIST_ONLY_EDITORIAL_REVIEW_REQUIRED",
+      "notebookFormat": "Debate",
+      "notebookDirection": "Compare two distinct 1939 World's Fair materials from the publicly available Wolfsonian checklist: a Harlem invitation advertising visits to the fair, and a separate General Motors Futurama book spread describing a narrated future city attraction. Ask who designs a visitor's path and who is represented in promotional images. Do NOT imply Harlem Tours clients attended Futurama, that fair attendees had equal access, or that the works were connected. The 1939 book spread is NOT the distinct 1940 Futurama booklet.",
+      "a": {
+        "accession": "XC2024.03.1.1",
+        "title": "Harlem Invites You to Visit the New York World’s Fair (leaflet)"
+      },
+      "b": {
+        "accession": "83.2.19",
+        "title": "Futurama (1939 book spread)"
+      },
+      "sources": [
+        "https://wolfsonian.org/_assets/docs/checklist_worlds-fairs.pdf"
+      ],
+      "turns": [
+        {
+          "id": "09-invited-future:t1",
+          "role": "A",
+          "accession": "XC2024.03.1.1",
+          "voiceRole": "objectA",
+          "text": "My first word is Harlem. An invitation tells you where the route begins.",
+          "direction": "opening",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "09-invited-future:t2",
+          "role": "B",
+          "accession": "83.2.19",
+          "voiceRole": "objectB",
+          "text": "My city can be seen from above, with a narration guiding your view.",
+          "direction": "scene",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "09-invited-future:t3",
+          "role": "A",
+          "accession": "XC2024.03.1.1",
+          "voiceRole": "objectA",
+          "text": "Who chooses the path?",
+          "direction": "ask",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "09-invited-future:t4",
+          "role": "B",
+          "accession": "83.2.19",
+          "voiceRole": "objectB",
+          "text": "In the attraction described by the checklist, the presentation sets it out.",
+          "direction": "measured",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "09-invited-future:t5",
+          "role": "A",
+          "accession": "XC2024.03.1.1",
+          "voiceRole": "objectA",
+          "text": "[interrupting] And who gets to decide whether that promised future includes them?",
+          "direction": "interrupt",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "09-invited-future:t6",
+          "role": "B",
+          "accession": "83.2.19",
+          "voiceRole": "objectB",
+          "text": "I can't answer for anyone who visited. Our records don't establish that.",
+          "direction": "self_correct",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "09-invited-future:t7",
+          "role": "A",
+          "accession": "XC2024.03.1.1",
+          "voiceRole": "objectA",
+          "text": "Then let's not confuse a designed view with a lived experience.",
+          "direction": "clarify",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "09-invited-future:t8",
+          "role": "B",
+          "accession": "83.2.19",
+          "voiceRole": "objectB",
+          "text": "Let's ask for the voices of people who actually traveled to the fair.",
+          "direction": "end",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    },
+    {
+      "id": "10-invisible-work",
+      "tier": "P1",
+      "question": "Can an exhibition represent the people who made it possible?",
+      "mode": "intimate_reframing",
+      "duration": "60–85s",
+      "lenses": [
+        "archive",
+        "brain"
+      ],
+      "sourceScene": "opening-skilled-work-woman-exhibition",
+      "sourceStatus": "draft_staff_metadata_reference",
+      "rights": "HOLD_EXTERNAL_UNTIL_TITLE_SOURCE_APPROVED",
+      "notebookFormat": "Critique",
+      "notebookDirection": "Two hosts critique the difference between representing labor and hearing testimony from workers, prompted by the print On Munitions: Skilled Work and an exhibition titled The Woman 1813–1913. The interpretation must not invent specific women workers, attendance or biographies. Encourage a quiet change of perspective near the end. The fictional Archivist can be discussed by the hosts but should not be claimed as a real museum representative.",
+      "a": {
+        "accession": "85.4.64.34",
+        "title": "On Munitions: Skilled Work"
+      },
+      "b": {
+        "accession": "TD1990.340.141",
+        "title": "Exhibition: The Woman 1813–1913"
+      },
+      "sources": [],
+      "turns": [
+        {
+          "id": "10-invisible-work:t1",
+          "role": "A",
+          "accession": "85.4.64.34",
+          "voiceRole": "objectA",
+          "text": "I have the words Skilled Work in my title. They sound so certain.",
+          "direction": "gentle",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "10-invisible-work:t2",
+          "role": "B",
+          "accession": "TD1990.340.141",
+          "voiceRole": "objectB",
+          "text": "And mine holds a century of women inside two dates.",
+          "direction": "dry",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "10-invisible-work:t3",
+          "role": "A",
+          "accession": "85.4.64.34",
+          "voiceRole": "objectA",
+          "text": "It sounds like enough room for a thousand stories.",
+          "direction": "wonder",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "10-invisible-work:t4",
+          "role": "B",
+          "accession": "TD1990.340.141",
+          "voiceRole": "objectB",
+          "text": "Or just enough room for an exhibition title.",
+          "direction": "pause",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "10-invisible-work:t5",
+          "role": "A",
+          "accession": "85.4.64.34",
+          "voiceRole": "objectA",
+          "text": "Who has to work before anything reaches a display?",
+          "direction": "ask",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "10-invisible-work:t6",
+          "role": "B",
+          "accession": "TD1990.340.141",
+          "voiceRole": "objectB",
+          "text": "The record alone doesn't tell us. That absence matters.",
+          "direction": "guard",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "10-invisible-work:t7",
+          "role": "C",
+          "accession": null,
+          "voiceRole": "fictional_archivist",
+          "text": "A title is a lead for research, not a substitute for a worker's testimony.",
+          "direction": "archivist",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        },
+        {
+          "id": "10-invisible-work:t8",
+          "role": "A",
+          "accession": "85.4.64.34",
+          "voiceRole": "objectA",
+          "text": "Then we should make room for the testimony—not invent it.",
+          "direction": "end",
+          "sourceClaimType": "ARTIST_AUTHORED_FICTION"
+        }
+      ]
+    }
+  ]
+}
