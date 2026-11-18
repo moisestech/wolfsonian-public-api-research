@@ -14,6 +14,7 @@ on:
       - 'test/archive-*.test.mjs'
       - 'test/curated-edge-scenes.test.mjs'
       - 'test/cold-visitor-orientation.test.mjs'
+      - 'test/mobile-play-stop.test.mjs'
       - 'examples/archive-society*'
       - 'test/discovery-*.test.mjs'
       - '.github/workflows/discovery-checks.yml'
@@ -48,6 +49,7 @@ jobs:
         run: |
           npm run test:society
           node --test test/cold-visitor-orientation.test.mjs
+          node --test test/mobile-play-stop.test.mjs
       - name: Verify curated relationships and skeptical fallbacks
         run: node --test test/curated-edge-scenes.test.mjs
       - name: Browser smoke and screenshots
