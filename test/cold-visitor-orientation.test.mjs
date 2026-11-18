@@ -13,7 +13,7 @@ test('cold visitors get the question first and persistent fiction and record aff
  assert.match(html,/IMAGINED EXCHANGE/);
  assert.match(html,/id="room-question"/);
  assert.match(html,/Why these two\? Open evidence/);
- assert.match(html,/id="space-room">Map</);
+ assert.match(html,/id="space-room" class="space-tab" aria-label="Explore object network"/);
  assert.match(beforeApp,/id="arrival-connection"/);
  assert.match(css,/\.room-header\{/);
  assert.match(js,/not historical speech or live autonomous AI/);
