@@ -369,3 +369,33 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
 .arrival-voices summary{cursor:pointer;min-height:26px;font-weight:650;color:#9fdcc9}
 .arrival-guide .arrival-voices p{font-size:13px;line-height:1.48;margin:3px 0 0}
 @media(max-width:800px){.arrival-guide{grid-template-columns:1fr;gap:6px;padding:11px 15px}.arrival-guide p{font-size:13px}.arrival-guide .arrival-voices p{font-size:13px}.arrival-path{margin:0}}
+
+
+/* Consistent dismissal control: × visually, an explicit Close label for AT. */
+#admin-close.close-icon,
+#prompt-close.close-icon,
+#sheet-close.close-icon {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font: 400 34px/1 system-ui, sans-serif;
+  border-radius: 50%;
+  border: 1px solid #9c9c9c;
+  background: #262626;
+  color: #f4f4f4;
+}
+#admin-close.close-icon { z-index: 76; }
+#prompt-close.close-icon { z-index: 73; }
+#sheet-close.close-icon { z-index: 71; }
+#admin-close.close-icon:hover,
+#prompt-close.close-icon:hover,
+#sheet-close.close-icon:hover { background: #404040; }
+#space-play[aria-pressed="true"] { background: #f4f4f4; color: #111; border-color: #f4f4f4; }
+#space-play:disabled { opacity: .55; }
