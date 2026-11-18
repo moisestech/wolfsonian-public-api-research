@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "Accession Number": "SYN-A",
+      "Title": "Tomorrow Screen",
+      "Subject": "Projected future",
+      "Description": "Advertised a dream of tomorrow, without documenting its realization.",
+      "Creator": "Synthetic Maker",
+      "Date": "1939",
+      "Thumbnail": "https://example.invalid/photo.jpg"
+    },
+    {
+      "Accession Number": "SYN-B",
+      "Title": "Inventory of Memory",
+      "Subject": "Catalogues and archives",
+      "Description": "A storage index of historic records.",
+      "Additional Accession Numbers": "SYN-B-ALIAS"
+    },
+    {
+      "Accession Number": "SYN-C",
+      "Title": "Electric Apparatus",
+      "Subject": "Signal processing",
+      "Description": "Electric machines promised a new kind of perception.",
+      "Creator": "Synthetic Workshop"
+    },
+    {
+      "Accession Number": "SYN-D",
+      "Title": "Unrelated Mineral",
+      "Description": null
+    },
+    {
+      "Accession Number": "SYN-A",
+      "Title": "Other Tomorrow Screen",
+      "Subject": "Futures",
+      "Additional Accession Numbers": "85.7.383a,b"
+    }
+  ]
+}
