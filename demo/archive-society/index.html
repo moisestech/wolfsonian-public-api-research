@@ -29,7 +29,7 @@
   </div>
 </header>
 <section id="admin" class="admin" hidden role="dialog" aria-modal="true" aria-labelledby="admin-title">
-  <button type="button" id="admin-close">Close</button>
+  <button type="button" id="admin-close" class="close-icon" aria-label="Close settings" title="Close settings">×</button>
   <div class="admin-reading">
     <p class="eyebrow">SETTINGS</p>
     <h2 id="admin-title">Staff tools</h2>
@@ -165,7 +165,7 @@
   <div id="listener-row" class="listener-row" aria-label="Other conversation paths"></div>
   <div class="rail-scroll">
     <div id="conversation-sheet" class="conversation-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="scene-title">
-      <button type="button" id="sheet-close">Close</button>
+      <button type="button" id="sheet-close" class="close-icon" aria-label="Close conversation details" title="Close conversation details">×</button>
       <div class="sheet-reading">
         <p id="sheet-concept" class="chat-topic" hidden></p>
         <p id="scene-title" hidden></p>
@@ -185,7 +185,7 @@
       <p class="landscape-credit">Fictional readings</p>
     </div>
     <div id="prompt-sheet" class="prompt-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="prompt-title">
-      <button type="button" id="prompt-close">Close</button>
+      <button type="button" id="prompt-close" class="close-icon" aria-label="Close perspective details" title="Close perspective details">×</button>
       <div class="sheet-reading">
         <p class="eyebrow">ARTIST-AUTHORED ARCHETYPE</p>
         <p id="prompt-kicker" class="prompt-kicker"></p>
@@ -217,8 +217,7 @@
   </div>
   <p id="voice-status" class="muted" role="status" hidden></p>
   <div id="space-bar" class="space-bar">
-    <button type="button" id="space-play">Play</button>
-    <button type="button" id="space-stop">Stop</button>
+    <button type="button" id="space-play" aria-label="Play conversation" aria-pressed="false">▶ Play</button>
     <button type="button" id="space-evidence">Evidence</button>
     <button type="button" id="space-room">Room</button>
   </div>
