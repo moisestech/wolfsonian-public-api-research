@@ -400,33 +400,8 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
 #space-play[aria-pressed="true"] { background: #f4f4f4; color: #111; border-color: #f4f4f4; }
 #space-play:disabled { opacity: .55; }
 
-/* A selected pair should explain itself before visitors listen to its voices. */
-.encounter-orientation{
-  margin:4px 0 16px;
-  padding:14px 16px;
-  border:1px solid #53635e;
-  border-radius:12px;
-  background:#1a2421;
-  color:#ebf4ee;
-  overflow-wrap:anywhere;
-}
-.encounter-type{display:block;font:700 11px/1.4 ui-monospace,monospace;letter-spacing:.055em;color:#9fdcc9}
-.encounter-orientation h3{margin:5px 0 10px;font:600 clamp(17px,1.6vw,24px)/1.2 Georgia,serif}
-.encounter-orientation p{margin:0 0 10px;font:400 15px/1.45 system-ui,sans-serif}
-.encounter-orientation strong{font-weight:750;color:#f7fcf8}
-.encounter-question{padding:8px 10px;border-left:3px solid #9fdcc9;background:#20352e}
-.encounter-changes{color:#e7cab2}
-.encounter-method summary{cursor:pointer;color:#9fdcc9;font:600 13px/1.5 system-ui,sans-serif;padding:4px 0}
-.encounter-method p{font-size:13px;color:#d8e5df}
 .path-kind{font:600 12px/1.35 system-ui,sans-serif;color:#9fdcc9}
-@media(max-width:800px){
-  .encounter-orientation{padding:11px 12px;margin:0 0 10px}
-  .encounter-orientation h3{font-size:17px}
-  .encounter-orientation p{font-size:13px}
-  .encounter-method p{font-size:12px}
-  .path-kind{font-size:12px}
-}
-
+@media(max-width:800px){.path-kind{font-size:12px}}
 
 /* Public navigation: one predictable row, with no settings button. */
 .top-actions{flex:0 1 auto;min-width:0;display:flex;align-items:center;gap:0}
@@ -532,9 +507,6 @@ body{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidd
 .evidence-record{display:block;width:100%;margin:8px 0;text-align:left;white-space:normal;overflow-wrap:anywhere}
 #conversation-content>details{font:400 14px/1.5 system-ui,sans-serif;margin:18px 0 0}
 #conversation-content>details>summary{min-height:44px;padding:10px 0;cursor:pointer;color:#bce4cf}
-.encounter-orientation{padding:0;border-width:1px 0 0;border-radius:0;background:transparent}
-.encounter-orientation[open]{padding-bottom:12px}
-.encounter-orientation h3{font-size:19px}
 .evidence-rail .audio-bar{flex:none;padding:12px 18px;margin:0;min-height:68px;border-top:1px solid #456056;background:#14211e}
 #audio-elapsed{font-size:13px}
 .evidence-rail .audio-bar #play{width:44px;height:44px;min-height:44px;flex:none}
@@ -824,3 +796,13 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
   border:1px solid #536b60;border-radius:50%;background:#1c322a;color:#e2f2e9}
 #room-back.room-back svg{display:block;width:21px;height:21px;flex:none}
 #room-back.room-back:hover,#room-back.room-back:focus-visible{background:#315043;border-color:#bce4cf}
+
+/* Secondary journey action: navigation, not another methodology card. */
+#conversation-content .more-questions-link{
+  display:inline-flex;align-items:center;min-height:44px;margin:12px 0 0;
+  padding:6px 0;border:0;border-radius:0;background:transparent;
+  box-shadow:none;color:#bce4cf;font:600 14px/1.35 system-ui,sans-serif;
+  text-align:left;cursor:pointer;
+}
+#conversation-content .more-questions-link:hover,
+#conversation-content .more-questions-link:focus-visible{text-decoration:underline;color:#e9fff1}
