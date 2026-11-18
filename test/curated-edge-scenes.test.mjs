@@ -14,11 +14,11 @@ const makeEdge=(a,b,family,value)=>({
 });
 const fakeObject=(id)=>({accession:id,title:'Test record '+id,source:'synthetic',objectType:'Test',tags:[]});
 
-test('six opening scenes and twelve presentation pairs form sixteen distinct source-gated scripts',()=>{
-  assert.equal(CURATED_EDGE_SCENES.length,16);
+test('the public expansion brings the registry to twenty distinct source-gated scripts',()=>{
+  assert.equal(CURATED_EDGE_SCENES.length,20);
   assert.equal(CURATED_EDGE_SCENES.filter(s=>s.group==='opening').length,6);
   assert.equal(CURATED_EDGE_SCENES.filter(s=>s.mode==='question_edge').length,2);
-  assert.equal(new Set(CURATED_EDGE_SCENES.map(s=>key(...s.pair))).size,16);
+  assert.equal(new Set(CURATED_EDGE_SCENES.map(s=>key(...s.pair))).size,20);
   assert.equal(PRESENTATION_PAIRS.length,12);
   for(const item of PRESENTATION_PAIRS){
     const scene=sceneForConfirmedEdge(item.source,item.target,[{family:item.family,value:item.tag}]);
@@ -26,15 +26,16 @@ test('six opening scenes and twelve presentation pairs form sixteen distinct sou
   }
 });
 
-test('all sixteen scripts require the exact metadata family and value before speaking',()=>{
+test('all scripts require the exact metadata family and value before speaking',()=>{
  for(const scene of CURATED_EDGE_SCENES){
   assert.equal(scene.historicalRelationshipEstablished,false);
   assert.equal(scene.status,'EDITORIAL_DRAFT_NOT_APPROVED');
   assert.equal(scene.requires.kind,'shared_staff_metadata');
   assert.ok(scene.turns.length===3||scene.turns.length===5);
-  assert.ok(scene.turns.some(turn=>turn.speakerAccession==='archivist'));
+  const assisted=scene.group==='public-expansion';
+  if(!assisted)assert.ok(scene.turns.some(turn=>turn.speakerAccession==='archivist'));
   assert.ok(scene.arc.length>=10&&scene.next.length>=10&&scene.editorialNote.length>=20);
-  assert.ok(scene.turns.every(t=>t.kind==='ARTIST_AUTHORED_INTERPRETATION'&&t.text.length>=35));
+  assert.ok(scene.turns.every(t=>t.kind===(assisted?'AI_ASSISTED_INTERPRETATION':'ARTIST_AUTHORED_INTERPRETATION')&&t.text.length>=35));
   const evidence=[{family:scene.requires.family,value:scene.requires.value}];
   const forward=sceneForConfirmedEdge(...scene.pair,evidence);
   const reversed=sceneForConfirmedEdge(scene.pair[1],scene.pair[0],evidence);
@@ -112,4 +113,24 @@ test('frontend renders editorial arc, source-based explanation and visitor quest
  assert.match(js,/Inspect the reason for this edge/);
  assert.match(server,/curated-edge-scenes/);
  assert.doesNotMatch(js,/innerHTML\s*=/);
+});
+
+test('all four additional pairs open from the public directory with correctly attributed voices',async()=>{
+  const {MATRIX_OBJECTS}=await import('../src/public-matrix-objects.mjs');
+  const {matrixToRecords}=await import('../src/matrix-room.mjs');
+  const {societyView}=await import('../src/archive-society.mjs');
+  const {conversationEpisode}=await import('../src/conversation-orientation.mjs');
+  const records=matrixToRecords(MATRIX_OBJECTS);
+  const scenes=CURATED_EDGE_SCENES.filter(scene=>scene.group==='public-expansion');
+  assert.equal(scenes.length,4);
+  for(const scene of scenes){
+    const source=records.find(r=>r.accession===scene.a);
+    const target=records.find(r=>r.accession===scene.b);
+    const edge=societyView(records,source.accession).edges.find(e=>e.target===target.accession);
+    const episode=conversationEpisode({source,target,conversation:conversationFor(source,target,edge)});
+    assert.equal(episode.question,scene.arc);
+    assert.equal(episode.label,'AI-assisted script');
+    assert.deepEqual(episode.turns.map(t=>t.role),['objectA','objectB','objectA']);
+    assert.ok(episode.turns.every(t=>t.kind==='AI_ASSISTED_INTERPRETATION'));
+  }
 });

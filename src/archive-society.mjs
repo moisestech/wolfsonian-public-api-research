@@ -164,6 +164,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
     return {
       id:edge.id+'::'+lensId,
       sceneId:curated.id,
+      aiAssisted:curated.turns[0].kind==='AI_ASSISTED_INTERPRETATION',
       authored:true,
       mode:'CURATED_EDGE_SCENE',
       editorialStatus:curated.status,
@@ -180,10 +181,10 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
           turn.role==='objectA'?source.title:target.title,
         text:turn.text,
         citations:[],
-        kind:'ARTIST_AUTHORED_INTERPRETATION'
+        kind:turn.kind
       })),
       resourceLayer:'metadata_tag_only',
-      limits:'Artist-authored hypothetical exchange. Shared metadata is not a documented relationship. '+curated.editorialNote
+      limits:'Scripted hypothetical exchange. Shared metadata is not a documented relationship. '+curated.editorialNote
     };
   }
   const lens=LENSES.find(l=>l.id===lensId)||LENSES[0], reason=edge.reasons[0];

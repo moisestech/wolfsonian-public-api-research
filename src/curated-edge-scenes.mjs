@@ -685,6 +685,166 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
     "historicalRelationshipEstablished": false
+  },
+  {
+    "id": "TD1989.317.66::TD1990.340.141",
+    "group": "public-expansion",
+    "a": "TD1989.317.66",
+    "b": "TD1990.340.141",
+    "family": "motif",
+    "tag": "Women",
+    "arc": "Who gets to represent women’s work?",
+    "mode": "contest",
+    "turns": [
+      {
+        "speakerAccession": "TD1989.317.66",
+        "text": "My lottery has an exhibition in its name. A ticket could tell you who won. Could it tell you whose work was on the wall?",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "TD1990.340.141",
+        "text": "I have a hundred years in my title. Try fitting a single working day inside those dates.",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "TD1989.317.66",
+        "text": "Then I’d want a different kind of list. Who set up the exhibition before anyone came through the door?",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      }
+    ],
+    "next": "Which names would you look for in an exhibition checklist?",
+    "editorialNote": "AI-assisted script grounded in the two public titles and their shared motif. The voices are imagined.",
+    "pair": [
+      "TD1989.317.66",
+      "TD1990.340.141"
+    ],
+    "requires": {
+      "family": "motif",
+      "value": "Women",
+      "kind": "shared_staff_metadata"
+    },
+    "status": "EDITORIAL_DRAFT_NOT_APPROVED",
+    "historicalRelationshipEstablished": false
+  },
+  {
+    "id": "XX1990.2907::XX1990.3843",
+    "group": "public-expansion",
+    "a": "XX1990.2907",
+    "b": "XX1990.3843",
+    "family": "motif",
+    "tag": "Political symbols",
+    "arc": "What does a war poster ask us to believe?",
+    "mode": "contest",
+    "turns": [
+      {
+        "speakerAccession": "XX1990.2907",
+        "text": "I put 1943 beside 1918. Two dates, and already you’re looking for a difference.",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "XX1990.3843",
+        "text": "My title promises the effect of our U-boats. You’d need more than a date to measure an effect.",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "XX1990.2907",
+        "text": "But read your title again. Before you measure anything, that little word “our” has picked a side.",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      }
+    ],
+    "next": "Whose account would you put beside the word “our”?",
+    "editorialNote": "AI-assisted script grounded in the two public titles and their shared motif. The voices are imagined.",
+    "pair": [
+      "XX1990.2907",
+      "XX1990.3843"
+    ],
+    "requires": {
+      "family": "motif",
+      "value": "Political symbols",
+      "kind": "shared_staff_metadata"
+    },
+    "status": "EDITORIAL_DRAFT_NOT_APPROVED",
+    "historicalRelationshipEstablished": false
+  },
+  {
+    "id": "XX1990.3275::XX1990.3277",
+    "group": "public-expansion",
+    "a": "XX1990.3275",
+    "b": "XX1990.3277",
+    "family": "motif",
+    "tag": "Mythological figures",
+    "arc": "What can a myth sell?",
+    "mode": "contest",
+    "turns": [
+      {
+        "speakerAccession": "XX1990.3275",
+        "text": "My dye calls itself superior. Put two swatches on the counter and you could ask me to prove it.",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "XX1990.3277",
+        "text": "And how would you test my heels? Walk a mile in them, or take one look and want to be the person wearing them?",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "XX1990.3275",
+        "text": "Now I wonder what I’m selling. Would anyone buy the very same color if I called it ordinary?",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      }
+    ],
+    "next": "What would you cover up to test whether the image changes your choice?",
+    "editorialNote": "AI-assisted script grounded in the two public titles and their shared motif. The voices are imagined.",
+    "pair": [
+      "XX1990.3275",
+      "XX1990.3277"
+    ],
+    "requires": {
+      "family": "motif",
+      "value": "Mythological figures",
+      "kind": "shared_staff_metadata"
+    },
+    "status": "EDITORIAL_DRAFT_NOT_APPROVED",
+    "historicalRelationshipEstablished": false
+  },
+  {
+    "id": "TD1990.340.146::XX1990.2880",
+    "group": "public-expansion",
+    "a": "TD1990.340.146",
+    "b": "XX1990.2880",
+    "family": "motif",
+    "tag": "Flags",
+    "arc": "Who is invited to stand behind a flag?",
+    "mode": "contest",
+    "turns": [
+      {
+        "speakerAccession": "TD1990.340.146",
+        "text": "My title tells you to work and fight. Read it aloud. Who do you feel is giving the order?",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "XX1990.2880",
+        "text": "Mine says the invader means to enslave us. Say “us” aloud and listen to where it puts you.",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      },
+      {
+        "speakerAccession": "TD1990.340.146",
+        "text": "You’ve given me a harder question. Could someone want freedom and still refuse my command?",
+        "kind": "AI_ASSISTED_INTERPRETATION"
+      }
+    ],
+    "next": "Who could answer these posters back, and where might you find their words?",
+    "editorialNote": "AI-assisted script grounded in the two public titles and their shared motif. The voices are imagined.",
+    "pair": [
+      "TD1990.340.146",
+      "XX1990.2880"
+    ],
+    "requires": {
+      "family": "motif",
+      "value": "Flags",
+      "kind": "shared_staff_metadata"
+    },
+    "status": "EDITORIAL_DRAFT_NOT_APPROVED",
+    "historicalRelationshipEstablished": false
   }
 ]);
 
