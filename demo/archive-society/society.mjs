@@ -439,6 +439,34 @@ function paintListeners(){
     row.append(button);
   }
 }
+function questionCard(episode,objects){
+  const button=node('button',undefined,'path-post');
+  button.type='button';
+  const current=episode.id===state.episode?.id;
+  if(current)button.setAttribute('aria-current','true');
+  const face=node('span',undefined,'question-card-face');
+  const meta=node('span',undefined,'question-card-meta');
+  meta.append(node('span',episode.label));
+  if(current)meta.append(node('span','Current room','current-room'));
+  face.append(meta,node('strong',episode.question));
+  const cast=node('span',undefined,'question-card-cast');
+  const portraits=node('span',undefined,'question-card-portraits');
+  portraits.setAttribute('aria-hidden','true');
+  for(const object of objects){
+    const image=node('img');
+    image.alt='';image.loading='lazy';image.src=photo(object)||objectBadge(object);
+    portraits.append(image);
+  }
+  cast.append(portraits,node('span',episode.participants.map(person=>person.shortName).join(' × ')));
+  face.append(cast);
+  const preview=node('span',undefined,'question-card-preview');
+  const first=episode.turns[0];
+  const speaker=episode.participants.find(person=>person.role===first?.role);
+  preview.append(node('span',first?(speaker?.shortName||first.speaker):'Why these two?','preview-speaker'),
+    node('span',first?'“'+first.text+'”':episode.rationale,'preview-line'));
+  button.append(face,preview);
+  return button;
+}
 let relatedQuestions=false;
 function paintTimeline(){
   const list=$('timeline-list');if(!list)return;
@@ -458,7 +486,7 @@ function paintTimeline(){
       seen.add(key);
       const target=records.get(edge.target);
       const episode=conversationEpisode({source,target,conversation:conversationFor(source,target,edge,state.lens)});
-      const entry={episode,open:()=>{
+      const entry={episode,objects:[source,target],open:()=>{
         state.seed=accession;
         state.mapMode='conversation';
         $('theme').value='';
@@ -471,7 +499,7 @@ function paintTimeline(){
   }
   const comparisons=CURATORIAL_PATHS.map(path=>({
     episode:conversationEpisode({source:path.source,target:path.target,conversation:juxtapositionConversation(path)}),
-    open:()=>openResearchPath(path.id)
+    objects:[path.source,path.target],open:()=>openResearchPath(path.id)
   }));
   const currentIds=new Set(state.episode?.participants.map(p=>p.accession));
   for(const [label,group] of [['Authored scenes',scenes],['Artist-proposed exchanges',comparisons],['Research prompts',prompts]]){
@@ -479,12 +507,8 @@ function paintTimeline(){
     if(!entries.length)continue;
     const section=node('section');
     section.append(node('h2',label+' · '+entries.length,'directory-heading'));
-    for(const {episode,open} of entries){
-      const button=node('button',undefined,'path-post');
-      button.type='button';
-      if(episode.id===state.episode?.id)button.setAttribute('aria-current','true');
-      button.append(node('strong',episode.question),node('span',episode.participants.map(p=>p.shortName).join(' × '),'path-arc'));
-      if(button.hasAttribute('aria-current'))button.append(node('span','Current question','path-kind'));
+    for(const {episode,objects,open} of entries){
+      const button=questionCard(episode,objects);
       button.addEventListener('click',()=>{
         setMobileView('space');
         open();

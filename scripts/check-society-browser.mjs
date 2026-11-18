@@ -76,6 +76,15 @@ try {
   await page.locator('#space-leave').click();
   assert.equal(await page.locator('#timeline-title').innerText(),'Choose a question');
   assert.match(await page.locator('#timeline-list').innerText(),/Authored scene/);
+  const card=page.locator('.path-post').first();
+  assert.equal(await card.locator('.question-card-portraits img').count(),2);
+  assert.ok(await card.locator('.preview-line').innerText());
+  for(const width of [320,390]){
+    await page.setViewportSize({width,height:844});
+    const bounds=await page.locator('.path-post').nth(1).boundingBox();
+    assert.ok(bounds.x>=0 && bounds.x+bounds.width<=width+1 && bounds.y+bounds.height<=844,'Two complete rooms fit at '+width);
+  }
+  await screenshot('question-cards-390');
   await page.locator('#timeline-list section').first().locator('button').last().click();
   assert.notEqual(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
   await page.locator('#space-leave').click();
