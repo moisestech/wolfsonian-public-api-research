@@ -11,6 +11,9 @@ on:
       - 'src/conversation-orientation.mjs'
       - 'src/scene-performance.mjs'
       - 'test/scene-performance.test.mjs'
+      - 'test/audio-lab-experiments.test.mjs'
+      - 'data/research/audio-lab/**'
+      - 'docs/audio-lab/**'
       - 'server/archive-*.mjs'
       - 'api/archive-society/**'
       - 'scripts/*society*'
@@ -60,7 +63,7 @@ jobs:
           node --test test/editorial-headline.test.mjs
           node --test test/atlas-four-control-header.test.mjs
       - name: Verify curated relationships and skeptical fallbacks
-        run: node --test test/curated-edge-scenes.test.mjs test/conversation-ux.test.mjs test/conversation-orientation.test.mjs test/scene-performance.test.mjs
+        run: node --test test/curated-edge-scenes.test.mjs test/conversation-ux.test.mjs test/conversation-orientation.test.mjs test/scene-performance.test.mjs test/audio-lab-experiments.test.mjs
       - name: Browser smoke and screenshots
         run: |
           npm ci

@@ -42,3 +42,14 @@ Official references:
 - NotebookLM / Gemini Notebook Audio Overviews: https://support.google.com/gemininotebook/answer/16212820
 - ElevenLabs Text to Dialogue: https://elevenlabs.io/docs/overview/capabilities/text-to-dialogue
 - ElevenLabs delivery tags: https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-do-audio-tags-work-with-eleven-v3-and-v4
+
+## NotebookLM-ready Google Docs — first five
+These clean briefs contain permitted source locators and interpretive prompts, **not** the fixed fictional dialogue. Import one brief per notebook and add the relevant museum public pages if source permissions allow.
+
+- [01 — Household / audience](https://docs.google.com/document/d/1AqUXIPhYMXVI_V0AHpCENXc774--mOKPlHdV3Qn6PsQ/edit)
+- [02 — Promise / souvenir](https://docs.google.com/document/d/1eMPfb6saxfZyDLkfiDWtNMZWPozzhbiKoD3dQ-HeQeE/edit)
+- [03 — Globe / Theme Center](https://docs.google.com/document/d/1LOp4YspxZp550EjPcSCmyKx2JONPog0BglyRpw2g9ik/edit)
+- [04 — Poster / program](https://docs.google.com/document/d/1z1MtpXdZtcTYIlSfxEkIGanBqiOH-XXVCPF3vxQcGl8/edit)
+- [05 — Naming the modern](https://docs.google.com/document/d/1riFWezFUpMUJiJXK6hNIVeVhYbCAaXlN-d4eFvd7JB4/edit)
+
+[Implementation and audio/speaker/event architecture](voice-engine-architecture.md)
