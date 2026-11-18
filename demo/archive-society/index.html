@@ -20,12 +20,14 @@
 <header class="topbar">
   <a class="wordmark" href="#atlas"><svg class="symbol" viewBox="0 0 32 32" aria-hidden="true"><rect x="2.5" y="2.5" width="27" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 23V13h4.5v10M14.5 23V8h5v15M21.5 23v-7H25v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>The Archive Dreams <em>in Public</em></span></a>
   <div class="top-actions">
-    <nav class="top-nav" aria-label="Inspector">
-      <div class="tabs" role="group" aria-label="Inspector"><button data-panel="conversation" aria-pressed="true">Conversation</button><button data-panel="record" aria-pressed="false">Record</button></div>
-      <button type="button" id="source-info" class="icon-button" aria-label="About this encounter">i</button>
+    <nav class="top-nav" aria-label="Explore Archive Dreams">
+      <div class="tabs" role="group" aria-label="Explore conversations and records">
+        <button type="button" data-panel="conversation" aria-pressed="true">Conversations</button>
+        <button type="button" data-panel="record" aria-pressed="false">Record</button>
+      </div>
+      <a class="icon-link" href="../object-lens/" aria-label="Open Object Lens" title="Object Lens"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg></a>
+      <button type="button" id="source-info" class="icon-button" aria-label="Information about this artwork" title="Information">i</button>
     </nav>
-    <a class="icon-link" href="../object-lens/" aria-label="Object Lens"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg></a>
-    <button id="admin-toggle" class="icon-button" type="button" hidden aria-label="Settings" aria-expanded="false" aria-controls="admin"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg></button>
   </div>
 </header>
 <section id="admin" class="admin" hidden role="dialog" aria-modal="true" aria-labelledby="admin-title">
@@ -230,8 +232,6 @@
 const local=location.hostname==='127.0.0.1'||location.hostname==='localhost';
 async function start(){
   document.documentElement.classList.add('demo-open');
-  const gear=document.getElementById('admin-toggle');
-  if(gear&&(local||sessionStorage.getItem('archive-demo-open')==='1'))gear.hidden=false;
   await import('./society.mjs');
 }
 if(local||sessionStorage.getItem('archive-demo-open')==='1')start();
