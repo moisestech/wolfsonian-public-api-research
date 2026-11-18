@@ -369,3 +369,7 @@ body,.atlas-panel,.atlas-footer,.evidence-rail,.admin,.reading-popover,.tool-pop
 .arrival-voices summary{cursor:pointer;min-height:26px;font-weight:650;color:#9fdcc9}
 .arrival-guide .arrival-voices p{font-size:13px;line-height:1.48;margin:3px 0 0}
 @media(max-width:800px){.arrival-guide{grid-template-columns:1fr;gap:6px;padding:11px 15px}.arrival-guide p{font-size:13px}.arrival-guide .arrival-voices p{font-size:13px}.arrival-path{margin:0}}
+
+/* Single touch target reflects the same active state as desktop audio. */
+#space-play[aria-pressed="true"]{background:#f4f4f4;color:#101010;border-color:#f4f4f4}
+#space-play:disabled{opacity:.58}
