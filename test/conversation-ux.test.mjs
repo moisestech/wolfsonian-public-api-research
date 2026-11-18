@@ -101,3 +101,33 @@ test('object speaker cards show only the object title and record arrow',async()=
  assert.doesNotMatch(css,/\.speaker-status/);
  assert.match(css,/\.object-open-arrow/);
 });
+
+test('mobile perspective controls share one canonical lens and preserve desktop selector',async()=>{
+ const html=await readFile(new URL(repoUrl+'index.html',import.meta.url),'utf8');
+ const js=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
+ const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
+ for(const key of ['room','feed'])assert.match(html,new RegExp('id="'+key+'-perspective-toggle"'));
+ assert.match(html,/id="mobile-perspective-sheet"/);
+ assert.match(html,/id="mobile-perspective-choices"/);
+ assert.match(html,/id="reading-toggle"/);
+ assert.match(js,/mobilePerspectiveSheet\.showModal\(\)/);
+ assert.match(js,/\$\('lens'\)\.dispatchEvent\(new Event\('change'\)\)/);
+ assert.match(js,/toggle\.setAttribute\('aria-label','Choose perspective, currently '/);
+ assert.match(css,/#room-perspective-toggle/);
+ assert.match(css,/#feed-perspective-toggle/);
+});
+test('speaking waveform is keyed to every scripted voice and cancels cleanly',async()=>{
+ const html=await readFile(new URL(repoUrl+'index.html',import.meta.url),'utf8');
+ const js=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
+ const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
+ assert.match(html,/id="voice-controls" class="audio-bar" data-speaker=""/);
+ assert.match(html,/id="audio-speaker"/);
+ assert.match(js,/function updateSpeakingAudio\(turn,index,count\)/);
+ assert.match(js,/updateSpeakingAudio\(turn,i,conversation\.turns\.length\)/);
+ for(const role of ['objectA','objectB','archivist']){
+   assert.match(css,new RegExp('data-speaker="'+role+'"'));
+ }
+ assert.match(css,/prefers-reduced-motion:reduce/);
+ assert.match(css,/body\.show-space \.evidence-rail \.audio-bar\.playing/);
+ assert.match(js,/audioBar\.dataset\.speaker=''/);
+});
