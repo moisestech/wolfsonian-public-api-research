@@ -653,6 +653,8 @@ function renderRoomHeader(source,target,c){
   state.episode=episode;
   const header=$('room-header');header.hidden=false;header.dataset.episode=episode.id;header.dataset.mode=episode.mode;
   $('room-question').textContent=episode.question;
+  $('room-kind').textContent=episode.label==='Authored scene'?'':episode.label;
+  $('room-status-line').hidden=!$('room-kind').textContent;
   // Show the relationship that led to this room, rather than a generic
   // description of its format. Research-proposal detail stays in Evidence.
   const connection=connectionCaption({episode,proposal:state.researchPath?.proposal});
