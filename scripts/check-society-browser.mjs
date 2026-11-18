@@ -117,6 +117,9 @@ try {
   assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
   assert.match(await page.locator('#space-play').innerText(),/Play/);
   await page.evaluate(()=>{
+    const voiceMode=document.querySelector('#voice-mode');
+    voiceMode.value='device';
+    voiceMode.dispatchEvent(new Event('change'));
     Object.defineProperty(window,'speechSynthesis',{
       configurable:true,
       value:{
