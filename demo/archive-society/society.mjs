@@ -16,7 +16,7 @@ import { explainEncounter, conversationEpisode, connectionCaption, visitorFollow
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 import { scriptedScenePlan } from '../../src/scene-performance.mjs';
 import { tagColor, voiceColors } from './conversation-color.mjs';
-import { personaCharacterUrl } from '../../src/persona-cloudinary-assets.mjs';
+import { personaCharacterUrl, personaAssetUrl } from '../../src/persona-cloudinary-assets.mjs';
 import { illustratedPersonaUrl, APPROVED_DECO_MASK_STUDIES, approvedMaskStudyUrl } from '../../src/persona-illustrated-gallery.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -1839,6 +1839,23 @@ function perspectiveSections(buildChoice){
 
 /** Approved masks remain visible as a separate artwork family without assigning
  *  the three unnamed studies to historical or institutional speakers. */
+/** A single icon grammar across all eleven identities, independent of the
+ *  larger portraits and the four unassigned approved mask studies. */
+function personaIdentityMark(id){
+  const mark=node('span',undefined,'perspective-identity-mark');
+  mark.setAttribute('aria-hidden','true');
+  const image=node('img');
+  image.alt='';
+  image.dataset.personaMark=id;
+  image.src=personaAssetUrl(id,{tone:'white',variant:'compact',format:'svg'});
+  image.onerror=()=>{
+    image.onerror=null;
+    const card=CARD_BY_ID.get(id);
+    if(card)image.src=portraitFallbackUrl(card,{tone:'white',variant:'compact'});
+  };
+  mark.append(image);
+  return mark;
+}
 function approvedMasksSection(){
   const section=node('section',undefined,'approved-mask-studies');
   section.append(
@@ -1866,7 +1883,7 @@ $('reading-popover').replaceChildren(...perspectiveSections(lens=>{
   const label=lens.id==='museum'?lens.label+' · fictional':lens.label;
   const copy=node('span',undefined,'perspective-card-copy');
   copy.append(node('strong',label),node('small',lens.question));
-  button.append(img,copy);
+  button.append(img,personaIdentityMark(lens.id),copy);
   button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));closeSheet();});
   return button;
 }),approvedMasksSection());
@@ -1897,7 +1914,7 @@ $('mobile-perspective-choices')?.replaceChildren(...perspectiveSections(lens=>{
   copy.append(node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
     node('small',lens.id==='museum'?'Artist-authored viewpoint; not museum staff.':lens.question));
   const check=node('span','✓','mobile-perspective-selected');check.setAttribute('aria-hidden','true');
-  button.append(portrait,copy,check);
+  button.append(portrait,personaIdentityMark(lens.id),copy,check);
   button.addEventListener('click',()=>{
     closeMobilePerspectives();
     $('lens').value=lens.id;
