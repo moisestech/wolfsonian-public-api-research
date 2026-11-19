@@ -3,6 +3,7 @@
  * Only public original vector artwork; never museum collection imagery.
  * Generated from docs/design/persona-cloudinary-manifest.json.
  */
+import { CHARACTER_PORTRAIT_ALTERNATES, CHARACTER_PORTRAIT_URLS } from './persona-character-portraits.mjs';
 const VERSION = Object.freeze({
   "family": {
     "full": {
@@ -130,6 +131,13 @@ export function decoStudyUrl(id,{format='svg'}={}){
   if(!['svg','png'].includes(format))throw new Error('Unsupported persona asset');
   const transformation=format==='png'?'c_scale,w_512/f_png/':'';
   return CLOUD+transformation+'v'+DECO_STUDIES[id]+'/'+FOLDER+'deco-'+id+'-white-v1.'+format;
+}
+export function personaCharacterUrl(id,{palette='sepia',variant='compact'}={}){
+  if(!['sepia','white','ink'].includes(palette)||!['full','compact'].includes(variant))
+    throw new Error('Unsupported persona portrait');
+  const table=id==='family-deco-mask'?CHARACTER_PORTRAIT_ALTERNATES[id]:CHARACTER_PORTRAIT_URLS[id];
+  const row=table?.[palette]?.[variant];
+  return row?.url||null;
 }
 export function personaAssetUrl(id,{tone='white',variant='full',format='svg'}={}){
   if(!Object.hasOwn(VERSION,id))throw new Error('Unknown persona symbol');

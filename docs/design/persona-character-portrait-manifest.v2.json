@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 2,
+  "project": "Archive Dreams in Public — The Futures We Inherited",
+  "cloudName": "dck5rzi4h",
+  "assetFolder": "archive-dreams/brand/personas/portraits",
+  "verifiedInCloudinaryAt": "2026-11-19",
+  "artifactStagingDoc": "https://docs.google.com/document/d/1lITPU4nNOflw3waFogyUIGE8psLh_kvo9obTgrKzy0Q/edit",
+  "existingSigilManifest": "docs/design/persona-cloudinary-manifest.json",
+  "existingV1SigilsUntouched": 47,
+  "counts": {
+    "characterPortraitIdentities": 3,
+    "mainPortraitAssets": 18,
+    "alternateFamilyAssets": 4,
+    "total": 22
+  },
+  "qualityNote": "The three sepia character masters derive from small crops in an approved composite design board. Export canvases are 1024px, not 1024px-native rendered character illustrations; use for UI preview and limited-size speaker art, retain v1 sigils and plan higher-resolution isolated artist masters for large exhibition output.",
+  "publicationRights": "Original artist-authored conceptual artwork only; no historic museum photographs or institutional seals",
+  "runtimeIntegration": "not yet implemented; implementation PR to use explicit URLs, reject unknown names, preserve v1 fallback and privacy controls",
+  "personas": {
+    "family": {
+      "identity": "family",
+      "source": "Artist-approved November 19 composite illustration; cropped/transparent derived asset",
+      "sourcePixelBounds": "167x170",
+      "v2SourceIsUpscaled": true,
+      "artistApproval": "Approved source imagery in conversation, 2026-11-19",
+      "runtimeQa": "pending",
+      "variants": {
+        "sepia": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-sepia-full-v2",
+            "version": 1795099878,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099878/archive-dreams/brand/personas/portraits/family-sepia-full-v2.png",
+            "bytes": 758311
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-sepia-compact-v2",
+            "version": 1795100011,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100011/archive-dreams/brand/personas/portraits/family-sepia-compact-v2.png",
+            "bytes": 96086
+          }
+        },
+        "white": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-white-full-v2",
+            "version": 1795099943,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099943/archive-dreams/brand/personas/portraits/family-white-full-v2.png",
+            "bytes": 257494
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-white-compact-v2",
+            "version": 1795099946,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099946/archive-dreams/brand/personas/portraits/family-white-compact-v2.png",
+            "bytes": 59505
+          }
+        },
+        "ink": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-ink-full-v2",
+            "version": 1795099950,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099950/archive-dreams/brand/personas/portraits/family-ink-full-v2.png",
+            "bytes": 257481
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-ink-compact-v2",
+            "version": 1795099953,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099953/archive-dreams/brand/personas/portraits/family-ink-compact-v2.png",
+            "bytes": 54631
+          }
+        }
+      }
+    },
+    "worker": {
+      "identity": "worker",
+      "source": "Artist-approved November 19 composite illustration; cropped/transparent derived asset",
+      "sourcePixelBounds": "168x170",
+      "v2SourceIsUpscaled": true,
+      "artistApproval": "Approved source imagery in conversation, 2026-11-19",
+      "runtimeQa": "pending",
+      "variants": {
+        "sepia": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/worker-sepia-full-v2",
+            "version": 1795099907,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099907/archive-dreams/brand/personas/portraits/worker-sepia-full-v2.png",
+            "bytes": 808416
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/worker-sepia-compact-v2",
+            "version": 1795100014,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100014/archive-dreams/brand/personas/portraits/worker-sepia-compact-v2.png",
+            "bytes": 102081
+          }
+        },
+        "white": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/worker-white-full-v2",
+            "version": 1795099956,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099956/archive-dreams/brand/personas/portraits/worker-white-full-v2.png",
+            "bytes": 278779
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/worker-white-compact-v2",
+            "version": 1795099961,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099961/archive-dreams/brand/personas/portraits/worker-white-compact-v2.png",
+            "bytes": 63809
+          }
+        },
+        "ink": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/worker-ink-full-v2",
+            "version": 1795099972,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099972/archive-dreams/brand/personas/portraits/worker-ink-full-v2.png",
+            "bytes": 278779
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/worker-ink-compact-v2",
+            "version": 1795099975,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099975/archive-dreams/brand/personas/portraits/worker-ink-compact-v2.png",
+            "bytes": 59477
+          }
+        }
+      }
+    },
+    "archivist": {
+      "identity": "archivist",
+      "source": "Artist-approved November 19 composite illustration; cropped/transparent derived asset",
+      "sourcePixelBounds": "165x171",
+      "v2SourceIsUpscaled": true,
+      "artistApproval": "Approved source imagery in conversation, 2026-11-19",
+      "runtimeQa": "pending",
+      "variants": {
+        "sepia": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/archivist-sepia-full-v2",
+            "version": 1795099910,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099910/archive-dreams/brand/personas/portraits/archivist-sepia-full-v2.png",
+            "bytes": 721915
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/archivist-sepia-compact-v2",
+            "version": 1795100018,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100018/archive-dreams/brand/personas/portraits/archivist-sepia-compact-v2.png",
+            "bytes": 90016
+          }
+        },
+        "white": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/archivist-white-full-v2",
+            "version": 1795099978,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099978/archive-dreams/brand/personas/portraits/archivist-white-full-v2.png",
+            "bytes": 249805
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/archivist-white-compact-v2",
+            "version": 1795099982,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099982/archive-dreams/brand/personas/portraits/archivist-white-compact-v2.png",
+            "bytes": 60030
+          }
+        },
+        "ink": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/archivist-ink-full-v2",
+            "version": 1795099985,
+            "format": "png",
+            "width": 1024,
+            "height": 1024,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099985/archive-dreams/brand/personas/portraits/archivist-ink-full-v2.png",
+            "bytes": 249495
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/archivist-ink-compact-v2",
+            "version": 1795099989,
+            "format": "png",
+            "width": 256,
+            "height": 256,
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099989/archive-dreams/brand/personas/portraits/archivist-ink-compact-v2.png",
+            "bytes": 54973
+          }
+        }
+      }
+    }
+  },
+  "alternates": {
+    "family-deco-mask": {
+      "identity": "family",
+      "source": "Separate standalone artist-approved geometric Family mask illustration",
+      "role": "optional approved alternative; never substitute silently for sepia variant",
+      "variants": {
+        "white": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-deco-mask-white-full-v2",
+            "version": 1795100026,
+            "width": 1024,
+            "height": 1024,
+            "format": "png",
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100026/archive-dreams/brand/personas/portraits/family-deco-mask-white-full-v2.png",
+            "bytes": 137765
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-deco-mask-white-compact-v2",
+            "version": 1795100030,
+            "width": 256,
+            "height": 256,
+            "format": "png",
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100030/archive-dreams/brand/personas/portraits/family-deco-mask-white-compact-v2.png",
+            "bytes": 38647
+          }
+        },
+        "ink": {
+          "full": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-deco-mask-ink-full-v2",
+            "version": 1795100033,
+            "width": 1024,
+            "height": 1024,
+            "format": "png",
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100033/archive-dreams/brand/personas/portraits/family-deco-mask-ink-full-v2.png",
+            "bytes": 138880
+          },
+          "compact": {
+            "publicId": "archive-dreams/brand/personas/portraits/family-deco-mask-ink-compact-v2",
+            "version": 1795100037,
+            "width": 256,
+            "height": 256,
+            "format": "png",
+            "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100037/archive-dreams/brand/personas/portraits/family-deco-mask-ink-compact-v2.png",
+            "bytes": 32473
+          }
+        }
+      }
+    }
+  }
+}

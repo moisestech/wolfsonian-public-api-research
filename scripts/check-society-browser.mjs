@@ -25,7 +25,12 @@ try {
   // Cloudinary-backed persona marks preserve the intended small/large roles.
   assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-id'),'family');
   assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-variant'),'compact');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
+  assert.match(await page.locator('#room-archivist-portrait').getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
+  assert.match(await page.locator('.chat .turn[data-role="archivist"] img').first().getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
+  assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="worker"] img').getAttribute('src'),/\/worker-white-compact-v1\.svg$/);
+  assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/portraits\/[a-z]+-sepia-full-v2\.png$/);
   // A blocked CDN must render the original inline vector without a broken avatar.
   await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
   assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
@@ -70,7 +75,7 @@ try {
   assert.ok(expectedPair.split('|').every(id=>cluster.split('|').includes(id)),'Hover gathers the objects that share this connection');
   assert.equal(await page.locator('#stage').getAttribute('data-cluster-label'),await townhallCard.getAttribute('data-reason'));
   assert.equal(await page.locator('#cluster-badge').isVisible(),true);
-  assert.equal(await page.locator('#cluster-badge-label').innerText(),await townhallCard.getAttribute('data-reason'));
+  assert.equal(await page.locator('#cluster-badge-label').evaluate(el=>el.textContent),await townhallCard.getAttribute('data-reason'));
   assert.match(await page.locator('#cluster-badge-meta').innerText(),/objects · \d+ edges?/);
   assert.equal(await townhallCard.evaluate(node=>getComputedStyle(node.querySelector('.question-card-swatch')).backgroundColor),await townhallCard.evaluate(node=>{
     const probe=document.createElement('span');
@@ -192,7 +197,7 @@ try {
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-ink-compact-v1\.svg$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
   // The mobile perspective sheet keeps the white compact mark in both themes.
   assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
@@ -201,7 +206,7 @@ try {
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
