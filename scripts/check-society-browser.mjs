@@ -30,10 +30,12 @@ try {
   assert.match(await page.locator('.chat .turn[data-role="archivist"] img').first().getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
   assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
   assert.match(await page.locator('#reading-popover [data-lens="worker"] img').getAttribute('src'),/\/worker-sepia-compact-v2\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="futurist"] img').getAttribute('src'),/\/futurist-white-compact-v1\.svg$/);
-  assert.match(await page.locator('#reading-popover [data-lens="tourist"] img').getAttribute('src'),/\/tourist-white-compact-v1\.svg$/);
+  assert.match(await page.locator('#reading-popover [data-lens="futurist"] img').getAttribute('src'),/\/futurist-sepia-compact-v4\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="tourist"] img').getAttribute('src'),/\/tourist-sepia-compact-v4\.png$/);
   assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/portraits\/[a-z]+-sepia-full-v2\.png$/);
   // A blocked CDN must render the original inline vector without a broken avatar.
+  await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
   await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
   assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
   assert.ok(decodeURIComponent(await page.locator('#room-lens-portrait').getAttribute('src')).includes('#ffffff'));
@@ -183,12 +185,15 @@ try {
     const choice=page.locator('#mobile-perspective-choices [data-lens="'+id+'"]');
     assert.equal(await choice.count(),1,'Perspective choice exists: '+label);
     assert.match(await choice.innerText(),new RegExp(label));
-    assert.match(await choice.locator('img').getAttribute('src'),new RegExp('/'+id+'-white-compact-v1[.]svg$'));
+    assert.match(await choice.locator('img').getAttribute('src'),new RegExp('/'+id+'-sepia-compact-v4[.]png$'));
   }
   assert.equal(await page.locator('#mobile-perspective-choices .perspective-choice-group-title').count(),3);
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-variant'),'compact');
-  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-tone'),'white');
+  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-palette'),'sepia');
   await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
+  assert.equal(await page.locator('#mobile-perspective-feature-title').innerText(),'Worker');
+  assert.match(await page.locator('#mobile-perspective-feature-image').getAttribute('src'),/\/worker-sepia-full-v2\.png$/);
+  await page.locator('#mobile-perspective-sheet .perspective-feature-action').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Worker');
   assert.equal(await page.locator('#reading-name').innerText(),'Worker');
   assert.deepEqual(await authoredDialogue(),originalDialogue,'Changing perspective does not alter an authored script');
@@ -196,13 +201,17 @@ try {
   await page.locator('#room-perspective-toggle').click();
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"]').getAttribute('aria-pressed'),'true');
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
+  await page.locator('#mobile-perspective-sheet .perspective-feature-action').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
   await page.locator('#room-perspective-toggle').click();
   await page.locator('#mobile-perspective-choices [data-lens="novice"]').click();
+  assert.match(await page.locator('#mobile-perspective-feature-image').getAttribute('src'),/\/novice-sepia-full-v4\.png$/);
+  await page.locator('#mobile-perspective-sheet .perspective-feature-action').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Art novice');
   assert.deepEqual(await authoredDialogue(),originalDialogue);
   await page.locator('#room-perspective-toggle').click();
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
+  await page.locator('#mobile-perspective-sheet .perspective-feature-action').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
 
   // Five persistent mobile destinations share the original dock space.
@@ -233,9 +242,11 @@ try {
   assert.equal(await page.locator('#feed-perspective-toggle').isVisible(),true);
   await page.locator('#feed-perspective-toggle').click();
   await page.locator('#mobile-perspective-choices [data-lens="futurist"]').click();
+  await page.locator('#mobile-perspective-sheet .perspective-feature-action').click();
   assert.equal(await page.locator('#feed-perspective-name').innerText(),'Futurist');
   await page.locator('#feed-perspective-toggle').click();
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
+  await page.locator('#mobile-perspective-sheet .perspective-feature-action').click();
   assert.equal(await page.locator('#space-feed[aria-current="page"]').count(),1);
   assert.equal(await page.locator('#space-bar').isVisible(),true,'Bottom navigation stays available in feed');
   await page.locator('#space-conversation').click();

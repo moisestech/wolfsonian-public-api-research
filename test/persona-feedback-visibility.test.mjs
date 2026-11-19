@@ -21,7 +21,7 @@ test('feedback cast contains all original eleven artist-authored persona identit
       }
     }
     assert.match(portraitFallbackUrl(card,{tone:'white',variant:'compact'}),/^data:image\/svg\+xml/);
-    assert.equal(personaCharacterUrl(id),null,'v1-only perspective must not be mislabeled illustrated v2');
+    assert.match(personaCharacterUrl(id),new RegExp('/'+id+'-sepia-compact-v4[.]png$'),'New illustrative portrait replaces v1 in the primary gallery');
   }
   assert.ok(!LENSES.some(p=>p.id==='open'));
 });
@@ -36,7 +36,11 @@ test('phone and desktop perspective lists share one complete grouped cast',async
   assert.match(code,/reading-popover'\)\.replaceChildren\(\.\.\.perspectiveSections\(/);
   assert.match(code,/mobile-perspective-choices'\)\?\.replaceChildren\(\.\.\.perspectiveSections\(/);
   assert.match(code,/const label=lens\.id==='museum'\?lens\.label\+' · fictional'/);
+  assert.match(code,/perspective-card-grid/);
+  assert.match(code,/buildPerspectiveFeature\('desktop'\)/);
+  assert.match(code,/buildPerspectiveFeature\('mobile'\)/);
+  assert.match(code,/updatePerspectiveGallery\(\)/);
   const html=await local('../demo/archive-society/index.html');
-  assert.match(html,/eleven artist-authored viewpoints/);
+  assert.match(html,/Meet eleven illustrated characters/);
   assert.match(html,/Shared metadata suggests questions, not proven historical relationships/);
 });

@@ -25,10 +25,11 @@ try{
   const personaMark=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/(?:family|tourist|novice|connoisseur|worker|archivist|futurist|mourner|propagandist|counterfeit|museum)-(?:white|ink)-(?:full|compact)-v1\.svg$/;
   // V2 portraits are artist-owned, version-pinned static art and cannot convey museum records.
   const personaPortrait=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/portraits\/(?:family|worker|archivist)-(?:sepia|white|ink)-(?:full|compact)-v2\.png$/;
+  const personaPortraitV4=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/portraits\/(?:tourist|novice|connoisseur|futurist|mourner|propagandist|counterfeit|museum)-sepia-(?:full|compact)-v4\.png$/;
 
   page.on('request',request=>{
     const url=request.url();
-    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url)||personaMark.test(url)||personaPortrait.test(url))return;
+    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url)||personaMark.test(url)||personaPortrait.test(url)||personaPortraitV4.test(url))return;
     external.push(url);
   });
 

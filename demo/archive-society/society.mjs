@@ -38,11 +38,19 @@ function bindPersonaImage(image,card,variant='compact',fixedTone=null,palette=nu
   image.classList.add('persona-symbol');
   image.alt=''; // The adjacent visible text identifies the perspective.
   const tone=fixedTone||personaTone();
+  const character=personaCharacterUrl(card.id,{palette:palette||'sepia',variant});
+  image.classList.toggle('persona-illustration',Boolean(character));
+  let fallback=0;
   image.onerror=()=>{
-    image.onerror=null;
-    image.src=portraitFallbackUrl(card,{tone,variant});
+    if(!fallback++){
+      image.classList.remove('persona-illustration');
+      image.src=portraitUrl(card,{tone,variant}); // Retain an accessible historic sigil only if art fails.
+    }else{
+      image.onerror=null;
+      image.src=portraitFallbackUrl(card,{tone,variant});
+    }
   };
-  image.src=(palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
+  image.src=character||portraitUrl(card,{tone,variant});
 }
 function refreshPersonaImages(){
   document.querySelectorAll('img[data-persona-id]').forEach(image=>{
@@ -1661,6 +1669,7 @@ function paintReading(){
     if(toggle)toggle.setAttribute('aria-label','Choose perspective, currently '+card.label+(card.id==='museum'?' (fictional, not museum staff)':''));
   }
   for(const button of document.querySelectorAll('[data-lens]'))button.setAttribute('aria-pressed',String(button.dataset.lens===state.lens));
+  updatePerspectiveGallery();
 }
 const PROMPT_EDITS_KEY='archive-dreams-prompt-edits';
 const promptDrafts=new Map();
@@ -1815,24 +1824,63 @@ function perspectiveSections(buildChoice){
   return feedbackPerspectiveGroups.map(group=>{
     const section=node('section',undefined,'perspective-choice-group');
     section.append(node('h3',group.title,'perspective-choice-group-title'));
+    const grid=node('div',undefined,'perspective-card-grid');
     for(const id of group.ids){
       const lens=LENSES.find(item=>item.id===id);
       if(!lens)throw new Error('Missing perspective '+id);
-      section.append(buildChoice(lens));
+      grid.append(buildChoice(lens));
     }
+    section.append(grid);
     return section;
   });
 }
+// Gallery feature: shows a large selected character, its interpretive question and
+// a deliberate return-to-conversation action. Images are original artist-authored
+// designs, not historical witness portraits or museum-endorsed personae.
+function buildPerspectiveFeature(scope){
+  const feature=node('section',undefined,'perspective-feature');
+  feature.setAttribute('aria-label','Selected perspective preview');
+  const portrait=node('img');portrait.id=scope+'-perspective-feature-image';
+  portrait.className='perspective-feature-image';portrait.alt='';
+  const copy=node('div',undefined,'perspective-feature-copy');
+  copy.append(node('span','SELECTED PERSPECTIVE','perspective-feature-eyebrow'));
+  const heading=node('strong');heading.id=scope+'-perspective-feature-title';
+  const question=node('p');question.id=scope+'-perspective-feature-question';
+  const limitation=node('small');limitation.id=scope+'-perspective-feature-limits';
+  const action=node('button','Enter with this perspective','perspective-feature-action');
+  action.type='button';action.addEventListener('click',()=>{
+    if(scope==='mobile')closeMobilePerspectives();
+    else closeSheet();
+  });
+  copy.append(heading,question,limitation,action);
+  feature.append(portrait,copy);
+  return feature;
+}
+function updatePerspectiveGallery(){
+  const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
+  const lens=LENSES.find(item=>item.id===card.id)||LENSES[0];
+  for(const scope of ['desktop','mobile']){
+    const image=$(scope+'-perspective-feature-image');
+    if(image)bindPersonaImage(image,card,'full',null,'sepia');
+    if($(scope+'-perspective-feature-title'))$(scope+'-perspective-feature-title').textContent=card.id==='museum'?card.label+' · fictional':card.label;
+    if($(scope+'-perspective-feature-question'))$(scope+'-perspective-feature-question').textContent=lens.question;
+    if($(scope+'-perspective-feature-limits'))$(scope+'-perspective-feature-limits').textContent=lens.limits;
+  }
+}
+
 $('reading-popover').replaceChildren(...perspectiveSections(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button');
   button.type='button';button.className='reading-choice';button.dataset.lens=lens.id;
   const img=node('img');bindPersonaImage(img,card,'compact',null,'sepia');
   const label=lens.id==='museum'?lens.label+' · fictional':lens.label;
-  button.append(img,node('span',label));
-  button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));closeSheet();});
+  const copy=node('span',undefined,'perspective-card-copy');
+  copy.append(node('strong',label),node('small',lens.question));
+  button.append(img,copy);
+  button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));});
   return button;
 }));
+$('reading-popover').prepend(buildPerspectiveFeature('desktop'));
 const mobilePerspectiveSheet=$('mobile-perspective-sheet');
 let mobilePerspectiveOpener=null;
 function closeMobilePerspectives(){if(mobilePerspectiveSheet?.open)mobilePerspectiveSheet.close();}
@@ -1841,7 +1889,8 @@ function openMobilePerspectives(opener){
   mobilePerspectiveOpener=opener;
   closeSheet();
   mobilePerspectiveSheet.showModal();
-  mobilePerspectiveSheet.querySelector('[data-lens="'+state.lens+'"]')?.focus();
+  mobilePerspectiveSheet.scrollTop=0;
+  mobilePerspectiveSheet.querySelector('.perspective-feature-action')?.focus({preventScroll:true});
 }
 for(const id of ['room','feed']){
   const button=$(id+'-perspective-toggle');
@@ -1854,19 +1903,22 @@ $('mobile-perspective-choices')?.replaceChildren(...perspectiveSections(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button',undefined,'mobile-perspective-choice');
   button.type='button';button.dataset.lens=lens.id;button.setAttribute('aria-pressed',String(lens.id===state.lens));
-  const portrait=node('img');bindPersonaImage(portrait,card,'compact','white','sepia');
+  const portrait=node('img');bindPersonaImage(portrait,card,'compact',null,'sepia');
   const copy=node('span',undefined,'mobile-perspective-copy');
   copy.append(node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
     node('small',lens.id==='museum'?'Artist-authored viewpoint; not museum staff.':lens.question));
   const check=node('span','✓','mobile-perspective-selected');check.setAttribute('aria-hidden','true');
   button.append(portrait,copy,check);
   button.addEventListener('click',()=>{
-    closeMobilePerspectives();
     $('lens').value=lens.id;
     $('lens').dispatchEvent(new Event('change'));
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)mobilePerspectiveSheet?.scrollTo(0,0);
+    else mobilePerspectiveSheet?.scrollTo({top:0,behavior:'smooth'});
   });
   return button;
 }));
+mobilePerspectiveSheet?.querySelector('.mobile-perspective-content>p')?.after(buildPerspectiveFeature('mobile'));
+updatePerspectiveGallery();
 document.querySelector('.finder').addEventListener('submit',event=>event.preventDefault());
 function shortPathTitle(record){
   const text=String(record?.title||record?.accession||'');

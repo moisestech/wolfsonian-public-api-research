@@ -4,6 +4,7 @@
  * Generated from docs/design/persona-cloudinary-manifest.json.
  */
 import { CHARACTER_PORTRAIT_ALTERNATES, CHARACTER_PORTRAIT_URLS } from './persona-character-portraits.mjs';
+import { ILLUSTRATED_V4 } from './persona-illustrated-v4.mjs';
 const VERSION = Object.freeze({
   "family": {
     "full": {
@@ -135,7 +136,10 @@ export function decoStudyUrl(id,{format='svg'}={}){
 export function personaCharacterUrl(id,{palette='sepia',variant='compact'}={}){
   if(!['sepia','white','ink'].includes(palette)||!['full','compact'].includes(variant))
     throw new Error('Unsupported persona portrait');
-  const table=id==='family-deco-mask'?CHARACTER_PORTRAIT_ALTERNATES[id]:CHARACTER_PORTRAIT_URLS[id];
+  // Approved Family/Worker/Archivist v2 character art stays intact.
+  // Eight new sepia illustrated studies complete the eleven-persona gallery.
+  const table=id==='family-deco-mask'?CHARACTER_PORTRAIT_ALTERNATES[id]:
+    (CHARACTER_PORTRAIT_URLS[id]||ILLUSTRATED_V4[id]);
   const row=table?.[palette]?.[variant];
   return row?.url||null;
 }

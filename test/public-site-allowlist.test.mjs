@@ -13,6 +13,13 @@ test('public site allowlist omits the staff matrix and saved Lakehouse capture',
   await access(join(out, 'demo/archive-society/index.html'));
   await access(join(out, 'demo/object-lens/index.html'));
   await access(join(out, 'src/object-lens-core.mjs'));
+  // Portrait runtime import closure: a missing asset module blanked the public Society.
+  const assetResolver=await readFile(join(out,'src/persona-cloudinary-assets.mjs'),'utf8');
+  for(const module of ['persona-character-portraits.mjs','persona-illustrated-v4.mjs']){
+    assert.ok(assetResolver.includes("from './"+module+"'"),'Resolver imports '+module);
+    await access(join(out,'src/'+module));
+    assert.ok(PUBLIC_FILES.includes('src/'+module),'Public copy must explicitly include '+module);
+  }
   await assert.rejects(access(join(out, 'src/matrix-objects.mjs')));
   await assert.rejects(access(join(out, 'data/lakehouse/project-matches.json')));
   const room = await readFile(join(out, 'src/matrix-room.mjs'), 'utf8');
