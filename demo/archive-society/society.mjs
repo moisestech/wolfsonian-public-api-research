@@ -534,6 +534,7 @@ function showEdge(edge){
   render();
   setPanel('conversation');
   if(mobileLayout())setMobileView('space');
+  setZoomT(34);
   breathDream();
   startSceneEntrance();
 }
@@ -772,7 +773,18 @@ function questionCard(episode,objects){
   button.type='button';
   const current=episode.id===state.episode?.id;
   if(current)button.setAttribute('aria-current','true');
+  const proposed=episode.relationship.type==='ARTIST_COMPARISON';
+  const reason=proposed?'Proposed pairing':(episode.relationship.term||'Shared symbol');
+  const linkColor=proposed?'#e8d5a3':tagColor(episode.relationship.term||'shared');
+  button.dataset.reason=reason;
+  button.style.setProperty('--link',linkColor);
   const face=node('span',undefined,'question-card-face');
+  const reasonRow=node('span',undefined,'question-card-reason');
+  const swatch=node('i');
+  swatch.className='question-card-swatch';
+  swatch.setAttribute('aria-hidden','true');
+  reasonRow.append(swatch,node('span',reason));
+  face.append(reasonRow);
   if(current){
     const meta=node('span',undefined,'question-card-meta');
     meta.append(node('span','Current room','current-room'));
@@ -810,6 +822,15 @@ function openObjectQuestions(accession){
   relatedAnchor=accession;
   setMobileView('timeline');
 }
+function themeValues(record){
+  const known=state.records.find(item=>item.accession===record?.accession)||record;
+  return new Set((known?.tags||[]).filter(tag=>tag.family==='theme').map(tag=>tag.value));
+}
+function sharesActiveTheme(objects){
+  const theme=$('theme')?.value||'';
+  if(!theme)return true;
+  return objects.every(object=>themeValues(object).has(theme));
+}
 function townhallGroups(){
   const records=new Map(state.records.map(record=>[record.accession,record]));
   const seeds=new Set([state.seed,...PRESENTATION_PAIRS.flatMap(pair=>[pair.source,pair.target])]);
@@ -827,7 +848,6 @@ function townhallGroups(){
       const entry={episode,objects:[source,target],open:()=>{
         state.seed=accession;
         state.mapMode='conversation';
-        $('theme').value='';
         $('atlas-mode').checked=false;
         $('seed').value=accession;
         showEdge(edge);
@@ -839,7 +859,8 @@ function townhallGroups(){
     episode:conversationEpisode({source:path.source,target:path.target,conversation:juxtapositionConversation(path)}),
     objects:[path.source,path.target],open:()=>openResearchPath(path.id)
   }));
-  return [['Conversations',scenes],['Proposed pairings',comparisons],['Open questions',prompts]];
+  const keep=entry=>sharesActiveTheme(entry.objects);
+  return [['Conversations',scenes.filter(keep)],['Proposed pairings',comparisons.filter(keep)],['Open questions',prompts.filter(keep)]];
 }
 function renderTownhallGraph(){
   const nodes=new Map();
@@ -863,24 +884,59 @@ function renderTownhallGraph(){
       links.push({
         source:source.accession,
         target:target.accession,
-        label:proposed?'Curatorial juxtaposition':term,
+        label:proposed?'Proposed pairing':term,
         color:proposed?'#e8d5a3':tagColor(term)
       });
     }
   }
   const graph=focusedPairGraph([...nodes.values()],links);
+  $('stage').dataset.theme=$('theme')?.value||'';
   stage.setGraph(graph.nodes,graph.links,{layout:$('layer-box')?.checked?'shelf':'constellation'});
   if(townhallShouldFit){townhallShouldFit=false;fit();}
 }
+function townhallCluster(source,target,episode){
+  const proposed=episode.relationship.type==='ARTIST_COMPARISON';
+  if(proposed)return {ids:[source.accession,target.accession],label:'Proposed pairing',color:'#e8d5a3',edges:1,proposed:true};
+  const term=episode.relationship.term||'shared';
+  const ids=new Set();
+  let edges=0;
+  for(const [,group] of townhallGroups()){
+    for(const entry of group){
+      if(entry.episode.relationship.type==='ARTIST_COMPARISON')continue;
+      if((entry.episode.relationship.term||'shared')!==term)continue;
+      edges+=1;
+      ids.add(entry.objects[0].accession);
+      ids.add(entry.objects[1].accession);
+    }
+  }
+  if(!ids.size){ids.add(source.accession);ids.add(target.accession);edges=Math.max(edges,1);}
+  return {ids:[...ids],label:term,color:tagColor(term),edges,proposed:false};
+}
+function paintClusterBadge(cluster){
+  const badge=$('cluster-badge');
+  if(!badge)return;
+  if(!cluster?.label){badge.hidden=true;return;}
+  badge.hidden=false;
+  badge.style.setProperty('--link',cluster.color);
+  $('cluster-badge-label').textContent=cluster.label;
+  const objects=cluster.ids.length;
+  const edges=cluster.edges||0;
+  const kind=cluster.proposed?'Artist-written comparison':'Shared catalog tag';
+  $('cluster-badge-meta').textContent=kind+' · '+objects+' objects · '+edges+' '+(edges===1?'edge':'edges');
+}
 function highlightTownhallPair(source,target,episode){
   if(!desktopHover()||!townhallGraphOpen()||!source||!target)return;
-  const proposed=episode.relationship.type==='ARTIST_COMPARISON';
-  const linkColor=proposed?'#e8d5a3':tagColor(episode.relationship.term||'shared');
-  const voices=voiceColors(source.accession,target.accession,linkColor);
-  stage.setPairHighlight(source.accession,target.accession,{
-    [source.accession]:voices.objectA,
-    [target.accession]:voices.objectB
-  });
+  const cluster=townhallCluster(source,target,episode);
+  stage.setClusterHighlight(cluster.ids,cluster.label,cluster.color);
+  stage.setPairHighlight(source.accession,target.accession,{});
+  paintClusterBadge(cluster);
+}
+function clearTownhallHover(event){
+  const next=event?.relatedTarget?.closest?.('.path-post');
+  if(next)return;
+  stage.setPairHighlight('','',null);
+  stage.setClusterHighlight([],'');
+  paintClusterBadge(null);
 }
 function paintTimeline(){
   const list=$('timeline-list');if(!list)return;
@@ -901,7 +957,7 @@ function paintTimeline(){
       button.dataset.target=objects[1].accession;
       if(!relatedQuestions){
         button.addEventListener('pointerenter',()=>highlightTownhallPair(objects[0],objects[1],episode));
-        button.addEventListener('pointerleave',()=>stage.setPairHighlight('','',null));
+        button.addEventListener('pointerleave',clearTownhallHover);
       }
       button.addEventListener('click',()=>{
         setMobileView('space');
@@ -914,7 +970,12 @@ function paintTimeline(){
     }
     list.append(section);
   }
-  if(!list.childElementCount)list.append(node('p','These objects have no further questions in this view.'));
+  if(!list.childElementCount){
+    const theme=$('theme')?.value;
+    list.append(node('p',theme
+      ?'No listed conversation shares “'+theme+'”. Some objects carry that tag, and none of the pairs in this hall share it.'
+      :'These objects have no further questions in this view.'));
+  }
 }
 // Contextual navigation stays in the room; writing method lives on About.
 function addRelatedQuestionsAction(box){
@@ -1052,7 +1113,7 @@ function renderRoomHeader(source,target,c){
     node('p','Source review and image permissions are separate from this imagined exchange.','muted'));
 }
 function paintResearchScene(c){
-  paintSceneLabel('Curatorial juxtaposition','#e8d5a3','Curatorial juxtaposition. Not a catalog match or a documented meeting.',c.dramaticArc,'RESEARCH PREVIEW · NOT A CATALOG MATCH');
+  paintSceneLabel('Proposed pairing','#e8d5a3','An artist-written comparison. Not a shared catalog tag, and not proof these objects met.',c.dramaticArc,'RESEARCH PREVIEW · NOT A CATALOG MATCH');
 }
 function renderJuxtaposition(box){
   const path=state.researchPath;
@@ -1082,6 +1143,7 @@ function renderJuxtaposition(box){
     const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
   }
+  appendPerspective(chat);
   box.append(chat);
   addRelatedQuestionsAction(box);
   $('voice-controls').hidden=$('conversation-panel').hidden;
@@ -1154,6 +1216,7 @@ function renderConversation(){
     say.append(line,node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
   }
+  if(state.episode.mode==='CURATED_SCRIPT')appendPerspective(chat);
   if(state.episode.turns.length)box.append(chat);
   if(state.episode.mode==='RESEARCH_PROMPT'){
     state.conversation=null;
@@ -1182,7 +1245,44 @@ function renderConversation(){
   $('voice-controls').hidden=$('conversation-panel').hidden||!state.conversation;setPlayDisabled(!state.conversation);
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn 1 of '+c.turns.length;
 }
-function pair(list,label,value){list.append(node('dt',label),node('dd',value||'Not supplied'));}
+function recordKind(label){
+  const known={Accession:'accession',Creator:'creator',Date:'date',Categories:'category','Catalog subject':'subject','Geographic origin':'place',Description:'description','Image source':'image'};
+  if(known[label])return known[label];
+  const name=String(label||'').toLowerCase();
+  if(/accession|identifier/.test(name))return 'accession';
+  if(/date|year/.test(name))return 'date';
+  if(/creator|artist|maker|author/.test(name))return 'creator';
+  if(/categor|theme|tag|subject/.test(name))return 'category';
+  if(/geo|place|origin|location/.test(name))return 'place';
+  if(/desc|note|text|quote/.test(name))return 'description';
+  if(/image|photo|thumb/.test(name))return 'image';
+  if(/title|^name$/.test(name))return 'title';
+  return 'note';
+}
+function recordIcon(kind){
+  const icon=svg('svg',{viewBox:'0 0 24 24','aria-hidden':'true',class:'record-fact-icon'});
+  const s={fill:'none',stroke:'currentColor','stroke-width':'1.6','stroke-linecap':'round','stroke-linejoin':'round'};
+  const marks={
+    accession:[svg('rect',{...s,x:'5',y:'7',width:'14',height:'10',rx:'1.5'}),svg('path',{...s,d:'M8 12h8'})],
+    creator:[svg('circle',{...s,cx:'12',cy:'9',r:'3'}),svg('path',{...s,d:'M6.5 18.5c.7-2.7 2.7-4 5.5-4s4.8 1.3 5.5 4'})],
+    date:[svg('rect',{...s,x:'5',y:'6',width:'14',height:'13',rx:'2'}),svg('path',{...s,d:'M5 10h14M9 4.5v3M15 4.5v3'})],
+    category:[svg('path',{...s,d:'M4.5 11.5V6.5h5l9 9-5 5z'}),svg('circle',{cx:'8.5',cy:'9.5',r:'1',fill:'currentColor'})],
+    subject:[svg('path',{...s,d:'M4 7h7v11H4zM13 7h7v11h-7zM12 7v11'})],
+    place:[svg('path',{...s,d:'M12 20.5s5.5-4.8 5.5-9a5.5 5.5 0 1 0-11 0c0 4.2 5.5 9 5.5 9z'}),svg('circle',{...s,cx:'12',cy:'11.5',r:'1.7'})],
+    description:[svg('path',{...s,d:'M6 8h12M6 12h12M6 16h8'})],
+    image:[svg('rect',{...s,x:'4',y:'5',width:'16',height:'14',rx:'2'}),svg('circle',{cx:'9',cy:'10',r:'1.3',fill:'currentColor'}),svg('path',{...s,d:'M4 16.5 8.5 13l3 2.2 2.8-2 5.7 4'})],
+    title:[svg('path',{...s,d:'M7 7h10M12 7v10'})],
+    note:[svg('circle',{...s,cx:'12',cy:'12',r:'7'}),svg('path',{...s,d:'M12 11v5M12 8h.01'})]
+  };
+  icon.append(...(marks[kind]||marks.note));
+  return icon;
+}
+function pair(list,label,value){
+  const row=node('div',undefined,'record-fact');
+  row.dataset.kind=recordKind(label);
+  row.append(recordIcon(row.dataset.kind),node('dt',label),node('dd',value||'Not supplied'));
+  list.append(row);
+}
 function renderDistrict(){
   const district=state.district,box=$('conversation-content');
   box.replaceChildren();state.conversation=null;
@@ -1215,7 +1315,7 @@ function renderRecord(){
   if(r.source!=='lakehouse')overlay.append(node('span',r.source==='invented'?'INVENTED EXAMPLE':r.source==='public-packet'?'PUBLIC PACKET · IDENTITY ONLY':r.source==='research-preview'?'PUBLISHED CHECKLIST · RESEARCH PREVIEW':r.source==='presentation'?'PUBLIC PRESENTATION RECORD':r.source==='matrix'?'PHOTOGRAPHED MATRIX':'LOCAL CSV · SOURCE INPUT','evidence-type'));
   if(r.source==='public-packet')overlay.append(node('p','This packet identifies an accession and title only. No direct historical relationship, source-linked image, or staff-tag neighbor has been established for it in this view.','muted'));
   overlay.append(node('h2',r.title));
-  const list=node('dl');
+  const list=node('dl',undefined,'record-facts');
   pair(list,'Accession',r.accession);pair(list,'Creator',r.creator);pair(list,'Date',r.date);
   pair(list,'Categories',(r.tags||[]).filter(t=>t.family==='theme').map(t=>t.value).join(' · '));
   if(r.catalogSubject)pair(list,'Catalog subject',r.catalogSubject);
@@ -1233,7 +1333,7 @@ function renderSnapshot(){
   else{
     box.append(node('strong',s.status),node('p','Captured '+s.retrievedAt),node('p','Adapter: '+s.schemaStatus+'. Exact identifier matching does not establish historical relationships.','muted'));
     if(s.sourceUrl){const a=node('a','Public lookup request ↗');a.href=s.sourceUrl;a.target='_blank';a.rel='noopener noreferrer';box.append(a);}
-    for(const match of s.matches){const dl=node('dl');for(const [key,field]of Object.entries(match.fields)){
+    for(const match of s.matches){const dl=node('dl',undefined,'record-facts');for(const [key,field]of Object.entries(match.fields)){
       const value=field.status==='PRESENT'?Array.isArray(field.value)?field.value.join(' · '):String(field.value):field.status;
       pair(dl,key,value);if(field.pointer)dl.append(node('dd','Catalog field '+field.pointer,'muted'));
     }box.append(dl);}
@@ -1299,7 +1399,7 @@ function paintResearchLabel(){
   if(!label)return;
   const on=Boolean(state.researchPath)&&!roomMode();
   label.hidden=!on;
-  if(on)label.textContent='Curatorial juxtaposition';
+  if(on)label.textContent='Proposed pairing';
   const stageHost=$('stage');
   if(stageHost)stageHost.dataset.relationship=on?'curatorial_juxtaposition':'';
 }
@@ -1334,7 +1434,7 @@ function renderResearch(){
   const portrait=$('object-focus-portrait');
   if(portrait)portrait.src=photo(held)||objectBadge(held);
   const graph=focusedPairGraph(withSpeakerColors(researchNodes(),path.source.accession,path.target.accession,'#e8d5a3'),[{
-    source:path.source.accession,target:path.target.accession,label:'Curatorial juxtaposition',color:'#e8d5a3'
+    source:path.source.accession,target:path.target.accession,label:'Proposed pairing',color:'#e8d5a3'
   }],path.source.accession,path.target.accession);
   $('stage').dataset.theme='';
   $('layer-notice').hidden=true;
@@ -1343,7 +1443,7 @@ function renderResearch(){
   paintResearchLabel();
   paintCounts([
     [objectIcon(),2,'research records'],
-    [pathIcon(),1,'curatorial juxtaposition'],
+    [pathIcon(),1,'proposed pairing'],
     [storageIcon(),0,'identity or storage lines'],
     [claimIcon(),0,'historical claims inferred']
   ]);
@@ -1364,6 +1464,7 @@ function openResearchPath(id){
   closeSheet();
   render();
   setMobileView('space');
+  setZoomT(34);
   breathDream();
   startSceneEntrance();
 }
@@ -1373,6 +1474,7 @@ function render(){
   paintChoices();
   paintPaths();
   if(townhallGraphOpen()){renderTownhallGraph();paintTimeline();return;}
+  paintClusterBadge(null);
   if(roomMode()){renderRoom();paintResearchLabel();return;}
   if(state.researchPath){renderResearch();return;}
   paintResearchLabel();
@@ -1744,23 +1846,46 @@ $('mobile-perspective-choices')?.replaceChildren(...LENSES.map(lens=>{
   return button;
 }));
 document.querySelector('.finder').addEventListener('submit',event=>event.preventDefault());
+function shortPathTitle(record){
+  const text=String(record?.title||record?.accession||'');
+  const english=text.match(/\[([^\]]{3,80})\]/);
+  const name=english?english[1]:text;
+  return name.length>46?name.slice(0,43)+'…':name;
+}
 function paintPaths(){
   const box=$('path-choices');if(!box)return;
   box.replaceChildren();
+  box.append(node('p','These '+CURATORIAL_PATHS.length+' paths are proposed pairings: artist-written comparisons between two records. The Townhall holds the other conversations, the ones suggested by a shared catalog tag. A path does not prove the objects met.','path-note'));
   const back=node('button','Leave preview');
   back.type='button';
   back.setAttribute('aria-pressed',String(!state.researchPath));
   back.addEventListener('click',()=>leavePreview());
   box.append(back);
   for(const path of CURATORIAL_PATHS){
-    const button=node('button',path.arc);
+    const button=node('button',undefined,'path-choice');
     button.type='button';
     button.dataset.path=path.id;
     button.setAttribute('aria-pressed',String(state.researchPath?.id===path.id));
+    button.setAttribute('aria-label',path.arc+'. '+shortPathTitle(path.source)+' and '+shortPathTitle(path.target)+'. Proposed pairing.');
+    button.append(node('strong',path.arc),node('span',shortPathTitle(path.source)+' × '+shortPathTitle(path.target),'path-objects'),node('span','Proposed pairing','path-kind'));
     button.addEventListener('click',()=>openResearchPath(path.id));
     box.append(button);
   }
-  if($('paths-name'))$('paths-name').textContent=state.researchPath?'Preview':'Research';
+  if($('paths-name'))$('paths-name').textContent=state.researchPath?'Proposed':'Research';
+}
+function appendPerspective(chat){
+  const lens=LENSES.find(item=>item.id===state.lens)||LENSES[0];
+  const card=CARD_BY_ID.get(lens.id)||CARD_BY_ID.get('family');
+  const bubble=node('article',undefined,'bubble turn perspective-turn side-guide');
+  bubble.dataset.role='perspective';
+  bubble.dataset.point='perspective';
+  bubble.style.setProperty('--speaker',card?.color||'#d7c4a3');
+  const img=node('img');img.className='avatar';img.alt='';
+  bindPersonaImage(img,card,'compact');
+  const say=node('div',undefined,'say');
+  say.append(node('strong',lens.label+' · '+card.subheading),node('p',card.hook));
+  bubble.append(img,say);
+  chat.append(bubble);
 }
 const PANELS={map:'map-popover',reading:'reading-popover',seed:'seed-popover',theme:'theme-popover',paths:'paths-popover'};
 function resetMore(){
@@ -1889,7 +2014,7 @@ $('space-room')?.addEventListener('click',()=>{
 });
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
 $('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();});
-function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;setMobileView('timeline');render();}
+function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;wakeDream();stage.setSpeaking('');stage.setPairHighlight('','',null);stage.setClusterHighlight([],'');setMobileView('timeline');render();}
 $('space-feed')?.addEventListener('click',browseAll);
 $('space-conversation')?.addEventListener('click',()=>{
   setPanel('conversation');
@@ -1902,7 +2027,7 @@ $('space-record')?.addEventListener('click',()=>{
 });
 $('space-leave')?.addEventListener('click',browseAll);
 $('all-directory-questions').addEventListener('click',browseAll);
-$('questions-back')?.addEventListener('click',()=>{setMobileView('space');render();});
+$('questions-back')?.addEventListener('click',()=>{setMobileView('space');render();setZoomT(34);});
 const mobileMedia=window.matchMedia('(max-width: 800px)');
 mobileMedia.addEventListener('change',syncMobileLayout);
 window.addEventListener('resize',syncMobileLayout);
@@ -1968,8 +2093,8 @@ paintReading();
 $('seed').addEventListener('change',()=>{state.journey=[];changeSeed($('seed').value);});
 $('search').addEventListener('input',()=>{stop();resetApproval();options();render();});
 for(const id of ['layer-box','layer-box-sim'])$(id).addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();});
-$('atlas-mode').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();render();stage.fit();});
-$('theme').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();render();});
+$('atlas-mode').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();render();if($('atlas-mode').checked)stage.fit();else setZoomT(34);});
+$('theme').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();if(townhallGraphOpen())townhallShouldFit=true;render();});
 $('veil').addEventListener('input',renderGraph);
 document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>{setPanel(b.dataset.panel);if(mobileLayout())setMobileView('space');}));
 $('voice-mode').addEventListener('change',()=>{stop();resetApproval();$('approval-box').hidden=$('voice-mode').value!=='elevenlabs';});

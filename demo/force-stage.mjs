@@ -98,6 +98,7 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
   let speakingId = '';
   let pointingId = '';
   let pairHighlight = null;
+  let cluster = null;
   let distance = FAR;
   let pointerDown = null;
 
@@ -268,8 +269,11 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
       if (target) accent.set(target, link.color);
     }
     pairHighlight = null;
+    cluster = null;
     host.dataset.pair = '';
     host.dataset.pairHighlight = '';
+    host.dataset.cluster = '';
+    host.dataset.clusterLabel = '';
     const nextNodes = nodes.map(node => {
       const painted = { ...node, accent: node.voice || accent.get(node.id) || '' };
       const prior = previous.get(node.id);
@@ -326,7 +330,7 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
     host.dataset.pointing = pointingId;
     host.querySelectorAll('.graph-node').forEach(button => {
       const id = button.dataset.accession;
-      const paired = Boolean(pairHighlight) && (id === pairHighlight.source || id === pairHighlight.target);
+      const paired = (Boolean(cluster) && cluster.ids.has(id)) || (Boolean(pairHighlight) && (id === pairHighlight.source || id === pairHighlight.target));
       button.classList.toggle('pointed', paired || (Boolean(pointingId) && id === pointingId));
     });
   }
@@ -343,8 +347,10 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
       if (!mesh?.material) continue;
       const source = endpoint(link.source);
       const target = endpoint(link.target);
-      const hot = Boolean(pairHighlight) && ((source === pairHighlight.source && target === pairHighlight.target) || (source === pairHighlight.target && target === pairHighlight.source));
-      if (!pairHighlight) {
+      const hot = cluster
+        ? cluster.ids.has(source) && cluster.ids.has(target) && link.label === cluster.label
+        : Boolean(pairHighlight) && ((source === pairHighlight.source && target === pairHighlight.target) || (source === pairHighlight.target && target === pairHighlight.source));
+      if (!pairHighlight && !cluster) {
         if (mesh.userData.sharedMaterial && mesh.material === mesh.userData.pairMaterial) mesh.material = mesh.userData.sharedMaterial;
         continue;
       }
@@ -366,6 +372,40 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
     paintPairLinks();
   }
 
+  function frameCluster() {
+    const nodes = (graph.graphData().nodes || []).filter(node => cluster.ids.has(node.id));
+    const points = nodes.map(pointOf).filter(Boolean);
+    if (!points.length) return;
+    const target = new THREE.Vector3();
+    for (const point of points) target.add(new THREE.Vector3(point.x, point.y, point.z));
+    target.multiplyScalar(1 / points.length);
+    let radius = 12;
+    for (const point of points) radius = Math.max(radius, Math.hypot(point.x - target.x, point.y - target.y, (point.z || 0) - target.z));
+    const fov = THREE.MathUtils.degToRad(camera.fov);
+    const fitted = (radius + 22) / Math.tan(fov / 2) * 1.45;
+    controls.target.copy(target);
+    applyDistance(Math.min(FAR, Math.max(distanceForT(34), fitted)));
+    host.dataset.scope = 'region';
+    host.dataset.zoom = String(tForDistance(distance));
+  }
+
+  function setClusterHighlight(ids, label, color) {
+    if (!ids?.length) {
+      const had = Boolean(cluster);
+      cluster = null;
+      host.dataset.cluster = '';
+      host.dataset.clusterLabel = '';
+      paintPairLinks();
+      if (had) commitZoom(FAR, true);
+      return;
+    }
+    cluster = { ids: new Set(ids), label: label || '', color: color || '#f4f4f4' };
+    host.dataset.cluster = [...cluster.ids].sort().join('|');
+    host.dataset.clusterLabel = cluster.label;
+    paintPairLinks();
+    frameCluster();
+  }
+
   function pulse() {
     const time = performance.now() / 1000;
     for (const node of graph.graphData().nodes || []) {
@@ -374,9 +414,10 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
       const frame = group?.userData?.frame;
       if (!sprite || !frame) continue;
       const speaking = node.id === speakingId;
-      const inPair = Boolean(pairHighlight) && (node.id === pairHighlight.source || node.id === pairHighlight.target);
+      const grouped = Boolean(cluster) && cluster.ids.has(node.id);
+      const inPair = grouped || (Boolean(pairHighlight) && (node.id === pairHighlight.source || node.id === pairHighlight.target));
       const pointing = (Boolean(pointingId) && node.id === pointingId) || inPair;
-      const quiet = (Boolean(pointingId) || Boolean(pairHighlight)) && !speaking && !pointing;
+      const quiet = (Boolean(pointingId) || Boolean(pairHighlight) || Boolean(cluster)) && !speaking && !pointing
       const scale = speaking ? 1 + Math.sin(time * 8) * 0.22 : pointing ? 1.16 : 1;
       const [fitW, fitH] = fittedSize(sprite.material.map);
       sprite.scale.set(fitW * scale, fitH * scale, 1);
@@ -391,7 +432,7 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
       });
       const material = frame.children[0]?.material;
       if (material) {
-        const voice = inPair ? pairHighlight.colors?.[node.id] : '';
+        const voice = grouped ? cluster.color : (inPair ? pairHighlight.colors?.[node.id] : '');
         material.color.set(voice || node.accent || node.color || '#f4f4f4');
         material.opacity = (speaking || pointing ? 1 : node.focused ? 0.95 : node.accent ? 0.78 : 0.16) * shown;
       }
@@ -477,6 +518,7 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
     setSpeaking,
     setPointing,
     setPairHighlight,
+    setClusterHighlight,
     resize,
     zoom(factor) { commitZoom(camera.position.distanceTo(controls.target) / factor, false); },
     fit() { commitZoom(FAR, true); },

@@ -66,10 +66,30 @@ try {
   const expectedPair=await townhallCard.evaluate(node=>[node.dataset.source,node.dataset.target].sort().join('|'));
   const highlighted=((await page.locator('#stage').getAttribute('data-pair-highlight'))||'').split('|').filter(Boolean).sort().join('|');
   assert.equal(highlighted,expectedPair);
+  const cluster=(await page.locator('#stage').getAttribute('data-cluster'))||'';
+  assert.ok(expectedPair.split('|').every(id=>cluster.split('|').includes(id)),'Hover gathers the objects that share this connection');
+  assert.equal(await page.locator('#stage').getAttribute('data-cluster-label'),await townhallCard.getAttribute('data-reason'));
+  assert.equal(await page.locator('#cluster-badge').isVisible(),true);
+  assert.equal(await page.locator('#cluster-badge-label').innerText(),await townhallCard.getAttribute('data-reason'));
+  assert.match(await page.locator('#cluster-badge-meta').innerText(),/objects · \d+ edges?/);
+  assert.equal(await townhallCard.evaluate(node=>getComputedStyle(node.querySelector('.question-card-swatch')).backgroundColor),await townhallCard.evaluate(node=>{
+    const probe=document.createElement('span');
+    probe.style.color=node.style.getPropertyValue('--link');
+    document.body.append(probe);
+    const color=getComputedStyle(probe).color;
+    probe.remove();
+    return color;
+  }));
   await page.locator('#timeline-title').hover();
   assert.equal((await page.locator('#stage').getAttribute('data-pair-highlight'))||'','');
+  assert.equal((await page.locator('#stage').getAttribute('data-cluster'))||'','');
+  assert.equal(await page.locator('#cluster-badge').isHidden(),true);
+  assert.equal(await page.locator('#stage').getAttribute('data-zoom'),'0');
+  assert.equal(await page.locator('#stage').getAttribute('data-dream'),'awake');
   await page.locator('#questions-back').click();
   await page.waitForFunction(()=>document.querySelector('#room-question')?.textContent==='Who pays the price of progress?');
+  assert.equal(await page.locator('#stage').getAttribute('data-zoom'),'34');
+  assert.equal(await page.locator('[data-stop="34"]').getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('.conversation-edge').count(),openingEdges);
   assert.equal(await page.locator('#stage').getAttribute('data-pair'),openingPair);
   assert.equal(await page.locator('#room-participants .object-inspect').count(),2);
@@ -84,10 +104,11 @@ try {
   const labels=await page.locator('#room-participants .object-inspect').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
   assert.ok(labels.every(label=>label.startsWith('Inspect collection record: ') && /\d/.test(label)),
     'Accession detail must remain in the accessible action');
-  assert.equal(await page.locator('.turn').count(),5);
+  assert.equal(await page.locator('.turn').count(),6);
+  assert.match(await page.locator('.perspective-turn').innerText(),/Family/);
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
   assert.equal(voiceRequests.length,0,'No autoplay or unsolicited provider calls');
-  assert.equal(await page.locator('#conversation-content .chat .turn').count(),5,'Complete authored transcript remains in DOM');
+  assert.equal(await page.locator('#conversation-content .chat .turn').count(),6,'Complete authored transcript remains in DOM');
   // The preview is user-triggered and silent; it does not fake a live model or
   // hide lines to produce artificial streaming.
   await page.locator('#scene-replay').click();
@@ -95,7 +116,7 @@ try {
   await page.waitForFunction(()=>document.querySelector('#conversation-content .turn.previewing'));
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
   assert.equal(voiceRequests.length,0,'Silent choreography must not send audio requests');
-  assert.equal(await page.locator('#conversation-content .chat .turn').count(),5);
+  assert.equal(await page.locator('#conversation-content .chat .turn').count(),6);
   await page.waitForFunction(()=>document.querySelector('#scene-replay')?.getAttribute('aria-pressed')==='false');
   assert.equal(await page.locator('.room-participant.previewing, .turn.previewing').count(),0);
 
@@ -146,7 +167,8 @@ try {
   await page.setViewportSize({width:390,height:844});
   assert.equal(await page.locator('#room-perspective-toggle').isVisible(),true);
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
-  const originalDialogue=await page.locator('.chat').innerText();
+  const authoredDialogue=()=>page.locator('.chat .turn:not(.perspective-turn)').allInnerTexts();
+  const originalDialogue=await authoredDialogue();
   await page.locator('#room-perspective-toggle').click();
   assert.equal(await page.locator('#mobile-perspective-sheet').isVisible(),true);
   assert.equal(await page.locator('#mobile-perspective-choices button').count(),5);
@@ -155,7 +177,8 @@ try {
   await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Worker');
   assert.equal(await page.locator('#reading-name').innerText(),'Worker');
-  assert.equal(await page.locator('.chat').innerText(),originalDialogue,'Changing perspective does not alter an authored script');
+  assert.deepEqual(await authoredDialogue(),originalDialogue,'Changing perspective does not alter an authored script');
+  assert.match(await page.locator('.perspective-turn').innerText(),/Worker/);
   await page.locator('#room-perspective-toggle').click();
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"]').getAttribute('aria-pressed'),'true');
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
@@ -306,10 +329,11 @@ try {
   assert.ok(promptIndex>=0,'Include a real unedited-pair fallback');
   await selectEdge(promptIndex);await screenshot('research-prompt');
   await page.locator('.conversation-edge[data-accession="TD1989.318.1"]').focus();await page.keyboard.press('Enter');
-  const script=await page.locator('.chat').innerText();
+  const script=await page.locator('.chat .turn:not(.perspective-turn)').allInnerTexts();
   await page.locator('#reading-toggle').click();await page.locator('#reading-popover [data-lens="worker"]').click();
   await page.locator('.conversation-edge[data-accession="TD1989.318.1"]').focus();await page.keyboard.press('Enter');
-  assert.equal(await page.locator('.chat').innerText(),script,'A perspective never rewrites authored text');
+  assert.deepEqual(await page.locator('.chat .turn:not(.perspective-turn)').allInnerTexts(),script,'A perspective never rewrites authored text');
+  assert.match(await page.locator('.perspective-turn').innerText(),/Worker/);
   await page.locator('#room-rationale').click();
   assert.match(await page.locator('#episode-evidence').innerText(),/does not change its script/);
   await page.locator('#sheet-close').click();
