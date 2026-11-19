@@ -124,5 +124,13 @@
       },
       "original": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106614/archive-dreams/brand/personas/approved-masks/halo-deco-original.png"
     }
-  }
+  },
+  "referenceOnly": [
+    {
+      "id": "three-figures-embossed",
+      "url": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106833/archive-dreams/brand/personas/approved-masks/three-figures-embossed-reference-original.jpg",
+      "source": "fifth user-provided artwork, November 19",
+      "note": "Three embossed white-on-white figures; preserved unchanged as reference because current contrast is not suitable for foreground app UI, and individual identities were not specified."
+    }
+  ]
 }
