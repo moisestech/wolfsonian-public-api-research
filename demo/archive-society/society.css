@@ -729,6 +729,15 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
 .question-card-preview{display:grid;gap:2px;padding:8px 15px 10px;background:var(--band)}
 .preview-speaker{font:650 16px/1.35 system-ui,sans-serif}
 .preview-line{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font:400 18px/1.4 system-ui,sans-serif}
+@media(max-width:420px){
+  #timeline-list .path-post{margin-bottom:6px}
+  .question-card-face{padding:6px 12px 4px}
+  .question-card-reason{margin-bottom:2px}
+  .question-card-face strong{margin:2px 0 4px;font-size:22px}
+  .question-card-portraits img{width:40px;height:40px}
+  .question-card-preview{padding:4px 12px}
+  .preview-line{-webkit-line-clamp:2;font-size:16px}
+}
 
 /* Archive Dreams symbol. White on the current dark UI; black when the
  * surrounding surface explicitly declares a light theme. SVG is an exact
