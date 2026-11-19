@@ -24,7 +24,8 @@ test('all persona symbols have transparent and theme-aware full and compact asse
        assert.equal(p.size,variant==='compact'?128:512);
        assert.equal(personaAssetUrl(id,{variant,tone}),p.svg);
        assert.equal(personaAssetUrl(id,{variant,tone,format:'png'}),p.png);
-       assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone}),p.svg);
+       assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone,source:'cloudinary'}),p.svg);
+       assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone}),portraitFallbackUrl(CARD_MAP.get(id),{variant,tone}));
        assert.match(portraitFallbackUrl(CARD_MAP.get(id),{variant,tone}),/^data:image\/svg\+xml/);
      }
    }

@@ -49,6 +49,13 @@ export function portraitSvg(card,{tone='white',variant='full'}={}){
 export function portraitFallbackUrl(card,{tone='white',variant='full'}={}){
   return personaSigilUrl(card.id,{mode:tone==='white'?'paper':tone==='ink'?'ink':tone,variant});
 }
-export function portraitUrl(card,{tone='white',variant='full',format='svg'}={}){
-  return personaAssetUrl(card.id,{tone,variant,format});
+// Render original SVG artwork in-line for museum visitors (no third-party
+// requests). The same versioned Cloudinary masters remain available separately.
+export function portraitUrl(card,{tone='white',variant='full',format='svg',source='local'}={}){
+  if(source==='cloudinary')return personaAssetUrl(card.id,{tone,variant,format});
+  if(source!=='local'||format!=='svg')throw new Error('Local persona rendering requires SVG');
+  return portraitFallbackUrl(card,{tone,variant});
+}
+export function portraitCloudinaryUrl(card,options={}){
+  return personaAssetUrl(card.id,options);
 }
