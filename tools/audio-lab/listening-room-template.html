@@ -21,8 +21,10 @@ input[type=file]{width:100%;max-width:100%;padding:9px;border:1px dashed #8fb3a0
 select#scene{width:100%;max-width:100%}audio{width:100%;margin:14px 0}
 .turn{padding:11px 0;border-bottom:1px solid #365140;margin:0}
 .turn strong{color:#b3ebd1}
-.rubric-row{display:grid;grid-template-columns:1fr 83px 83px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #375042}
-.rubric-row select{width:100%}
+.rubric-row{display:grid;grid-template-columns:minmax(0,1fr) 56px 56px;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid #375042}
+.rubric-row select{width:100%;min-width:0;padding:6px}
+.rubric-row span,.rubric-row strong{min-width:0;overflow-wrap:anywhere;font-size:.84rem}
+.sound,.panel,audio{min-width:0;max-width:100%}
 textarea{width:100%;min-height:83px}label{display:block;margin:12px 0 7px}
 .status{display:inline-block;color:#f5c69b;border:1px solid #967c5c;padding:5px 9px;border-radius:20px;font-size:.8rem}
 #notice{color:#b9e5c5;min-height:1em}
