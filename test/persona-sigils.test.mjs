@@ -47,7 +47,7 @@ test('white deco variants are real linked assets, not unreviewed museum marks',(
  assert.throws(()=>personaAssetUrl('aperture-mask'),/Unknown persona symbol/);
  assert.match(manifest.rights,/not museum staff insignia/);
 });
-test('illustrated portraits preserve approved v2 and extend to eight verified v4 character studies',async()=>{
+test('illustrated portraits preserve approved v2 and expose eight v4 characters',async()=>{
  const portraits=JSON.parse(await readFile(new URL('../docs/design/persona-character-portrait-manifest.v2.json',import.meta.url),'utf8'));
  assert.equal(portraits.counts.total,22);
  assert.equal(portraits.counts.mainPortraitAssets,18);
@@ -77,15 +77,11 @@ test('illustrated portraits preserve approved v2 and extend to eight verified v4
  const v4=JSON.parse(await readFile(new URL('../docs/design/persona-illustrated-v4-manifest.json',import.meta.url),'utf8'));
  assert.equal(v4.masterIdentityCount,8);
  assert.equal(v4.variantCount,16);
- for(const [id,sizes] of Object.entries(v4.personas)){
-   for(const [variant,asset] of Object.entries(sizes)){
-     assert.equal(personaCharacterUrl(id,{palette:'sepia',variant}),asset.url);
-     assert.match(asset.url,new RegExp('/'+id+'-sepia-'+variant+'-v4[.]png
- assert.equal(personaCharacterUrl('tourist',{palette:'white',variant:'compact'}),null);
- assert.throws(()=>personaCharacterUrl('family',{palette:'gold'}),/Unsupported persona portrait/);
-});
-));
-   }
+ for(const [id,variants] of Object.entries(v4.personas)){
+  for(const [variant,asset] of Object.entries(variants)){
+    assert.equal(personaCharacterUrl(id,{palette:'sepia',variant}),asset.url);
+    assert.match(asset.url,new RegExp('/'+id+'-sepia-'+variant+'-v4[.]png$'));
+  }
  }
  assert.equal(personaCharacterUrl('tourist',{palette:'white',variant:'compact'}),null);
  assert.throws(()=>personaCharacterUrl('family',{palette:'gold'}),/Unsupported persona portrait/);
