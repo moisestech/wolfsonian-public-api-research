@@ -10,6 +10,10 @@ on:
       - 'src/curated-edge-scenes.mjs'
       - 'src/conversation-orientation.mjs'
       - 'src/scene-performance.mjs'
+      - 'src/persona-sigils.mjs'
+      - 'demo/persona-sigils/**'
+      - 'docs/design/**'
+      - 'test/persona-sigils.test.mjs'
       - 'test/scene-performance.test.mjs'
       - 'server/archive-*.mjs'
       - 'api/archive-society/**'
@@ -47,12 +51,13 @@ jobs:
           node --check src/curated-edge-scenes.mjs
           node --check src/conversation-orientation.mjs
           node --check src/scene-performance.mjs
+          node --check src/persona-sigils.mjs
           node --check src/archive-evidence.mjs
           node --check server/archive-services.mjs
           node --check scripts/serve-archive-society.mjs
           node --check scripts/check-society-browser.mjs
-      - name: Run discovery tests
-        run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
+      - name: Run discovery and persona asset tests
+        run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs test/persona-sigils.test.mjs
       - name: Run archive society and service tests
         run: |
           npm run test:society
