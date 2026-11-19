@@ -41,6 +41,6 @@ test('phone and desktop perspective lists share one complete grouped cast',async
   assert.match(code,/buildPerspectiveFeature\('mobile'\)/);
   assert.match(code,/updatePerspectiveGallery\(\)/);
   const html=await local('../demo/archive-society/index.html');
-  assert.match(html,/eleven artist-authored viewpoints/);
+  assert.match(html,/Meet eleven illustrated characters/);
   assert.match(html,/Shared metadata suggests questions, not proven historical relationships/);
 });
