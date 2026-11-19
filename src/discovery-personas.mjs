@@ -49,9 +49,10 @@ export function portraitSvg(card,{tone='white',variant='full'}={}){
 export function portraitFallbackUrl(card,{tone='white',variant='full'}={}){
   return personaSigilUrl(card.id,{mode:tone==='white'?'paper':tone==='ink'?'ink':tone,variant});
 }
-// Render original SVG artwork in-line for museum visitors (no third-party
-// requests). The same versioned Cloudinary masters remain available separately.
-export function portraitUrl(card,{tone='white',variant='full',format='svg',source='local'}={}){
+// Use pinned public Cloudinary SVG masters across the app, with the original
+// local vector artwork retained as a network/error fallback. Never use this
+// path for protected museum collection images.
+export function portraitUrl(card,{tone='white',variant='full',format='svg',source='cloudinary'}={}){
   if(source==='cloudinary')return personaAssetUrl(card.id,{tone,variant,format});
   if(source!=='local'||format!=='svg')throw new Error('Local persona rendering requires SVG');
   return portraitFallbackUrl(card,{tone,variant});

@@ -2,7 +2,7 @@ import { MATRIX_OBJECTS, LAYERS, layoutRoom, conversationFor, objectConversation
 import { focusedPairGraph } from '/src/force-graph-data.mjs';
 import { applyLakehouseFields } from '/src/lakehouse-matches.mjs';
 import { localImageUrl } from '/src/local-images.mjs';
-import { CARD_BY_ID, portraitUrl } from '/src/discovery-personas.mjs';
+import { CARD_BY_ID, portraitUrl, portraitFallbackUrl } from '/src/discovery-personas.mjs';
 import { deviceCast } from '/src/archive-society.mjs';
 import { mountForceStage } from '../force-stage.mjs';
 import { nearestZoomStop } from '/src/zoom-stops.mjs';
@@ -152,6 +152,8 @@ function showCard() {
       const avatar = document.createElement('img');
       avatar.className = 'avatar';
       avatar.alt = '';
+      const persona = turn.role === 'objectA' ? reader : turn.role === 'archivist' ? guide : null;
+      if (persona) avatar.addEventListener('error', () => { avatar.src = portraitFallbackUrl(persona); }, { once: true });
       avatar.src = faces[turn.role] || '';
       const say = document.createElement('div');
       say.className = 'say';

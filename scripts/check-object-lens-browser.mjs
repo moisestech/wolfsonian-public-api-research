@@ -19,12 +19,13 @@ try{
   const errors=[],external=[];
   page.on('pageerror',e=>errors.push(e.message));
   const publicPhoto=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/archive-dreams\/object-images\//;
-  // Only these two immutable artist-owned brand assets are allowed from the CDN.
-  // Museum records, packets, and browser state must still stay local.
+  // Allow only version-pinned, artist-owned branding and persona artwork.
+  // Museum records, private packets, and browser state must still stay local.
   const identityMark=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/aperture-(?:white|black)-v1\.svg$/;
+  const personaMark=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/(?:family|tourist|novice|connoisseur|worker|archivist|futurist|mourner|propagandist|counterfeit|museum)-(?:white|ink)-(?:full|compact)-v1\.svg$/;
   page.on('request',request=>{
     const url=request.url();
-    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url))return;
+    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url)||personaMark.test(url))return;
     external.push(url);
   });
 

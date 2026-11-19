@@ -430,7 +430,12 @@ function addAvatar(defs,g,href,x,y,size,extra=''){
   const clip=svg('clipPath',{id});
   clip.append(svg('circle',{cx:x+size/2,cy:y+size/2,r:size/2}));
   defs.append(clip);
-  g.append(svg('image',{href,x,y,width:size,height:size,preserveAspectRatio:'xMidYMid slice','clip-path':'url(#'+id+')',class:('avatar '+extra).trim()}));
+  const portrait=svg('image',{href,x,y,width:size,height:size,preserveAspectRatio:'xMidYMid slice','clip-path':'url(#'+id+')',class:('avatar '+extra).trim()});
+  if(href.includes('/archive-dreams/brand/personas/'))portrait.addEventListener('error',()=>{
+    const card=CARD_BY_ID.get(state.lens);
+    if(card)portrait.setAttribute('href',portraitFallbackUrl(card,{tone:personaTone()}));
+  },{once:true});
+  g.append(portrait);
   g.append(svg('circle',{cx:x+size/2,cy:y+size/2,r:size/2,class:'avatar-ring'}));
 }
 function wrapTitle(text,max=20){

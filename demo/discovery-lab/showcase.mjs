@@ -67,10 +67,10 @@ function renderPersonaRail(){
     const btn=element('button',undefined,'persona-item'+(model.lens===p.id?' active':''));
     btn.type='button';btn.style.setProperty('--persona-color',p.color);
     btn.setAttribute('aria-pressed',String(model.lens===p.id));
-    btn.setAttribute('aria-label','Select '+p.label+' interpretive lens');
-    const image=element('img');image.src=portraitUrl(p);image.alt='Artist-authored aperture emblem: '+p.label;image.decoding='async';
-    image.addEventListener('error',()=>{image.src=portraitFallbackUrl(p);},{once:true});
-    const copy=element('span');copy.append(element('strong',p.label),element('small',p.subheading));
+    btn.setAttribute('aria-label','Select '+(p.id==='museum'?'fictional museum':p.label)+' interpretive lens');
+    const image=element('img');image.src=portraitUrl(p,{variant:'compact'});image.alt='';image.decoding='async';image.loading='lazy';
+    image.addEventListener('error',()=>{image.src=portraitFallbackUrl(p,{variant:'compact'});},{once:true});
+    const copy=element('span');copy.append(element('strong',p.id==='museum'?p.label+' · fictional':p.label),element('small',p.subheading));
     btn.append(image,copy);
     btn.addEventListener('click',()=>{stopSpeech();model.lens=p.id;model.selected=null;renderPersonaRail();renderStage();renderInspector();});
     E.personaList.append(btn);
