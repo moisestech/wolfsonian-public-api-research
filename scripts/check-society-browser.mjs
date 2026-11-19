@@ -183,7 +183,9 @@ try {
     const choice=page.locator('#mobile-perspective-choices [data-lens="'+id+'"]');
     assert.equal(await choice.count(),1,'Perspective choice exists: '+label);
     assert.match(await choice.innerText(),new RegExp(label));
-    assert.match(await choice.locator('img').getAttribute('src'),new RegExp('/'+id+'-white-compact-v1\\.svg
+    assert.match(await choice.locator('img').getAttribute('src'),new RegExp('/'+id+'-white-compact-v1[.]svg$'));
+  }
+  assert.equal(await page.locator('#mobile-perspective-choices .perspective-choice-group-title').count(),3);
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-variant'),'compact');
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-tone'),'white');
   await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
