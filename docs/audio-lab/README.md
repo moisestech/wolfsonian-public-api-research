@@ -54,6 +54,8 @@ These clean briefs contain permitted source locators and interpretive prompts, *
 
 [Implementation and audio/speaker/event architecture](voice-engine-architecture.md)
 
+[Recorded-listening UI integration contract and publication gates](app-playback-contract.md)
+
 ## Local A/B audition room
 
 Run from a checked-out audio-lab feature branch (with Node 24 installed):
