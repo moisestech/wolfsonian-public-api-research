@@ -25,14 +25,14 @@ try {
   // Cloudinary-backed persona marks preserve the intended small/large roles.
   assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-id'),'family');
   assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-variant'),'compact');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/approved-masks\/nested-family-white-compact-v1\.png$/);
   assert.match(await page.locator('#room-archivist-portrait').getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
   assert.match(await page.locator('.chat .turn[data-role="archivist"] img').first().getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
-  assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
+  assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/approved-masks\/nested-family-white-compact-v1\.png$/);
   assert.match(await page.locator('#reading-popover [data-lens="worker"] img.persona-illustrated').getAttribute('src'),/\/worker-sepia-full-v2\.png$/);
   assert.match(await page.locator('#reading-popover [data-lens="futurist"] img.persona-illustrated').getAttribute('src'),/\/futurist-architectural-white-master-v1\.png$/);
   assert.match(await page.locator('#reading-popover [data-lens="tourist"] img.persona-illustrated').getAttribute('src'),/\/tourist-architectural-white-master-v1\.png$/);
-  assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/portraits\/[a-z]+-sepia-full-v2\.png$/);
+  assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/(?:approved-masks\/nested-family-white-full-v1|portraits\/[a-z]+-sepia-full-v2)\.png$/);
   // A blocked CDN must render the original inline vector without a broken avatar.
   await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
   assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
@@ -225,7 +225,7 @@ try {
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/approved-masks\/nested-family-white-compact-v1\.png$/);
   // The mobile perspective sheet uses the same sepia plate in both themes.
   assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img.persona-illustrated').getAttribute('src'),/\/family-sepia-full-v2\.png$/);
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
@@ -234,7 +234,7 @@ try {
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/approved-masks\/nested-family-white-compact-v1\.png$/);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
