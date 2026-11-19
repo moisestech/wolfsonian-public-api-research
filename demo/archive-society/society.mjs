@@ -490,7 +490,7 @@ function stagePlate(rec, kind, speaker){
   if(speaker)fig.dataset.speaker=speaker;
   const img=node('img');img.className='object-shot';img.alt='';
   const chosenCard=!photo(rec)&&lensMatch(rec)?CARD_BY_ID.get(state.lens):null;
-  if(chosenCard)bindPersonaImage(img,chosenCard);
+  if(chosenCard){fig.classList.add('persona');bindPersonaImage(img,chosenCard);}
   else img.src=avatarFor(rec);
   fig.append(img,node('figcaption',rec.title));
   return fig;
