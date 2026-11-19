@@ -42,13 +42,14 @@ function bindPersonaImage(image,card,variant='compact',fixedTone=null,palette=nu
   delete image.dataset.artworkFallback;
   const tone=fixedTone||personaTone();
   image.onerror=()=>{
-    if(image.dataset.artworkFallback==='1'){
+    const alternate=(palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
+    if(image.dataset.artworkFallback==='1'||alternate===image.src){
       image.onerror=null;
       image.src=portraitFallbackUrl(card,{tone,variant}); // Failure-only fallback, never the gallery's primary art.
       return;
     }
     image.dataset.artworkFallback='1';
-    image.src=(palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
+    image.src=alternate;
   };
   image.src=illustratedPersonaUrl(card.id,{variant})||
     (palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
