@@ -1,9 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { parseMatrixCsv } from '../src/discovery-graph.mjs';
-import { inventedRecords,societyView,conversationFor,photoKeys,imageKeys,objectMarkUrl } from '../src/archive-society.mjs';
+import { parseMatrixCsv, PERSONAS } from '../src/discovery-graph.mjs';
+import { LENSES,inventedRecords,societyView,conversationFor,photoKeys,imageKeys,objectMarkUrl } from '../src/archive-society.mjs';
 import { reconcileLookup,recordsFromLookup } from '../src/archive-evidence.mjs';
+
+test('first-feedback edition exposes eleven named perspectives while excluding open search mode',()=>{
+  const named=PERSONAS.filter(persona=>persona.id!=='open');
+  assert.equal(LENSES.length,11);
+  assert.deepEqual(LENSES.map(persona=>persona.id),named.map(persona=>persona.id));
+  for(const id of ['tourist','novice','connoisseur','futurist','mourner'])
+    assert.ok(LENSES.some(persona=>persona.id===id),'Missing visitor perspective '+id);
+  assert.ok(!LENSES.some(persona=>persona.id==='open'));
+  assert.match(LENSES.find(persona=>persona.id==='museum').limits,/fictional institutional voice/);
+  assert.match(LENSES.find(persona=>persona.id==='counterfeit').limits,/never asserts counterfeit claims/);
+});
 
 test('invented atlas has bounded, deterministic object/conversation neighborhoods',()=>{
   const records=inventedRecords(),view=societyView(records,'FICTION-01','worker');
@@ -38,7 +49,7 @@ test('filters and isolated objects do not manufacture edges',()=>{
   assert.ok(focused.nodes.length<=7);
   assert.equal(overview.nodes.length,100);
   assert.ok(Math.max(...overview.nodes.map(node=>node.x))>2000);
-  assert.equal(overview.landmarks.personas.length,5);
+  assert.equal(overview.landmarks.personas.length,11);
   assert.ok(overview.landmarks.categories.length>=6);
   assert.deepEqual(focused.landmarks,{personas:[],categories:[]});
 });

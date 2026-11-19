@@ -1804,7 +1804,26 @@ function promptMenu(){
   more.append(dots,menu);
   return more;
 }
-$('reading-popover').replaceChildren(...LENSES.map(lens=>{
+// Show the full persona cast in legible groups rather than an undifferentiated
+// eleven-item list. The final three are critical *fictional* experiments, not museum positions.
+const feedbackPerspectiveGroups=[
+  {title:'Everyday readers',ids:['family','tourist','novice','connoisseur','worker']},
+  {title:'Archive & futures',ids:['archivist','futurist','mourner']},
+  {title:'Critical experiments · fictional',ids:['propagandist','counterfeit','museum']}
+];
+function perspectiveSections(buildChoice){
+  return feedbackPerspectiveGroups.map(group=>{
+    const section=node('section',undefined,'perspective-choice-group');
+    section.append(node('h3',group.title,'perspective-choice-group-title'));
+    for(const id of group.ids){
+      const lens=LENSES.find(item=>item.id===id);
+      if(!lens)throw new Error('Missing perspective '+id);
+      section.append(buildChoice(lens));
+    }
+    return section;
+  });
+}
+$('reading-popover').replaceChildren(...perspectiveSections(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button');
   button.type='button';button.className='reading-choice';button.dataset.lens=lens.id;
@@ -1831,7 +1850,7 @@ for(const id of ['room','feed']){
 $('mobile-perspective-close')?.addEventListener('click',closeMobilePerspectives);
 mobilePerspectiveSheet?.addEventListener('click',event=>{if(event.target===mobilePerspectiveSheet)closeMobilePerspectives();});
 mobilePerspectiveSheet?.addEventListener('close',()=>{mobilePerspectiveOpener?.focus({preventScroll:true});mobilePerspectiveOpener=null;});
-$('mobile-perspective-choices')?.replaceChildren(...LENSES.map(lens=>{
+$('mobile-perspective-choices')?.replaceChildren(...perspectiveSections(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button',undefined,'mobile-perspective-choice');
   button.type='button';button.dataset.lens=lens.id;button.setAttribute('aria-pressed',String(lens.id===state.lens));

@@ -37,7 +37,7 @@ try {
   await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
   assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
   assert.ok(decodeURIComponent(await page.locator('#room-lens-portrait').getAttribute('src')).includes('#ffffff'));
-  assert.equal(await page.locator('#reading-popover [data-lens] img.persona-symbol').count(),5);
+  assert.equal(await page.locator('#reading-popover [data-lens] img.persona-symbol').count(),11);
   assert.equal(await page.locator('#zoom-stage .plate.persona img.persona-symbol').count()>0,true);
   // The editorial title changes without replacing the accessible archive identity.
   assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
@@ -178,7 +178,14 @@ try {
   const originalDialogue=await authoredDialogue();
   await page.locator('#room-perspective-toggle').click();
   assert.equal(await page.locator('#mobile-perspective-sheet').isVisible(),true);
-  assert.equal(await page.locator('#mobile-perspective-choices button').count(),5);
+  assert.equal(await page.locator('#mobile-perspective-choices button').count(),11);
+  for(const [id,label] of [['tourist','Tourist'],['novice','Art novice'],['connoisseur','Art connoisseur'],['futurist','Futurist'],['mourner','Mourner']]){
+    const choice=page.locator('#mobile-perspective-choices [data-lens="'+id+'"]');
+    assert.equal(await choice.count(),1,'Perspective choice exists: '+label);
+    assert.match(await choice.innerText(),new RegExp(label));
+    assert.match(await choice.locator('img').getAttribute('src'),new RegExp('/'+id+'-white-compact-v1[.]svg$'));
+  }
+  assert.equal(await page.locator('#mobile-perspective-choices .perspective-choice-group-title').count(),3);
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-variant'),'compact');
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-tone'),'white');
   await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
@@ -188,6 +195,13 @@ try {
   assert.match(await page.locator('.perspective-turn').innerText(),/Worker/);
   await page.locator('#room-perspective-toggle').click();
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"]').getAttribute('aria-pressed'),'true');
+  await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
+  assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
+  await page.locator('#room-perspective-toggle').click();
+  await page.locator('#mobile-perspective-choices [data-lens="novice"]').click();
+  assert.equal(await page.locator('#room-perspective-name').innerText(),'Art novice');
+  assert.deepEqual(await authoredDialogue(),originalDialogue);
+  await page.locator('#room-perspective-toggle').click();
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
 
