@@ -1,0 +1,97 @@
+{
+  "cloud": "dck5rzi4h",
+  "folder": "archive-dreams/brand/personas/portraits",
+  "note": "Illustrated character portraits. None of these files are uploaded. A row gains a version and a secure URL only after the approved source art is verified. These public IDs are the intended names, not delivery URLs.",
+  "portraits": {
+    "family": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/portraits/family-white-full-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/portraits/family-ink-full-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/portraits/family-white-compact-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/portraits/family-ink-compact-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        }
+      }
+    },
+    "worker": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/portraits/worker-white-full-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/portraits/worker-ink-full-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/portraits/worker-white-compact-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/portraits/worker-ink-compact-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        }
+      }
+    },
+    "archivist": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/portraits/archivist-white-full-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/portraits/archivist-ink-full-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/portraits/archivist-white-compact-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/portraits/archivist-ink-compact-v2",
+          "status": "SOURCE_ART_MISSING",
+          "uploaded": false,
+          "approved": false
+        }
+      }
+    }
+  }
+}

@@ -131,6 +131,43 @@ export function decoStudyUrl(id,{format='svg'}={}){
   const transformation=format==='png'?'c_scale,w_512/f_png/':'';
   return CLOUD+transformation+'v'+DECO_STUDIES[id]+'/'+FOLDER+'deco-'+id+'-white-v1.'+format;
 }
+const PORTRAIT_IDS=['family','worker','archivist'];
+function missingPortrait(id,variant,tone){
+  return Object.freeze({
+    publicId:'archive-dreams/brand/personas/portraits/'+id+'-'+tone+'-'+variant+'-v2',
+    status:'SOURCE_ART_MISSING',
+    uploaded:false,
+    approved:false
+  });
+}
+function missingIdentity(id){
+  return Object.freeze({
+    full:Object.freeze({white:missingPortrait(id,'full','white'),ink:missingPortrait(id,'full','ink')}),
+    compact:Object.freeze({white:missingPortrait(id,'compact','white'),ink:missingPortrait(id,'compact','ink')})
+  });
+}
+export const CHARACTER_PORTRAITS=Object.freeze(Object.fromEntries(PORTRAIT_IDS.map(id=>[id,missingIdentity(id)])));
+export function approvedPortraitUrl(row){
+  if(!row||typeof row!=='object')throw new Error('Malformed persona portrait');
+  const ready=row.uploaded===true&&row.approved===true&&row.status==='approved';
+  if(!ready){
+    if(row.uploaded===true||row.approved===true||row.status==='approved'||row.url||row.version)
+      throw new Error('Malformed persona portrait');
+    if(row.status!=='SOURCE_ART_MISSING'||row.uploaded!==false||row.approved!==false)
+      throw new Error('Malformed persona portrait');
+    return null;
+  }
+  if(typeof row.version!=='number'||typeof row.url!=='string'||!row.url.startsWith('https://res.cloudinary.com/dck5rzi4h/image/upload/v'+row.version+'/'))
+    throw new Error('Malformed persona portrait');
+  return row.url;
+}
+export function personaCharacterUrl(id,{tone='white',variant='full'}={}){
+  if(!['white','ink'].includes(tone)||!['full','compact'].includes(variant))
+    throw new Error('Unsupported persona portrait');
+  const row=CHARACTER_PORTRAITS[id]?.[variant]?.[tone];
+  if(!row)return null;
+  return approvedPortraitUrl(row);
+}
 export function personaAssetUrl(id,{tone='white',variant='full',format='svg'}={}){
   if(!Object.hasOwn(VERSION,id))throw new Error('Unknown persona symbol');
   if(!['white','ink'].includes(tone)||!['full','compact'].includes(variant)||!['svg','png'].includes(format))

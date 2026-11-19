@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {PERSONA_SIGIL_IDS,personaSigilSvg} from '../src/persona-sigils.mjs';
-import {personaAssetUrl,decoStudyUrl,DECO_STUDY_IDS} from '../src/persona-cloudinary-assets.mjs';
+import {personaAssetUrl,decoStudyUrl,DECO_STUDY_IDS,personaCharacterUrl,approvedPortraitUrl,CHARACTER_PORTRAITS} from '../src/persona-cloudinary-assets.mjs';
 import {CARD_BY_ID as CARD_MAP,portraitUrl,portraitFallbackUrl} from '../src/discovery-personas.mjs';
 import {CARD_BY_ID} from '../src/discovery-personas.mjs';
 const manifest=JSON.parse(await readFile(new URL('../docs/design/persona-cloudinary-manifest.json',import.meta.url),'utf8'));
@@ -46,4 +46,27 @@ test('white deco variants are real linked assets, not unreviewed museum marks',(
  }
  assert.throws(()=>personaAssetUrl('aperture-mask'),/Unknown persona symbol/);
  assert.match(manifest.rights,/not museum staff insignia/);
+});
+test('illustrated portraits stay missing until an approved file is verified',async()=>{
+ const portraits=JSON.parse(await readFile(new URL('../docs/design/persona-character-portrait-manifest.v2.json',import.meta.url),'utf8'));
+ assert.equal(portraits.folder,'archive-dreams/brand/personas/portraits');
+ assert.deepEqual(Object.keys(portraits.portraits).sort(),['archivist','family','worker']);
+ assert.deepEqual(portraits.portraits,CHARACTER_PORTRAITS);
+ for(const id of ['family','worker','archivist']){
+  for(const variant of ['full','compact']){
+   for(const tone of ['white','ink']){
+    const row=portraits.portraits[id][variant][tone];
+    assert.equal(row.publicId,'archive-dreams/brand/personas/portraits/'+id+'-'+tone+'-'+variant+'-v2');
+    assert.equal(row.status,'SOURCE_ART_MISSING');
+    assert.equal(row.url,undefined);
+    assert.equal(row.version,undefined);
+    assert.equal(personaCharacterUrl(id,{tone,variant}),null);
+   }
+  }
+ }
+ assert.equal(personaCharacterUrl('futurist'),null);
+ assert.equal(personaCharacterUrl('tourist'),null);
+ assert.throws(()=>approvedPortraitUrl({uploaded:true,approved:false,status:'SOURCE_ART_MISSING'}),/Malformed persona portrait/);
+ assert.throws(()=>approvedPortraitUrl({uploaded:true,approved:true,status:'approved'}),/Malformed persona portrait/);
+ assert.throws(()=>personaCharacterUrl('family',{variant:'huge'}),/Unsupported persona portrait/);
 });
