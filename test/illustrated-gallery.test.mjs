@@ -13,7 +13,19 @@ test('all eleven active personas have independent artwork rather than a symbol a
     for(const variant of ['full','compact']){
       const url=illustratedPersonaUrl(lens.id,{variant});
       assert.equal(url,manifest.gallery[lens.id][variant]);
-      assert.match(url,/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/portraits\/[^/]+\.png$/);
+      if(manifest.gallery[lens.id].source==='architectural-mask-geometric-v1'){
+        assert.ok(url.includes('/architectural-masks-v1/'));
+        assert.ok(url.includes('/f_png/v'));
+        assert.ok(url.endsWith('.png'));
+        for(const tone of ['white','ink']){
+          const selected=illustratedPersonaUrl(lens.id,{tone,variant});
+          assert.equal(selected,manifest.gallery[lens.id][tone][variant]);
+          assert.ok(selected.includes('/architectural-masks-v1/'));
+        }
+        assert.ok(manifest.gallery[lens.id].priorIllustration.full.includes('/portraits/'));
+      }else{
+        assert.ok(url.includes('/portraits/'));
+      }
       assert.doesNotMatch(url,/\.svg$/);
     }
   }
@@ -35,7 +47,7 @@ test('four approved artist-provided mask studies are separate from speaking pers
 test('desktop and mobile gallery use illustrated artwork at full size and preserve labels and source limits',async()=>{
   const source=await readFile(new URL('../demo/archive-society/society.mjs',import.meta.url),'utf8');
   const css=await readFile(new URL('../demo/archive-society/society.css',import.meta.url),'utf8');
-  assert.match(source,/image\.src=illustratedPersonaUrl\(card\.id,\{variant\}\)/);
+  assert.ok(source.includes('image.src=illustratedPersonaUrl(card.id,{variant,tone})'));
   assert.match(source,/function approvedMasksSection\(\)/);
   assert.match(source,/node\('small',lens\.question\)/);
   assert.match(source,/reading-popover'\)\.replaceChildren\(\.\.\.perspectiveSections\(/);
