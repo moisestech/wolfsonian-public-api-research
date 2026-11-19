@@ -1274,3 +1274,29 @@ html[data-color-theme="light"] .record-overlay .evidence-type{color:#d7c4a3}
 @media(prefers-reduced-motion:reduce){
   #reading-popover .reading-choice,#mobile-perspective-choices .mobile-perspective-choice{transition:none!important}
 }
+
+/* Cohesive archetype identity system: all eleven use the same white Deco SVG
+   at the same optical size, regardless of the review-stage portrait behind it.
+   The overlaid mark is decorative; the adjacent title carries its accessible name. */
+#reading-popover .perspective-identity-mark,
+#mobile-perspective-choices .perspective-identity-mark{
+  position:absolute;top:18px;left:18px;z-index:2;
+  display:grid;place-items:center;pointer-events:none;
+  width:48px;height:48px;padding:6px;border:1px solid rgba(246,240,219,.44);
+  border-radius:50%;background:rgba(11,29,23,.86);
+  box-shadow:0 3px 14px rgba(0,0,0,.18);
+}
+#reading-popover .perspective-identity-mark img,
+#mobile-perspective-choices .perspective-identity-mark img{
+  display:block!important;width:34px!important;height:34px!important;
+  min-width:34px!important;min-height:34px!important;
+  object-fit:contain!important;filter:none!important;
+  border:0!important;background:transparent!important;border-radius:0!important;
+}
+#reading-popover .perspective-art,
+#mobile-perspective-choices .perspective-art{filter:grayscale(1) contrast(1.08)}
+@media(max-width:800px){
+  #mobile-perspective-choices .perspective-identity-mark{
+    top:15px;left:15px;width:44px;height:44px;padding:5px;
+  }
+}
