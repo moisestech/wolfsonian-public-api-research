@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {PERSONA_SIGIL_IDS,personaSigilSvg} from '../src/persona-sigils.mjs';
+import {personaAssetUrl} from '../src/persona-cloudinary-assets.mjs';
+import {CARD_BY_ID as CARD_MAP,portraitUrl,portraitFallbackUrl} from '../src/discovery-personas.mjs';
 import {CARD_BY_ID} from '../src/discovery-personas.mjs';
 const manifest=JSON.parse(await readFile(new URL('../docs/design/persona-cloudinary-manifest.json',import.meta.url),'utf8'));
 test('the archive persona identity family exactly covers the eleven existing perspectives',()=>{
@@ -20,6 +22,10 @@ test('all persona symbols have transparent and theme-aware full and compact asse
        assert.ok(p.png.endsWith('.png'));
        assert.ok(p.png.startsWith('https://res.cloudinary.com/dck5rzi4h/image/upload/'));
        assert.equal(p.size,variant==='compact'?128:512);
+       assert.equal(personaAssetUrl(id,{variant,tone}),p.svg);
+       assert.equal(personaAssetUrl(id,{variant,tone,format:'png'}),p.png);
+       assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone}),p.svg);
+       assert.match(portraitFallbackUrl(CARD_MAP.get(id),{variant,tone}),/^data:image\/svg\+xml/);
      }
    }
    assert.match(personaSigilSvg(id,{mode:'paper',variant:'full'}),/<svg/);

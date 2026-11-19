@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { dirname,join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CARDS, portraitSvg, portraitUrl } from '../src/discovery-personas.mjs';
+import { CARDS, portraitSvg, portraitUrl, portraitFallbackUrl } from '../src/discovery-personas.mjs';
 import { makeDialogue, replyToQuestion, VOICE_DISCLOSURE } from '../src/discovery-dialogue.mjs';
 import { buildDiscoveryIndex, recommendNeighbors, PERSONAS } from '../src/discovery-graph.mjs';
 const root=join(dirname(fileURLToPath(import.meta.url)),'..');
@@ -19,7 +19,8 @@ test('the presentation contains five relatable and six artist-authored personas'
     assert.match(p.prompt,/shared category/i);
     assert.match(p.prompt,/not a historical person/i);
     assert.match(portraitSvg(p),/<svg/);
-    assert.match(portraitUrl(p),/^data:image\/svg\+xml/);
+    assert.match(portraitUrl(p),/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\//);
+    assert.match(portraitFallbackUrl(p),/^data:image\/svg\+xml/);
   }
 });
 const tags=[{id:'theme:technology',value:'Technology',family:'theme',sourceColumns:['Thematic Category 1']},

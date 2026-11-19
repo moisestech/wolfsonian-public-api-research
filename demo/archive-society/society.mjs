@@ -1264,11 +1264,11 @@ $('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('le
 function paintReading(){
   const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   bindPersonaImage($('reading-portrait'),card,'compact');
-  $('reading-name').textContent=card.label;
+  $('reading-name').textContent=card.id==='museum'?card.label+' · fictional':card.label;
   for(const id of ['room','feed']){
-    if($(id+'-perspective-name'))$(id+'-perspective-name').textContent=card.label;
+    if($(id+'-perspective-name'))$(id+'-perspective-name').textContent=card.id==='museum'?card.label+' · fictional':card.label;
     const toggle=$(id+'-perspective-toggle');
-    if(toggle)toggle.setAttribute('aria-label','Choose perspective, currently '+card.label);
+    if(toggle)toggle.setAttribute('aria-label','Choose perspective, currently '+card.label+(card.id==='museum'?' (fictional, not museum staff)':''));
   }
   for(const button of document.querySelectorAll('[data-lens]'))button.setAttribute('aria-pressed',String(button.dataset.lens===state.lens));
 }
