@@ -23,9 +23,12 @@ try{
   // Museum records, private packets, and browser state must still stay local.
   const identityMark=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/aperture-(?:white|black)-v1\.svg$/;
   const personaMark=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/(?:family|tourist|novice|connoisseur|worker|archivist|futurist|mourner|propagandist|counterfeit|museum)-(?:white|ink)-(?:full|compact)-v1\.svg$/;
+  // V2 portraits are artist-owned, version-pinned static art and cannot convey museum records.
+  const personaPortrait=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/portraits\/(?:family|worker|archivist)-(?:sepia|white|ink)-(?:full|compact)-v2\.png$/;
+
   page.on('request',request=>{
     const url=request.url();
-    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url)||personaMark.test(url))return;
+    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url)||personaMark.test(url)||personaPortrait.test(url))return;
     external.push(url);
   });
 
