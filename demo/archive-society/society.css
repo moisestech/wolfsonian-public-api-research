@@ -1001,3 +1001,15 @@ html[data-color-theme="light"] #conversation-content .bubble.turn.previewing .sa
     transition:none!important;animation:none!important;
   }
 }
+
+/* Aperture-derived persona identities. SVG backgrounds are transparent;
+   the project header retains the original non-persona aperture logo. */
+img.persona-symbol{object-fit:contain!important;background:transparent!important}
+.zoom-stage .plate.persona{background:#12241d}
+.zoom-stage .plate.persona img.persona-symbol{object-fit:contain!important;padding:clamp(4px,1.4vw,17px);background:transparent!important}
+html[data-color-theme="light"] .zoom-stage .plate.persona{background:#e4eae1}
+.evidence-rail .bubble img.persona-symbol{object-fit:contain!important}
+#reading-popover .reading-choice img.persona-symbol{width:42px;height:42px;object-fit:contain!important;border-radius:0}
+.command .reading>button img.persona-symbol{width:28px;height:28px;border-radius:0}
+.mobile-perspective-choice img.persona-symbol{object-fit:contain!important;border-radius:0}
+@media(prefers-reduced-motion:reduce){img.persona-symbol{transition:none!important}}
