@@ -29,9 +29,9 @@ try {
   assert.match(await page.locator('#room-archivist-portrait').getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
   assert.match(await page.locator('.chat .turn[data-role="archivist"] img').first().getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
   assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="worker"] img').getAttribute('src'),/\/worker-sepia-full-v2\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="futurist"] img').getAttribute('src'),/\/futurist-sepia-full-v4\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="tourist"] img').getAttribute('src'),/\/tourist-sepia-full-v4\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="worker"] img.persona-illustrated').getAttribute('src'),/\/worker-sepia-full-v2\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="futurist"] img.persona-illustrated').getAttribute('src'),/\/futurist-sepia-full-v4\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="tourist"] img.persona-illustrated').getAttribute('src'),/\/tourist-sepia-full-v4\.png$/);
   assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/portraits\/[a-z]+-sepia-full-v2\.png$/);
   // A blocked CDN must render the original inline vector without a broken avatar.
   await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
@@ -180,7 +180,7 @@ try {
   assert.equal(await page.locator('#mobile-perspective-sheet').isVisible(),true);
   assert.equal(await page.locator('#mobile-perspective-choices button').count(),11);
   // Large illustration cards must remain substantial on real narrow phone viewports.
-  const artworkHeight=await page.locator('#mobile-perspective-choices [data-lens="novice"] img').evaluate(el=>el.getBoundingClientRect().height);
+  const artworkHeight=await page.locator('#mobile-perspective-choices [data-lens="novice"] img.persona-illustrated').evaluate(el=>el.getBoundingClientRect().height);
   assert.ok(artworkHeight>=130,'The Art Novice portrait must be a readable illustration, not a tiny 42px icon');
   await screenshot('illustrated-character-gallery-390');
   assert.equal(await page.locator('#mobile-perspective-choices .approved-mask-tile').count(),4);
@@ -198,8 +198,8 @@ try {
     assert.match(await choice.locator('img').getAttribute('src'),new RegExp('/'+id+'-sepia-full-v4[.]png$'));
   }
   assert.equal(await page.locator('#mobile-perspective-choices .perspective-choice-group-title').count(),3);
-  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-variant'),'full');
-  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-tone'),'white');
+  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img.persona-illustrated').getAttribute('data-persona-variant'),'full');
+  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img.persona-illustrated').getAttribute('data-persona-tone'),'white');
   await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Worker');
   assert.equal(await page.locator('#reading-name').innerText(),'Worker');
@@ -227,7 +227,7 @@ try {
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
   assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
   // The mobile perspective sheet uses the same sepia plate in both themes.
-  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img').getAttribute('src'),/\/family-sepia-full-v2\.png$/);
+  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img.persona-illustrated').getAttribute('src'),/\/family-sepia-full-v2\.png$/);
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
