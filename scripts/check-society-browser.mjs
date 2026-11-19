@@ -184,6 +184,12 @@ try {
   assert.ok(artworkHeight>=130,'The Art Novice portrait must be a readable illustration, not a tiny 42px icon');
   await screenshot('illustrated-character-gallery-390');
   assert.equal(await page.locator('#mobile-perspective-choices .approved-mask-tile').count(),4);
+  const marks=page.locator('#mobile-perspective-choices .perspective-choice-group .perspective-identity-mark img');
+  assert.equal(await marks.count(),11,'Every illustrated persona needs its same-family identity mark');
+  for(const image of await marks.all()){
+    const src=await image.getAttribute('src');
+    assert.match(src,/-(?:white)-compact-v1[.]svg$/);
+  }
 
   for(const [id,label] of [['tourist','Tourist'],['novice','Art novice'],['connoisseur','Art connoisseur'],['futurist','Futurist'],['mourner','Mourner']]){
     const choice=page.locator('#mobile-perspective-choices [data-lens="'+id+'"]');
