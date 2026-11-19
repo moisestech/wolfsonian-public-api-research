@@ -1,6 +1,9 @@
 // Artist-authored editorial statements, not quotes from collection objects.
 export const EDITORIAL_PHRASES=Object.freeze([
   'Archive dreams in public.',
+  'Follow a question between objects.',
+  'The voices are imagined.',
+  'Check the records.',
   'What could two objects say?',
   'The past imagined futures.',
   'Every connection is a question.',
@@ -13,9 +16,8 @@ export const nextEditorialIndex=index=>(index+1)%EDITORIAL_PHRASES.length;
 // Pauses for reduced-motion, tab visibility, hover, keyboard focus, and explicit control.
 export function initEditorialHeadline({doc=document,win=window}={}){
   const phrase=doc.getElementById('editorial-phrase');
-  const toggle=doc.getElementById('editorial-toggle');
   const area=doc.querySelector('.brand-area');
-  if(!phrase||!toggle||!area)return ()=>{};
+  if(!phrase||!area)return ()=>{};
   const reduced=win.matchMedia('(prefers-reduced-motion: reduce)');
   let index=0,paused=false,hovering=false,focusing=false,tick=null,swap=null,disposed=false;
   const clear=()=>{
@@ -42,11 +44,10 @@ export function initEditorialHeadline({doc=document,win=window}={}){
   const update=()=>{
     clear();
     phrase.classList.remove('is-changing');
-    toggle.setAttribute('aria-pressed',String(paused));
+    phrase.setAttribute('aria-pressed',String(paused));
     const label=paused?'Resume rotating title':'Pause rotating title';
-    toggle.setAttribute('aria-label',label);
-    toggle.title=label;
-    toggle.firstElementChild.textContent=paused?'▶':'Ⅱ';
+    phrase.setAttribute('aria-label',label);
+    phrase.title=label;
     schedule();
   };
   const enter=()=>{hovering=true;update();};
@@ -59,7 +60,7 @@ export function initEditorialHeadline({doc=document,win=window}={}){
   area.addEventListener('mouseleave',leave);
   area.addEventListener('focusin',focus);
   area.addEventListener('focusout',blur);
-  toggle.addEventListener('click',click);
+  phrase.addEventListener('click',click);
   doc.addEventListener('visibilitychange',update);
   reduced.addEventListener?.('change',change);
   phrase.textContent=EDITORIAL_PHRASES[0];
@@ -70,7 +71,7 @@ export function initEditorialHeadline({doc=document,win=window}={}){
     area.removeEventListener('mouseleave',leave);
     area.removeEventListener('focusin',focus);
     area.removeEventListener('focusout',blur);
-    toggle.removeEventListener('click',click);
+    phrase.removeEventListener('click',click);
     doc.removeEventListener('visibilitychange',update);
     reduced.removeEventListener?.('change',change);
   };

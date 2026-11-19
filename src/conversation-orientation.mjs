@@ -69,7 +69,7 @@ export function connectionCaption({episode,proposal}={}){
   }
   const family=episode.relationship.family||'tag';
   const term=episode.relationship.term;
-  return term?'Both list “'+term+'” · link unproven':'Connection not established · Research question';
+  return term?term+' · link unproven':'Connection not established · Research question';
 }
 
 /** Keep internal editorial rejection actions out of visitor-facing dialogue. */

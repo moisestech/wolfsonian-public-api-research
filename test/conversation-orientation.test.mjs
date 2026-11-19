@@ -112,7 +112,7 @@ test('the room subtitle names its real basis, while the about page explains the 
  const source=rec('85.4.64.43','Making the Engine'),target=rec('TD1989.318.1','Safety warning');
  const actual=conversationFor(source,target,edge(source.accession,target.accession,'motif','Machines'),'family');
  const episode=conversationEpisode({source,target,conversation:actual});
- assert.equal(connectionCaption({episode}),'Both list “Machines” · link unproven');
+ assert.equal(connectionCaption({episode}),'Machines · link unproven');
  const curatorial=conversationEpisode({source:rec('A','First'),target:rec('B','Second'),
    conversation:{mode:'CURATORIAL_JUXTAPOSITION',relationshipType:'curatorial_juxtaposition',turns:[],nextPrompt:'Why this pairing?'}});
  const proposed=connectionCaption({episode:curatorial,proposal:'These two printed artifacts use different media to narrate the future. The pairing does not establish that their visitors met.'});

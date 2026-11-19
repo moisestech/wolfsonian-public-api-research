@@ -140,9 +140,9 @@ function showCard() {
     const reader = CARD_BY_ID.get(talk.lens) || CARD_BY_ID.get('family');
     const guide = CARD_BY_ID.get('archivist');
     const faces = {
-      objectA: portraitUrl(reader),
+      objectA: portraitUrl(reader,{variant:'compact'}),
       objectB: localImageUrl(talk.target),
-      archivist: portraitUrl(guide),
+      archivist: portraitUrl(guide,{variant:'compact'}),
     };
     const chat = document.createElement('div');
     chat.className = 'chat';
@@ -153,7 +153,7 @@ function showCard() {
       avatar.className = 'avatar';
       avatar.alt = '';
       const persona = turn.role === 'objectA' ? reader : turn.role === 'archivist' ? guide : null;
-      if (persona) avatar.addEventListener('error', () => { avatar.src = portraitFallbackUrl(persona); }, { once: true });
+      if (persona) avatar.addEventListener('error', () => { avatar.src = portraitFallbackUrl(persona,{variant:'compact'}); }, { once: true });
       avatar.src = faces[turn.role] || '';
       const say = document.createElement('div');
       say.className = 'say';

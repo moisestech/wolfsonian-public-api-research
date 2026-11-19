@@ -118,6 +118,19 @@ const VERSION = Object.freeze({
 const CLOUD='https://res.cloudinary.com/dck5rzi4h/image/upload/';
 const FOLDER='archive-dreams/brand/personas/';
 export const PERSONA_ASSET_IDS=Object.freeze(Object.keys(VERSION));
+// Artwork studies. They are not speaking identities and never enter the lens list.
+const DECO_STUDIES=Object.freeze({
+  'aperture-mask':1795048670,
+  'guardian-emblem':1795048675,
+  'mask-emblem':1795048679
+});
+export const DECO_STUDY_IDS=Object.freeze(Object.keys(DECO_STUDIES));
+export function decoStudyUrl(id,{format='svg'}={}){
+  if(!Object.hasOwn(DECO_STUDIES,id))throw new Error('Unknown deco study');
+  if(!['svg','png'].includes(format))throw new Error('Unsupported persona asset');
+  const transformation=format==='png'?'c_scale,w_512/f_png/':'';
+  return CLOUD+transformation+'v'+DECO_STUDIES[id]+'/'+FOLDER+'deco-'+id+'-white-v1.'+format;
+}
 export function personaAssetUrl(id,{tone='white',variant='full',format='svg'}={}){
   if(!Object.hasOwn(VERSION,id))throw new Error('Unknown persona symbol');
   if(!['white','ink'].includes(tone)||!['full','compact'].includes(variant)||!['svg','png'].includes(format))

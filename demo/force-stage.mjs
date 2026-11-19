@@ -96,6 +96,8 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   let speakingId = '';
+  let pointingId = '';
+  let pairHighlight = null;
   let distance = FAR;
   let pointerDown = null;
 
@@ -103,9 +105,10 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
     const group = new THREE.Group();
     group.userData.id = node.id;
     const photo = typeof node.image === 'string' && node.image.length > 0;
+    const icon = !photo && typeof node.icon === 'string' && node.icon.length > 0 ? node.icon : '';
     const material = new THREE.SpriteMaterial({
-      map: textureFor(photo ? node.image : PLACEHOLDER),
-      color: photo ? '#ffffff' : (node.color || '#f4f4f4'),
+      map: textureFor(photo ? node.image : (icon || PLACEHOLDER)),
+      color: '#ffffff',
       transparent: true,
     });
     const sprite = new THREE.Sprite(material);
@@ -191,6 +194,7 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
   }
 
   function presence(node) {
+    if (layoutMode === 'shelf') return node.focused ? 1 : 0.92;
     const scope = host.dataset.scope || 'world';
     if (scope === 'world') return 1;
     if (scope === 'region') {
@@ -225,7 +229,35 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
     dreamField?.fit(camera);
   }
 
-  function setGraph(nodes, links) {
+  let layoutMode = 'constellation';
+  function shelfSlot(index, count){
+    const cols = count <= 4 ? Math.max(1, count) : 4;
+    const col = index % cols;
+    const row = Math.floor(index / cols);
+    const pitchX = 40;
+    const pitchY = 36;
+    const rows = Math.ceil(count / cols);
+    const width = (cols - 1) * pitchX;
+    const height = (rows - 1) * pitchY;
+    return { x: col * pitchX - width / 2, y: height / 2 - row * pitchY, z: 0 };
+  }
+  function pinShelf(nodes){
+    const order = [...nodes].sort((a, b) => Number(Boolean(b.focused)) - Number(Boolean(a.focused)) || String(a.label || a.id).localeCompare(String(b.label || b.id)));
+    order.forEach((node, index) => {
+      const place = shelfSlot(index, order.length);
+      node.x = place.x;
+      node.y = place.y;
+      node.z = place.z;
+      node.fx = place.x;
+      node.fy = place.y;
+      node.fz = place.z;
+      node.vx = 0;
+      node.vy = 0;
+      node.vz = 0;
+    });
+  }
+  function setGraph(nodes, links, options = {}) {
+    layoutMode = options.layout === 'shelf' ? 'shelf' : 'constellation';
     const previous = new Map((graph.graphData().nodes || []).map(node => [node.id, node]));
     const accent = new Map();
     for (const link of [...links.filter(item => !item.focused), ...links.filter(item => item.focused)]) {
@@ -235,12 +267,19 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
       if (source) accent.set(source, link.color);
       if (target) accent.set(target, link.color);
     }
+    pairHighlight = null;
+    host.dataset.pair = '';
+    host.dataset.pairHighlight = '';
     const nextNodes = nodes.map(node => {
-      const painted = { ...node, accent: accent.get(node.id) || '' };
+      const painted = { ...node, accent: node.voice || accent.get(node.id) || '' };
       const prior = previous.get(node.id);
       if (!prior) return { ...painted, fx: undefined, fy: undefined, fz: undefined };
       return Object.assign(prior, painted, { fx: undefined, fy: undefined, fz: undefined });
     });
+    if (layoutMode === 'shelf') {
+      pinShelf(nextNodes);
+      controls.target.set(0, 0, 0);
+    }
     graph.graphData({ nodes: nextNodes, links: links.map(link => ({ ...link })) });
     const chargeForce = graph.d3Force('charge');
     if (chargeForce) chargeForce.strength(nextNodes.length > 40 ? -34 : -140);
@@ -267,18 +306,64 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
   }
 
   function focusPair(sourceId, targetId) {
+    host.dataset.pair = sourceId + '|' + targetId;
+    if (layoutMode === 'shelf') return;
     for (const node of graph.graphData().nodes || []) {
       if (node.id === sourceId) { node.fx = -18; node.fy = 0; node.fz = 0; }
       else if (node.id === targetId) { node.fx = 18; node.fy = 0; node.fz = 0; }
       else { node.fx = undefined; node.fy = undefined; node.fz = undefined; }
     }
     graph.d3ReheatSimulation();
-    host.dataset.pair = sourceId + '|' + targetId;
   }
 
   function setSpeaking(nodeId) {
     speakingId = nodeId || '';
     host.dataset.speaking = speakingId;
+  }
+
+  function setPointing(nodeId) {
+    pointingId = nodeId || '';
+    host.dataset.pointing = pointingId;
+    host.querySelectorAll('.graph-node').forEach(button => {
+      const id = button.dataset.accession;
+      const paired = Boolean(pairHighlight) && (id === pairHighlight.source || id === pairHighlight.target);
+      button.classList.toggle('pointed', paired || (Boolean(pointingId) && id === pointingId));
+    });
+  }
+
+  function linkMesh(link) {
+    const obj = link.__lineObj;
+    if (!obj) return null;
+    return obj.children?.length ? obj.children[0] : obj;
+  }
+
+  function paintPairLinks() {
+    for (const link of graph.graphData().links || []) {
+      const mesh = linkMesh(link);
+      if (!mesh?.material) continue;
+      const source = endpoint(link.source);
+      const target = endpoint(link.target);
+      const hot = Boolean(pairHighlight) && ((source === pairHighlight.source && target === pairHighlight.target) || (source === pairHighlight.target && target === pairHighlight.source));
+      if (!pairHighlight) {
+        if (mesh.userData.sharedMaterial && mesh.material === mesh.userData.pairMaterial) mesh.material = mesh.userData.sharedMaterial;
+        continue;
+      }
+      if (mesh.material !== mesh.userData.pairMaterial) {
+        mesh.userData.sharedMaterial = mesh.material;
+        mesh.userData.pairMaterial = mesh.material.clone();
+        mesh.material = mesh.userData.pairMaterial;
+      }
+      mesh.material.opacity = hot ? 1 : 0.16;
+      mesh.material.transparent = true;
+    }
+  }
+
+  function setPairHighlight(sourceId, targetId, colors) {
+    if (!sourceId || !targetId) pairHighlight = null;
+    else pairHighlight = { source: sourceId, target: targetId, colors: colors || {} };
+    host.dataset.pairHighlight = pairHighlight ? sourceId + '|' + targetId : '';
+    setPointing(pointingId);
+    paintPairLinks();
   }
 
   function pulse() {
@@ -289,10 +374,13 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
       const frame = group?.userData?.frame;
       if (!sprite || !frame) continue;
       const speaking = node.id === speakingId;
-      const scale = speaking ? 1 + Math.sin(time * 8) * 0.22 : 1;
+      const inPair = Boolean(pairHighlight) && (node.id === pairHighlight.source || node.id === pairHighlight.target);
+      const pointing = (Boolean(pointingId) && node.id === pointingId) || inPair;
+      const quiet = (Boolean(pointingId) || Boolean(pairHighlight)) && !speaking && !pointing;
+      const scale = speaking ? 1 + Math.sin(time * 8) * 0.22 : pointing ? 1.16 : 1;
       const [fitW, fitH] = fittedSize(sprite.material.map);
       sprite.scale.set(fitW * scale, fitH * scale, 1);
-      const shown = presence(node);
+      const shown = presence(node) * (quiet ? 0.38 : 1);
       sprite.material.opacity = shown;
       if (speaking) host.dataset.pulse = String(Math.round(scale * 100) / 100);
       const bars = frameBars(fitW, fitH, { focused: Boolean(node.focused), scale });
@@ -303,11 +391,13 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
       });
       const material = frame.children[0]?.material;
       if (material) {
-        material.color.set(node.accent || node.color || '#f4f4f4');
-        material.opacity = (speaking ? 1 : node.focused ? 0.95 : node.accent ? 0.78 : 0.16) * shown;
+        const voice = inPair ? pairHighlight.colors?.[node.id] : '';
+        material.color.set(voice || node.accent || node.color || '#f4f4f4');
+        material.opacity = (speaking || pointing ? 1 : node.focused ? 0.95 : node.accent ? 0.78 : 0.16) * shown;
       }
       frame.lookAt(camera.position);
     }
+    paintPairLinks();
   }
 
   const projector = new THREE.Vector3();
@@ -385,6 +475,8 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
     setGraph,
     focusPair,
     setSpeaking,
+    setPointing,
+    setPairHighlight,
     resize,
     zoom(factor) { commitZoom(camera.position.distanceTo(controls.target) / factor, false); },
     fit() { commitZoom(FAR, true); },

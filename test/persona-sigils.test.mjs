@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {PERSONA_SIGIL_IDS,personaSigilSvg} from '../src/persona-sigils.mjs';
-import {personaAssetUrl} from '../src/persona-cloudinary-assets.mjs';
+import {personaAssetUrl,decoStudyUrl,DECO_STUDY_IDS} from '../src/persona-cloudinary-assets.mjs';
 import {CARD_BY_ID as CARD_MAP,portraitUrl,portraitFallbackUrl} from '../src/discovery-personas.mjs';
 import {CARD_BY_ID} from '../src/discovery-personas.mjs';
 const manifest=JSON.parse(await readFile(new URL('../docs/design/persona-cloudinary-manifest.json',import.meta.url),'utf8'));
@@ -37,9 +37,13 @@ test('all persona symbols have transparent and theme-aware full and compact asse
 });
 test('white deco variants are real linked assets, not unreviewed museum marks',()=>{
  assert.deepEqual(Object.keys(manifest.decoWhiteMasks).sort(),['aperture-mask','guardian-emblem','mask-emblem']);
- for(const asset of Object.values(manifest.decoWhiteMasks)){
+ assert.deepEqual([...DECO_STUDY_IDS].sort(),Object.keys(manifest.decoWhiteMasks).sort());
+ for(const [id,asset] of Object.entries(manifest.decoWhiteMasks)){
    assert.ok(asset.publicId.includes('/deco-'));
    assert.ok(asset.png.includes('/f_png/'));
+   assert.equal(decoStudyUrl(id),asset.svg);
+   assert.equal(decoStudyUrl(id,{format:'png'}),asset.png);
  }
+ assert.throws(()=>personaAssetUrl('aperture-mask'),/Unknown persona symbol/);
  assert.match(manifest.rights,/not museum staff insignia/);
 });

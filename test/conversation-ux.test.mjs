@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {CURATED_EDGE_SCENES,sceneForConfirmedEdge} from '../src/curated-edge-scenes.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
+import {tagColor,voiceColors,ARCHIVIST_COLOR} from '../demo/archive-society/conversation-color.mjs';
 
 const repoUrl='../demo/archive-society/';
 const scriptedIds=[
@@ -176,4 +177,61 @@ test('silent scene preview uses a separate role state from actual audio playback
  assert.match(css,/\.room-participant\.previewing/);
  assert.match(css,/\.bubble\.turn\.previewing/);
  assert.match(css,/prefers-reduced-motion:reduce/);
+});
+
+function hueOf(color){
+ return Number(String(color).match(/hsl\((\d+)/)[1]);
+}
+function hueGap(a,b){
+ const delta=Math.abs(a-b)%360;
+ return Math.min(delta,360-delta);
+}
+test('a conversation takes the shared-category color and each speaker keeps a distinct one',async()=>{
+ const html=await readFile(new URL(repoUrl+'index.html',import.meta.url),'utf8');
+ const js=await readFile(new URL(repoUrl+'society.mjs',import.meta.url),'utf8');
+ const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
+ const stage=await readFile(new URL('../demo/force-stage.mjs',import.meta.url),'utf8');
+ assert.equal(tagColor('Machines'),'hsl(220, 68%, 52%)');
+ assert.notEqual(tagColor('Women'),tagColor('Political symbols'));
+ const known=['Machines','Technology','Water','Trees','Labor','Factories','Flags','Women','Political symbols','Mythological figures','War / Military'];
+ const hues=known.map(label=>hueOf(tagColor(label)));
+ for(let i=0;i<hues.length;i++){
+  for(let j=i+1;j<hues.length;j++)assert.ok(hueGap(hues[i],hues[j])>=28,known[i]+' and '+known[j]);
+ }
+ const fallback=['Progress','Archive','Dream','Brain','Copper','Night','Shared'].map(tagColor);
+ assert.ok(new Set(fallback).size>=3);
+ for(const color of fallback){
+  const hue=hueOf(color);
+  for(const reserved of hues)assert.ok(hueGap(hue,reserved)>=14,color+' sits on a reserved hue');
+ }
+ const room=tagColor('Machines');
+ const voices=voiceColors('85.4.64.43','TD1989.318.1',room);
+ assert.equal(voices.archivist,ARCHIVIST_COLOR);
+ assert.notEqual(voices.objectA,voices.objectB);
+ assert.ok(hueGap(hueOf(voices.objectA),hueOf(room))>=28);
+ assert.ok(hueGap(hueOf(voices.objectB),hueOf(room))>=28);
+ assert.ok(hueGap(hueOf(voices.objectA),hueOf(voices.objectB))>=28);
+ const again=voiceColors('85.4.64.43','TD1989.318.1',room);
+ assert.deepEqual(voices,again);
+ const gold=voiceColors('85.4.64.43','TD1989.318.1','#e8d5a3');
+ assert.equal(gold.archivist,ARCHIVIST_COLOR);
+ assert.notEqual(gold.objectA,gold.objectB);
+ assert.match(js,/const linkColor=tagColor\(edge\.reasons\[0\]\.value\)/);
+ assert.match(js,/chat\.style\.setProperty\('--link',linkColor\)/);
+ assert.match(js,/paintRailLink\(linkColor\)/);
+ assert.match(js,/chat\.style\.setProperty\('--link','#e8d5a3'\)/);
+ assert.match(js,/bubble\.style\.setProperty\('--speaker',voices\[turn\.role\]\|\|voices\.archivist\)/);
+ assert.match(js,/card\.style\.setProperty\('--speaker',voices\[p\.role\]\|\|voices\.archivist\)/);
+ assert.match(js,/voice:voices\.objectA/);
+ assert.match(js,/withSpeakerColors\(nodes, edge\.source, edge\.target, linkColor\)/);
+ assert.match(stage,/accent: node\.voice \|\| accent\.get\(node\.id\)/);
+ assert.match(css,/\.link-badge-swatch\{[^}]*background:var\(--link/);
+ assert.match(html,/id="room-lens"/);
+ assert.match(html,/id="room-prompts"/);
+ assert.match(html,/id="prompt-cast"/);
+ assert.match(css,/color-mix\(in srgb,var\(--link,#243c37\) 12%,#0c1210\)/);
+ assert.match(css,/color-mix\(in srgb,var\(--speaker\) 28%,#14211e\)/);
+ assert.match(css,/color-mix\(in srgb,var\(--speaker\) 18%,#f6f4eb\)/);
+ assert.match(css,/color-mix\(in srgb,var\(--speaker\) 48%,#142523\)/);
+ assert.match(css,/prefers-reduced-motion:reduce\)\{\.bubble\.turn\.speaking \.avatar\{animation:none;box-shadow:0 0 0 3px #111,0 0 0 6px var\(--speaker,#f4f4f4\)\}/);
 });

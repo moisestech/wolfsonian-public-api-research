@@ -1,5 +1,5 @@
 import { buildDiscoveryIndex, parseMatrixCsv, recommendNeighbors } from '../../src/discovery-graph.mjs';
-import { inventedRecords, societyView, conversationFor, LENSES, WORLD, categoryIconUrl, district, deviceCast } from '../../src/archive-society.mjs';
+import { inventedRecords, societyView, conversationFor, LENSES, WORLD, categoryIconUrl, objectMarkUrl, district, deviceCast } from '../../src/archive-society.mjs';
 import { CARD_BY_ID, portraitUrl, portraitFallbackUrl } from '../../src/discovery-personas.mjs';
 import { applyLayers, buildAtlasGraph, recordsToAtlasInput } from '../../src/atlas-graph.mjs';
 import { reconcileLookup } from '../../src/archive-evidence.mjs';
@@ -15,6 +15,7 @@ import { visitorGuide } from '../../src/visitor-guide.mjs';
 import { explainEncounter, conversationEpisode, connectionCaption, visitorFollowUp } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 import { scriptedScenePlan } from '../../src/scene-performance.mjs';
+import { tagColor, voiceColors } from './conversation-color.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
@@ -25,7 +26,7 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
 const appearanceKey='archive-dreams-appearance';
 function personaTone(){return document.documentElement.dataset.colorTheme==='light'?'ink':'white';}
-function bindPersonaImage(image,card,variant='full',fixedTone=null){
+function bindPersonaImage(image,card,variant='compact',fixedTone=null){
   if(!card)return;
   image.dataset.personaId=card.id;
   image.dataset.personaVariant=variant;
@@ -43,7 +44,7 @@ function bindPersonaImage(image,card,variant='full',fixedTone=null){
 function refreshPersonaImages(){
   document.querySelectorAll('img[data-persona-id]').forEach(image=>{
     const card=CARD_BY_ID.get(image.dataset.personaId);
-    if(card)bindPersonaImage(image,card,image.dataset.personaVariant||'full',image.dataset.personaTone||null);
+    if(card)bindPersonaImage(image,card,image.dataset.personaVariant||'compact',image.dataset.personaTone||null);
   });
 }
 function applyAppearance(mode){
@@ -215,7 +216,8 @@ function objectVisual(record){
   const image=photo(record);
   if(image)return {src:image,label:'Collection image'};
   const study=PACKET_STUDIES[record?.accession];
-  return study?{src:'../assets/objects/'+study,label:'Artist diagram'}:{src:null,label:'Record only'};
+  if(study)return {src:'../assets/objects/'+study,label:'Artist diagram'};
+  return {src:objectMarkUrl(record),label:'Motif icon'};
 }
 function questionCountFor(accession){
   const pairs=new Set();
@@ -296,10 +298,25 @@ function stop(){
   if($('audio-speaker'))$('audio-speaker').textContent='Ready to listen';
   stage.setSpeaking('');
 }
-function changeSeed(id){stop();resetApproval();state.researchPath=null;state.seed=id;state.edge=null;
-  state.recordAccession=null;
-  if(state.payload)state.snapshots.set(id,reconcileLookup(state.payload,id,'UNKNOWN_LOCAL_CAPTURE_TIME'));
+function changeSeed(id){stop();resetApproval();state.recordAccession=null;
+  if(state.researchPath&&onPreviewPair(id)&&!subjectInSociety(id)){
+    state.seed=id;render();setPanel('conversation');breathDream();return;
+  }
+  state.researchPath=null;state.seed=subjectInSociety(id)?id:openingSubject();state.edge=null;
+  if(state.payload)state.snapshots.set(state.seed,reconcileLookup(state.payload,state.seed,'UNKNOWN_LOCAL_CAPTURE_TIME'));
   render();setPanel('record');breathDream();}
+function subjectInSociety(id){return state.records.some(item=>item.accession===id);}
+function onPreviewPair(id){
+  const path=state.researchPath;
+  return Boolean(path&&(path.source.accession===id||path.target.accession===id));
+}
+function openingSubject(){return subjectInSociety('85.4.64.43')?'85.4.64.43':state.records[0]?.accession;}
+function leavePreview(){
+  state.researchPath=null;state.edge=null;state.mapMode='conversation';state.recordAccession=null;
+  if($('atlas-mode')?.checked)$('atlas-mode').checked=false;
+  if(!subjectInSociety(state.seed))state.seed=openingSubject();
+  closeSheet();render();setPanel('conversation');
+}
 function options(){
   const query=$('search').value.toLowerCase();
   const entries=state.records.filter(r=>(r.title+' '+r.accession).toLowerCase().includes(query));
@@ -308,10 +325,46 @@ function options(){
   if(!$('seed').value&&entries.length){state.seed=entries[0].accession;$('seed').value=state.seed;state.edge=null;}
   paintChoices();
 }
+let pointedAccession='';
+function applyPoint(){
+  const id=pointedAccession;
+  document.querySelectorAll('[data-point]').forEach(el=>el.classList.toggle('pointed',Boolean(id)&&el.dataset.point===id));
+  const record=id&&id!=='archivist'?person(id):null;
+  stage?.setPointing?.(record?record.accession:'');
+}
+function showPoint(id){
+  if(pointedAccession===id)return;
+  pointedAccession=id||'';
+  applyPoint();
+}
+function clearPoint(){
+  if(!pointedAccession)return;
+  pointedAccession='';
+  applyPoint();
+}
+function desktopHover(){return window.matchMedia('(hover:hover) and (min-width:801px)').matches;}
+function watchPointing(root){
+  if(!root)return;
+  root.addEventListener('pointerover',event=>{
+    if(!desktopHover()){clearPoint();return;}
+    const hit=event.target.closest('[data-point]');
+    if(!hit||!root.contains(hit))return;
+    showPoint(hit.dataset.point);
+  });
+  root.addEventListener('pointerout',event=>{
+    const hit=event.target.closest('[data-point]');
+    if(!hit||!root.contains(hit))return;
+    if(hit.contains(event.relatedTarget))return;
+    const next=event.relatedTarget&&event.relatedTarget.closest?event.relatedTarget.closest('[data-point]'):null;
+    if(next&&root.contains(next)&&next.dataset.point===hit.dataset.point)return;
+    clearPoint();
+  });
+}
 function paintChoices(){
   const current=viewingRecords().find(item=>item.accession===state.seed)||state.records.find(item=>item.accession===state.seed);
   if($('seed-name'))$('seed-name').textContent=current?.title||state.seed;
-  if($('seed-portrait')&&current)$('seed-portrait').src=photo(current)||objectBadge(current);
+  const portrait=$('object-focus-portrait')||$('seed-portrait');
+  if(portrait&&current)portrait.src=photo(current)||objectBadge(current);
   paintTheme();
 }
 function conversationCenters(){
@@ -334,6 +387,9 @@ function paintSeedChoices(){
     button.addEventListener('click',()=>{
       state.journey=[];
       $('seed').value=item.accession;
+      if(state.researchPath&&onPreviewPair(item.accession)){
+        state.seed=item.accession;closeSheet();render();setPanel('conversation');return;
+      }
       changeSeed(item.accession);
       setPanel('conversation');
       closeSheet();
@@ -372,12 +428,7 @@ function lensMatch(record){
 function portraitFor(record){
   if(!lensMatch(record))return '';
   const card=CARD_BY_ID.get(state.lens);
-  return card?portraitUrl(card,{tone:personaTone()}):'';
-}
-function tagColor(label){
-  let hash=2166136261;
-  for(const char of String(label))hash=Math.imul(hash^char.charCodeAt(0),16777619);
-  return 'hsl('+((hash>>>0)%360)+', 72%, 46%)';
+  return card?portraitUrl(card,{tone:personaTone(),variant:'compact'}):'';
 }
 function linkedAccessions(){
   const linked=new Set([state.seed]);
@@ -387,9 +438,7 @@ function linkedAccessions(){
   return linked;
 }
 function objectBadge(record){
-  const letter=(record.title||'?').replace(/[<>&"]/g,'').slice(0,1).toUpperCase()||'?';
-  const markup='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#e6e6e6"/><text x="32" y="42" text-anchor="middle" font-size="28" font-family="system-ui,sans-serif" fill="#111">'+letter+'</text></svg>';
-  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(markup);
+  return objectMarkUrl(record);
 }
 function avatarFor(record){return photo(record)||portraitFor(record)||objectBadge(record);}
 function bindHover(g,hover){
@@ -450,24 +499,33 @@ function renderGraph(){
     id: item.record.accession,
     label: item.record.title,
     image: photo(item.record) || '',
+    icon: photo(item.record) ? '' : objectMarkUrl(item.record),
     color: '#f4f4f4',
     neighbor: item.record.accession !== state.seed && state.view.edges.some(link => link.source === item.record.accession || link.target === item.record.accession),
     emphasized: lensMatch(item.record),
   }));
   const links = state.view.edges.map(item => ({ source: item.source, target: item.target, label: item.reasons?.[0]?.value || '', color: tagColor(item.reasons?.[0]?.value || 'shared') }));
-  const graph = edge ? focusedPairGraph(nodes, links, edge.source, edge.target) : focusedPairGraph(nodes, links);
-  const layers = applyLayers(buildAtlasGraph(recordsToAtlasInput(state.view.nodes.map(n => n.record)), { useSyntheticBoxes: $('layer-box-sim').checked }), { accession: $('layer-accession').checked, box: $('layer-box').checked });
+  const linkColor = edge ? tagColor(edge.reasons?.[0]?.value || 'shared') : '';
+  const voiced = edge ? withSpeakerColors(nodes, edge.source, edge.target, linkColor) : nodes;
+  const graph = edge ? focusedPairGraph(voiced, links, edge.source, edge.target) : focusedPairGraph(nodes, links);
+  const layers = applyLayers(buildAtlasGraph(recordsToAtlasInput(state.view.nodes.map(n => n.record)), { useSyntheticBoxes: $('layer-box-sim').checked }), { accession: false, box: $('layer-box').checked });
   state.layerView = layers;
   const notice = $('layer-notice');
-  if ($('layer-box').checked && layers.boxNotice) { notice.hidden = false; notice.textContent = layers.boxNotice; }
+  if ($('layer-box').checked && layers.boxNotice) {
+    notice.hidden = false;
+    notice.textContent = layers.relationships.some(edge => edge.layer === 'box')
+      ? layers.boxNotice
+      : layers.boxNotice + ' The rows are a storage-shaped view. No box number is assigned.';
+  }
   else notice.hidden = true;
   $('stage').dataset.theme = $('theme').value;
-  stage.setGraph(graph.nodes, graph.links);
+  stage.setGraph(graph.nodes, graph.links, { layout: $('layer-box').checked ? 'shelf' : 'constellation' });
   if (edge) stage.focusPair(edge.source, edge.target);
   syncDream();
 }
 function showEdge(edge){
   if(!edge)return;
+  if(state.researchPath&&edge.relationshipType==='curatorial_juxtaposition')return;
   stop();resetApproval();
   state.researchPath=null;
   state.edge=edge.id;
@@ -480,6 +538,7 @@ function showEdge(edge){
   startSceneEntrance();
 }
 function onGraphSelect(id){
+  if(state.researchPath&&onPreviewPair(id)){state.seed=id;render();setPanel('conversation');return;}
   if(roomMode()){stop();resetApproval();state.district=null;state.seed=id;render();setPanel('conversation');return;}
   const edge = state.view?.edges.find(item => item.target === id || item.source === id);
   if (edge && id !== state.seed) { showEdge(edge); return; }
@@ -648,6 +707,52 @@ function followObject(accession){
   if(mobileLayout())setMobileView('space');
 }
 function edgeCategory(edge){return edge.reasons?.[0]?.value||'';}
+function sharedRoom(edge){
+  const reason=edge?.reasons?.[0];
+  if(!reason)return [];
+  return state.records.filter(item=>{
+    if(!item||item.accession===edge.source||item.accession===edge.target)return false;
+    return (item.tags||[]).some(tag=>tag.family===reason.family&&tag.value===reason.value);
+  }).sort((a,b)=>String(a.title).localeCompare(String(b.title)));
+}
+function townhallName(record){
+  const text=String(record?.title||record?.accession||'').replace(/\s+/g,' ').trim();
+  const english=text.match(/\[([^\]]{3,48})\]/);
+  const name=english?english[1].trim():text;
+  return name.length>34?name.slice(0,31)+'…':name;
+}
+function townhallFace(record,className){
+  const button=node('button',undefined,className);
+  button.type='button';
+  button.setAttribute('aria-label','Inspect collection record: '+record.title+' · '+record.accession);
+  button.dataset.point=record.accession;
+  const img=node('img');
+  img.alt='';
+  img.src=photo(record)||objectBadge(record);
+  button.append(img,node(className==='townhall-speaker'?'strong':'span',townhallName(record)));
+  button.addEventListener('click',()=>openEpisodeRecord(record.accession));
+  return button;
+}
+function townhallPanel(source,target,edge){
+  const term=edge.reasons?.[0]?.value||'a shared tag';
+  const room=node('section',undefined,'townhall');
+  room.setAttribute('aria-label','Gathered on this connection');
+  const stage=node('div',undefined,'townhall-stage');
+  stage.append(node('p','On stage','townhall-kicker'));
+  const hosts=node('div',undefined,'townhall-hosts');
+  hosts.append(townhallFace(source,'townhall-speaker'),townhallFace(target,'townhall-speaker'));
+  stage.append(hosts);
+  const listeners=sharedRoom(edge);
+  const shown=listeners.slice(0,24);
+  const crowd=node('div',undefined,'townhall-crowd');
+  crowd.append(node('p','Listening · '+listeners.length,'townhall-kicker'));
+  const grid=node('div',undefined,'townhall-grid');
+  for(const record of shown)grid.append(townhallFace(record,'townhall-listener'));
+  crowd.append(grid);
+  if(listeners.length>shown.length)crowd.append(node('p',shown.length+' of '+listeners.length+' in this index','townhall-more'));
+  room.append(stage,crowd,node('p','This pair has no edited dialogue. These records share “'+term+'” and stay in the room as listeners.','townhall-note'));
+  return room;
+}
 function paintListeners(){
   const row=$('listener-row');if(!row)return;
   row.replaceChildren();
@@ -698,18 +803,14 @@ function questionCard(episode,objects){
 }
 let relatedQuestions=false;
 let relatedAnchor=null;
+let townhallShouldFit=false;
+function townhallGraphOpen(){return document.body.classList.contains('show-timeline')&&!relatedQuestions;}
 function openObjectQuestions(accession){
   relatedQuestions=true;
   relatedAnchor=accession;
   setMobileView('timeline');
 }
-function paintTimeline(){
-  const list=$('timeline-list');if(!list)return;
-  list.replaceChildren();
-  if(!document.body.classList.contains('show-timeline'))return;
-  const focus=relatedAnchor && (person(relatedAnchor)||state.records.find(record=>record.accession===relatedAnchor));
-  $('timeline-title').textContent=relatedQuestions?(focus?'More conversations with '+(focus.title.length>50?focus.title.slice(0,47)+'…':focus.title):'Follow these objects'):'Choose a question';
-  $('all-directory-questions').hidden=!relatedQuestions;
+function townhallGroups(){
   const records=new Map(state.records.map(record=>[record.accession,record]));
   const seeds=new Set([state.seed,...PRESENTATION_PAIRS.flatMap(pair=>[pair.source,pair.target])]);
   const seen=new Set(), scenes=[], prompts=[];
@@ -721,6 +822,7 @@ function paintTimeline(){
       if(seen.has(key))continue;
       seen.add(key);
       const target=records.get(edge.target);
+      if(!target)continue;
       const episode=conversationEpisode({source,target,conversation:conversationFor(source,target,edge,state.lens)});
       const entry={episode,objects:[source,target],open:()=>{
         state.seed=accession;
@@ -737,14 +839,70 @@ function paintTimeline(){
     episode:conversationEpisode({source:path.source,target:path.target,conversation:juxtapositionConversation(path)}),
     objects:[path.source,path.target],open:()=>openResearchPath(path.id)
   }));
+  return [['Conversations',scenes],['Proposed pairings',comparisons],['Open questions',prompts]];
+}
+function renderTownhallGraph(){
+  const nodes=new Map();
+  const links=[];
+  for(const [,group] of townhallGroups()){
+    for(const {episode,objects} of group){
+      const [source,target]=objects;
+      if(!source||!target)continue;
+      for(const object of objects){
+        if(nodes.has(object.accession))continue;
+        nodes.set(object.accession,{
+          id:object.accession,
+          label:object.title,
+          image:photo(object)||'',
+          icon:photo(object)?'':objectMarkUrl(object),
+          color:'#f4f4f4'
+        });
+      }
+      const proposed=episode.relationship.type==='ARTIST_COMPARISON';
+      const term=episode.relationship.term||'shared';
+      links.push({
+        source:source.accession,
+        target:target.accession,
+        label:proposed?'Curatorial juxtaposition':term,
+        color:proposed?'#e8d5a3':tagColor(term)
+      });
+    }
+  }
+  const graph=focusedPairGraph([...nodes.values()],links);
+  stage.setGraph(graph.nodes,graph.links,{layout:$('layer-box')?.checked?'shelf':'constellation'});
+  if(townhallShouldFit){townhallShouldFit=false;fit();}
+}
+function highlightTownhallPair(source,target,episode){
+  if(!desktopHover()||!townhallGraphOpen()||!source||!target)return;
+  const proposed=episode.relationship.type==='ARTIST_COMPARISON';
+  const linkColor=proposed?'#e8d5a3':tagColor(episode.relationship.term||'shared');
+  const voices=voiceColors(source.accession,target.accession,linkColor);
+  stage.setPairHighlight(source.accession,target.accession,{
+    [source.accession]:voices.objectA,
+    [target.accession]:voices.objectB
+  });
+}
+function paintTimeline(){
+  const list=$('timeline-list');if(!list)return;
+  list.replaceChildren();
+  if(!document.body.classList.contains('show-timeline'))return;
+  const focus=relatedAnchor && (person(relatedAnchor)||state.records.find(record=>record.accession===relatedAnchor));
+  $('timeline-title').textContent=relatedQuestions?(focus?'More conversations with '+(focus.title.length>50?focus.title.slice(0,47)+'…':focus.title):'Follow these objects'):'Townhall';
+  $('all-directory-questions').hidden=!relatedQuestions;
   const currentIds=new Set(relatedAnchor?[relatedAnchor]:(state.episode?.participants.map(p=>p.accession)||[]));
-  for(const [label,group] of [['Conversations',scenes],['Proposed pairings',comparisons],['Open questions',prompts]]){
+  for(const [label,group] of townhallGroups()){
     const entries=relatedQuestions?group.filter(({episode})=>episode.id!==state.episode?.id && episode.participants.some(p=>currentIds.has(p.accession))):group;
     if(!entries.length)continue;
     const section=node('section');
     section.append(node('h2',label+' · '+entries.length,'directory-heading'));
     for(const {episode,objects,open} of entries){
       const button=questionCard(episode,objects);
+      button.dataset.source=objects[0].accession;
+      button.dataset.target=objects[1].accession;
+      if(!relatedQuestions){
+        button.addEventListener('pointerenter',()=>highlightTownhallPair(objects[0],objects[1],episode));
+        button.addEventListener('pointerleave',()=>stage.setPairHighlight('','',null));
+      }
       button.addEventListener('click',()=>{
         setMobileView('space');
         open();
@@ -773,6 +931,28 @@ function openEpisodeRecord(accession){
   renderRecord();setPanel('record');closeConversationSheet();
   document.querySelector('.rail-scroll').scrollTop=0;
 }
+function paintConnection(connection){
+  const desc=$('room-description');
+  const mark=' · link unproven';
+  if(connection.endsWith(mark)){
+    const badge=node('span',undefined,'link-badge');
+    badge.tabIndex=0;
+    const swatch=node('i',undefined,'link-badge-swatch');
+    swatch.setAttribute('aria-hidden','true');
+    const label=node('span',connection.slice(0,-mark.length),'link-badge-label');
+    const pip=node('span','!','link-badge-mark');
+    pip.setAttribute('aria-hidden','true');
+    const warning=node('span','link unproven','link-warning');
+    warning.id='room-link-warning';
+    badge.setAttribute('aria-describedby','room-link-warning');
+    badge.append(swatch,label,pip,warning);
+    desc.replaceChildren(badge);
+    desc.removeAttribute('title');
+    return;
+  }
+  desc.replaceChildren(document.createTextNode(connection));
+  desc.title=state.researchPath?.proposal||connection;
+}
 function renderRoomHeader(source,target,c){
   const episode=conversationEpisode({source,target,conversation:c});
   if(state.episode?.id!==episode.id){
@@ -787,19 +967,24 @@ function renderRoomHeader(source,target,c){
   // Show the relationship that led to this room, rather than a generic
   // description of its format. Research-proposal detail stays in Evidence.
   const connection=connectionCaption({episode,proposal:state.researchPath?.proposal});
-  $('room-description').textContent=connection;
-  $('room-description').title=state.researchPath?.proposal||connection;
+  paintConnection(connection);
   $('room-rationale').textContent='Why these two? ↗';
   const cast=$('room-participants');
+  const linkColor=state.researchPath?'#e8d5a3':tagColor(shownEdge()?.reasons?.[0]?.value||'shared');
+  const voices=voiceColors(source.accession,target.accession,linkColor);
+  paintSubjectRing(voices[target.accession===state.seed?'objectB':'objectA']);
   cast.replaceChildren(...episode.participants.map((p,i)=>{
     const r=i?target:source,visual=objectVisual(r);
-    const card=node('article',undefined,'room-participant');
+    const card=node('article',undefined,'room-participant'+(p.accession===state.seed?' is-subject':''));
     card.dataset.speaker=p.role;
+    card.dataset.point=p.accession;
+    card.style.setProperty('--speaker',voices[p.role]||voices.archivist);
     const inspect=node('button',undefined,'object-inspect');inspect.type='button';
     inspect.setAttribute('aria-label','Inspect collection record: '+p.title+' · '+p.accession);
     const media=node('span',undefined,'object-portrait-media'+(visual.label==='Artist diagram'?' is-diagram':''));
     media.setAttribute('aria-hidden','true');
     const placeholder=()=>{media.replaceChildren(node('span',p.shortName.slice(0,55),'object-portrait-placeholder'));media.classList.add('is-placeholder');};
+    if(visual.label==='Motif icon')media.classList.add('is-mark');
     if(visual.src){
       const img=node('img');img.src=visual.src;img.alt='';img.loading='lazy';img.decoding='async';
       img.addEventListener('error',placeholder,{once:true});media.append(img);
@@ -813,6 +998,17 @@ function renderRoomHeader(source,target,c){
     inspect.append(media,metadata);
     inspect.addEventListener('click',()=>openEpisodeRecord(p.accession));
     card.append(inspect);
+    if(p.accession!==state.seed){
+      const hold=node('button','Make subject','object-subject');
+      hold.type='button';
+      hold.setAttribute('aria-label','Make '+p.title+' the subject');
+      hold.addEventListener('click',()=>{
+        if(state.researchPath){state.seed=p.accession;render();setPanel('conversation');return;}
+        stop();resetApproval();state.researchPath=null;state.seed=p.accession;state.edge=null;state.recordAccession=null;
+        render();setPanel('conversation');
+      });
+      card.append(hold);
+    }
     const total=questionCountFor(p.accession),remaining=Math.max(0,total-1);
     if(remaining){
       const other=node('button',remaining+' other '+(remaining===1?'conversation':'conversations')+' ↗','object-more');
@@ -872,12 +1068,16 @@ function renderJuxtaposition(box){
     archivist:{name:'Archivist · fictional research voice',src:'',persona:guide,side:'guide'}
   };
   const chat=node('div',undefined,'chat');
+  paintRailLink('#e8d5a3');
   chat.style.setProperty('--link','#e8d5a3');
+  const voices=voiceColors(source.accession,target.accession,'#e8d5a3');
   for(const turn of c.turns){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
+    bubble.dataset.point=turn.role==='objectA'?source.accession:turn.role==='objectB'?target.accession:'archivist';
+    bubble.style.setProperty('--speaker',voices[turn.role]||voices.archivist);
     const img=node('img');img.className='avatar';img.alt='';
-    if(face.persona)bindPersonaImage(img,face.persona);
+    if(face.persona)bindPersonaImage(img,face.persona,'compact');
     else img.src=face.src;
     const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
@@ -890,11 +1090,13 @@ function renderJuxtaposition(box){
 }
 function renderConversation(){
   const edge=shownEdge(),box=$('conversation-content');box.replaceChildren();
+  paintRailLink('');
+  paintSubjectRing('');
   state.conversation=null;
   $('room-header').hidden=true;
   syncMobileRoomStage();
   clearScene();
-  if(edge?.relationshipType==='curatorial_juxtaposition'&&state.researchPath){renderJuxtaposition(box);return;}
+  if(state.researchPath){renderJuxtaposition(box);return;}
   if(state.hover?.kind==='identity'){
     const identity=state.layerView?.relationships.find(item=>item.id===state.hover.id);
     if(identity){box.append(node('span','SCRIPTED · '+identity.validationState,'evidence-type'),node('h2',identity.type.replaceAll('_',' ')),node('p',identity.basis),node('p','A shared tag or identifier is not a historical relationship.','muted'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
@@ -904,14 +1106,32 @@ function renderConversation(){
     box.append(node('span','SCRIPTED · '+identity.validationState,'evidence-type'),node('h2',identity.type.replaceAll('_',' ')),node('p',identity.basis),node('p','Hidden layers remove both the line and its hit target. This edge is not a historical relationship.','muted'));
     $('voice-controls').hidden=true;setPlayDisabled(true);return;
   }
-  if(!edge){state.episode=null;box.append(node('h2','No shared category in this view.'),node('p','Try another object, category or perspective. An absent edge does not mean the objects have no relationship.'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
+  if(!edge){
+    state.episode=null;
+    $('room-header').hidden=false;
+    $('room-question').textContent='This subject has no conversation in the current view.';
+    $('room-participants').replaceChildren();
+    box.append(node('p','A conversation here needs a shared tag. A path preview is a separate authored comparison, and it stays with its two objects.'),node('button','Return to Making the Engine'));
+    const back=box.querySelector('button');
+    back.type='button';
+    back.addEventListener('click',()=>{state.researchPath=null;state.mapMode='conversation';state.seed=openingSubject();state.edge=null;render();setPanel('conversation');});
+    $('voice-controls').hidden=true;setPlayDisabled(true);return;
+  }
   const source=person(edge.source),target=person(edge.target);
-  if(!source||!target){box.append(node('h2','No shared category in this view.'));$('voice-controls').hidden=true;setPlayDisabled(true);return;}
+  if(!source||!target){
+    $('room-header').hidden=false;
+    $('room-question').textContent='This subject has no conversation in the current view.';
+    box.append(node('p','The two records for this line are not both in the current view.'));
+    $('voice-controls').hidden=true;setPlayDisabled(true);return;
+  }
   const c=conversationFor(source,target,edge,state.lens,{source:state.snapshots.get(state.seed),target:state.snapshots.get(target.accession)});state.conversation=c;
   paintScene(c,edge);
   renderRoomHeader(source,target,c);
   const chat=node('div',undefined,'chat');
-  chat.style.setProperty('--link',tagColor(edge.reasons[0].value));
+  const linkColor=tagColor(edge.reasons[0].value);
+  paintRailLink(linkColor);
+  chat.style.setProperty('--link',linkColor);
+  const voices=voiceColors(source.accession,target.accession,linkColor);
   const reader=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   const guide=CARD_BY_ID.get('archivist');
   const faces={
@@ -922,8 +1142,10 @@ function renderConversation(){
   for(const turn of state.episode.turns){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
+    bubble.dataset.point=turn.role==='objectA'?source.accession:turn.role==='objectB'?target.accession:'archivist';
+    bubble.style.setProperty('--speaker',voices[turn.role]||voices.archivist);
     const img=node('img');img.className='avatar';img.alt='';
-    if(face.persona)bindPersonaImage(img,face.persona);
+    if(face.persona)bindPersonaImage(img,face.persona,'compact');
     else img.src=face.src;
     const say=node('div',undefined,'say');
     const line=node('span',undefined,'speaker-line');
@@ -932,18 +1154,13 @@ function renderConversation(){
     say.append(line,node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
   }
-  box.append(chat);
+  if(state.episode.turns.length)box.append(chat);
   if(state.episode.mode==='RESEARCH_PROMPT'){
     state.conversation=null;
-    box.append(node('p','Compare these records','research-prompt-title'),
-      node('p','This pair has no edited dialogue. Start with the shared tag, inspect each record, and decide whether the comparison holds.','research-prompt-copy'));
-    for(const p of state.episode.participants){
-      const button=node('button','Inspect '+p.shortName,'evidence-record');button.type='button';
-      button.addEventListener('click',()=>openEpisodeRecord(p.accession));box.append(button);
-    }
+    box.append(townhallPanel(source,target,edge));
   }
-  if(c.mode!=='CURATED_EDGE_SCENE'&&c.dramaticArc)box.append(node('p',c.dramaticArc,'notice'));
-  if(c.nextPrompt)box.append(node('p',visitorFollowUp(c),'notice'));
+  if(c.mode!=='CURATED_EDGE_SCENE'&&state.episode.mode!=='RESEARCH_PROMPT'&&c.dramaticArc)box.append(node('p',c.dramaticArc,'notice'));
+  if(state.episode.mode!=='RESEARCH_PROMPT'&&c.nextPrompt)box.append(node('p',visitorFollowUp(c),'notice'));
   // A narrative edge can become a new starting object. Make this an explicit
   // visitor action; graph connectivity is never inferred from the dialogue.
   const actions=node('div',undefined,'edge-path-actions');
@@ -1056,14 +1273,16 @@ function renderRoom(){
   const current=record();
   message('atlas-title',state.district?state.district.label+' · '+state.room.layer.label:(current?current.title+' · '+current.accession:state.room.layer.label));
   const nodes=state.room.nodes.map(item=>({
-    id:item.accession,label:item.title,image:localImageUrl(item.accession)||'',color:item.color,
+    id:item.accession,label:item.title,image:localImageUrl(item.accession)||'',icon:localImageUrl(item.accession)?'':objectMarkUrl(state.matrixRecords.find(record=>record.accession===item.accession)||{accession:item.accession,title:item.title}),color:item.color,
     neighbor:Boolean(pair&&item.accession===pair.edge.target),
   }));
-  const links=pair?[{source:pair.edge.source,target:pair.edge.target,label:pair.edge.reasons?.[0]?.value||'',color:tagColor(pair.edge.reasons?.[0]?.value||'shared')}]:[];
-  const graph=pair?focusedPairGraph(nodes,links,pair.edge.source,pair.edge.target):focusedPairGraph(nodes,links);
+  const linkColor=pair?tagColor(pair.edge.reasons?.[0]?.value||'shared'):'';
+  const links=pair?[{source:pair.edge.source,target:pair.edge.target,label:pair.edge.reasons?.[0]?.value||'',color:linkColor}]:[];
+  const voiced=pair?withSpeakerColors(nodes,pair.edge.source,pair.edge.target,linkColor):nodes;
+  const graph=pair?focusedPairGraph(voiced,links,pair.edge.source,pair.edge.target):focusedPairGraph(nodes,links);
   $('stage').dataset.theme='';
   $('layer-notice').hidden=true;
-  stage.setGraph(graph.nodes,graph.links);
+  stage.setGraph(graph.nodes,graph.links,{layout:$('layer-box').checked?'shelf':'constellation'});
   if(pair)stage.focusPair(pair.edge.source,pair.edge.target);
   paintCounts([[objectIcon(),state.room.nodes.length,state.room.nodes.length===1?'object':'objects']]);
   renderStage();
@@ -1090,6 +1309,7 @@ function researchNodes(){
     id:item.accession,
     label:item.title,
     image:photo(item)||'',
+    icon:photo(item)?'':objectMarkUrl(item),
     color:'#f4f4f4',
     neighbor:index===1,
     schematic:!photo(item),
@@ -1107,14 +1327,18 @@ function renderResearch(){
   };
   state.edge=path.edge.id;
   state.layerView={relationships:[]};
+  const held=path.target.accession===state.seed?path.target:path.source;
+  if(state.seed!==held.accession)state.seed=held.accession;
   message('lens-question',path.arc);
-  message('atlas-title',path.arc);
-  const graph=focusedPairGraph(researchNodes(),[{
+  message('atlas-title',held.title+' · '+held.accession);
+  const portrait=$('object-focus-portrait');
+  if(portrait)portrait.src=photo(held)||objectBadge(held);
+  const graph=focusedPairGraph(withSpeakerColors(researchNodes(),path.source.accession,path.target.accession,'#e8d5a3'),[{
     source:path.source.accession,target:path.target.accession,label:'Curatorial juxtaposition',color:'#e8d5a3'
   }],path.source.accession,path.target.accession);
   $('stage').dataset.theme='';
   $('layer-notice').hidden=true;
-  stage.setGraph(graph.nodes,graph.links);
+  stage.setGraph(graph.nodes,graph.links,{layout:$('layer-box').checked?'shelf':'constellation'});
   stage.focusPair(path.source.accession,path.target.accession);
   paintResearchLabel();
   paintCounts([
@@ -1124,7 +1348,7 @@ function renderResearch(){
     [claimIcon(),0,'historical claims inferred']
   ]);
   renderStage();renderConversation();renderRecord();
-  message('visitor-source','RESEARCH PREVIEW · NOT A WOLFSONIAN ENDORSEMENT');
+  message('visitor-source','Artist-proposed comparison');
   message('visitor-object',path.source.title+' · '+path.target.title);
   message('visitor-connection',path.proposal);
   paintLegend();paintSeedChoices();paintListeners();paintTimeline();
@@ -1135,6 +1359,7 @@ function openResearchPath(id){
   stop();resetApproval();
   state.mapMode='conversation';
   state.researchPath=path;
+  state.seed=path.source.accession;
   if($('atlas-mode')?.checked)$('atlas-mode').checked=false;
   closeSheet();
   render();
@@ -1143,9 +1368,11 @@ function openResearchPath(id){
   startSceneEntrance();
 }
 function render(){
+  clearPoint();
   state.hover=null;
   paintChoices();
   paintPaths();
+  if(townhallGraphOpen()){renderTownhallGraph();paintTimeline();return;}
   if(roomMode()){renderRoom();paintResearchLabel();return;}
   if(state.researchPath){renderResearch();return;}
   paintResearchLabel();
@@ -1196,6 +1423,9 @@ function updateSpeakingAudio(turn,index,count){
   if($('audio-speaker'))$('audio-speaker').textContent=speaker+' speaking';
   if($('audio-elapsed'))$('audio-elapsed').textContent='Turn '+(index+1)+' of '+count;
 }
+// Mode A, a performed scene, and Mode B, a research-host discussion, stay inactive
+// until a verified recording and its timecodes are in this repo. Listen reads the
+// displayed transcript only. Playback position is never invented, and nothing autoplays.
 async function play(){
   if(!state.conversation)return;stop();wakeDream();const session=playback;
   const conversation=state.conversation,mode=$('voice-mode').value;
@@ -1266,10 +1496,60 @@ function saveConversation(){
 }
 $('lens').replaceChildren(...LENSES.map(p=>{const o=node('option',p.label);o.value=p.id;return o;}));
 $('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;render();paintReading();});
+$('room-prompts')?.addEventListener('click',event=>{event.stopPropagation();openPromptSheet(state.lens);});
+$('room-archivist')?.addEventListener('click',event=>{event.stopPropagation();openPromptSheet('archivist');});
+function applyCastOpen(open){
+  const header=$('room-header');
+  const toggle=$('room-cast-toggle');
+  if(header)header.classList.toggle('is-cast-open',open);
+  if(toggle){
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.setAttribute('aria-label',open?'Show the compact cast':'Show the records and perspective');
+  }
+}
+$('room-cast-toggle')?.addEventListener('click',()=>{
+  const open=!$('room-header')?.classList.contains('is-cast-open');
+  applyCastOpen(open);
+  try{sessionStorage.setItem('archive-dreams-cast-open',open?'1':'0');}catch{}
+});
+try{applyCastOpen(sessionStorage.getItem('archive-dreams-cast-open')==='1');}catch{}
+function withSpeakerColors(nodes,sourceId,targetId,linkColor){
+  const voices=voiceColors(sourceId,targetId,linkColor);
+  return nodes.map(node=>node.id===sourceId?{...node,voice:voices.objectA}:node.id===targetId?{...node,voice:voices.objectB}:node);
+}
+function paintSubjectRing(color){
+  const portrait=$('object-focus-portrait');
+  if(!portrait)return;
+  portrait.style.boxShadow=color?'0 0 0 2px '+color:'';
+}
+function paintRailLink(color){
+  const rail=document.querySelector('.evidence-rail');
+  if(!rail)return;
+  if(color)rail.style.setProperty('--link',color);
+  else rail.style.removeProperty('--link');
+}
 function paintReading(){
   const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
-  bindPersonaImage($('reading-portrait'),card,'compact');
-  $('reading-name').textContent=card.id==='museum'?card.label+' · fictional':card.label;
+  const personaLabel=card.id==='museum'?card.label+' · fictional':card.label;
+  const dockPortrait=$('reading-portrait');
+  if(dockPortrait)bindPersonaImage(dockPortrait,card,'compact');
+  if($('reading-name'))$('reading-name').textContent=personaLabel;
+  const reading=$('reading-toggle');
+  if(reading)reading.setAttribute('aria-label','Choose perspective, currently '+personaLabel+(card.id==='museum'?' (fictional, not museum staff)':''));
+  const lens=$('room-lens');
+  if(lens){
+    lens.style.setProperty('--persona',card.color);
+    const portrait=$('room-lens-portrait');
+    if(portrait)bindPersonaImage(portrait,card,'compact');
+    $('room-lens-hook').textContent=card.hook;
+    const guide=CARD_BY_ID.get('archivist');
+    const archivist=$('room-archivist');
+    if(archivist&&guide){
+      const face=$('room-archivist-portrait');
+      if(face)bindPersonaImage(face,guide,'compact');
+      archivist.hidden=card.id==='archivist';
+    }
+  }
   for(const id of ['room','feed']){
     if($(id+'-perspective-name'))$(id+'-perspective-name').textContent=card.id==='museum'?card.label+' · fictional':card.label;
     const toggle=$(id+'-perspective-toggle');
@@ -1277,20 +1557,108 @@ function paintReading(){
   }
   for(const button of document.querySelectorAll('[data-lens]'))button.setAttribute('aria-pressed',String(button.dataset.lens===state.lens));
 }
+const PROMPT_EDITS_KEY='archive-dreams-prompt-edits';
+const promptDrafts=new Map();
+let promptEditing=false;
+function promptEdits(){
+  try{
+    const stored=JSON.parse(localStorage.getItem(PROMPT_EDITS_KEY)||'{}');
+    if(stored&&typeof stored==='object')return stored;
+  }catch{}
+  return Object.fromEntries(promptDrafts);
+}
+function savePromptEdit(id,text){
+  promptDrafts.set(id,text);
+  const edits=promptEdits();
+  edits[id]=text;
+  try{localStorage.setItem(PROMPT_EDITS_KEY,JSON.stringify(edits));}catch{}
+}
+function clearPromptEdit(id){
+  promptDrafts.delete(id);
+  const edits=promptEdits();
+  delete edits[id];
+  try{localStorage.setItem(PROMPT_EDITS_KEY,JSON.stringify(edits));}catch{}
+}
+function promptFor(card){
+  const custom=promptEdits()[card.id];
+  return typeof custom==='string'&&custom.trim()?custom:card.prompt;
+}
+function paintPromptFields(text){
+  const host=$('prompt-fields');
+  if(!host)return;
+  const rows=[];
+  for(const line of String(text||'').split('\n')){
+    const trimmed=line.trim();
+    if(!trimmed)continue;
+    const cut=trimmed.indexOf(':');
+    const row=node('div',undefined,'prompt-field');
+    if(cut>0&&cut<32){
+      row.append(node('span',trimmed.slice(0,cut),'prompt-label'),node('p',trimmed.slice(cut+1).trim(),'prompt-value'));
+    }else row.append(node('p',trimmed,'prompt-value'));
+    rows.push(row);
+  }
+  host.replaceChildren(...rows);
+}
+function setPromptEditing(on){
+  promptEditing=on;
+  const fields=$('prompt-fields');
+  const editor=$('prompt-editor');
+  const edit=$('prompt-edit');
+  const cancel=$('prompt-cancel');
+  if(fields)fields.hidden=on;
+  if(editor)editor.hidden=!on;
+  if(edit){
+    edit.textContent=on?'Save':'Edit';
+    edit.setAttribute('aria-pressed',String(on));
+  }
+  if(cancel)cancel.hidden=!on;
+  if(on&&editor){
+    editor.value=$('prompt-text')?.textContent||'';
+    editor.focus();
+  }
+}
 function closePromptSheet(){
   const sheet=$('prompt-sheet');if(!sheet)return;
+  setPromptEditing(false);
   sheet.hidden=true;
 }
-function openPromptSheet(){
-  const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
-  $('prompt-kicker').textContent=card.subheading;
+function paintPromptCast(activeId){
+  const cast=$('prompt-cast');
+  if(!cast)return;
+  if(!cast.childElementCount){
+    cast.replaceChildren(...[...CARD_BY_ID.values()].map(card=>{
+      const button=node('button');
+      button.type='button';button.className='prompt-cast-choice';button.dataset.prompt=card.id;
+      button.style.setProperty('--persona',card.color);
+      button.setAttribute('role','option');
+      const img=node('img');bindPersonaImage(img,card,'compact');
+      button.append(img,node('span',card.label));
+      button.addEventListener('click',()=>openPromptSheet(card.id));
+      return button;
+    }));
+  }
+  for(const button of cast.querySelectorAll('[data-prompt]'))button.setAttribute('aria-pressed',String(button.dataset.prompt===activeId));
+}
+function openPromptSheet(id){
+  const card=CARD_BY_ID.get(id||state.lens)||CARD_BY_ID.get('family');
+  const text=promptFor(card);
+  const edited=text!==card.prompt;
+  setPromptEditing(false);
+  paintPromptCast(card.id);
+  const portrait=$('prompt-portrait');
+  if(portrait)bindPersonaImage(portrait,card);
   $('prompt-title').textContent=card.label;
   $('prompt-hook').textContent=card.hook;
   $('prompt-description').textContent=card.description;
   const attended=card.priorities.length?card.priorities:['Any explicitly available staff-assigned metadata.'];
   $('prompt-priorities').replaceChildren(...attended.map(item=>node('li',item)));
   $('prompt-limits').textContent=card.limits;
-  $('prompt-text').textContent=card.prompt;
+  $('prompt-text').textContent=text;
+  paintPromptFields(text);
+  const mark=$('prompt-edited');
+  if(mark)mark.hidden=!edited;
+  const reset=$('prompt-reset');
+  if(reset)reset.hidden=!edited;
   const archivist=CARD_BY_ID.get('archivist');
   const other=$('archivist-block');
   if(other){
@@ -1298,7 +1666,11 @@ function openPromptSheet(){
     if(archivist)$('archivist-prompt').textContent=archivist.prompt;
   }
   closeSheet();
-  $('prompt-sheet').hidden=false;
+  const sheet=$('prompt-sheet');
+  sheet.dataset.lens=card.id;
+  sheet.style.setProperty('--persona',card.color);
+  sheet.hidden=false;
+  sheet.scrollTop=0;
   $('prompt-close')?.focus();
 }
 function promptMenu(){
@@ -1358,7 +1730,7 @@ $('mobile-perspective-choices')?.replaceChildren(...LENSES.map(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button',undefined,'mobile-perspective-choice');
   button.type='button';button.dataset.lens=lens.id;button.setAttribute('aria-pressed',String(lens.id===state.lens));
-  const portrait=node('img');bindPersonaImage(portrait,card,'full','white');
+  const portrait=node('img');bindPersonaImage(portrait,card,'compact','white');
   const copy=node('span',undefined,'mobile-perspective-copy');
   copy.append(node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
     node('small',lens.id==='museum'?'Artist-authored viewpoint; not museum staff.':lens.question));
@@ -1374,11 +1746,11 @@ $('mobile-perspective-choices')?.replaceChildren(...LENSES.map(lens=>{
 document.querySelector('.finder').addEventListener('submit',event=>event.preventDefault());
 function paintPaths(){
   const box=$('path-choices');if(!box)return;
-  box.replaceChildren(node('p','Research preview. Not a Wolfsonian endorsement.','path-note'));
-  const back=node('button','Making the Engine');
+  box.replaceChildren();
+  const back=node('button','Leave preview');
   back.type='button';
   back.setAttribute('aria-pressed',String(!state.researchPath));
-  back.addEventListener('click',()=>{state.researchPath=null;closeSheet();render();});
+  back.addEventListener('click',()=>leavePreview());
   box.append(back);
   for(const path of CURATORIAL_PATHS){
     const button=node('button',path.arc);
@@ -1390,21 +1762,28 @@ function paintPaths(){
   }
   if($('paths-name'))$('paths-name').textContent=state.researchPath?'Preview':'Research';
 }
-const PANELS={map:'map-popover',reading:'reading-popover',seed:'seed-popover',theme:'theme-popover',paths:'paths-popover',zoom:'zoom-popover'};
+const PANELS={map:'map-popover',reading:'reading-popover',seed:'seed-popover',theme:'theme-popover',paths:'paths-popover'};
 function resetMore(){
   const layers=document.querySelector('[data-more="layers"]'),zoom=document.querySelector('[data-more="zoom"]');
   if(layers)layers.hidden=false;
   if(zoom)zoom.hidden=true;
 }
-function placePanel(name){
-  const button=document.querySelector('[data-sheet="'+name+'"]');
+function placePanel(name, button){
+  button=button||document.querySelector('[data-sheet="'+name+'"]');
   const panel=$(PANELS[name]);
+  if(!button||!panel)return;
   const width=panel.getBoundingClientRect().width;
   const rect=button.getBoundingClientRect();
   let left=rect.left;
   if(left+width>window.innerWidth-12)left=Math.max(12,window.innerWidth-12-width);
   panel.style.left=Math.round(left)+'px';
-  panel.style.bottom=Math.round(window.innerHeight-rect.top+8)+'px';
+  if(rect.top>window.innerHeight*0.55){
+    panel.style.top='auto';
+    panel.style.bottom=Math.round(window.innerHeight-rect.top+8)+'px';
+  }else{
+    panel.style.bottom='auto';
+    panel.style.top=Math.round(rect.bottom+8)+'px';
+  }
 }
 function closeSheet(){
   for(const id of Object.values(PANELS)){const panel=$(id);if(panel)panel.hidden=true;}
@@ -1418,16 +1797,18 @@ function closeConversationSheet(){
   sheet.hidden=true;
   $('conversation-head')?.setAttribute('aria-expanded','false');
 }
-function openSheet(name){
+function openSheet(name, button){
+  if(name==='reading'&&mobileLayout()){openMobilePerspectives(button);return;}
   const panel=$(PANELS[name]);
   const open=panel.hidden;
   closeSheet();
   if(!open)return;
   panel.hidden=false;
-  document.querySelector('[data-sheet="'+name+'"]').setAttribute('aria-expanded','true');
-  placePanel(name);
+  const trigger=button||document.querySelector('[data-sheet="'+name+'"]');
+  trigger?.setAttribute('aria-expanded','true');
+  placePanel(name, trigger);
 }
-for(const button of document.querySelectorAll('[data-sheet]'))button.addEventListener('click',()=>openSheet(button.dataset.sheet));
+for(const button of document.querySelectorAll('[data-sheet]'))button.addEventListener('click',()=>openSheet(button.dataset.sheet, button));
 $('zoom-open')?.addEventListener('click',()=>{document.querySelector('[data-more="layers"]').hidden=true;document.querySelector('[data-more="zoom"]').hidden=false;placePanel('more');});
 $('sheet-back')?.addEventListener('click',()=>{resetMore();placePanel('more');});
 document.addEventListener('click',event=>{
@@ -1451,6 +1832,51 @@ $('prompt-close')?.addEventListener('click',event=>{
   event.stopPropagation();
   closePromptSheet();
 });
+$('prompt-copy')?.addEventListener('click',event=>{
+  event.stopPropagation();
+  const text=promptEditing?$('prompt-editor').value:$('prompt-text').textContent;
+  const button=$('prompt-copy');
+  const show=ok=>{
+    if(!button)return;
+    button.textContent=ok?'Copied':'Copy';
+    setTimeout(()=>{if(button.textContent==='Copied')button.textContent='Copy';},1400);
+  };
+  const pending=navigator.clipboard?.writeText(text);
+  const area=node('textarea');
+  area.value=text;
+  area.setAttribute('readonly','');
+  area.style.position='fixed';
+  area.style.opacity='0';
+  document.body.append(area);
+  area.focus();
+  area.select();
+  let copied=false;
+  try{copied=document.execCommand('copy');}catch{copied=false;}
+  area.remove();
+  if(copied){show(true);return;}
+  if(pending)pending.then(()=>show(true)).catch(()=>show(false));
+  else show(false);
+});
+$('prompt-edit')?.addEventListener('click',event=>{
+  event.stopPropagation();
+  if(!promptEditing){setPromptEditing(true);return;}
+  const id=$('prompt-sheet').dataset.lens;
+  const text=$('prompt-editor').value;
+  const card=CARD_BY_ID.get(id);
+  if(card&&text.trim()===card.prompt.trim())clearPromptEdit(id);
+  else savePromptEdit(id,text);
+  openPromptSheet(id);
+});
+$('prompt-cancel')?.addEventListener('click',event=>{
+  event.stopPropagation();
+  setPromptEditing(false);
+});
+$('prompt-reset')?.addEventListener('click',event=>{
+  event.stopPropagation();
+  const id=$('prompt-sheet').dataset.lens;
+  clearPromptEdit(id);
+  openPromptSheet(id);
+});
 $('sheet-close')?.addEventListener('click',event=>{
   event.stopPropagation();
   closeConversationSheet();
@@ -1463,7 +1889,7 @@ $('space-room')?.addEventListener('click',()=>{
 });
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
 $('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();});
-function browseAll(){relatedQuestions=false;relatedAnchor=null;setMobileView('timeline');}
+function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;setMobileView('timeline');render();}
 $('space-feed')?.addEventListener('click',browseAll);
 $('space-conversation')?.addEventListener('click',()=>{
   setPanel('conversation');
@@ -1476,7 +1902,7 @@ $('space-record')?.addEventListener('click',()=>{
 });
 $('space-leave')?.addEventListener('click',browseAll);
 $('all-directory-questions').addEventListener('click',browseAll);
-$('questions-back')?.addEventListener('click',()=>setMobileView('space'));
+$('questions-back')?.addEventListener('click',()=>{setMobileView('space');render();});
 const mobileMedia=window.matchMedia('(max-width: 800px)');
 mobileMedia.addEventListener('change',syncMobileLayout);
 window.addEventListener('resize',syncMobileLayout);
@@ -1535,13 +1961,15 @@ document.addEventListener('pointermove',()=>{
 },{passive:true});
 const stage=mountForceStage($('stage'),{onSelect:id=>onGraphSelect(id),onLink:(source,target)=>onGraphLink(source,target),onDrag:wakeDream,background:'#111111',dream:true});
 stageApi=stage;
+watchPointing($('conversation-content'));
+watchPointing($('room-header'));
 syncMobileLayout();
 paintReading();
 $('seed').addEventListener('change',()=>{state.journey=[];changeSeed($('seed').value);});
 $('search').addEventListener('input',()=>{stop();resetApproval();options();render();});
-for(const id of ['layer-accession','layer-box','layer-box-sim'])$(id).addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();});
-$('atlas-mode').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;render();stage.fit();});
-$('theme').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;render();});
+for(const id of ['layer-box','layer-box-sim'])$(id).addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();});
+$('atlas-mode').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();render();stage.fit();});
+$('theme').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();render();});
 $('veil').addEventListener('input',renderGraph);
 document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>{setPanel(b.dataset.panel);if(mobileLayout())setMobileView('space');}));
 $('voice-mode').addEventListener('change',()=>{stop();resetApproval();$('approval-box').hidden=$('voice-mode').value!=='elevenlabs';});
@@ -1583,15 +2011,9 @@ $('check-services').addEventListener('click',async()=>{
     message('service-status','Lakehouse: '+(s.lakehouse?'enabled':'disabled')+' · ElevenLabs: '+(s.elevenlabs?'enabled':'disabled')+' · '+voiceLine+' · live conversation model: no.');
   }catch(error){message('service-status',error.message);}
 });
-function closeZoomPopover(){
-  const panel=$('zoom-popover');if(!panel)return;
-  panel.hidden=true;
-  $('zoom-toggle')?.setAttribute('aria-expanded','false');
-}
-$('zoom-in')?.addEventListener('click',()=>zoom(1.2));$('zoom-out')?.addEventListener('click',()=>zoom(1/1.2));
-$('fit')?.addEventListener('click',()=>{fit();closeZoomPopover();});
+$('fit')?.addEventListener('click',()=>fit());
 $('zoom')?.addEventListener('input',()=>setZoomT(Number($('zoom').value)));
-for(const button of document.querySelectorAll('[data-stop]'))button.addEventListener('click',()=>{setZoomT(Number(button.dataset.stop));closeZoomPopover();});
+for(const button of document.querySelectorAll('[data-stop]'))button.addEventListener('click',()=>setZoomT(Number(button.dataset.stop)));
 for(const button of document.querySelectorAll('[data-map]'))button.addEventListener('click',()=>setMapMode(button.dataset.map));
 $('present').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{message('voice-status','Full screen unavailable on this device.');}});
 $('admin-toggle')?.addEventListener('click',()=>{
