@@ -60,8 +60,17 @@ try{
 
   for(const width of [320,390,768]){
     await page.setViewportSize({width,height:844});
-    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),
-      'Listening room overflow at '+width+'px');
+    const overflow=await page.evaluate(()=>({
+      scrollWidth:document.documentElement.scrollWidth,
+      viewport:window.innerWidth,
+      offenders:[...document.querySelectorAll('body *')].map(el=>{
+        const r=el.getBoundingClientRect();
+        return {tag:el.tagName,id:el.id||'',className:typeof el.className==='string'?el.className:'',
+          right:Math.round(r.right),left:Math.round(r.left),scroll:el.scrollWidth,client:el.clientWidth};
+      }).filter(x=>x.right>innerWidth+1||x.left < -1).slice(0,12)
+    }));
+    assert.ok(overflow.scrollWidth<=overflow.viewport+1,
+      'Listening room overflow at '+width+'px: '+JSON.stringify(overflow));
   }
   assert.deepEqual(externalRequests,[],'The local listening room must not make external requests.');
   assert.deepEqual(errors,[],'The listening room must load without browser errors.');
