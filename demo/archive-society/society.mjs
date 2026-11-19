@@ -16,6 +16,7 @@ import { explainEncounter, conversationEpisode, connectionCaption, visitorFollow
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 import { scriptedScenePlan } from '../../src/scene-performance.mjs';
 import { tagColor, voiceColors } from './conversation-color.mjs';
+import { personaCharacterUrl } from '../../src/persona-cloudinary-assets.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
@@ -26,12 +27,14 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
 const appearanceKey='archive-dreams-appearance';
 function personaTone(){return document.documentElement.dataset.colorTheme==='light'?'ink':'white';}
-function bindPersonaImage(image,card,variant='compact',fixedTone=null){
+function bindPersonaImage(image,card,variant='compact',fixedTone=null,palette=null){
   if(!card)return;
   image.dataset.personaId=card.id;
   image.dataset.personaVariant=variant;
   if(fixedTone)image.dataset.personaTone=fixedTone;
   else delete image.dataset.personaTone;
+  if(palette)image.dataset.personaPalette=palette;
+  else delete image.dataset.personaPalette;
   image.classList.add('persona-symbol');
   image.alt=''; // The adjacent visible text identifies the perspective.
   const tone=fixedTone||personaTone();
@@ -39,12 +42,12 @@ function bindPersonaImage(image,card,variant='compact',fixedTone=null){
     image.onerror=null;
     image.src=portraitFallbackUrl(card,{tone,variant});
   };
-  image.src=portraitUrl(card,{tone,variant});
+  image.src=(palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
 }
 function refreshPersonaImages(){
   document.querySelectorAll('img[data-persona-id]').forEach(image=>{
     const card=CARD_BY_ID.get(image.dataset.personaId);
-    if(card)bindPersonaImage(image,card,image.dataset.personaVariant||'compact',image.dataset.personaTone||null);
+    if(card)bindPersonaImage(image,card,image.dataset.personaVariant||'compact',image.dataset.personaTone||null,image.dataset.personaPalette||null);
   });
 }
 function applyAppearance(mode){
@@ -564,7 +567,7 @@ function personaPlate(card,speaker){
   const fig=node('figure',undefined,'plate persona');
   fig.dataset.speaker=speaker;
   const face=node('img');face.className='object-shot';
-  bindPersonaImage(face,card);
+  bindPersonaImage(face,card,'full',null,'sepia');
   fig.append(face,node('figcaption',card.id==='museum'?card.label+' · fictional':card.label));
   return fig;
 }
@@ -1138,7 +1141,7 @@ function renderJuxtaposition(box){
     bubble.dataset.point=turn.role==='objectA'?source.accession:turn.role==='objectB'?target.accession:'archivist';
     bubble.style.setProperty('--speaker',voices[turn.role]||voices.archivist);
     const img=node('img');img.className='avatar';img.alt='';
-    if(face.persona)bindPersonaImage(img,face.persona,'compact');
+    if(face.persona)bindPersonaImage(img,face.persona,'compact',null,'sepia');
     else img.src=face.src;
     const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
@@ -1207,7 +1210,7 @@ function renderConversation(){
     bubble.dataset.point=turn.role==='objectA'?source.accession:turn.role==='objectB'?target.accession:'archivist';
     bubble.style.setProperty('--speaker',voices[turn.role]||voices.archivist);
     const img=node('img');img.className='avatar';img.alt='';
-    if(face.persona)bindPersonaImage(img,face.persona,'compact');
+    if(face.persona)bindPersonaImage(img,face.persona,'compact',null,'sepia');
     else img.src=face.src;
     const say=node('div',undefined,'say');
     const line=node('span',undefined,'speaker-line');
@@ -1642,13 +1645,13 @@ function paintReading(){
   if(lens){
     lens.style.setProperty('--persona',card.color);
     const portrait=$('room-lens-portrait');
-    if(portrait)bindPersonaImage(portrait,card,'compact');
+    if(portrait)bindPersonaImage(portrait,card,'compact',null,'sepia');
     $('room-lens-hook').textContent=card.hook;
     const guide=CARD_BY_ID.get('archivist');
     const archivist=$('room-archivist');
     if(archivist&&guide){
       const face=$('room-archivist-portrait');
-      if(face)bindPersonaImage(face,guide,'compact');
+      if(face)bindPersonaImage(face,guide,'compact',null,'sepia');
       archivist.hidden=card.id==='archivist';
     }
   }
@@ -1733,7 +1736,7 @@ function paintPromptCast(activeId){
       button.type='button';button.className='prompt-cast-choice';button.dataset.prompt=card.id;
       button.style.setProperty('--persona',card.color);
       button.setAttribute('role','option');
-      const img=node('img');bindPersonaImage(img,card,'compact');
+      const img=node('img');bindPersonaImage(img,card,'compact',null,'sepia');
       button.append(img,node('span',card.label));
       button.addEventListener('click',()=>openPromptSheet(card.id));
       return button;
@@ -1748,7 +1751,7 @@ function openPromptSheet(id){
   setPromptEditing(false);
   paintPromptCast(card.id);
   const portrait=$('prompt-portrait');
-  if(portrait)bindPersonaImage(portrait,card);
+  if(portrait)bindPersonaImage(portrait,card,'compact',null,'sepia');
   $('prompt-title').textContent=card.label;
   $('prompt-hook').textContent=card.hook;
   $('prompt-description').textContent=card.description;
@@ -1805,7 +1808,7 @@ $('reading-popover').replaceChildren(...LENSES.map(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button');
   button.type='button';button.className='reading-choice';button.dataset.lens=lens.id;
-  const img=node('img');bindPersonaImage(img,card,'compact');
+  const img=node('img');bindPersonaImage(img,card,'compact',null,'sepia');
   const label=lens.id==='museum'?lens.label+' · fictional':lens.label;
   button.append(img,node('span',label));
   button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));closeSheet();});
@@ -1832,7 +1835,7 @@ $('mobile-perspective-choices')?.replaceChildren(...LENSES.map(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button',undefined,'mobile-perspective-choice');
   button.type='button';button.dataset.lens=lens.id;button.setAttribute('aria-pressed',String(lens.id===state.lens));
-  const portrait=node('img');bindPersonaImage(portrait,card,'compact','white');
+  const portrait=node('img');bindPersonaImage(portrait,card,'compact','white','sepia');
   const copy=node('span',undefined,'mobile-perspective-copy');
   copy.append(node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
     node('small',lens.id==='museum'?'Artist-authored viewpoint; not museum staff.':lens.question));
@@ -1881,7 +1884,7 @@ function appendPerspective(chat){
   bubble.dataset.point='perspective';
   bubble.style.setProperty('--speaker',card?.color||'#d7c4a3');
   const img=node('img');img.className='avatar';img.alt='';
-  bindPersonaImage(img,card,'compact');
+  bindPersonaImage(img,card,'compact',null,'sepia');
   const say=node('div',undefined,'say');
   say.append(node('strong',lens.label+' · '+card.subheading),node('p',card.hook));
   bubble.append(img,say);

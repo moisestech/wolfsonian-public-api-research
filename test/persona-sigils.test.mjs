@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {PERSONA_SIGIL_IDS,personaSigilSvg} from '../src/persona-sigils.mjs';
-import {personaAssetUrl,decoStudyUrl,DECO_STUDY_IDS} from '../src/persona-cloudinary-assets.mjs';
+import {personaAssetUrl,decoStudyUrl,DECO_STUDY_IDS,personaCharacterUrl} from '../src/persona-cloudinary-assets.mjs';
 import {CARD_BY_ID as CARD_MAP,portraitUrl,portraitFallbackUrl} from '../src/discovery-personas.mjs';
 import {CARD_BY_ID} from '../src/discovery-personas.mjs';
 const manifest=JSON.parse(await readFile(new URL('../docs/design/persona-cloudinary-manifest.json',import.meta.url),'utf8'));
@@ -46,4 +46,35 @@ test('white deco variants are real linked assets, not unreviewed museum marks',(
  }
  assert.throws(()=>personaAssetUrl('aperture-mask'),/Unknown persona symbol/);
  assert.match(manifest.rights,/not museum staff insignia/);
+});
+test('illustrated portraits use the verified uploaded URLs and leave the other identities on v1',async()=>{
+ const portraits=JSON.parse(await readFile(new URL('../docs/design/persona-character-portrait-manifest.v2.json',import.meta.url),'utf8'));
+ assert.equal(portraits.counts.total,22);
+ assert.equal(portraits.counts.mainPortraitAssets,18);
+ assert.equal(portraits.counts.alternateFamilyAssets,4);
+ let primary=0;
+ for(const [id,group] of Object.entries(portraits.personas)){
+  for(const [palette,sizes] of Object.entries(group.variants)){
+   for(const [variant,asset] of Object.entries(sizes)){
+    primary++;
+    assert.equal(personaCharacterUrl(id,{palette,variant}),asset.url);
+    assert.match(asset.url,/\/v\d+\/archive-dreams\/brand\/personas\/portraits\//);
+   }
+  }
+ }
+ assert.equal(primary,18);
+ let alternates=0;
+ for(const [id,group] of Object.entries(portraits.alternates)){
+  for(const [palette,sizes] of Object.entries(group.variants)){
+   for(const [variant,asset] of Object.entries(sizes)){
+    alternates++;
+    assert.equal(personaCharacterUrl(id,{palette,variant}),asset.url);
+   }
+  }
+ }
+ assert.equal(alternates,4);
+ assert.equal(personaCharacterUrl('family-deco-mask',{palette:'sepia',variant:'full'}),null);
+ assert.equal(personaCharacterUrl('futurist'),null);
+ assert.equal(personaCharacterUrl('tourist',{palette:'white',variant:'compact'}),null);
+ assert.throws(()=>personaCharacterUrl('family',{palette:'gold'}),/Unsupported persona portrait/);
 });
