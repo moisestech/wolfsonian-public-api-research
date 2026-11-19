@@ -1842,7 +1842,7 @@ function perspectiveSections(buildChoice){
 function approvedMasksSection(){
   const section=node('section',undefined,'approved-mask-studies');
   section.append(
-    node('h3','Artist-approved mask studies','perspective-choice-group-title'),
+    node('h3','Artist-approved mask studies','approved-mask-title'),
     node('p','Graphic studies informing the characters; not additional speaking perspectives.','approved-mask-note')
   );
   const grid=node('div',undefined,'approved-mask-grid');
