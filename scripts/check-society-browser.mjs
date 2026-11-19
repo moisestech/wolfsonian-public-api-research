@@ -195,7 +195,7 @@ try {
     const choice=page.locator('#mobile-perspective-choices [data-lens="'+id+'"]');
     assert.equal(await choice.count(),1,'Perspective choice exists: '+label);
     assert.match(await choice.innerText(),new RegExp(label));
-    assert.match(await choice.locator('img.persona-illustrated').getAttribute('src'),new RegExp('/'+id+'-architectural-white-master-v1[.]png));
+    assert.match(await choice.locator('img.persona-illustrated').getAttribute('src'),new RegExp('/'+id+'-architectural-white-master-v1[.]png$'));
   }
   assert.equal(await page.locator('#mobile-perspective-choices .perspective-choice-group-title').count(),3);
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img.persona-illustrated').getAttribute('data-persona-variant'),'full');
