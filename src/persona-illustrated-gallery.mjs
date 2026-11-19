@@ -12,22 +12,70 @@ export const ILLUSTRATED_PERSONAS=Object.freeze({
     "approval": "approved prior artist work"
   },
   "tourist": {
-    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795105997/archive-dreams/brand/personas/portraits/tourist-sepia-full-v4.png",
-    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106002/archive-dreams/brand/personas/portraits/tourist-sepia-compact-v4.png",
-    "source": "v4",
-    "approval": "new artist-directed study; artwork-level review pending"
+    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112012/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-white-master-v1.png",
+    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112012/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-white-master-v1.png",
+    "white": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112012/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-white-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112012/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-white-master-v1.png"
+    },
+    "ink": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112018/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-ink-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112018/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-ink-master-v1.png"
+    },
+    "source": "architectural-mask-geometric-v1",
+    "approval": "artist visual review pending",
+    "masters": {
+      "white": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112012/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-white-master-v1.svg",
+      "ink": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112018/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-ink-master-v1.svg"
+    },
+    "priorIllustration": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795105997/archive-dreams/brand/personas/portraits/tourist-sepia-full-v4.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106002/archive-dreams/brand/personas/portraits/tourist-sepia-compact-v4.png"
+    }
   },
   "novice": {
-    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106006/archive-dreams/brand/personas/portraits/novice-sepia-full-v4.png",
-    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106010/archive-dreams/brand/personas/portraits/novice-sepia-compact-v4.png",
-    "source": "v4",
-    "approval": "new artist-directed study; artwork-level review pending"
+    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112025/archive-dreams/brand/personas/architectural-masks-v1/novice-architectural-white-master-v1.png",
+    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112025/archive-dreams/brand/personas/architectural-masks-v1/novice-architectural-white-master-v1.png",
+    "white": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112025/archive-dreams/brand/personas/architectural-masks-v1/novice-architectural-white-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112025/archive-dreams/brand/personas/architectural-masks-v1/novice-architectural-white-master-v1.png"
+    },
+    "ink": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112030/archive-dreams/brand/personas/architectural-masks-v1/novice-architectural-ink-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112030/archive-dreams/brand/personas/architectural-masks-v1/novice-architectural-ink-master-v1.png"
+    },
+    "source": "architectural-mask-geometric-v1",
+    "approval": "artist visual review pending",
+    "masters": {
+      "white": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112025/archive-dreams/brand/personas/architectural-masks-v1/novice-architectural-white-master-v1.svg",
+      "ink": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112030/archive-dreams/brand/personas/architectural-masks-v1/novice-architectural-ink-master-v1.svg"
+    },
+    "priorIllustration": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106006/archive-dreams/brand/personas/portraits/novice-sepia-full-v4.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106010/archive-dreams/brand/personas/portraits/novice-sepia-compact-v4.png"
+    }
   },
   "connoisseur": {
-    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106013/archive-dreams/brand/personas/portraits/connoisseur-sepia-full-v4.png",
-    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106018/archive-dreams/brand/personas/portraits/connoisseur-sepia-compact-v4.png",
-    "source": "v4",
-    "approval": "new artist-directed study; artwork-level review pending"
+    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112037/archive-dreams/brand/personas/architectural-masks-v1/connoisseur-architectural-white-master-v1.png",
+    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112037/archive-dreams/brand/personas/architectural-masks-v1/connoisseur-architectural-white-master-v1.png",
+    "white": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112037/archive-dreams/brand/personas/architectural-masks-v1/connoisseur-architectural-white-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112037/archive-dreams/brand/personas/architectural-masks-v1/connoisseur-architectural-white-master-v1.png"
+    },
+    "ink": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112043/archive-dreams/brand/personas/architectural-masks-v1/connoisseur-architectural-ink-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112043/archive-dreams/brand/personas/architectural-masks-v1/connoisseur-architectural-ink-master-v1.png"
+    },
+    "source": "architectural-mask-geometric-v1",
+    "approval": "artist visual review pending",
+    "masters": {
+      "white": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112037/archive-dreams/brand/personas/architectural-masks-v1/connoisseur-architectural-white-master-v1.svg",
+      "ink": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112043/archive-dreams/brand/personas/architectural-masks-v1/connoisseur-architectural-ink-master-v1.svg"
+    },
+    "priorIllustration": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106013/archive-dreams/brand/personas/portraits/connoisseur-sepia-full-v4.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106018/archive-dreams/brand/personas/portraits/connoisseur-sepia-compact-v4.png"
+    }
   },
   "worker": {
     "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099907/archive-dreams/brand/personas/portraits/worker-sepia-full-v2.png",
@@ -42,34 +90,114 @@ export const ILLUSTRATED_PERSONAS=Object.freeze({
     "approval": "approved prior artist work"
   },
   "futurist": {
-    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106022/archive-dreams/brand/personas/portraits/futurist-sepia-full-v4.png",
-    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106027/archive-dreams/brand/personas/portraits/futurist-sepia-compact-v4.png",
-    "source": "v4",
-    "approval": "new artist-directed study; artwork-level review pending"
+    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112049/archive-dreams/brand/personas/architectural-masks-v1/futurist-architectural-white-master-v1.png",
+    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112049/archive-dreams/brand/personas/architectural-masks-v1/futurist-architectural-white-master-v1.png",
+    "white": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112049/archive-dreams/brand/personas/architectural-masks-v1/futurist-architectural-white-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112049/archive-dreams/brand/personas/architectural-masks-v1/futurist-architectural-white-master-v1.png"
+    },
+    "ink": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112055/archive-dreams/brand/personas/architectural-masks-v1/futurist-architectural-ink-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112055/archive-dreams/brand/personas/architectural-masks-v1/futurist-architectural-ink-master-v1.png"
+    },
+    "source": "architectural-mask-geometric-v1",
+    "approval": "artist visual review pending",
+    "masters": {
+      "white": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112049/archive-dreams/brand/personas/architectural-masks-v1/futurist-architectural-white-master-v1.svg",
+      "ink": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112055/archive-dreams/brand/personas/architectural-masks-v1/futurist-architectural-ink-master-v1.svg"
+    },
+    "priorIllustration": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106022/archive-dreams/brand/personas/portraits/futurist-sepia-full-v4.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106027/archive-dreams/brand/personas/portraits/futurist-sepia-compact-v4.png"
+    }
   },
   "mourner": {
-    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106032/archive-dreams/brand/personas/portraits/mourner-sepia-full-v4.png",
-    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106037/archive-dreams/brand/personas/portraits/mourner-sepia-compact-v4.png",
-    "source": "v4",
-    "approval": "new artist-directed study; artwork-level review pending"
+    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112060/archive-dreams/brand/personas/architectural-masks-v1/mourner-architectural-white-master-v1.png",
+    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112060/archive-dreams/brand/personas/architectural-masks-v1/mourner-architectural-white-master-v1.png",
+    "white": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112060/archive-dreams/brand/personas/architectural-masks-v1/mourner-architectural-white-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112060/archive-dreams/brand/personas/architectural-masks-v1/mourner-architectural-white-master-v1.png"
+    },
+    "ink": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112066/archive-dreams/brand/personas/architectural-masks-v1/mourner-architectural-ink-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112066/archive-dreams/brand/personas/architectural-masks-v1/mourner-architectural-ink-master-v1.png"
+    },
+    "source": "architectural-mask-geometric-v1",
+    "approval": "artist visual review pending",
+    "masters": {
+      "white": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112060/archive-dreams/brand/personas/architectural-masks-v1/mourner-architectural-white-master-v1.svg",
+      "ink": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112066/archive-dreams/brand/personas/architectural-masks-v1/mourner-architectural-ink-master-v1.svg"
+    },
+    "priorIllustration": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106032/archive-dreams/brand/personas/portraits/mourner-sepia-full-v4.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106037/archive-dreams/brand/personas/portraits/mourner-sepia-compact-v4.png"
+    }
   },
   "propagandist": {
-    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106044/archive-dreams/brand/personas/portraits/propagandist-sepia-full-v4.png",
-    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106048/archive-dreams/brand/personas/portraits/propagandist-sepia-compact-v4.png",
-    "source": "v4",
-    "approval": "new artist-directed study; artwork-level review pending"
+    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112074/archive-dreams/brand/personas/architectural-masks-v1/propagandist-architectural-white-master-v1.png",
+    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112074/archive-dreams/brand/personas/architectural-masks-v1/propagandist-architectural-white-master-v1.png",
+    "white": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112074/archive-dreams/brand/personas/architectural-masks-v1/propagandist-architectural-white-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112074/archive-dreams/brand/personas/architectural-masks-v1/propagandist-architectural-white-master-v1.png"
+    },
+    "ink": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112079/archive-dreams/brand/personas/architectural-masks-v1/propagandist-architectural-ink-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112079/archive-dreams/brand/personas/architectural-masks-v1/propagandist-architectural-ink-master-v1.png"
+    },
+    "source": "architectural-mask-geometric-v1",
+    "approval": "artist visual review pending",
+    "masters": {
+      "white": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112074/archive-dreams/brand/personas/architectural-masks-v1/propagandist-architectural-white-master-v1.svg",
+      "ink": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112079/archive-dreams/brand/personas/architectural-masks-v1/propagandist-architectural-ink-master-v1.svg"
+    },
+    "priorIllustration": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106044/archive-dreams/brand/personas/portraits/propagandist-sepia-full-v4.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106048/archive-dreams/brand/personas/portraits/propagandist-sepia-compact-v4.png"
+    }
   },
   "counterfeit": {
-    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106052/archive-dreams/brand/personas/portraits/counterfeit-sepia-full-v4.png",
-    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106056/archive-dreams/brand/personas/portraits/counterfeit-sepia-compact-v4.png",
-    "source": "v4",
-    "approval": "new artist-directed study; artwork-level review pending"
+    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112085/archive-dreams/brand/personas/architectural-masks-v1/counterfeit-architectural-white-master-v1.png",
+    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112085/archive-dreams/brand/personas/architectural-masks-v1/counterfeit-architectural-white-master-v1.png",
+    "white": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112085/archive-dreams/brand/personas/architectural-masks-v1/counterfeit-architectural-white-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112085/archive-dreams/brand/personas/architectural-masks-v1/counterfeit-architectural-white-master-v1.png"
+    },
+    "ink": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112092/archive-dreams/brand/personas/architectural-masks-v1/counterfeit-architectural-ink-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112092/archive-dreams/brand/personas/architectural-masks-v1/counterfeit-architectural-ink-master-v1.png"
+    },
+    "source": "architectural-mask-geometric-v1",
+    "approval": "artist visual review pending",
+    "masters": {
+      "white": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112085/archive-dreams/brand/personas/architectural-masks-v1/counterfeit-architectural-white-master-v1.svg",
+      "ink": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112092/archive-dreams/brand/personas/architectural-masks-v1/counterfeit-architectural-ink-master-v1.svg"
+    },
+    "priorIllustration": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106052/archive-dreams/brand/personas/portraits/counterfeit-sepia-full-v4.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106056/archive-dreams/brand/personas/portraits/counterfeit-sepia-compact-v4.png"
+    }
   },
   "museum": {
-    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106060/archive-dreams/brand/personas/portraits/museum-sepia-full-v4.png",
-    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106064/archive-dreams/brand/personas/portraits/museum-sepia-compact-v4.png",
-    "source": "v4",
-    "approval": "new artist-directed study; artwork-level review pending"
+    "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112097/archive-dreams/brand/personas/architectural-masks-v1/museum-architectural-white-master-v1.png",
+    "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112097/archive-dreams/brand/personas/architectural-masks-v1/museum-architectural-white-master-v1.png",
+    "white": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112097/archive-dreams/brand/personas/architectural-masks-v1/museum-architectural-white-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112097/archive-dreams/brand/personas/architectural-masks-v1/museum-architectural-white-master-v1.png"
+    },
+    "ink": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112102/archive-dreams/brand/personas/architectural-masks-v1/museum-architectural-ink-master-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_384,h_384/f_png/v1795112102/archive-dreams/brand/personas/architectural-masks-v1/museum-architectural-ink-master-v1.png"
+    },
+    "source": "architectural-mask-geometric-v1",
+    "approval": "artist visual review pending",
+    "masters": {
+      "white": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112097/archive-dreams/brand/personas/architectural-masks-v1/museum-architectural-white-master-v1.svg",
+      "ink": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795112102/archive-dreams/brand/personas/architectural-masks-v1/museum-architectural-ink-master-v1.svg"
+    },
+    "priorIllustration": {
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106060/archive-dreams/brand/personas/portraits/museum-sepia-full-v4.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106064/archive-dreams/brand/personas/portraits/museum-sepia-compact-v4.png"
+    }
   }
 });
 export const APPROVED_DECO_MASK_STUDIES=Object.freeze({
@@ -126,9 +254,10 @@ export const APPROVED_DECO_MASK_STUDIES=Object.freeze({
     "original": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106614/archive-dreams/brand/personas/approved-masks/halo-deco-original.png"
   }
 });
-export function illustratedPersonaUrl(id,{variant='compact'}={}){
-  if(!['full','compact'].includes(variant))throw new Error('Unsupported illustrated portrait size');
-  return Object.hasOwn(ILLUSTRATED_PERSONAS,id)?ILLUSTRATED_PERSONAS[id][variant]:null;
+export function illustratedPersonaUrl(id,{tone='white',variant='compact'}={}){
+  if(!['white','ink'].includes(tone)||!['full','compact'].includes(variant))throw new Error('Unsupported portrait size or palette');
+  const art=ILLUSTRATED_PERSONAS[id];
+  return art?.[tone]?.[variant]||art?.[variant]||null;
 }
 export function approvedMaskStudyUrl(id,{tone='white',variant='compact'}={}){
   if(!['white','ink'].includes(tone)||!['full','compact'].includes(variant))throw new Error('Unsupported mask appearance');
