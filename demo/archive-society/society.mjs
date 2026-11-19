@@ -51,7 +51,7 @@ function bindPersonaImage(image,card,variant='compact',fixedTone=null,palette=nu
     image.dataset.artworkFallback='1';
     image.src=alternate;
   };
-  image.src=illustratedPersonaUrl(card.id,{variant})||
+  image.src=illustratedPersonaUrl(card.id,{variant,tone})||
     (palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
 }
 function refreshPersonaImages(){
