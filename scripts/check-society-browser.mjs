@@ -25,8 +25,11 @@ try {
   // Cloudinary-backed persona marks preserve the intended small/large roles.
   assert.equal(await page.locator('#reading-portrait').getAttribute('data-persona-id'),'family');
   assert.equal(await page.locator('#reading-portrait').getAttribute('data-persona-variant'),'compact');
+  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
+  // A blocked CDN must render the original inline vector without a broken avatar.
+  await page.locator('#reading-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
   assert.match(await page.locator('#reading-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
-  assert.ok(decodeURIComponent(await page.locator('#reading-portrait').getAttribute('src')).includes('#ffffff'));
+  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
   assert.equal(await page.locator('#reading-popover [data-lens] img.persona-symbol').count(),5);
   assert.equal(await page.locator('#zoom-stage .plate.persona img.persona-symbol').count()>0,true);
   // The editorial title changes without replacing the accessible archive identity.
@@ -134,9 +137,9 @@ try {
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
-  assert.ok(decodeURIComponent(await page.locator('#reading-portrait').getAttribute('src')).includes('#142523'));
+  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/\/family-ink-compact-v1\.svg$/);
   // The mobile perspective sheet stays dark in both theme settings.
-  assert.ok(decodeURIComponent(await page.locator('#mobile-perspective-choices [data-lens="family"] img').getAttribute('src')).includes('#ffffff'));
+  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img').getAttribute('src'),/\/family-white-full-v1\.svg$/);
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
