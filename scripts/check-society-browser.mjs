@@ -179,6 +179,12 @@ try {
   await page.locator('#room-perspective-toggle').click();
   assert.equal(await page.locator('#mobile-perspective-sheet').isVisible(),true);
   assert.equal(await page.locator('#mobile-perspective-choices button').count(),11);
+  // Large illustration cards must remain substantial on real narrow phone viewports.
+  const artworkHeight=await page.locator('#mobile-perspective-choices [data-lens="novice"] img').evaluate(el=>el.getBoundingClientRect().height);
+  assert.ok(artworkHeight>=130,'The Art Novice portrait must be a readable illustration, not a tiny 42px icon');
+  await screenshot('illustrated-character-gallery-390');
+  assert.equal(await page.locator('#mobile-perspective-choices .approved-mask-tile').count(),4);
+
   for(const [id,label] of [['tourist','Tourist'],['novice','Art novice'],['connoisseur','Art connoisseur'],['futurist','Futurist'],['mourner','Mourner']]){
     const choice=page.locator('#mobile-perspective-choices [data-lens="'+id+'"]');
     assert.equal(await choice.count(),1,'Perspective choice exists: '+label);
