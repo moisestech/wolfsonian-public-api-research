@@ -14,6 +14,7 @@ on:
       - 'test/audio-lab-experiments.test.mjs'
       - 'test/audio-lab-review.test.mjs'
       - 'scripts/build-audio-lab-review.mjs'
+      - 'scripts/check-audio-lab-review-browser.mjs'
       - 'tools/audio-lab/**'
       - 'data/research/audio-lab/**'
       - 'docs/audio-lab/**'
@@ -58,6 +59,7 @@ jobs:
           node --check scripts/serve-archive-society.mjs
           node --check scripts/check-society-browser.mjs
           node --check scripts/build-audio-lab-review.mjs
+          node --check scripts/check-audio-lab-review-browser.mjs
       - name: Run discovery tests
         run: node --test test/discovery-graph.test.mjs test/discovery-showcase.test.mjs
       - name: Run archive society and service tests
@@ -74,6 +76,7 @@ jobs:
           npx playwright install --with-deps chromium
           node test/discovery-browser-smoke.mjs
           node scripts/check-society-browser.mjs
+          node scripts/check-audio-lab-review-browser.mjs
       - name: Save review screenshots
         if: always()
         uses: actions/upload-artifact@v4
