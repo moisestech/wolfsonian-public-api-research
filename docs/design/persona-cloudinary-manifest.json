@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 1,
+  "source": "cloudinary",
+  "project": "Archive Dreams in Public",
+  "collection": "Archive Society persona design study",
+  "cloudName": "dck5rzi4h",
+  "assetFolder": "archive-dreams/brand/personas",
+  "parentLogoFolder": "archive-dreams/brand",
+  "masterFormat": "svg",
+  "derivedFormat": "png",
+  "rights": "original artist design study; not museum staff insignia",
+  "counts": {
+    "personas": 11,
+    "colors": 2,
+    "variants": 2,
+    "personaAssets": 44,
+    "decoMaskStudies": 3,
+    "total": 47
+  },
+  "personas": {
+    "family": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/family-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048530/archive-dreams/brand/personas/family-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048530/archive-dreams/brand/personas/family-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/family-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048817/archive-dreams/brand/personas/family-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048817/archive-dreams/brand/personas/family-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/family-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048533/archive-dreams/brand/personas/family-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048533/archive-dreams/brand/personas/family-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/family-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048821/archive-dreams/brand/personas/family-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048821/archive-dreams/brand/personas/family-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "tourist": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/tourist-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048537/archive-dreams/brand/personas/tourist-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048537/archive-dreams/brand/personas/tourist-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/tourist-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048826/archive-dreams/brand/personas/tourist-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048826/archive-dreams/brand/personas/tourist-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/tourist-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048542/archive-dreams/brand/personas/tourist-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048542/archive-dreams/brand/personas/tourist-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/tourist-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048830/archive-dreams/brand/personas/tourist-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048830/archive-dreams/brand/personas/tourist-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "novice": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/novice-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048546/archive-dreams/brand/personas/novice-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048546/archive-dreams/brand/personas/novice-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/novice-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048834/archive-dreams/brand/personas/novice-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048834/archive-dreams/brand/personas/novice-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/novice-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048551/archive-dreams/brand/personas/novice-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048551/archive-dreams/brand/personas/novice-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/novice-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048838/archive-dreams/brand/personas/novice-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048838/archive-dreams/brand/personas/novice-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "connoisseur": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/connoisseur-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048556/archive-dreams/brand/personas/connoisseur-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048556/archive-dreams/brand/personas/connoisseur-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/connoisseur-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048842/archive-dreams/brand/personas/connoisseur-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048842/archive-dreams/brand/personas/connoisseur-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/connoisseur-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048561/archive-dreams/brand/personas/connoisseur-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048561/archive-dreams/brand/personas/connoisseur-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/connoisseur-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048845/archive-dreams/brand/personas/connoisseur-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048845/archive-dreams/brand/personas/connoisseur-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "worker": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/worker-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048566/archive-dreams/brand/personas/worker-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048566/archive-dreams/brand/personas/worker-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/worker-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048849/archive-dreams/brand/personas/worker-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048849/archive-dreams/brand/personas/worker-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/worker-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048570/archive-dreams/brand/personas/worker-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048570/archive-dreams/brand/personas/worker-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/worker-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048853/archive-dreams/brand/personas/worker-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048853/archive-dreams/brand/personas/worker-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "archivist": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/archivist-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048481/archive-dreams/brand/personas/archivist-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048481/archive-dreams/brand/personas/archivist-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/archivist-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048857/archive-dreams/brand/personas/archivist-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048857/archive-dreams/brand/personas/archivist-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/archivist-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048574/archive-dreams/brand/personas/archivist-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048574/archive-dreams/brand/personas/archivist-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/archivist-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048861/archive-dreams/brand/personas/archivist-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048861/archive-dreams/brand/personas/archivist-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "futurist": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/futurist-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048578/archive-dreams/brand/personas/futurist-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048578/archive-dreams/brand/personas/futurist-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/futurist-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048872/archive-dreams/brand/personas/futurist-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048872/archive-dreams/brand/personas/futurist-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/futurist-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048582/archive-dreams/brand/personas/futurist-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048582/archive-dreams/brand/personas/futurist-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/futurist-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048876/archive-dreams/brand/personas/futurist-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048876/archive-dreams/brand/personas/futurist-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "mourner": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/mourner-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048585/archive-dreams/brand/personas/mourner-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048585/archive-dreams/brand/personas/mourner-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/mourner-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048881/archive-dreams/brand/personas/mourner-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048881/archive-dreams/brand/personas/mourner-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/mourner-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048589/archive-dreams/brand/personas/mourner-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048589/archive-dreams/brand/personas/mourner-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/mourner-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048886/archive-dreams/brand/personas/mourner-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048886/archive-dreams/brand/personas/mourner-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "propagandist": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/propagandist-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048592/archive-dreams/brand/personas/propagandist-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048592/archive-dreams/brand/personas/propagandist-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/propagandist-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048889/archive-dreams/brand/personas/propagandist-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048889/archive-dreams/brand/personas/propagandist-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/propagandist-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048598/archive-dreams/brand/personas/propagandist-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048598/archive-dreams/brand/personas/propagandist-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/propagandist-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048893/archive-dreams/brand/personas/propagandist-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048893/archive-dreams/brand/personas/propagandist-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "counterfeit": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/counterfeit-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048602/archive-dreams/brand/personas/counterfeit-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048602/archive-dreams/brand/personas/counterfeit-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/counterfeit-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048897/archive-dreams/brand/personas/counterfeit-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048897/archive-dreams/brand/personas/counterfeit-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/counterfeit-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048606/archive-dreams/brand/personas/counterfeit-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048606/archive-dreams/brand/personas/counterfeit-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/counterfeit-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048900/archive-dreams/brand/personas/counterfeit-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048900/archive-dreams/brand/personas/counterfeit-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    },
+    "museum": {
+      "full": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/museum-white-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048630/archive-dreams/brand/personas/museum-white-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048630/archive-dreams/brand/personas/museum-white-full-v1.png",
+          "size": 512
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/museum-ink-full-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048905/archive-dreams/brand/personas/museum-ink-full-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048905/archive-dreams/brand/personas/museum-ink-full-v1.png",
+          "size": 512
+        }
+      },
+      "compact": {
+        "white": {
+          "publicId": "archive-dreams/brand/personas/museum-white-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048634/archive-dreams/brand/personas/museum-white-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048634/archive-dreams/brand/personas/museum-white-compact-v1.png",
+          "size": 128
+        },
+        "ink": {
+          "publicId": "archive-dreams/brand/personas/museum-ink-compact-v1",
+          "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048909/archive-dreams/brand/personas/museum-ink-compact-v1.svg",
+          "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795048909/archive-dreams/brand/personas/museum-ink-compact-v1.png",
+          "size": 128
+        }
+      }
+    }
+  },
+  "decoWhiteMasks": {
+    "aperture-mask": {
+      "publicId": "archive-dreams/brand/personas/deco-aperture-mask-white-v1",
+      "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048670/archive-dreams/brand/personas/deco-aperture-mask-white-v1.svg",
+      "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048670/archive-dreams/brand/personas/deco-aperture-mask-white-v1.png",
+      "size": 512
+    },
+    "guardian-emblem": {
+      "publicId": "archive-dreams/brand/personas/deco-guardian-emblem-white-v1",
+      "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048675/archive-dreams/brand/personas/deco-guardian-emblem-white-v1.svg",
+      "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048675/archive-dreams/brand/personas/deco-guardian-emblem-white-v1.png",
+      "size": 512
+    },
+    "mask-emblem": {
+      "publicId": "archive-dreams/brand/personas/deco-mask-emblem-white-v1",
+      "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795048679/archive-dreams/brand/personas/deco-mask-emblem-white-v1.svg",
+      "png": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795048679/archive-dreams/brand/personas/deco-mask-emblem-white-v1.png",
+      "size": 512
+    }
+  }
+}

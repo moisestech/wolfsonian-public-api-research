@@ -1,6 +1,6 @@
 import { buildDiscoveryIndex, parseMatrixCsv, recommendNeighbors } from '../../src/discovery-graph.mjs';
 import { inventedRecords, societyView, conversationFor, LENSES, WORLD, categoryIconUrl, district, deviceCast } from '../../src/archive-society.mjs';
-import { CARD_BY_ID, portraitUrl } from '../../src/discovery-personas.mjs';
+import { CARD_BY_ID, portraitUrl, portraitFallbackUrl } from '../../src/discovery-personas.mjs';
 import { applyLayers, buildAtlasGraph, recordsToAtlasInput } from '../../src/atlas-graph.mjs';
 import { reconcileLookup } from '../../src/archive-evidence.mjs';
 import { applyLakehouseFields, conversationRecords, lookupSnapshots } from '../../src/lakehouse-matches.mjs';
@@ -24,9 +24,32 @@ const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null
   playing:false,epoch:0,view:null,conversation:null,episode:null,recordAccession:null,lookupBusy:false,hover:null,researchPath:null};
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
 const appearanceKey='archive-dreams-appearance';
+function personaTone(){return document.documentElement.dataset.colorTheme==='light'?'ink':'white';}
+function bindPersonaImage(image,card,variant='full',fixedTone=null){
+  if(!card)return;
+  image.dataset.personaId=card.id;
+  image.dataset.personaVariant=variant;
+  if(fixedTone)image.dataset.personaTone=fixedTone;
+  else delete image.dataset.personaTone;
+  image.classList.add('persona-symbol');
+  image.alt=''; // The adjacent visible text identifies the perspective.
+  const tone=fixedTone||personaTone();
+  image.onerror=()=>{
+    image.onerror=null;
+    image.src=portraitFallbackUrl(card,{tone,variant});
+  };
+  image.src=portraitUrl(card,{tone,variant});
+}
+function refreshPersonaImages(){
+  document.querySelectorAll('img[data-persona-id]').forEach(image=>{
+    const card=CARD_BY_ID.get(image.dataset.personaId);
+    if(card)bindPersonaImage(image,card,image.dataset.personaVariant||'full',image.dataset.personaTone||null);
+  });
+}
 function applyAppearance(mode){
   const light=mode==='light';
   document.documentElement.dataset.colorTheme=light?'light':'dark';
+  refreshPersonaImages();
   const toggle=$('appearance-toggle');
   if(toggle){
     const action=light?'Switch to dark appearance':'Switch to light appearance';
@@ -349,7 +372,7 @@ function lensMatch(record){
 function portraitFor(record){
   if(!lensMatch(record))return '';
   const card=CARD_BY_ID.get(state.lens);
-  return card?portraitUrl(card):'';
+  return card?portraitUrl(card,{tone:personaTone()}):'';
 }
 function tagColor(label){
   let hash=2166136261;
@@ -465,15 +488,19 @@ function onGraphLink(sourceId, targetId){
 function stagePlate(rec, kind, speaker){
   const fig=node('figure',undefined,'plate'+(kind?' '+kind:''));
   if(speaker)fig.dataset.speaker=speaker;
-  const img=node('img');img.className='object-shot';img.src=avatarFor(rec);img.alt='';
+  const img=node('img');img.className='object-shot';img.alt='';
+  const chosenCard=!photo(rec)&&lensMatch(rec)?CARD_BY_ID.get(state.lens):null;
+  if(chosenCard){fig.classList.add('persona');bindPersonaImage(img,chosenCard);}
+  else img.src=avatarFor(rec);
   fig.append(img,node('figcaption',rec.title));
   return fig;
 }
 function personaPlate(card,speaker){
   const fig=node('figure',undefined,'plate persona');
   fig.dataset.speaker=speaker;
-  const face=node('img');face.className='object-shot';face.src=portraitUrl(card);face.alt='';
-  fig.append(face,node('figcaption',card.label));
+  const face=node('img');face.className='object-shot';
+  bindPersonaImage(face,card);
+  fig.append(face,node('figcaption',card.id==='museum'?card.label+' · fictional':card.label));
   return fig;
 }
 function markSpeaker(role){
@@ -837,14 +864,16 @@ function renderJuxtaposition(box){
   const faces={
     objectA:{name:state.episode.participants[0].shortName,src:photo(source)||objectBadge(source),side:'a'},
     objectB:{name:state.episode.participants[1].shortName,src:photo(target)||objectBadge(target),side:'b'},
-    archivist:{name:'Archivist',src:guide?portraitUrl(guide):'',side:'guide'}
+    archivist:{name:'Archivist · fictional research voice',src:'',persona:guide,side:'guide'}
   };
   const chat=node('div',undefined,'chat');
   chat.style.setProperty('--link','#e8d5a3');
   for(const turn of c.turns){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
-    const img=node('img');img.className='avatar';img.alt='';img.src=face.src;
+    const img=node('img');img.className='avatar';img.alt='';
+    if(face.persona)bindPersonaImage(img,face.persona);
+    else img.src=face.src;
     const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
     bubble.append(img,say);chat.append(bubble);
   }
@@ -883,12 +912,14 @@ function renderConversation(){
   const faces={
     objectA:{name:state.episode.participants[0].shortName,src:photo(source)||objectBadge(source),side:'a'},
     objectB:{name:state.episode.participants[1].shortName,src:photo(target)||objectBadge(target),side:'b'},
-    archivist:{name:'Archivist · fictional research voice',src:guide?portraitUrl(guide):'',side:'guide'}
+    archivist:{name:'Archivist · fictional research voice',src:'',persona:guide,side:'guide'}
   };
   for(const turn of state.episode.turns){
     const face=faces[turn.role]||faces.archivist;
     const bubble=node('article',undefined,'bubble turn side-'+face.side);bubble.dataset.role=turn.role;
-    const img=node('img');img.className='avatar';img.alt='';img.src=face.src;
+    const img=node('img');img.className='avatar';img.alt='';
+    if(face.persona)bindPersonaImage(img,face.persona);
+    else img.src=face.src;
     const say=node('div',undefined,'say');
     const line=node('span',undefined,'speaker-line');
     line.append(node('strong',face.name));
@@ -1232,12 +1263,12 @@ $('lens').replaceChildren(...LENSES.map(p=>{const o=node('option',p.label);o.val
 $('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;render();paintReading();});
 function paintReading(){
   const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
-  $('reading-portrait').src=portraitUrl(card);
-  $('reading-name').textContent=card.label;
+  bindPersonaImage($('reading-portrait'),card,'compact');
+  $('reading-name').textContent=card.id==='museum'?card.label+' · fictional':card.label;
   for(const id of ['room','feed']){
-    if($(id+'-perspective-name'))$(id+'-perspective-name').textContent=card.label;
+    if($(id+'-perspective-name'))$(id+'-perspective-name').textContent=card.id==='museum'?card.label+' · fictional':card.label;
     const toggle=$(id+'-perspective-toggle');
-    if(toggle)toggle.setAttribute('aria-label','Choose perspective, currently '+card.label);
+    if(toggle)toggle.setAttribute('aria-label','Choose perspective, currently '+card.label+(card.id==='museum'?' (fictional, not museum staff)':''));
   }
   for(const button of document.querySelectorAll('[data-lens]'))button.setAttribute('aria-pressed',String(button.dataset.lens===state.lens));
 }
@@ -1295,8 +1326,9 @@ $('reading-popover').replaceChildren(...LENSES.map(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button');
   button.type='button';button.className='reading-choice';button.dataset.lens=lens.id;
-  const img=node('img');img.src=portraitUrl(card);img.alt='';
-  button.append(img,node('span',lens.label));
+  const img=node('img');bindPersonaImage(img,card,'compact');
+  const label=lens.id==='museum'?lens.label+' · fictional':lens.label;
+  button.append(img,node('span',label));
   button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));closeSheet();});
   return button;
 }));
@@ -1321,9 +1353,10 @@ $('mobile-perspective-choices')?.replaceChildren(...LENSES.map(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button',undefined,'mobile-perspective-choice');
   button.type='button';button.dataset.lens=lens.id;button.setAttribute('aria-pressed',String(lens.id===state.lens));
-  const portrait=node('img');portrait.src=portraitUrl(card);portrait.alt='';
+  const portrait=node('img');bindPersonaImage(portrait,card,'full','white');
   const copy=node('span',undefined,'mobile-perspective-copy');
-  copy.append(node('strong',lens.label),node('small',lens.question));
+  copy.append(node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
+    node('small',lens.id==='museum'?'Artist-authored viewpoint; not museum staff.':lens.question));
   const check=node('span','✓','mobile-perspective-selected');check.setAttribute('aria-hidden','true');
   button.append(portrait,copy,check);
   button.addEventListener('click',()=>{

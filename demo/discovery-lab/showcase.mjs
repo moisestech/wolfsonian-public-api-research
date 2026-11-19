@@ -1,5 +1,5 @@
 import { buildDiscoveryIndex, parseMatrixCsv, recommendNeighbors, FAMILIES } from '../../src/discovery-graph.mjs';
-import { CARDS, CARD_BY_ID, portraitUrl } from '../../src/discovery-personas.mjs';
+import { CARDS, CARD_BY_ID, portraitUrl, portraitFallbackUrl } from '../../src/discovery-personas.mjs';
 import { makeDialogue, replyToQuestion } from '../../src/discovery-dialogue.mjs';
 
 // Deliberately INVENTED source examples: never present these as museum objects.
@@ -68,7 +68,8 @@ function renderPersonaRail(){
     btn.type='button';btn.style.setProperty('--persona-color',p.color);
     btn.setAttribute('aria-pressed',String(model.lens===p.id));
     btn.setAttribute('aria-label','Select '+p.label+' interpretive lens');
-    const image=element('img');image.src=portraitUrl(p);image.alt='Conceptual illustrated portrait: '+p.label;image.decoding='async';
+    const image=element('img');image.src=portraitUrl(p);image.alt='Artist-authored aperture emblem: '+p.label;image.decoding='async';
+    image.addEventListener('error',()=>{image.src=portraitFallbackUrl(p);},{once:true});
     const copy=element('span');copy.append(element('strong',p.label),element('small',p.subheading));
     btn.append(image,copy);
     btn.addEventListener('click',()=>{stopSpeech();model.lens=p.id;model.selected=null;renderPersonaRail();renderStage();renderInspector();});

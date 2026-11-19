@@ -22,6 +22,13 @@ try {
   const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await open();
+  // Cloudinary-backed persona marks preserve the intended small/large roles.
+  assert.equal(await page.locator('#reading-portrait').getAttribute('data-persona-id'),'family');
+  assert.equal(await page.locator('#reading-portrait').getAttribute('data-persona-variant'),'compact');
+  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
+  assert.ok(decodeURIComponent(await page.locator('#reading-portrait').getAttribute('src')).includes('#ffffff'));
+  assert.equal(await page.locator('#reading-popover [data-lens] img.persona-symbol').count(),5);
+  assert.equal(await page.locator('#zoom-stage .plate.persona img.persona-symbol').count()>0,true);
   // The editorial title changes without replacing the accessible archive identity.
   assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
   await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='What could two objects say?',null,{timeout:7500});
@@ -108,6 +115,8 @@ try {
   await page.locator('#room-perspective-toggle').click();
   assert.equal(await page.locator('#mobile-perspective-sheet').isVisible(),true);
   assert.equal(await page.locator('#mobile-perspective-choices button').count(),5);
+  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-variant'),'full');
+  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-tone'),'white');
   await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Worker');
   assert.equal(await page.locator('#reading-name').innerText(),'Worker');
@@ -125,12 +134,16 @@ try {
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
+  assert.ok(decodeURIComponent(await page.locator('#reading-portrait').getAttribute('src')).includes('#142523'));
+  // The mobile perspective sheet stays dark in both theme settings.
+  assert.ok(decodeURIComponent(await page.locator('#mobile-perspective-choices [data-lens="family"] img').getAttribute('src')).includes('#ffffff'));
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
+  assert.ok(decodeURIComponent(await page.locator('#reading-portrait').getAttribute('src')).includes('#ffffff'));
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
