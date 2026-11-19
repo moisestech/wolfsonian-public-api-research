@@ -13,6 +13,10 @@ test('public site allowlist omits the staff matrix and saved Lakehouse capture',
   await access(join(out, 'demo/archive-society/index.html'));
   await access(join(out, 'demo/object-lens/index.html'));
   await access(join(out, 'src/object-lens-core.mjs'));
+  await access(join(out, 'src/persona-character-portraits.mjs'));
+  await access(join(out, 'src/persona-illustrated-gallery.mjs'));
+  assert.ok(PUBLIC_FILES.includes('src/persona-illustrated-gallery.mjs'));
+  assert.ok(PUBLIC_FILES.includes('src/persona-character-portraits.mjs'));
   await assert.rejects(access(join(out, 'src/matrix-objects.mjs')));
   await assert.rejects(access(join(out, 'data/lakehouse/project-matches.json')));
   const room = await readFile(join(out, 'src/matrix-room.mjs'), 'utf8');
