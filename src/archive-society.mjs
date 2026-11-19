@@ -3,7 +3,7 @@ import { sceneForConfirmedEdge } from './curated-edge-scenes.mjs';
 
 export const WORLD = Object.freeze({ width: 2000, height: 1125 });
 const clean = value => String(value ?? '').replace(/\s+/g, ' ').trim();
-export const LENSES = PERSONAS.filter(p => ['family','worker','archivist','futurist','tourist'].includes(p.id));
+// Visitor-feedback preview: expose all eleven *named* artist-authored perspectives.\n// 'open' is a broad search mode, not a speaking persona or Cloudinary icon.\nexport const LENSES = PERSONAS.filter(p => p.id !== 'open');
 const sample = [
   ['radio','Imagined domestic radio',['Domestic life','Technology','Advertising'],['Machines','Hands']],
   ['stove','Imagined kitchen appliance',['Domestic life','Industry','Labor'],['Machines','Workers']],
