@@ -5,10 +5,22 @@
   "imageProvenance": "Eight new Art Deco aperture/architectural facial mask concepts are rasterized Cloudinary PNGs in two palettes and two sizes; 16 versioned SVG production masters and 32 cached PNGs. New artworks remain artist-review stage. Prior generated v4 portraits preserved as priorIllustration, three earlier accepted v2 portraits unchanged. Four supplied mask studies remain separate.",
   "gallery": {
     "family": {
-      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099878/archive-dreams/brand/personas/portraits/family-sepia-full-v2.png",
-      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100011/archive-dreams/brand/personas/portraits/family-sepia-compact-v2.png",
-      "source": "v2",
-      "approval": "approved prior artist work"
+      "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106480/archive-dreams/brand/personas/approved-masks/nested-family-white-full-v1.png",
+      "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106485/archive-dreams/brand/personas/approved-masks/nested-family-white-compact-v1.png",
+      "white": {
+        "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106480/archive-dreams/brand/personas/approved-masks/nested-family-white-full-v1.png",
+        "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106485/archive-dreams/brand/personas/approved-masks/nested-family-white-compact-v1.png"
+      },
+      "ink": {
+        "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106489/archive-dreams/brand/personas/approved-masks/nested-family-ink-full-v1.png",
+        "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795106494/archive-dreams/brand/personas/approved-masks/nested-family-ink-compact-v1.png"
+      },
+      "source": "approved-nested-family-mask-v1",
+      "approval": "artist-approved reference artwork; Family identity mapped; preview QA pending",
+      "priorIllustration": {
+        "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795099878/archive-dreams/brand/personas/portraits/family-sepia-full-v2.png",
+        "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795100011/archive-dreams/brand/personas/portraits/family-sepia-compact-v2.png"
+      }
     },
     "tourist": {
       "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_1024,h_1024/f_png/v1795112012/archive-dreams/brand/personas/architectural-masks-v1/tourist-architectural-white-master-v1.png",
