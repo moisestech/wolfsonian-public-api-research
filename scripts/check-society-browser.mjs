@@ -33,7 +33,10 @@ try {
   assert.match(await page.locator('#reading-popover [data-lens="futurist"] img.persona-illustrated').getAttribute('src'),/\/futurist-architectural-white-master-v1\.png$/);
   assert.match(await page.locator('#reading-popover [data-lens="tourist"] img.persona-illustrated').getAttribute('src'),/\/tourist-architectural-white-master-v1\.png$/);
   assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/(?:approved-masks\/nested-family-white-full-v1|portraits\/[a-z]+-sepia-full-v2)\.png$/);
-  // A blocked CDN must render the original inline vector without a broken avatar.
+  // An image failure first falls back to the known v2 Family portrait,
+  // then to an inline vector if the secondary CDN request also fails.
+  await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-sepia-compact-v2\.png$/);
   await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
   assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
   assert.ok(decodeURIComponent(await page.locator('#room-lens-portrait').getAttribute('src')).includes('#ffffff'));
