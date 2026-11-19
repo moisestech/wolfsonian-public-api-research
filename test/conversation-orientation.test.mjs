@@ -137,9 +137,9 @@ test('about explains authored scene, shared motif and imagined comparison outsid
  }
  assert.match(about,/decision to keep or withdraw a network edge belongs to the editorial process/);
  assert.doesNotMatch(js,/meta\.append\(node\('span',episode\.label\)\)/);
- assert.match(js,/\['Conversations',scenes\]/);
- assert.match(js,/\['Proposed pairings',comparisons\]/);
- assert.match(js,/\['Open questions',prompts\]/);
+ assert.match(js,/\['Conversations',scenes\.filter\(keep\)\]/);
+ assert.match(js,/\['Proposed pairings',comparisons\.filter\(keep\)\]/);
+ assert.match(js,/\['Open questions',prompts\.filter\(keep\)\]/);
  assert.match(js,/\$\('room-rationale'\)\.textContent='Why these two\? ↗'/);
 });
 
