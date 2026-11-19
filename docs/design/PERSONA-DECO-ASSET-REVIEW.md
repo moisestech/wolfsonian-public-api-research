@@ -1,5 +1,5 @@
 # Archive Society — Deco machine-mask persona family
-Status: design review; no runtime switching, no deployment.
+Status: Cloudinary-first runtime integration proposed on a feature branch; not merged or deployed. The November 19 public-demo view needs QA before release.
 
 ## Cloudinary storage confirmed
 - Aperture logos: `archive-dreams/brand/aperture-white-v1` and `archive-dreams/brand/aperture-black-v1`.
@@ -25,7 +25,11 @@ For Deco studies: `deco-<mask>-white-v1`.
 
 **White** = foreground on charcoal/dark backgrounds; **ink** = foreground on light paper backgrounds. The labels refer to glyph color, *not* the theme name.
 
-## Implementation next step
-Keep the existing app's portrait rendering stable until the 320px/390px/desktop UI is reviewed. Add a small `personaAsset(id,appearance,size)` adapter using this manifest. Prefer SVG for full-resolution scalable rendering, PNG only for integrations that require PNG. Keep text labels, semantic button names, visible selection and nonanimated fallback. Test contrast, role identity and 28px decipherability before merging.
+## Implementation and release gates
+The existing `personaAssetUrl(id,{tone,variant})` adapter uses the pinned Cloudinary manifest. The app's `portraitUrl()` defaults to those SVG masters, and `portraitFallbackUrl()` keeps the original inline SVG available on image errors. The primary Society UI already binds theme-aware full/compact images to its reader controls, participant plates and chat avatars; the mobile sheet intentionally remains a dark panel with white full-aperture marks. Discovery Lab uses compact icons. Spatial Atlas and Society's SVG graph add error fallbacks.
+
+Before merging: run `npm test`, confirm `npm run build:public` continues to omit protected staff data, and visually inspect the 320px, 390px, and desktop sizes with light/dark modes, role labels, selection states and keyboard access. Check 28px compact mark legibility, 42px mobile full marks, and normal/CDN-blocked icon deliveries. Do not change the project header's original aperture logo.
+
+Visual production remaining: the eleven shipped assets are aperture-derived *pictogram sigils*. The Family/Worker/Archivist nested-mask and profile studies may merit a future second visual pass, but they must be exported as their own isolated, transparent, contrast-paired character assets and explicitly reviewed before replacing the approved pinned IDs; do not substitute a composite moodboard sheet.
 
 The `museum` persona remains a fictional stance; its UI needs a label that does not suggest institutional endorsement. Do not use any of these glyphs as evidence labels, catalog subject classifications or generation/reasoning indicators.
