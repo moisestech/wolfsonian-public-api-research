@@ -225,9 +225,9 @@ try {
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/approved-masks\/nested-family-white-compact-v1\.png$/);
-  // The mobile perspective sheet uses the same sepia plate in both themes.
-  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img.persona-illustrated').getAttribute('src'),/\/family-sepia-full-v2\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/approved-masks\/nested-family-ink-compact-v1\.png$/);
+  // Approved Family masks swap ink and white variants with the current theme.
+  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img.persona-illustrated').getAttribute('src'),/\/approved-masks\/nested-family-ink-full-v1\.png$/);
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
