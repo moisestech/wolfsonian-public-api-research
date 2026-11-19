@@ -23,6 +23,14 @@ test('all eleven active personas have independent artwork rather than a symbol a
           assert.ok(selected.includes('/architectural-masks-v1/'));
         }
         assert.ok(manifest.gallery[lens.id].priorIllustration.full.includes('/portraits/'));
+      }else if(manifest.gallery[lens.id].source==='approved-nested-family-mask-v1'){
+        assert.equal(lens.id,'family');
+        assert.ok(url.includes('/approved-masks/nested-family-'));
+        for(const tone of ['white','ink']){
+          const selected=illustratedPersonaUrl(lens.id,{tone,variant});
+          assert.equal(selected,manifest.masks['nested-family'][tone][variant]);
+        }
+        assert.ok(manifest.gallery[lens.id].priorIllustration.full.includes('/portraits/'));
       }else{
         assert.ok(url.includes('/portraits/'));
       }
@@ -32,7 +40,7 @@ test('all eleven active personas have independent artwork rather than a symbol a
   assert.equal(illustratedPersonaUrl('open'),null);
 });
 
-test('four approved artist-provided mask studies are separate from speaking personas',()=>{
+test('approved masks retain independent provenance; only Nested Family is mapped to a persona',()=>{
   assert.equal(Object.keys(APPROVED_DECO_MASK_STUDIES).length,4);
   for(const [id,mask] of Object.entries(APPROVED_DECO_MASK_STUDIES)){
     assert.equal(mask.identity,id==='nested-family'?'family':null);
