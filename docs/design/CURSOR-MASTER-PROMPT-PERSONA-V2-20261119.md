@@ -1,60 +1,74 @@
-# Cursor master prompt — Archive Dreams in Public / Persona v2 portraits
-**Date:** November 19, 2026 · **Type:** implementation handoff / artist review gate · **Tracker:** [Issue #79](https://github.com/moisestech/wolfsonian-public-api-research/issues/79)
+# Cursor master prompt — Implement verified Archive Society persona v2 portraits
+**Updated:** November 19, 2026 · **State:** Cloudinary assets uploaded and inventoried; runtime integration not yet implemented · **Tracker:** [Issue #79](https://github.com/moisestech/wolfsonian-public-api-research/issues/79)
 
-You are operating as the senior visual-systems engineer and creative technologist for Moises Sanabria's **Archive Dreams in Public / The Futures We Inherited**, an independent artist-authored Wolfsonian research project. Work in the EXISTING repository `moisestech/wolfsonian-public-api-research`; do not create a parallel app or replace its existing persona family. You should execute permitted work and create a focused, reviewable implementation PR. Be scrupulous about what can actually be verified.
+You are working on Moises Sanabria's independent artist-authored `Archive Dreams in Public / The Futures We Inherited` in the EXISTING repository `moisestech/wolfsonian-public-api-research`. Act as the senior design engineer, accessibility reviewer, and careful maintainer of source/fiction distinctions. **Execute the implementation, not another generic proposal.** Do not fork a parallel app.
 
-## Non-negotiable problem statement
+## Source of truth: v2 images ALREADY uploaded
 
-**v1 already exists and works.** Cloudinary cloud `dck5rzi4h`, folder `archive-dreams/brand/personas`, contains **47 verified SVGs**: 11 personas × 2 colors × 2 sizes = 44 pictogram icons, plus three separate white Art Deco artwork studies. GitHub `docs/design/persona-cloudinary-manifest.json` and `src/persona-cloudinary-assets.mjs` resolve their version-pinned URLs. Family=house, Worker=tool, Archivist=record card, Futurist=arrow, Tourist=compass. Do NOT rename, overwrite, delete or visually approximate these existing files.
+**VERIFIED cloud name:** `dck5rzi4h`.
+**VERIFIED v2 folder:** `archive-dreams/brand/personas/portraits`.
+**VERIFIED, complete manifest with actual public IDs, versioned HTTPS delivery URLs and dimensions:** `docs/design/persona-character-portrait-manifest.v2.json` on branch `docs/persona-v2-cursor-handoff-20261119`. This has **22 verified Cloudinary PNGs**:
+- Family, Worker, Archivist each have sepia, white and ink images, with full 1024×1024 and compact 256×256 variants (**18 primary files**).
+- Family has a second, distinct geometric Deco-mask interpretation, in white/ink full+compact (**4 optional alternate files**).
+- The artist has approved the illustrated designs. DO NOT regenerate or substitute new portraits, and DO NOT claim image uploads are missing.
+- The three sepia masters were extracted from an approved composite image board with a character region approximately 165–170px square, then transparency processed and placed in a 1024px export canvas. **This is NOT equivalent to 1024px-native original artwork.** It is suitable to test visually in UI but may not suit large-scale exhibition output. Retain provenance, actual quality limitations, and a future high-res replacement path.
+- Full artist artwork staging contact sheet/source: https://docs.google.com/document/d/1lITPU4nNOflw3waFogyUIGE8psLh_kvo9obTgrKzy0Q/edit
 
-**v2 is a distinct illustrated character-portrait layer.** We are pursuing specific preexisting visual studies developed in the creative process: (1) Family, a nested/domestic architectural Deco mask with intergenerational profile language; (2) Worker, a human-industrial machinery profile preserving the worker's agency; (3) Archivist, a layered book, records, index-card/catalog-drawer face. These are **not** the v1 symbols, not archetype labels, and not the three white Deco studies (`deco-aperture-mask`, `deco-guardian-emblem`, `deco-mask-emblem`). No verified finished v2 character exports or Cloudinary uploads have yet been established. A partially generated Family concept and unrelated design sheets must not be mistaken for the approved trio.
+**EXISTING v1 icons MUST REMAIN:** 47 verified SVG assets in `archive-dreams/brand/personas`: 11 identities × 2 tones × 2 sizes = 44 functional sigils, plus 3 non-speaking Deco studies. See `docs/design/persona-cloudinary-manifest.json` and `src/persona-cloudinary-assets.mjs`. The parent aperture logo under `archive-dreams/brand/` remains brand-identifying and separate. NEVER overwrite these v1 files.
 
-**CRITICAL SOURCE GATE:** First locate and inspect the EXACT approved illustration bytes supplied by the artist (downloaded images from creative conversations, approved exported files, or confirmed asset links). Examine their actual visual contents, source/copyright ownership, cutouts, dimensions and alpha. Do not claim that an image is in Cloudinary merely because a chat once displayed it; do not invent URLs or silently regenerate approximations. If any approved source is unavailable, record `SOURCE_ART_MISSING` for that identity, implement only safe non-invasive scaffolding and documentation, keep v1 visible, and report the exact files required from the artist. Do not substitute a composite concept board or new AI-generated replacement.
+**Existing visitor perspectives:** 5 selectable lenses ONLY: Family / Worker / Archivist / Futurist / Tourist. Six other identities remain in library; no automatic lens expansion. Label vocabulary such as “At home”, “Provenance” are text descriptors of existing identities, not new image IDs. `Museum` is a fictional interpretive identity, never an official museum voice. The three white Deco studies do not speak.
 
-## Inspect first (do not code blind)
-1. `git status`, current HEAD and comparison to `origin/main`. Use a NEW branch from latest main; preserve unrelated uncommitted changes.
-2. Read [Issue #79](https://github.com/moisestech/wolfsonian-public-api-research/issues/79), [Visual Production Bible](https://docs.google.com/document/d/1gdW4-1BEX12EJrwQyfFBOVm8DNKZ0S5hnOTKs7q_3g8/edit), current [asset manifest](https://github.com/moisestech/wolfsonian-public-api-research/blob/main/docs/design/persona-cloudinary-manifest.json), `src/persona-cloudinary-assets.mjs`, `src/persona-sigils.mjs`, `src/discovery-personas.mjs`, `demo/archive-society/society.mjs` plus styling and existing tests. Inspect Discovery Lab, Spatial Atlas and Object Lens only where they currently consume the identity system.
-3. Inspect the existing 47 Cloudinary assets using the authenticated connector or exact version-pinned manifest, not search-engine images. Keep the 3 Deco studies non-speaking and the aperture logo under `archive-dreams/brand/`.
-4. Read Airtable **Moises Art OS** → **Archive Dreams — Persona Asset Pipeline** (14 rows) and its linked parent work, **Archive Dreams in Public — The Futures We Inherited**. Treat uploaded state and approved state separately.
+## P0 — Verify current repo and actual files before editing
 
-## P0 — Recover and export only approved character artwork
-- Find the approved source illustrations for Family, Worker and Archivist. If a source is a composite sheet, isolate that SAME approved art without recoloring features, substituting a different portrait, or inventing missing areas; record the crop/derivative lineage.
-- For each accepted identity, produce a transparent **full** artwork around 1024×1024 RGBA with equal optical scale, no opaque background/backplate, breathing room and clean contour; separately prepare a simplified **compact** artwork >=256×256, not just a tiny illegible downscale.
-- For each full/compact create **white** artwork for charcoal/dark interface and **ink** artwork for archival-paper/light interface. Use color variants that genuinely preserve shape/alpha; do not threshold a photographic background into a false mask. If the approved artwork is multitone, seek artist approval for its two-tone treatment.
-- Do visual sheet QA at 28, 42, 128 and 256px on real dark/light samples. **12 output targets total = 3 identities × 2 tones × 2 variants.** Do not count files merely planned as uploaded.
-- Keep local original master artwork outside public bundles, with source attribution/approval status and derivative hash. Original works only; no Wolfsonian museum badge, undocumented historical portrait or collection imagery.
+1. Inspect `git status`, latest `origin/main`, PR #80, merged icon PRs #77/#78, and current runtime/test pipeline. Do not overwrite work in progress. Start a focused feature branch `feat/archive-persona-v2-runtime-20261119` from a current main or from the documentation PR branch, then reconcile any divergence.
+2. Read manifest `docs/design/persona-character-portrait-manifest.v2.json`, and compare all 22 actual Cloudinary `publicId`/`version`/`url` entries against their current public delivery and its thumbnail appearance; record any unreachable asset as an explicit fallback, do not fake success.
+3. Inspect actual persona consumers in `src/persona-cloudinary-assets.mjs`, `src/persona-sigils.mjs`, `src/discovery-personas.mjs`, `demo/archive-society/society.mjs` and CSS, plus Discovery Lab / Spatial Atlas / Object Lens only where persona identity is already used. Identify where current full and compact v1 is bound. Preserve all important UI semantics, current scene playback, and privacy controls.
+4. Cross-check Creative Production Bible and Airtable; do not assume “Cloudinary uploaded” means “production integrated” or visual QA passed.
 
-## P1 — Upload real files to Cloudinary, if and only if P0 passes
-The folder `archive-dreams/brand/personas/portraits` already exists, initially empty. Upload verified transparent files with `overwrite:false`. Use these exact public-ID conventions and file extensions matching ACTUAL encoding:
-```
-archive-dreams/brand/personas/portraits/family-white-full-v2.png
-archive-dreams/brand/personas/portraits/family-white-compact-v2.png
-archive-dreams/brand/personas/portraits/family-ink-full-v2.png
-archive-dreams/brand/personas/portraits/family-ink-compact-v2.png
-# Repeat precisely for worker and archivist.
-```
-Use SVG only if a true vector source exists; don't relabel PNG as SVG. Record upload response `public_id`, `version`, `secure_url`, dimensions, format, alpha check, bytes/hash and approval note. Check each delivered image; a successful upload response alone is not sufficient. Do not push asset credentials or raw base64 to GitHub.
+## P1 — Integrate a clean and reviewable v2 resolver
 
-Store validated deliveries in a separate `docs/design/persona-character-portrait-manifest.v2.json`, with explicit missing/approved flags; never infer a version number from another persona or copy the v1 manifest URLs as purported portraits. Update the corresponding Airtable row's **Refined portrait URL** and status only after real asset verification.
+Implement a minimal, central `personaCharacterUrl(persona, {palette, tone, variant})` (or equivalent) using **exact manifest URLs**. `palette` may be `sepia` / `white` / `ink`; `variant` may be `full` / `compact`. Do NOT build URLs using guessed version numbers. Choose sensible defaults based on actual scene presentation, with sepia for large portrait emphasis and theme-appropriate monochrome artwork where stronger integration works.
 
-## P2 — Minimal runtime integration, behind graceful fallback
-Create or extend a central `personaCharacterUrl(persona, {tone,variant})` or equivalent. Exact v2 mapping must resolve from the validated manifest, not guessed string concatenations. Resolver order:
-**approved uploaded v2 portrait → existing versioned v1 pictogram via `personaAssetUrl` → existing local SVG sigil fallback.**
-A failed v2 image URL must not loop `onerror`; theme switching must reselect white for dark and ink for light without resetting active lens, room, playback or scroll.
+Keep `personaAssetUrl` and all v1 CDN mappings backwards compatible. Fallback chain when v2 missing or broken:
+1. valid uploaded v2 URL for the selected identity/palette/variant;
+2. existing version-pinned v1 sigil for same identity with white on dark, ink on light;
+3. existing local `src/persona-sigils.mjs` SVG.
 
-Use v2 illustrated avatars preferentially at **expanded conversation speaker plates, portrait cards and larger speaking states**. Keep v1 compact sigils in 28–42px selectors if illustrated crops fail legibility tests. Update only actual UI consumers; do not duplicate the image implementation independently across views. Preserve current five Society selectable lenses: Family, Worker, Archivist, Futurist and Tourist. The six additional personas stay in the asset library; do not auto-activate them. `Museum` is a fictional interpretive role, never the museum's literal spokesperson. Perspective labels such as “At home” / “Provenance” are text descriptors, not different image IDs. Keep object photographs separate from persona portraits and source records.
+Avoid infinite `onerror` retries, semantic mismatch, hydration flicker and broken URLs. Main feature must still work if every v2 image fails. Resolve `family-deco-mask` as an explicit optional Family alternative, NOT a separate twelfth identity, and do not silently switch the approved Family sepia portrait.
 
-Maintain the visual DNA of the original aperture logo and 1850s–1950s print/Art Deco design, but prioritize readability and genuinely distinct identities over decoration. No new 3D/AR feature, API integration, new dialogue generation or audio redesign is authorized by this ticket.
+Use fully transparent PNGs as delivered; do not introduce opaque square backgrounds. Avoid stretching and ensure correct object-fit and safe margins. Do not take downloaded remote image asset metadata as proof that pixels are optically crisp at small sizes.
 
-## P3 — QA, source ethics, release
-- Unit/integration tests cover precise asset family IDs, missing v2, malformed URL, CDN rejection, v1/local fallback, dark/light switching, and the 3 non-speaking Deco studies.
-- Browser test the actual UI at 320px / 390px phone, 768px tablet, and 1440px desktop, including perspective sheet, room, speaking state, object lens if affected. Verify 28/42/128px legibility, low bandwidth/no-image case, reduced-motion preferences, keyboard navigation, no unexpected horizontal scroll, image `alt`/adjacent readable label, and visually consistent masks.
-- Run applicable `npm test`, `npm run build:public`, `npm run check:society:browser` or the existing project QA scripts. Inspect CI. Note unrelated preexisting failure separately rather than disabling tests. Public allowlist must still exclude staff matrix and captured Lakehouse files.
-- Produce screenshots for v1/v2 comparison on dark and light, and a small audit of the 12 intended assets (file present, uploaded, verified, approved, integrated, QA).
-- Documentation: update the Visual Production Bible, Airtable pipeline, issue #79, and a short in-repo design/usage note after each state change. Keep source-location status honest. No museum-media or historical image permissions are implied.
-- Create a narrowly scoped PR with screenshots, hashes/version-pinned asset links, test log, and remaining blockers. **Do not merge or trigger a production release solely because the files compile.** Ask for artist visual signoff on actual portraits and ensure required review gates are met.
+## P2 — Targeted interface behavior
 
-## Final response format
-Report (A) latest inspected SHA and branch, (B) source illustration(s) actually found and provenance, (C) 12-row asset checklist with verified URLs or `SOURCE_ART_MISSING`, (D) code diff summary and exact UI placements, (E) preview screenshots and test results, (F) Airtable/Drive/GitHub record URLs, (G) PR URL and whether it is review-ready, and (H) the **smallest next artist action** if source images remain missing.
+Prioritize persona portraits where character identity helps the user understand who is speaking:
+- Conversation full-size speaker/portrait stage, expanded cards, scene introduction and contextual persona detail.
+- Active speaker indicators, *only when an actual fixed transcript turn is known*; do not imply an unverified AI is speaking or align to audio without real timecodes.
+- Mobile perspective sheet at 42–72px only where legible; keep 28px compact v1 sigils in dense lists, footer, small navigation or the 320px picker if clearer.
+- Light/dark theme switching must preserve active persona, scene, scroll and play/stop status. White vector for charcoal backgrounds, ink for light paper; sepia character plate can work on both if contrast verified.
+- Maintain labels and accessible naming. Decorative portraits should have empty alt with adjacent visible text; a sole image carrying identity requires meaningful alt or aria-label. Preserve reduced-motion and no-autoplay.
+- Do not alter source-backed collection evidence, accession identities, private matrix boundaries, or launch AR/another new feature.
 
-**Important:** An accurate “cannot finish without the original approved Worker/Archivist image files” is a successful safety boundary; a silently substituted icon is not.
+Do not replace the existing five perspectives with eleven. Do not use historical person portraits or actual Wolfsonian insignia.
+
+## P3 — Tests and evidence
+
+- Update/add automated coverage: manifest completeness = 22 IDs; three persona sources; 18 primary and 4 Family alt; fallback for inactive identities; error handling; theme variant mapping; no speaking Deco studies; no unintended v1 URL change.
+- Run `npm test` and the applicable public build/browsers. One previous main Actions run had a stale conversation-orientation regex expectation; fix the test to reflect observed source/UI semantics rather than disabling it. Document any unrelated failures.
+- Capture actual 320px, 390px, 768px, desktop screenshots for perspective picker, conversation header, speaker stage; compare v1-only and v2 paths, light and dark. Check alpha, image fetches, legibility at 28/42/128px, reduced motion, keyboard accessibility, no horizontal scroll.
+- Public-site allowlist must remain safe: NO staff matrix, nonpublic Lakehouse extracts, restricted photographs or unrelated data in public bundles.
+- Preserve good browser performance; avoid loading 1024px portrait where 256px compact suffices.
+
+## P4 — Track & deliver
+
+- Update Airtable **Moises Art OS → Archive Dreams — Persona Asset Pipeline** (14 tracked entries) for Family, Worker and Archivist. Their source visual approval is established, v2 uploaded, but **runtime QA remains pending**. Link actual Cloudinary source URLs and GitHub PR.
+- Reference working Google Doc: https://docs.google.com/document/d/1lITPU4nNOflw3waFogyUIGE8psLh_kvo9obTgrKzy0Q/edit
+- Update Visual Production Bible: https://docs.google.com/document/d/1gdW4-1BEX12EJrwQyfFBOVm8DNKZ0S5hnOTKs7q_3g8/edit
+- Source GitHub issue: https://github.com/moisestech/wolfsonian-public-api-research/issues/79
+- Draft documentation PR containing this prompt and verified asset manifest: https://github.com/moisestech/wolfsonian-public-api-research/pull/80
+- Deliver a **new focused runtime implementation PR** (not a production deployment), with screenshots, test log, manifest-to-view mapping and clear remaining approval/visual issues. Do not auto-merge until reviewed.
+- Report exactly (A) repo SHA/branch, (B) portrait map and screens changed, (C) URL/404 checks, (D) 320/390/tablet/desktop screenshot review, (E) test/build status, (F) PR link and (G) explicit blockers. Do not invent delivered behavior.
+
+### Done means
+The existing five-lens visitor app continues to work; Family, Worker and Archivist show the approved v2 artworks at useful portrait scale; small UI remains clear; all v1 icons and Deco studies still exist; dark/light, audio states and source evidence behave as before; Cloudinary assets resolve; automated tests and browser QA are reproducibly green; public/private boundaries remain intact.
+
+**Execute now using the real uploaded assets rather than generating new characters or searching for nonexistent source URLs.**
