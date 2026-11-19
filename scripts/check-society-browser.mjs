@@ -29,7 +29,7 @@ try {
   // A blocked CDN must render the original inline vector without a broken avatar.
   await page.locator('#reading-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
   assert.match(await page.locator('#reading-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
-  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
+  assert.ok(decodeURIComponent(await page.locator('#reading-portrait').getAttribute('src')).includes('#ffffff'));
   assert.equal(await page.locator('#reading-popover [data-lens] img.persona-symbol').count(),5);
   assert.equal(await page.locator('#zoom-stage .plate.persona img.persona-symbol').count()>0,true);
   // The editorial title changes without replacing the accessible archive identity.
@@ -146,7 +146,7 @@ try {
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
-  assert.ok(decodeURIComponent(await page.locator('#reading-portrait').getAttribute('src')).includes('#ffffff'));
+  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
