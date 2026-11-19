@@ -1194,3 +1194,82 @@ html[data-color-theme="light"] .record-overlay .evidence-type{color:#d7c4a3}
 .mobile-perspective-choices{gap:12px}
 .mobile-perspective-choices .perspective-choice-group{gap:6px}
 .mobile-perspective-choices .perspective-choice-group-title{padding:0 2px;font-size:12px}
+
+/* Archive Society illustrated cast — portraits are artwork, not 42px logo glyphs.
+ * Keep existing layout outside the perspective gallery unchanged. */
+#reading-popover .perspective-choice-group,
+#mobile-perspective-choices .perspective-choice-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:0}
+#reading-popover .perspective-choice-group-title,
+#mobile-perspective-choices .perspective-choice-group-title{grid-column:1/-1;margin:0 0 3px;padding:0;font-size:12px;letter-spacing:.11em}
+#reading-popover .reading-choice,
+#mobile-perspective-choices .mobile-perspective-choice{
+  display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:8px;
+  position:relative;min-width:0;height:auto;min-height:0;padding:10px!important;
+  border:1px solid #546d5c;border-radius:12px;background:#1a2c24;color:#f6f0db;
+  text-align:left;white-space:normal;cursor:pointer
+}
+#reading-popover .reading-choice:hover,
+#mobile-perspective-choices .mobile-perspective-choice:hover{border-color:#dfc58b;background:#293b2e}
+#reading-popover .reading-choice[aria-pressed="true"],
+#mobile-perspective-choices .mobile-perspective-choice[aria-pressed="true"]{
+  grid-column:span 2;border:2px solid #efd6a2;background:#263e30;
+  box-shadow:0 0 0 2px rgba(239,214,162,.10)
+}
+#reading-popover .reading-choice img.perspective-art.persona-symbol,
+#mobile-perspective-choices .mobile-perspective-choice img.perspective-art.persona-symbol{
+  display:block;flex:none;width:100%;height:clamp(142px,36vw,225px);
+  margin:0;padding:0;object-fit:contain!important;background:#101a17!important;
+  border:0;border-radius:7px!important
+}
+#reading-popover .reading-choice[aria-pressed="true"] img.perspective-art.persona-symbol,
+#mobile-perspective-choices .mobile-perspective-choice[aria-pressed="true"] img.perspective-art.persona-symbol{
+  height:clamp(200px,46vw,295px)
+}
+#reading-popover .perspective-card-copy,
+#mobile-perspective-choices .mobile-perspective-copy{
+  display:flex;flex:1;flex-direction:column;gap:5px;align-items:flex-start;min-width:0
+}
+#reading-popover .perspective-card-copy strong,
+#mobile-perspective-choices .mobile-perspective-copy strong{font:400 clamp(18px,2.1vw,25px)/1.12 Georgia,serif;color:#f6e1b5}
+#reading-popover .perspective-card-copy small,
+#mobile-perspective-choices .mobile-perspective-copy small{
+  font:400 12px/1.4 system-ui,sans-serif;color:#c6d2c6;white-space:normal
+}
+#mobile-perspective-choices .mobile-perspective-selected{
+  position:absolute;right:15px;top:14px;display:grid;place-items:center;
+  width:28px;height:28px;background:#e7d7a8;color:#1d3328;border-radius:50%;z-index:2
+}
+#reading-popover .approved-mask-studies,
+#mobile-perspective-choices .approved-mask-studies{
+  margin-top:20px;padding:18px 0 0;border-top:1px solid #4c685b
+}
+.approved-mask-note{font:400 12px/1.5 system-ui,sans-serif;color:#c2cfc4;margin:5px 0 12px}
+.approved-mask-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.approved-mask-tile{margin:0;padding:8px;border:1px solid #52695a;border-radius:9px;background:#16231d}
+.approved-mask-tile img{width:100%;height:clamp(65px,9vw,145px);object-fit:contain;display:block}
+.approved-mask-tile figcaption{margin-top:7px;font:400 10px/1.25 system-ui,sans-serif;color:#c6d2c6;text-transform:capitalize}
+@media(min-width:801px){
+  #reading-popover.reading-popover{
+    position:fixed!important;inset:clamp(78px,10vh,126px) auto auto 50%!important;
+    transform:translateX(-50%);z-index:90;width:min(1080px,calc(100vw - 56px))!important;
+    min-width:0;max-height:calc(100dvh - 140px)!important;overflow-y:auto;
+    padding:22px;background:#10211b;border:1px solid #63806e;box-shadow:0 16px 70px rgba(0,0,0,.75)
+  }
+  #reading-popover .perspective-choice-group{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #reading-popover .reading-choice img.perspective-art.persona-symbol{height:170px}
+  #reading-popover .reading-choice[aria-pressed="true"] img.perspective-art.persona-symbol{height:255px}
+}
+@media(max-width:800px){
+  .mobile-perspective-sheet{width:100%;max-height:min(94dvh,900px);z-index:100}
+  .mobile-perspective-content{padding:20px 14px calc(20px + env(safe-area-inset-bottom,0px))}
+  #mobile-perspective-choices{display:grid;gap:20px}
+  #mobile-perspective-choices .perspective-choice-group{gap:10px}
+  #mobile-perspective-choices .mobile-perspective-choice img.perspective-art.persona-symbol{height:clamp(135px,40vw,200px)}
+  #mobile-perspective-choices .mobile-perspective-choice[aria-pressed="true"] img.perspective-art.persona-symbol{height:235px}
+  .approved-mask-grid{gap:6px}
+  .approved-mask-tile{padding:4px}
+  .approved-mask-tile figcaption{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  #reading-popover .reading-choice,#mobile-perspective-choices .mobile-perspective-choice{transition:none!important}
+}
