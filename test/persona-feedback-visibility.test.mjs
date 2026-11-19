@@ -21,7 +21,30 @@ test('feedback cast contains all original eleven artist-authored persona identit
       }
     }
     assert.match(portraitFallbackUrl(card,{tone:'white',variant:'compact'}),/^data:image\/svg\+xml/);
-    assert.equal(personaCharacterUrl(id),null,'v1-only perspective must not be mislabeled illustrated v2');
+    assert.match(personaCharacterUrl(id),new RegExp('/'+id+'-sepia-compact-v4[.]png
+  }
+  assert.ok(!LENSES.some(p=>p.id==='open'));
+});
+
+test('phone and desktop perspective lists share one complete grouped cast',async()=>{
+  const code=await local('../demo/archive-society/society.mjs');
+  const text=code.match(/const feedbackPerspectiveGroups=\[([\s\S]*?)\];/);
+  assert.ok(text,'missing UI persona groups');
+  const declared=[...text[1].matchAll(/'([a-z]+)'/g)].map(m=>m[1]);
+  assert.equal(new Set(declared).size,11,'perspective duplicated across groups');
+  assert.deepEqual(new Set(declared),new Set(LENSES.map(p=>p.id)));
+  assert.match(code,/reading-popover'\)\.replaceChildren\(\.\.\.perspectiveSections\(/);
+  assert.match(code,/mobile-perspective-choices'\)\?\.replaceChildren\(\.\.\.perspectiveSections\(/);
+  assert.match(code,/const label=lens\.id==='museum'\?lens\.label\+' · fictional'/);
+  assert.match(code,/perspective-card-grid/);
+  assert.match(code,/buildPerspectiveFeature\('desktop'\)/);
+  assert.match(code,/buildPerspectiveFeature\('mobile'\)/);
+  assert.match(code,/updatePerspectiveGallery\(\)/);
+  const html=await local('../demo/archive-society/index.html');
+  assert.match(html,/eleven artist-authored viewpoints/);
+  assert.match(html,/Shared metadata suggests questions, not proven historical relationships/);
+});
+),'Illustrated character, not small v1 SVG, is primary');
   }
   assert.ok(!LENSES.some(p=>p.id==='open'));
 });
