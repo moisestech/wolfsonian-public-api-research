@@ -53,3 +53,13 @@
 - [Archive Dreams Visual Production Bible](https://docs.google.com/document/d/1gdW4-1BEX12EJrwQyfFBOVm8DNKZ0S5hnOTKs7q_3g8/edit).
 
 **Key decision:** all **icons** are already a complete, consistent family; the illustrated **masks and portraits** are *not* yet eleven approved coherent faces. Maintain this distinction in GitHub, Cloudinary and Airtable.
+
+
+## November 19, architectural portrait implementation update
+
+- A new **flat, architectural mask study** was designed for eight personalities: Tourist, Novice, Connoisseur, Futurist, Mourner, Propagandist, Counterfeit and fictional Museum. These are **new artwork candidates**, not eight artist-approved faces; the prior v4 sepia raster portraits remain addressable in `priorIllustration` for rollback.
+- New Cloudinary source folder: `archive-dreams/brand/personas/architectural-masks-v1`. There are **16 versioned white/ink SVG illustration masters**, and Cloudinary explicitly transformed and cached **32 1024px/384px transparent PNG outputs**. The app loads the PNG versions, not the SVG masters. These are **geometric mask studies**, distinct from the more sculptural bas-relief poster concept generated alongside them; the poster is not the hosted app source.
+- Repo canonical manifest: `docs/design/illustrated-persona-gallery-manifest.v1.json`. Images are wired by `src/persona-illustrated-gallery.mjs` and `demo/archive-society/society.mjs` with palette passed from the current dark/light theme. The initial 3 previously accepted v2 portrait assets have not been overwritten. Four artist-supplied mask studies remain separate, and only nested-family has a confirmed identity relation.
+- Updated Airtable **Moises Art OS → Archive Dreams — Persona Asset Pipeline**: eight named persona records now have their own new white full, white compact, ink full, ink compact Cloudinary URLs in dedicated columns. Status remains `Uploaded for QA`, not `Approved`.
+- [Visual board with the real delivered PNGs](./PERSONA-VISUAL-BOARD.md) is the required final human acceptance gate. Check 320px mobile selection, large mobile gallery, desktop, fallback behavior, adaptive palette, face geometry/character distinctiveness, and URL response validity before merging PR #86.
+- The open question is **whether this new flat, transparent graphic version carries enough sculptural detail and architectural facial character to match the higher-relief approved art direction**. It is not equivalent to the high-detail image-generation artwork, and should not be silently described as such.
