@@ -1736,7 +1736,7 @@ function paintPromptCast(activeId){
       button.type='button';button.className='prompt-cast-choice';button.dataset.prompt=card.id;
       button.style.setProperty('--persona',card.color);
       button.setAttribute('role','option');
-      const img=node('img');bindPersonaImage(img,card,'compact');
+      const img=node('img');bindPersonaImage(img,card,'compact',null,'sepia');
       button.append(img,node('span',card.label));
       button.addEventListener('click',()=>openPromptSheet(card.id));
       return button;
@@ -1751,7 +1751,7 @@ function openPromptSheet(id){
   setPromptEditing(false);
   paintPromptCast(card.id);
   const portrait=$('prompt-portrait');
-  if(portrait)bindPersonaImage(portrait,card);
+  if(portrait)bindPersonaImage(portrait,card,'compact',null,'sepia');
   $('prompt-title').textContent=card.label;
   $('prompt-hook').textContent=card.hook;
   $('prompt-description').textContent=card.description;
@@ -1808,7 +1808,7 @@ $('reading-popover').replaceChildren(...LENSES.map(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button');
   button.type='button';button.className='reading-choice';button.dataset.lens=lens.id;
-  const img=node('img');bindPersonaImage(img,card,'compact');
+  const img=node('img');bindPersonaImage(img,card,'compact',null,'sepia');
   const label=lens.id==='museum'?lens.label+' · fictional':lens.label;
   button.append(img,node('span',label));
   button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));closeSheet();});
@@ -1835,7 +1835,7 @@ $('mobile-perspective-choices')?.replaceChildren(...LENSES.map(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button',undefined,'mobile-perspective-choice');
   button.type='button';button.dataset.lens=lens.id;button.setAttribute('aria-pressed',String(lens.id===state.lens));
-  const portrait=node('img');bindPersonaImage(portrait,card,'compact','white');
+  const portrait=node('img');bindPersonaImage(portrait,card,'compact','white','sepia');
   const copy=node('span',undefined,'mobile-perspective-copy');
   copy.append(node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
     node('small',lens.id==='museum'?'Artist-authored viewpoint; not museum staff.':lens.question));
