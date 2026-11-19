@@ -1194,3 +1194,117 @@ html[data-color-theme="light"] .record-overlay .evidence-type{color:#d7c4a3}
 .mobile-perspective-choices{gap:12px}
 .mobile-perspective-choices .perspective-choice-group{gap:6px}
 .mobile-perspective-choices .perspective-choice-group-title{padding:0 2px;font-size:12px}
+
+
+/* Illustrated perspective gallery: original 1850–1950s-inspired woodcut characters,
+ * visually distinct from the old small functional SVG symbols. */
+#reading-popover{
+  display:block;width:min(800px,calc(100vw - 24px));max-height:min(85dvh,820px);
+  padding:18px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;
+  border:1px solid #786e54;background:#131d18;color:#f6ecd8;
+  box-shadow:0 14px 60px #0009
+}
+.perspective-choice-group{display:block;min-width:0}
+.perspective-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.perspective-choice-group-title{
+  display:block;margin:0 0 10px;padding:0 2px;color:#dbc59c;
+  font:700 11px/1.4 ui-monospace,monospace;letter-spacing:.095em;text-transform:uppercase
+}
+#reading-popover .reading-choice,
+.mobile-perspective-choice{
+  display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
+  gap:8px;position:relative;min-width:0;width:100%;height:auto;
+  padding:9px;text-align:left;border:1px solid #536455;
+  border-radius:11px;background:#1a271f;color:#f6e9d1;cursor:pointer;
+  white-space:normal;transition:border-color .12s ease,background .12s ease
+}
+#reading-popover .reading-choice:hover,.mobile-perspective-choice:hover{border-color:#d7ba82}
+#reading-popover .reading-choice[aria-pressed="true"],
+.mobile-perspective-choice[aria-pressed="true"]{
+  border-color:#f1d49c;background:#293c30;box-shadow:inset 0 0 0 1px #d3ad72
+}
+#reading-popover .reading-choice img.persona-symbol,
+.mobile-perspective-choice img.persona-symbol{
+  display:block;flex:none;position:static;width:100%;height:clamp(140px,20vw,215px);
+  max-height:none;padding:0;object-fit:contain!important;object-position:center;
+  border:0;border-radius:8px;background:#0d1513!important
+}
+#reading-popover .reading-choice img.persona-illustration,
+.mobile-perspective-choice img.persona-illustration{object-fit:contain!important}
+.perspective-card-copy,.mobile-perspective-copy{
+  display:flex;flex-direction:column;gap:6px;flex:1;min-width:0
+}
+.perspective-card-copy strong,.mobile-perspective-copy strong{
+  font:600 16px/1.22 system-ui,sans-serif;color:#fff1d4;white-space:normal
+}
+.perspective-card-copy small,.mobile-perspective-copy small{
+  font:400 12px/1.35 system-ui,sans-serif;color:#c5d3bd;white-space:normal
+}
+.mobile-perspective-selected{
+  visibility:visible;position:absolute;top:15px;right:15px;z-index:1;
+  display:grid;place-items:center;width:30px;height:30px;
+  border:1px solid #b3c3ac;border-radius:50%;background:#14231dd9;
+  font:700 18px/1 system-ui,sans-serif;color:transparent
+}
+.mobile-perspective-choice[aria-pressed="true"] .mobile-perspective-selected{color:#f4dda7;border-color:#e5d0a2}
+.perspective-feature{
+  display:grid;grid-template-columns:minmax(125px,210px) minmax(0,1fr);
+  gap:16px;align-items:center;margin:0 0 18px;padding:12px;border:1px solid #77664f;
+  border-radius:13px;background:#26342a;color:#f5ecd6
+}
+.perspective-feature-image{
+  display:block;width:100%;height:230px;border-radius:9px;
+  object-fit:contain!important;background:#0d1513!important
+}
+.perspective-feature-copy{display:flex;flex-direction:column;gap:8px;min-width:0}
+.perspective-feature-eyebrow{
+  font:700 10px/1.3 ui-monospace,monospace;letter-spacing:.12em;color:#c7b38a
+}
+.perspective-feature-copy strong{
+  font:400 clamp(23px,3vw,34px)/1.06 Georgia,serif;color:#fff3dd
+}
+.perspective-feature-copy p{
+  margin:0;font:400 15px/1.4 system-ui,sans-serif;color:#e6ddca
+}
+.perspective-feature-copy small{
+  font:400 11px/1.35 system-ui,sans-serif;color:#b9cbb9
+}
+.perspective-feature-action{
+  display:inline-flex;justify-content:center;align-items:center;align-self:flex-start;
+  min-height:44px;padding:10px 16px;margin-top:2px;border:1px solid #e3cb94;
+  border-radius:8px;background:#ddc28c;color:#111d15;font:700 13px/1.2 system-ui,sans-serif;cursor:pointer
+}
+.perspective-feature-action:hover,.perspective-feature-action:focus-visible{background:#f3d9a2}
+.room-header.is-cast-open #room-lens-portrait{
+  width:clamp(80px,12vw,112px);height:clamp(100px,15vw,140px);
+  border-radius:9px;object-fit:contain!important;background:#111e18!important
+}
+.room-header.is-cast-open .room-lens-trigger{gap:14px;align-items:center}
+.mobile-perspective-sheet{
+  width:min(100%,720px);max-height:92dvh;border-color:#77664f;background:#121e19
+}
+.mobile-perspective-content{padding:18px 18px calc(22px + env(safe-area-inset-bottom,0px))}
+.mobile-perspective-choices .perspective-card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mobile-perspective-choices .perspective-choice-group{display:block}
+.mobile-perspective-choices .perspective-choice-group-title{margin:5px 0 12px;color:#dbcbab}
+.mobile-perspective-sheet .perspective-feature{
+  grid-template-columns:minmax(112px,150px) minmax(0,1fr);gap:12px;padding:10px;
+}
+.mobile-perspective-sheet .perspective-feature-image{height:180px}
+.mobile-perspective-sheet .perspective-feature-copy strong{font-size:24px}
+.mobile-perspective-sheet .perspective-feature-copy p{font-size:12px}
+.mobile-perspective-sheet .perspective-feature-copy small{font-size:10px}
+.mobile-perspective-sheet .perspective-feature-action{font-size:12px;padding:9px 11px}
+.mobile-perspective-choice img.persona-symbol{height:clamp(142px,42vw,242px)}
+@media(max-width:380px){
+  .mobile-perspective-content{padding-inline:12px}
+  .mobile-perspective-choices .perspective-card-grid{gap:9px}
+  .mobile-perspective-choice{padding:7px;gap:7px}
+  .mobile-perspective-choice img.persona-symbol{height:145px}
+  .mobile-perspective-sheet .perspective-feature{grid-template-columns:112px 1fr}
+  .mobile-perspective-sheet .perspective-feature-image{height:152px}
+  .mobile-perspective-sheet .perspective-feature-copy strong{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){
+  #reading-popover .reading-choice,.mobile-perspective-choice{transition:none}
+}
