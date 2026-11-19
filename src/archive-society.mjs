@@ -58,12 +58,59 @@ const categoryMarks={
   'Cities':'M6 26V12h6v14M14 26V6h8v20M24 26V16h4v10',
   'Architecture':'M4 26V14h24v12M10 26v-6h4v6M18 26v-6h4v6',
   'Trade / Commerce':'M6 8h20v16H6zM6 14h20M12 18h8',
-  'Commemoration':'M16 6a10 10 0 1 0 .1 0zM16 10v7l5 3'
+  'Commemoration':'M16 6a10 10 0 1 0 .1 0zM16 10v7l5 3',
+  Machines:'M9 16a5 5 0 1 0 .1 0zM19 20a4 4 0 1 0 .1 0zM14 16h5',
+  Hands:'M11 20v-6a2 2 0 0 1 4 0v6M15 14V8a2 2 0 0 1 4 0v10M19 12V9a2 2 0 0 1 4 0v11M12 20c0 4 2 6 6 6s5-2 5-6',
+  Workers:'M16 8a3 3 0 1 0 .1 0zM10 26l4-8h4l4 8M12 18h8',
+  Factories:'M4 26V16l6-4v4l6-4v4l6-4v14Z',
+  Water:'M4 14c3 3 5 3 8 0s5-3 8 0 5 3 8 0M4 20c3 3 5 3 8 0s5-3 8 0 5 3 8 0',
+  Trees:'M16 26v-6M8 20 16 8l8 12Z',
+  Flags:'M8 6v20M8 6h14l-3 4 3 4H8',
+  Women:'M16 9a3 3 0 1 0 .1 0zM10 26c1-6 4-8 6-8s5 2 6 8',
+  'Political symbols':'M16 6l3 7h7l-5 4 2 7-7-4-7 4 2-7-5-4h7Z',
+  'Mythological figures':'M8 22c4-10 12-10 16 0M12 14h8',
+  'War / Military':'M6 22 16 8l10 14H6zM16 14v8'
 };
+const MARK_HUE={
+  Machines:220,Technology:188,Water:158,Trees:128,Labor:96,Factories:64,Flags:32,
+  Women:350,'Political symbols':318,'Mythological figures':278,'War / Military':248
+};
+const ABSTRACT_MARKS=[
+  'M16 6a10 10 0 1 0 .1 0z',
+  'M16 6 26 16 16 26 6 16Z',
+  'M8 10h16M8 16h16M8 22h16',
+  'M6 22 16 8l10 14Z',
+  'M8 16c0-6 4-10 8-10s8 4 8 10-4 8-8 8',
+  'M10 8h12v6H10zM8 18h16v6H8z'
+];
+function markHash(label){
+  let hash=2166136261;
+  for(const char of String(label))hash=Math.imul(hash^char.charCodeAt(0),16777619);
+  return hash>>>0;
+}
+function markSvg(path,hue){
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="hsl(${hue},48%,62%)"/><path d="${path}" fill="none" stroke="hsl(${hue},40%,18%)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
 export function categoryIconUrl(label){
   const d=categoryMarks[label]||'M8 8h16v16H8Z';
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#dce6de"/><path d="${d}" fill="none" stroke="#326d68" stroke-width="2" stroke-linejoin="round"/></svg>`;
   return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+export function objectMarkUrl(record){
+  const tags=record?.tags||[];
+  const labels=[
+    ...tags.filter(tag=>tag.family==='motif').map(tag=>tag.value),
+    ...tags.filter(tag=>tag.family==='theme').map(tag=>tag.value)
+  ];
+  const label=labels.find(value=>categoryMarks[value]);
+  if(label){
+    const hue=Object.prototype.hasOwnProperty.call(MARK_HUE,label)?MARK_HUE[label]:markHash(label)%360;
+    return markSvg(categoryMarks[label],hue);
+  }
+  const seed=String(record?.accession||record?.title||'object');
+  const hash=markHash(seed);
+  return markSvg(ABSTRACT_MARKS[hash%ABSTRACT_MARKS.length],hash%360);
 }
 export function district(record) {
   const themes=(record.tags||[]).filter(t=>t.family==='theme').map(t=>t.value);

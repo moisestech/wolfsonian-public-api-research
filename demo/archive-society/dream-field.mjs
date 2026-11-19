@@ -19,10 +19,6 @@ uniform float uDream;
 uniform float uPaper;
 uniform float uReduced;
 
-float hash(vec2 p){
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-
 void main(){
   vec3 ink = vec3(0.0666667);
   vec3 paper = vec3(0.964706, 0.956863, 0.921569);
@@ -30,24 +26,18 @@ void main(){
   vec3 teal = vec3(0.443137, 0.768627, 0.694118);
   vec3 ground = mix(ink, paper, uPaper);
   float presence = clamp(uDream, 0.0, 1.0);
-  float motion = presence * (1.0 - uReduced);
-  vec2 flow = vUv + vec2(uTime * 0.008, uTime * 0.005) * motion;
-  float freq = mix(78.0, 128.0, uPaper);
-  vec2 cell = flow * freq;
-  vec2 f = fract(cell) - 0.5;
-  float patch = 0.84 + 0.16 * hash(floor(flow * 2.2));
-  float dotA = smoothstep(0.42, 0.2, length(f)) * patch;
-  vec2 shifted = fract(cell + vec2(1.6, 0.9) * motion) - 0.5;
-  float dotB = smoothstep(0.36, 0.18, length(shifted)) * patch;
-  float grain = hash(floor(cell)) - 0.5;
-  vec3 dream = ground;
-  dream += mix(copper, ink, uPaper) * dotA * mix(0.36, 0.18, uPaper);
-  dream += teal * dotB * motion * 0.28;
-  dream += grain * presence * 0.05;
+  float drift = (0.4 + 0.6 * presence) * (1.0 - uReduced);
+  float t = uTime * 0.05 * drift;
   vec2 p = vUv * 2.0 - 1.0;
-  float vig = smoothstep(1.15, 0.2, length(p));
-  dream = mix(dream * mix(0.62, 0.86, uPaper), dream, mix(1.0, vig, presence));
-  gl_FragColor = vec4(mix(ground, dream, presence), 1.0);
+  float washA = sin(p.x * 1.35 + t) * cos(p.y * 0.9 - t * 0.65);
+  float washB = sin(p.y * 1.15 + p.x * 0.35 - t * 0.45);
+  float breath = 0.5 + 0.5 * sin(t * 0.8);
+  vec3 dream = ground;
+  dream += mix(copper, ink, uPaper) * (0.22 + 0.18 * washA);
+  dream += teal * (0.12 + 0.14 * washB) * mix(0.55, 1.0, breath);
+  float edge = smoothstep(0.15, 1.35, length(p));
+  dream = mix(dream, dream * mix(0.62, 0.86, uPaper), edge * 0.55);
+  gl_FragColor = vec4(dream, 1.0);
 }
 `;
 

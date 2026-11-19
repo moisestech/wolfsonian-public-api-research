@@ -21,8 +21,9 @@
 <a class="skip" href="#atlas">Skip to the atlas</a>
 <header class="topbar">
   <div class="brand-area">
-    <a class="wordmark" href="#atlas" aria-label="Archive Dreams in Public — explore conversations"><span class="brand-icon" aria-hidden="true"><img class="brand-mark-on-dark" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981354/archive-dreams/brand/aperture-white-v1.svg" data-local-src="./assets/archive-dreams-aperture-white.svg" width="40" height="40" alt=""><img class="brand-mark-on-light" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981350/archive-dreams/brand/aperture-black-v1.svg" data-local-src="./assets/archive-dreams-aperture-black.svg" width="40" height="40" alt=""></span><span class="brand-copy"><span class="brand-name">ARCHIVE DREAMS IN PUBLIC</span><span class="brand-phrase" id="editorial-phrase" aria-hidden="true">Archive dreams in public.</span></span></a>
-    <button id="editorial-toggle" type="button" aria-label="Pause rotating title" aria-pressed="false" title="Pause rotating title"><span aria-hidden="true">Ⅱ</span></button>
+    <a class="wordmark" href="#atlas" aria-label="Archive Dreams in Public — explore conversations"><span class="brand-icon" aria-hidden="true"><img class="brand-mark-on-dark" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981354/archive-dreams/brand/aperture-white-v1.svg" data-local-src="./assets/archive-dreams-aperture-white.svg" width="40" height="40" alt=""><img class="brand-mark-on-light" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981350/archive-dreams/brand/aperture-black-v1.svg" data-local-src="./assets/archive-dreams-aperture-black.svg" width="40" height="40" alt=""></span></a>
+    <span class="brand-copy"><span class="brand-name">ARCHIVE DREAMS IN PUBLIC</span><button type="button" id="editorial-phrase" class="brand-phrase" aria-pressed="false" aria-label="Pause rotating title">Archive dreams in public.</button></span>
+    <span class="sr-only">Follow a question between objects. The voices are imagined. Check the records.</span>
   </div>
   <div class="top-actions">
     <nav class="top-nav" aria-label="Explore Archive Dreams">
@@ -76,15 +77,15 @@
     <p class="admin-links"><a href="../discovery-lab/">Discovery Lab</a><a href="../../docs/archive-society.md">Setup &amp; evidence contract</a></p>
   </div>
 </section>
-<div class="arrival-guide" aria-label="How to experience this artwork">
-  <p>Follow a question between objects. <strong>The voices are imagined. Check the records.</strong></p>
+<div class="arrival-guide">
   <p id="arrival-connection" class="sr-only" role="status"></p>
 </div>
 <main class="workspace">
 <section class="atlas-panel" id="atlas" aria-label="The Archive Dreams in Public">
-  <div class="atlas-toolbar"><button type="button" id="room-back" class="room-back" aria-label="Back to conversation" title="Back to conversation"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m7-7-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h2 id="atlas-title">A constellation of possible readings</h2><div id="room-legend" class="room-legend" hidden></div></div>
+  <div class="atlas-toolbar"><button type="button" id="room-back" class="room-back" aria-label="Back to conversation" title="Back to conversation"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m7-7-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div id="room-legend" class="room-legend" hidden></div></div>
+  <div id="seed-popover" class="tool-popover" hidden role="dialog" aria-label="Choose the artwork"><div id="seed-choices" class="seed-choices"></div><select id="seed" class="lens-native" tabindex="-1" aria-hidden="true"></select></div>
   <div class="canvas">
-    <div id="stage" role="img" aria-label="Objects in a force graph"></div>
+    <div id="stage" role="img" aria-label="The society"></div>
     <p id="research-edge" class="research-edge edge-curatorial" hidden>Curatorial juxtaposition</p>
     <div id="zoom-stage" class="zoom-stage" aria-live="polite"></div>
   </div>
@@ -104,21 +105,6 @@
           </div>
         </div>
       </div>
-      <div class="reading">
-        <button id="reading-toggle" type="button" data-sheet="reading" aria-haspopup="dialog" aria-expanded="false" aria-controls="reading-popover">
-          <img id="reading-portrait" alt="" width="36" height="36">
-          <span class="reading-label"><small>Perspective</small><strong id="reading-name">Family</strong></span>
-        </button>
-        <div id="reading-popover" class="reading-popover" hidden role="dialog" aria-label="Choose a reading"></div>
-        <select id="lens" class="lens-native" tabindex="-1" aria-hidden="true"></select>
-      </div>
-      <div class="tool">
-        <button id="seed-toggle" class="choice" type="button" data-sheet="seed" aria-haspopup="dialog" aria-expanded="false" aria-controls="seed-popover"><img id="seed-portrait" alt="" width="36" height="36"><span class="reading-label"><small>Object</small><strong id="seed-name">Object</strong></span></button>
-        <div id="seed-popover" class="tool-popover" hidden role="dialog" aria-label="Center the conversation">
-          <div id="seed-choices" class="seed-choices"></div>
-          <select id="seed" class="lens-native" tabindex="-1" aria-hidden="true"></select>
-        </div>
-      </div>
       <div class="tool">
         <button id="theme-toggle" class="choice" type="button" data-sheet="theme" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 12h10M4 16h13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" fill="currentColor"/></svg></span><span class="reading-label"><small>Theme</small><strong id="theme-name">All</strong></span></button>
         <div id="theme-popover" class="tool-popover" hidden role="dialog" aria-label="Shared thematic category">
@@ -131,18 +117,14 @@
         <div id="paths-popover" class="tool-popover" hidden role="dialog" aria-label="Curatorial paths"><div id="path-choices"></div></div>
       </div>
       <div class="command-layers" role="group" aria-label="Map layers">
-        <label class="icon-check" title="Accession identity"><input id="layer-accession" type="checkbox" checked aria-label="Accession identity"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.6"/></svg></label>
         <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
         <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
       </div>
-      <div class="tool">
-        <button id="zoom-toggle" class="choice" type="button" data-sheet="zoom" aria-haspopup="dialog" aria-expanded="false" aria-controls="zoom-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14.5 14.5 20 20" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="reading-label"><small>Zoom</small><strong id="zoom-name">Field</strong></span></button>
-        <div id="zoom-popover" class="tool-popover" hidden role="dialog" aria-label="Zoom">
-          <button id="fit" class="on" type="button" title="The whole set">Field</button>
-          <button type="button" data-stop="34" title="Objects in this conversation">Group</button>
-          <button type="button" data-stop="67" title="The two objects talking">Pair</button>
-          <button type="button" data-stop="100" title="This photograph">Object</button>
-        </div>
+      <div class="command-zoom" role="group" aria-label="Zoom">
+        <button id="fit" type="button" title="The whole set" aria-pressed="false">Field</button>
+        <button type="button" data-stop="34" title="Objects in this conversation" aria-pressed="false">Group</button>
+        <button type="button" data-stop="67" title="The two objects talking" aria-pressed="false">Pair</button>
+        <button type="button" data-stop="100" title="This photograph" aria-pressed="false">Object</button>
       </div>
     </div>
     <p id="layer-notice" class="boundary" hidden></p>
@@ -156,7 +138,7 @@
     <button id="feed-perspective-toggle" class="mobile-perspective-trigger" type="button" aria-haspopup="dialog" aria-controls="mobile-perspective-sheet" aria-label="Choose perspective, currently Family">
       <span>Perspective</span><strong id="feed-perspective-name">Family</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
-    <button type="button" id="all-directory-questions" hidden>Browse all questions</button>
+    <button type="button" id="all-directory-questions" hidden>Townhall</button>
     <div id="timeline-list"></div>
   </div>
   <div class="space-view">
@@ -165,17 +147,48 @@
       <span id="scene-tag" class="chat-topic rail-theme" hidden></span>
       <span id="counts"></span>
     </button>
-    <button type="button" id="space-leave" class="space-leave">Browse questions</button>
+    <button type="button" id="space-leave" class="space-leave">Townhall</button>
   </div>
   <section id="room-header" class="room-header" aria-labelledby="room-question" hidden>
     <p class="room-kicker" id="room-status-line" hidden><span id="room-kind"></span></p>
     <h1 id="room-question" tabindex="-1"></h1>
+    <button id="object-focus" class="room-subject" type="button" data-sheet="seed" aria-haspopup="dialog" aria-expanded="false" aria-controls="seed-popover">
+      <img id="object-focus-portrait" alt="" width="36" height="44">
+      <span class="room-subject-copy">
+        <span>Subject</span>
+        <strong id="atlas-title">A constellation of possible readings</strong>
+      </span>
+      <svg class="object-focus-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
     <button id="room-perspective-toggle" class="mobile-perspective-trigger" type="button" aria-haspopup="dialog" aria-controls="mobile-perspective-sheet" aria-label="Choose perspective, currently Family">
       <span>Perspective</span><strong id="room-perspective-name">Family</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <p id="room-description" class="room-description">Connection: research in progress</p>
+    <div id="room-cast" class="room-cast">
+    <div id="room-lens" class="room-lens">
+      <button id="reading-toggle" class="room-lens-trigger" type="button" data-sheet="reading" aria-haspopup="dialog" aria-expanded="false" aria-controls="reading-popover" aria-label="Choose perspective, currently Family">
+        <img id="room-lens-portrait" alt="" width="48" height="56">
+        <span class="room-lens-copy">
+          <span>Perspective</span>
+          <strong id="reading-name">Family</strong>
+          <p id="room-lens-hook"></p>
+        </span>
+        <svg class="room-lens-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div id="reading-popover" class="reading-popover" hidden role="dialog" aria-label="Choose a reading"></div>
+      <select id="lens" class="lens-native" tabindex="-1" aria-hidden="true"></select>
+      <button type="button" id="room-archivist" class="room-archivist" data-point="archivist" aria-label="Archivist">
+        <img id="room-archivist-portrait" alt="" width="48" height="56">
+        <span>Archivist</span>
+      </button>
+      <button type="button" id="room-prompts">Prompts</button>
+      <button type="button" id="room-cast-toggle" class="room-cast-toggle" aria-expanded="false" aria-label="Show the records and perspective">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
     <div id="room-participants" class="room-participants" aria-label="Object speakers"></div>
     <button type="button" id="room-rationale" class="room-rationale" aria-label="Why these two? Open evidence"></button>
+    </div>
   </section>
   <div id="space-stage"></div>
   <div id="listener-row" class="listener-row" aria-label="Other conversation paths"></div>
@@ -202,25 +215,48 @@
       <p class="landscape-credit">Fictional readings</p>
     </div>
     <div id="prompt-sheet" class="prompt-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="prompt-title">
-      <button type="button" id="prompt-close" class="close-icon" aria-label="Close perspective details" title="Close perspective details">×</button>
-      <div class="sheet-reading">
-        <p class="eyebrow">ARTIST-AUTHORED ARCHETYPE</p>
-        <p id="prompt-kicker" class="prompt-kicker"></p>
-        <h2 id="prompt-title"></h2>
-        <p id="prompt-hook" class="prompt-hook"></p>
-        <p id="prompt-description"></p>
-        <h3>What this perspective attends to</h3>
-        <ul id="prompt-priorities"></ul>
-        <h3>What it cannot claim</h3>
-        <p id="prompt-limits"></p>
-        <h3>The prompt</h3>
-        <pre id="prompt-text"></pre>
-        <p class="prompt-note">These rules define a proposed lens. They are not evidence of a live model, and they are not a museum voice.</p>
-        <details id="archivist-block">
-          <summary>The Archivist, who speaks third</summary>
-          <pre id="archivist-prompt"></pre>
-        </details>
+      <div class="prompt-frame">
+        <header class="prompt-hero">
+          <img id="prompt-portrait" alt="" width="96" height="112">
+          <div class="prompt-identity">
+            <a class="prompt-about" href="../about/#archetypes">About these perspectives</a>
+            <h2 id="prompt-title"></h2>
+            <p id="prompt-hook" class="prompt-hook"></p>
+          </div>
+          <div class="prompt-actions">
+            <button type="button" id="prompt-copy">Copy</button>
+            <button type="button" id="prompt-edit" aria-pressed="false">Edit</button>
+            <button type="button" id="prompt-cancel" hidden>Cancel</button>
+            <button type="button" id="prompt-reset" hidden>Restore</button>
+          </div>
+        </header>
+        <div id="prompt-cast" class="prompt-cast" role="listbox" aria-label="Prompts for each perspective"></div>
+        <div class="prompt-stage">
+          <section class="prompt-column" aria-labelledby="prompt-column-title">
+            <div class="prompt-column-head">
+              <h3 id="prompt-column-title">The prompt</h3>
+              <span id="prompt-edited" class="prompt-edited" hidden>Saved on this browser</span>
+            </div>
+            <div id="prompt-fields" class="prompt-fields"></div>
+            <textarea id="prompt-editor" class="prompt-editor" hidden aria-label="Edit this perspective prompt"></textarea>
+            <pre id="prompt-text" class="prompt-source" aria-hidden="true"></pre>
+            <p class="prompt-note">These rules define a proposed lens. They are not evidence of a live model, and they are not a museum voice.</p>
+          </section>
+          <aside class="prompt-aside" aria-label="About this perspective">
+            <h3>About this perspective</h3>
+            <p id="prompt-description"></p>
+            <h3>What this perspective attends to</h3>
+            <ul id="prompt-priorities"></ul>
+            <h3>What it cannot claim</h3>
+            <p id="prompt-limits"></p>
+            <details id="archivist-block">
+              <summary>The Archivist, who speaks third</summary>
+              <pre id="archivist-prompt"></pre>
+            </details>
+          </aside>
+        </div>
       </div>
+      <button type="button" id="prompt-close" class="close-icon" aria-label="Close perspective details" title="Close perspective details">×</button>
     </div>
     <section id="conversation-panel"><div id="conversation-content"></div></section>
     <section id="record-panel" hidden><button type="button" id="record-return">← Back to conversation</button><div id="record-content"></div></section>

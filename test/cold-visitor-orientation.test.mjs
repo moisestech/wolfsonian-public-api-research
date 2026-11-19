@@ -9,7 +9,8 @@ test('cold visitors get the question first and persistent fiction and record aff
  const js=await readFile(new URL('../demo/archive-society/society.mjs',import.meta.url),'utf8');
  const beforeApp=html.slice(0,html.indexOf('<main class="workspace">'));
  assert.match(beforeApp,/class="arrival-guide"/);
- assert.match(beforeApp,/The voices are imagined\. Check the records\./);
+ assert.match(beforeApp,/class="sr-only">Follow a question between objects\. The voices are imagined\. Check the records\./);
+ assert.doesNotMatch(html,/<p>Follow a question between objects\./);
  assert.doesNotMatch(html,/IMAGINED EXCHANGE/);
  assert.match(html,/id="room-kind"/);
  assert.match(html,/id="room-status-line" hidden/);

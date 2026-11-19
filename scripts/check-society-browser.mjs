@@ -10,7 +10,7 @@ try {
     child.stdout.on('data',b=>{if(b.toString().includes('Archive Society:')){clearTimeout(timer);resolve();}});
     child.once('exit',code=>{clearTimeout(timer);reject(new Error('Server exited before ready: '+code));});
   });
-  browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH}:{})});
+  browser=await chromium.launch({headless:true,args:['--force-prefers-reduced-motion=no-preference'],...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH}:{})});
   const page=await browser.newPage({viewport:{width:1280,height:900},deviceScaleFactor:1}),errors=[],external=[],voiceRequests=[];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('request',req=>{const url=req.url();if(!url.startsWith(base)&&!url.startsWith('blob:')&&!url.startsWith('data:')&&!url.startsWith('https://res.cloudinary.com/'))external.push(url);if(url.includes('/api/archive-society/voice'))voiceRequests.push(url);});
@@ -23,20 +23,21 @@ try {
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await open();
   // Cloudinary-backed persona marks preserve the intended small/large roles.
-  assert.equal(await page.locator('#reading-portrait').getAttribute('data-persona-id'),'family');
-  assert.equal(await page.locator('#reading-portrait').getAttribute('data-persona-variant'),'compact');
-  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
+  assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-id'),'family');
+  assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-variant'),'compact');
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
   // A blocked CDN must render the original inline vector without a broken avatar.
-  await page.locator('#reading-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
-  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
-  assert.ok(decodeURIComponent(await page.locator('#reading-portrait').getAttribute('src')).includes('#ffffff'));
+  await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/^data:image\/svg\+xml/);
+  assert.ok(decodeURIComponent(await page.locator('#room-lens-portrait').getAttribute('src')).includes('#ffffff'));
   assert.equal(await page.locator('#reading-popover [data-lens] img.persona-symbol').count(),5);
   assert.equal(await page.locator('#zoom-stage .plate.persona img.persona-symbol').count()>0,true);
   // The editorial title changes without replacing the accessible archive identity.
   assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
-  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='What could two objects say?',null,{timeout:7500});
-  await page.locator('#editorial-toggle').click();
-  assert.equal(await page.locator('#editorial-toggle').getAttribute('aria-pressed'),'true');
+  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='Follow a question between objects.',null,{timeout:7500});
+  await page.locator('#editorial-phrase').click();
+  assert.equal(await page.locator('#editorial-phrase').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('#editorial-toggle').count(),0);
   assert.equal(await page.locator('.wordmark').getAttribute('aria-label'),'Archive Dreams in Public — explore conversations');
   assert.ok(await page.locator('.graph-node').count()>=2);
   assert.equal(await page.locator('.conversation-edge').count(),6);
@@ -44,7 +45,33 @@ try {
   assert.equal(await page.locator('#room-question').innerText(),'Who pays the price of progress?');
   assert.equal(await page.locator('#room-header').getAttribute('data-mode'),'CURATED_SCRIPT');
   assert.match(await page.locator('#room-rationale').innerText(),/Why these two\?/);
-  assert.match(await page.locator('#room-description').innerText(),/Both list “Machines” · link unproven/);
+  assert.equal(await page.locator('#room-description .link-badge-label').innerText(),'Machines');
+  assert.equal(await page.locator('#room-description .link-warning').textContent(),'link unproven');
+  const openingPair=await page.locator('#stage').getAttribute('data-pair');
+  const openingEdges=await page.locator('.conversation-edge').count();
+  await page.locator('#space-leave').click();
+  await page.waitForFunction(()=>document.querySelector('#timeline-title')?.textContent==='Townhall');
+  assert.equal((await page.locator('#stage').getAttribute('data-pair'))||'','');
+  assert.equal(await page.locator('#stage').getAttribute('data-zoom'),'0');
+  const listed=await page.locator('#timeline-list .path-post').evaluateAll(cards=>{
+    const ids=new Set();
+    for(const card of cards){ids.add(card.dataset.source);ids.add(card.dataset.target);}
+    return [...ids].sort();
+  });
+  const drawn=await page.locator('#stage .graph-node').evaluateAll(nodes=>nodes.map(node=>node.dataset.accession).sort());
+  assert.deepEqual(drawn,listed);
+  assert.ok(listed.length>2,'Townhall draws every listed conversation');
+  const townhallCard=page.locator('#timeline-list .path-post').first();
+  await townhallCard.hover();
+  const expectedPair=await townhallCard.evaluate(node=>[node.dataset.source,node.dataset.target].sort().join('|'));
+  const highlighted=((await page.locator('#stage').getAttribute('data-pair-highlight'))||'').split('|').filter(Boolean).sort().join('|');
+  assert.equal(highlighted,expectedPair);
+  await page.locator('#timeline-title').hover();
+  assert.equal((await page.locator('#stage').getAttribute('data-pair-highlight'))||'','');
+  await page.locator('#questions-back').click();
+  await page.waitForFunction(()=>document.querySelector('#room-question')?.textContent==='Who pays the price of progress?');
+  assert.equal(await page.locator('.conversation-edge').count(),openingEdges);
+  assert.equal(await page.locator('#stage').getAttribute('data-pair'),openingPair);
   assert.equal(await page.locator('#room-participants .object-inspect').count(),2);
    assert.equal(await page.locator('#room-participants .object-portrait-media').count(),2);
    assert.equal(await page.locator('#room-participants .object-portrait-meta').count(),2);
@@ -74,6 +101,11 @@ try {
 
   assert.equal(await page.locator('.encounter-orientation').count(),0);
   assert.equal(await page.locator('#conversation-content>details').count(),0);
+  assert.equal(await page.locator('#room-header').evaluate(el=>el.classList.contains('is-cast-open')),false);
+  const avatar=await page.locator('#room-participants .object-portrait-media').first().evaluate(el=>el.getBoundingClientRect().height);
+  assert.ok(avatar>=44&&avatar<=68,'Compact cast avatars: '+avatar);
+  await page.locator('#room-cast-toggle').click();
+  assert.equal(await page.locator('#room-cast-toggle').getAttribute('aria-expanded'),'true');
   await screenshot('room-1280');
 
   // Object-first mobile: expansive photographs on arrival, compact when reading.
@@ -118,7 +150,7 @@ try {
   await page.locator('#room-perspective-toggle').click();
   assert.equal(await page.locator('#mobile-perspective-sheet').isVisible(),true);
   assert.equal(await page.locator('#mobile-perspective-choices button').count(),5);
-  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-variant'),'full');
+  assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-variant'),'compact');
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img').getAttribute('data-persona-tone'),'white');
   await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Worker');
@@ -137,16 +169,16 @@ try {
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
-  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/\/family-ink-compact-v1\.svg$/);
-  // The mobile perspective sheet stays dark in both theme settings.
-  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img').getAttribute('src'),/\/family-white-full-v1\.svg$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-ink-compact-v1\.svg$/);
+  // The mobile perspective sheet keeps the white compact mark in both themes.
+  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
-  assert.match(await page.locator('#reading-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/family-white-compact-v1\.svg$/);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
@@ -207,7 +239,7 @@ try {
   assert.match(await page.locator('#episode-evidence').innerText(),/85\.4\.64\.43[\s\S]*TD1989\.318\.1/);
   await page.locator('#sheet-close').click();
   await page.locator('#space-leave').click();
-  assert.equal(await page.locator('#timeline-title').innerText(),'Choose a question');
+  assert.equal(await page.locator('#timeline-title').innerText(),'Townhall');
   assert.match(await page.locator('#timeline-list').innerText(),/Conversations/);
   const questionTitles=await page.locator('#timeline-list .question-card-face strong').allTextContents();
   assert.ok(questionTitles.includes('Can a tree connect Paul Robeson to an imagined house?'));
@@ -348,8 +380,8 @@ try {
   await page.locator('#atlas-mode').check();assert.equal(await page.locator('.graph-node').count(),Math.min(100,corpusCount),'Overview must use the loaded corpus, without inventing nodes to reach 100');
   const scaleOf=()=>page.locator('#stage').evaluate(el=>Number(el.dataset.scale));
   const fitted=await scaleOf();
-  await page.locator('#zoom-toggle').click();await page.locator('[data-stop="100"]').click();assert.ok(await scaleOf()>fitted);
-  await page.locator('#zoom-toggle').click();await page.locator('#fit').click();assert.ok(Math.abs(await scaleOf()-fitted)<0.02);
+  await page.locator('[data-stop="100"]').click();assert.ok(await scaleOf()>fitted);
+  await page.locator('#fit').click();assert.ok(Math.abs(await scaleOf()-fitted)<0.02);
   await page.locator('#atlas-mode').uncheck();
   await page.locator('#theme-toggle').click();await page.locator('#theme-choices [data-theme="Domestic life"]').click();
   assert.equal(await page.locator('#stage').getAttribute('data-theme'),'Domestic life');

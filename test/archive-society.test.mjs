@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { parseMatrixCsv } from '../src/discovery-graph.mjs';
-import { inventedRecords,societyView,conversationFor,photoKeys,imageKeys } from '../src/archive-society.mjs';
+import { inventedRecords,societyView,conversationFor,photoKeys,imageKeys,objectMarkUrl } from '../src/archive-society.mjs';
 import { reconcileLookup,recordsFromLookup } from '../src/archive-evidence.mjs';
 
 test('invented atlas has bounded, deterministic object/conversation neighborhoods',()=>{
@@ -67,6 +67,14 @@ test('catalog date enters dialogue only after a unique primary match',()=>{
   const c=conversationFor(records[0],target,edge,'family',{source:snapshot});
   assert.equal(c.resourceLayer,'catalog_field_quotes');assert.match(c.turns[0].text,/TEST DATE/);assert.equal(c.turns[0].citations[0].pointer,'/0/Date');
   assert.equal(conversationFor(records[0],target,edge,'family',{source:{...snapshot,status:'AMBIGUOUS'}}).resourceLayer,'no_matched_catalog_field');
+});
+test('an object without a photograph gets a stable motif mark',()=>{
+  const radio=inventedRecords()[0];
+  assert.equal(objectMarkUrl(radio),objectMarkUrl(radio));
+  assert.match(objectMarkUrl(radio),/^data:image\/svg\+xml/);
+  assert.match(decodeURIComponent(objectMarkUrl({accession:'A',tags:[{family:'motif',value:'Machines'}]})),/hsl\(220/);
+  assert.notEqual(objectMarkUrl(radio),objectMarkUrl({accession:'NO-TAGS-1',title:'Bare'}));
+  assert.notEqual(objectMarkUrl({accession:'NO-TAGS-1'}),objectMarkUrl({accession:'NO-TAGS-2'}));
 });
 test('local photograph matching preserves accession suffixes and filenames',()=>{
   assert.ok(photoKeys({accession:'85.7.383a,b',imageFilename:'folder/Exact Photo.JPG'}).includes('exact photo.jpg'));
