@@ -1889,7 +1889,8 @@ function openMobilePerspectives(opener){
   mobilePerspectiveOpener=opener;
   closeSheet();
   mobilePerspectiveSheet.showModal();
-  mobilePerspectiveSheet.querySelector('[data-lens="'+state.lens+'"]')?.focus();
+  mobilePerspectiveSheet.scrollTop=0;
+  mobilePerspectiveSheet.querySelector('.perspective-feature-action')?.focus({preventScroll:true});
 }
 for(const id of ['room','feed']){
   const button=$(id+'-perspective-toggle');
