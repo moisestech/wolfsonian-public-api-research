@@ -2,7 +2,8 @@
  * Explicit versioned Cloudinary resources for the artist-led illustrated archetype gallery.
  * Never interpreted as museum objects, institution-approved portraits or source evidence.
  * Source of truth: docs/design/illustrated-persona-gallery-manifest.v1.json
- * The 8 newer v4 characters are review-stage art; the 4 supplied masks are approved studies.
+ * Eight geometric masks remain review-stage; approved Nested Family is mapped to Family.
+ * The other three approved masks remain unassigned visual references.
  */
 export const ILLUSTRATED_PERSONAS=Object.freeze({
   "family": {
