@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; media-src blob:; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Archive Society — Private Listening Room</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#111915;color:#f4f1e9}
+*{box-sizing:border-box}body{max-width:1150px;margin:0 auto;padding:clamp(18px,4vw,44px)}
+h1{font-size:clamp(1.7rem,4vw,2.7rem);margin:.4em 0}h2{font-size:1.3rem}
+p{line-height:1.5}small,.muted{color:#b0c2b7}
+.eyebrow{color:#a4dbb8;text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;font-weight:700}
+.panel{border:1px solid #516e5e;border-radius:16px;background:#1a2a22;padding:20px;margin:18px 0}
+.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.sound{background:#12251a;border:1px solid #527960;border-radius:14px;padding:16px}
+input,select,textarea,button{font:inherit;color:inherit}
+button,select,textarea{background:#213d2a;border:1px solid #739078;border-radius:10px;padding:10px}
+button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f5b883}
+input[type=file]{width:100%;max-width:100%;padding:9px;border:1px dashed #8fb3a0;border-radius:10px}
+select#scene,select#next{width:100%;min-width:0;max-width:100%}audio{width:100%;margin:14px 0}
+.turn{padding:11px 0;border-bottom:1px solid #365140;margin:0}
+.turn strong{color:#b3ebd1}
+.rubric-row{display:grid;grid-template-columns:minmax(0,1fr) 56px 56px;gap:6px;align-items:center;padding:9px 0;border-bottom:1px solid #375042}
+.rubric-row select{width:100%;min-width:0;padding:6px}
+.rubric-row span,.rubric-row strong{min-width:0;overflow-wrap:anywhere;font-size:.84rem}
+.sound,.panel,audio{min-width:0;max-width:100%}
+textarea{width:100%;min-height:83px}label{display:block;margin:12px 0 7px}
+.status{display:inline-block;color:#f5c69b;border:1px solid #967c5c;padding:5px 9px;border-radius:20px;font-size:.8rem}
+#notice{color:#b9e5c5;min-height:1em}
+@media(max-width:750px){.layout{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head><body>
+<header>
+<div class="eyebrow">Archive Dreams in Public · local sound laboratory</div>
+<h1>What makes a society sound alive?</h1>
+<p>Compare the same question through <strong>NotebookLM's improvised two-host research overview</strong> and <strong>ElevenLabs' fixed, character-specific dialogue</strong>. Neither is archival testimony or an official museum narration.</p>
+<p class="muted">Local-only file selection. No upload, network request, autoplay, or analytics. A review export contains only your scores and notes, never the audio recordings.</p>
+</header>
+<section class="panel" aria-labelledby="choose-title">
+<h2 id="choose-title">Choose a conversation</h2>
+<label for="scene">Ten audio studies</label><select id="scene"></select>
+<p id="status" class="status"></p>
+<h2 id="question"></h2><p id="cast"></p><p id="rights" class="muted"></p>
+</section>
+<section aria-labelledby="listen-title">
+<h2 id="listen-title">A/B audition</h2>
+<div class="layout">
+<div class="sound">
+<h3>A · NotebookLM overview</h3>
+<p class="muted">Source-grounded two-host discussion; hosts are not the collection objects and may paraphrase. Verify generated claims.</p>
+<label for="fileA">Choose a locally downloaded recording</label>
+<input type="file" accept="audio/*" id="fileA">
+<audio controls preload="none" id="audioA" aria-label="NotebookLM audio preview"></audio>
+</div>
+<div class="sound">
+<h3>B · ElevenLabs dialogue</h3>
+<p class="muted">Fixed artist-authored object dialogue; match text and speaking roles before synchronizing animations.</p>
+<label for="fileB">Choose a locally downloaded recording</label>
+<input type="file" accept="audio/*" id="fileB">
+<audio controls preload="none" id="audioB" aria-label="ElevenLabs audio preview"></audio>
+</div>
+</div></section>
+<div class="layout">
+<section class="panel" aria-labelledby="script-title">
+<h2 id="script-title">Original character script</h2>
+<p class="muted">A reference for B, not an exact NotebookLM transcript. It is fictional writing; no historical object or person actually spoke.</p>
+<div id="turns"></div>
+</section>
+<section class="panel" aria-labelledby="scores-title">
+<h2 id="scores-title">Listening notes</h2>
+<p class="muted">Score 1–5, with 5 strongest. A confident voice is not evidence of historical accuracy.</p>
+<div class="rubric-row"><strong>Criteria</strong><strong>Overview</strong><strong>Dialogue</strong></div>
+<div id="scores"></div>
+<label for="notesA">NotebookLM notes</label><textarea id="notesA" placeholder="Was it natural? Were its factual claims supported?"></textarea>
+<label for="notesB">ElevenLabs notes</label><textarea id="notesB" placeholder="Did the objects feel distinctive? Were pauses meaningful?"></textarea>
+<label for="next">Next iteration</label>
+<select id="next">
+<option value="">Not selected</option><option value="notebooklm">Improve source discussion</option>
+<option value="elevenlabs">Improve character performance</option><option value="hybrid">Hybrid approach</option>
+<option value="hold">Neither is ready</option>
+</select>
+<p><button type="button" id="export">Export review JSON</button></p>
+<p id="notice" role="status" aria-live="polite"></p>
+</section></div>
+<footer class="muted">Research only. No recording, scripted voice, licensed image, or institutionally approved narrative is published by this tool. Review source rights and voice permissions before making public audio.</footer>
+<script type="application/json" id="scene-data">__SCENES__</script>
+<script>
+"use strict";
+const data=JSON.parse(document.getElementById('scene-data').textContent);
+const rubric=['Voice identity','Turn-taking & rhythm','Source integrity','Conversational vitality','UI synchronization potential'];
+const reviews=new Map(), audioUrls=new Map();
+const $=id=>document.getElementById(id);
+for(const scene of data){
+  const o=document.createElement('option');o.value=scene.id;
+  o.textContent=(scene.tier==='P0'?'● ':'○ ')+scene.question;
+  $('scene').append(o);
+}
+function selected(){return data.find(x=>x.id===$('scene').value)}
+function reviewFor(){
+  const id=selected().id;
+  if(!reviews.has(id))reviews.set(id,{ratings:{},notesA:'',notesB:'',next:''});
+  return reviews.get(id);
+}
+function detachAudio(){
+  for(const key of ['A','B']){
+    const a=$('audio'+key);a.pause();a.removeAttribute('src');a.load();
+    const url=audioUrls.get(key);if(url)URL.revokeObjectURL(url);
+    audioUrls.delete(key);$('file'+key).value='';
+  }
+}
+function showScores(){
+  const holder=$('scores');holder.replaceChildren();const review=reviewFor();
+  for(const name of rubric){
+    const row=document.createElement('div');row.className='rubric-row';
+    const title=document.createElement('span');title.textContent=name;row.append(title);
+    for(const provider of ['A','B']){
+      const choice=document.createElement('select');
+      choice.setAttribute('aria-label',provider+' score: '+name);
+      const first=document.createElement('option');first.value='';first.textContent='—';choice.append(first);
+      for(let i=1;i<=5;i++){const o=document.createElement('option');o.value=String(i);o.textContent=String(i);choice.append(o)}
+      const key=provider+':'+name;
+      choice.value=review.ratings[key]||'';
+      choice.addEventListener('change',()=>{review.ratings[key]=choice.value;$('notice').textContent='Local review changed; export to save.'});
+      row.append(choice);
+    }
+    holder.append(row);
+  }
+}
+function render(){
+  detachAudio();const s=selected();const r=reviewFor();
+  $('status').textContent=s.tier==='P0'?'P0 · published-source pointers':'P1 · external provider source review needed';
+  $('question').textContent=s.question;
+  $('cast').textContent=s.a.title+' ('+s.a.accession+') × '+s.b.title+' ('+s.b.accession+')';
+  $('rights').textContent=s.tier==='P0'?'Original research preview; publication and audio playback approval remain pending.':'Do not send unpublished staff metadata or Lakehouse captures to third-party voice services.';
+  $('turns').replaceChildren();
+  for(const turn of s.turns){
+    const line=document.createElement('p');line.className='turn';
+    const speaker=document.createElement('strong');
+    speaker.textContent=turn.role==='objectA'?s.a.title:turn.role==='objectB'?s.b.title:'Fictional Archivist';
+    line.append(speaker,document.createTextNode(' · '+turn.text));$('turns').append(line);
+  }
+  showScores();$('notesA').value=r.notesA;$('notesB').value=r.notesB;$('next').value=r.next;
+  $('notice').textContent='Audio and evaluation remain on your device.';
+}
+$('scene').addEventListener('change',render);
+for(const key of ['A','B']){
+  $('file'+key).addEventListener('change',event=>{
+    const file=event.target.files&&event.target.files[0];const player=$('audio'+key);
+    player.pause();player.removeAttribute('src');
+    if(audioUrls.has(key))URL.revokeObjectURL(audioUrls.get(key));
+    audioUrls.delete(key);
+    if(!file)return;
+    const url=URL.createObjectURL(file);audioUrls.set(key,url);player.src=url;
+    $('notice').textContent='Local audio selected. No upload occurred.';
+  });
+  $('audio'+key).addEventListener('play',()=>{$('audio'+(key==='A'?'B':'A')).pause()});
+}
+for(const id of ['notesA','notesB','next'])
+  $(id).addEventListener('input',()=>{reviewFor()[id]=$(id).value;$('notice').textContent='Local review changed; export to save.'});
+$('export').addEventListener('click',()=>{
+  const payload={schemaVersion:1,exportedAt:new Date().toISOString(),kind:'archive-society-audio-reviews',
+    warning:'Private listening notes only, without recordings, source extracts, or publication rights',
+    reviews:[...reviews.entries()].map(([experimentId,r])=>({experimentId,...r}))};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const href=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=href;link.download='archive-society-listening-notes.json';link.click();
+  setTimeout(()=>URL.revokeObjectURL(href),10000);
+  $('notice').textContent='Review exported. Store it privately.';
+});
+render();
+</script>
+</body></html>
