@@ -74,9 +74,9 @@ jobs:
         run: |
           npm ci
           npx playwright install --with-deps chromium
+          node scripts/check-audio-lab-review-browser.mjs
           node test/discovery-browser-smoke.mjs
           node scripts/check-society-browser.mjs
-          node scripts/check-audio-lab-review-browser.mjs
       - name: Save review screenshots
         if: always()
         uses: actions/upload-artifact@v4
