@@ -33,9 +33,10 @@ try{
   // The four user-supplied Deco masks are decorative studies, not named speaker roles.
   const approvedMask=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/approved-masks\/(?:nested-family|architectural-deco|tiered-deco|halo-deco)-(?:white|ink)-(?:full|compact)-v1\.png$/;
 
+  const sculpturalPortrait=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_(?:192|1024)\/f_auto\/q_auto\/v\d+\/archive-dreams\/brand\/personas\/sculptural-masks-v3\/(?:family|tourist|novice|connoisseur|worker|archivist|futurist|mourner|propagandist|counterfeit|museum)-limestone-master-v3\.png$/;
   page.on('request',request=>{
     const url=request.url();
-    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url)||personaMark.test(url)||personaPortrait.test(url)||personaGalleryV4.test(url)||architecturalPortrait.test(url)||approvedMask.test(url))return;
+    if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url)||personaMark.test(url)||personaPortrait.test(url)||personaGalleryV4.test(url)||architecturalPortrait.test(url)||approvedMask.test(url)||sculpturalPortrait.test(url))return;
     external.push(url);
   });
 

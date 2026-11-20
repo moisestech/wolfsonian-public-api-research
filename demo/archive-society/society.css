@@ -1294,7 +1294,7 @@ html[data-color-theme="light"] .record-overlay .evidence-type{color:#d7c4a3}
   border:0!important;background:transparent!important;border-radius:0!important;
 }
 #reading-popover .perspective-art,
-#mobile-perspective-choices .perspective-art{filter:grayscale(1) contrast(1.08)}
+#mobile-perspective-choices .perspective-art{filter:none}
 @media(max-width:800px){
   #mobile-perspective-choices .perspective-identity-mark{
     top:15px;left:15px;width:44px;height:44px;padding:5px;

@@ -4,6 +4,7 @@
  */
 import { PERSONAS } from './discovery-graph.mjs';
 import { personaSigilSvg, personaSigilUrl } from './persona-sigils.mjs';
+import { illustratedPersonaUrl } from './persona-illustrated-gallery.mjs';
 import { personaAssetUrl } from './persona-cloudinary-assets.mjs';
 const entries=[
   ['family','everyday','At home','What would an ordinary household notice?','home','#DE9A70','A domestic reader interested in safety, shared routines, access, care and unpaid work.'],
@@ -41,7 +42,7 @@ export const CARDS=Object.freeze(entries.map(([id,group,subheading,hook,icon,col
 }));
 export const CARD_BY_ID=new Map(CARDS.map(c=>[c.id,c]));
 // The old generic bust portraits are replaced by the project's original
-// aperture-derived Deco sigils. Source URLs are version-pinned to the
+// sculptural Deco masks. Source URLs are version-pinned to the
 // verified Cloudinary masters; a local SVG is available as an offline fallback.
 export function portraitSvg(card,{tone='white',variant='full'}={}){
   return personaSigilSvg(card.id,{mode:tone==='white'?'paper':tone==='ink'?'ink':tone,variant});
@@ -49,14 +50,14 @@ export function portraitSvg(card,{tone='white',variant='full'}={}){
 export function portraitFallbackUrl(card,{tone='white',variant='full'}={}){
   return personaSigilUrl(card.id,{mode:tone==='white'?'paper':tone==='ink'?'ink':tone,variant});
 }
-// Use pinned public Cloudinary SVG masters across the app, with the original
+// Use the current sculptural artwork across the app, with the original
 // local vector artwork retained as a network/error fallback. Never use this
 // path for protected museum collection images.
-export function portraitUrl(card,{tone='white',variant='full',format='svg',source='cloudinary'}={}){
-  if(source==='cloudinary')return personaAssetUrl(card.id,{tone,variant,format});
-  if(source!=='local'||format!=='svg')throw new Error('Local persona rendering requires SVG');
+export function portraitUrl(card,{tone='white',variant='full',format='artwork',source='cloudinary'}={}){
+  if(source==='cloudinary')return format==='artwork'?illustratedPersonaUrl(card.id,{tone,variant}):personaAssetUrl(card.id,{tone,variant,format});
+  if(source!=='local'||!['svg','artwork'].includes(format))throw new Error('Local persona rendering requires SVG');
   return portraitFallbackUrl(card,{tone,variant});
 }
 export function portraitCloudinaryUrl(card,options={}){
-  return personaAssetUrl(card.id,options);
+  return portraitUrl(card,options);
 }

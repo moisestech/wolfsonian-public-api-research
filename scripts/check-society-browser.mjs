@@ -22,17 +22,33 @@ try {
   const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await open();
+  // Every desktop/mobile identity uses and successfully decodes its own v3 artwork.
+  for(const selector of ['#reading-popover','#mobile-perspective-choices']){
+    const portraits=page.locator(selector+' [data-lens] img.persona-illustrated');
+    assert.equal(await portraits.count(),11);
+    for(const portrait of await portraits.all()){
+      const id=await portrait.getAttribute('data-persona-id');
+      assert.ok((await portrait.getAttribute('src')).endsWith('/'+id+'-limestone-master-v3.png'));
+      await portrait.evaluate(img=>img.decode());
+      assert.ok(await portrait.evaluate(img=>img.naturalWidth>0));
+    }
+    for(const mark of await page.locator(selector+' img[data-persona-mark]').all()){
+      const id=await mark.getAttribute('data-persona-mark');
+      assert.ok((await mark.getAttribute('src')).endsWith('/'+id+'-limestone-master-v3.png'));
+      await mark.evaluate(img=>img.decode());
+    }
+  }
   // Cloudinary-backed persona marks preserve the intended small/large roles.
   assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-id'),'family');
   assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-variant'),'compact');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/approved-masks\/nested-family-white-compact-v1\.png$/);
-  assert.match(await page.locator('#room-archivist-portrait').getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
-  assert.match(await page.locator('.chat .turn[data-role="archivist"] img').first().getAttribute('src'),/\/archivist-sepia-compact-v2\.png$/);
-  assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/approved-masks\/nested-family-white-compact-v1\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="worker"] img.persona-illustrated').getAttribute('src'),/\/worker-sepia-full-v2\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="futurist"] img.persona-illustrated').getAttribute('src'),/\/futurist-architectural-white-master-v1\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="tourist"] img.persona-illustrated').getAttribute('src'),/\/tourist-architectural-white-master-v1\.png$/);
-  assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/(?:approved-masks\/nested-family-white-full-v1|portraits\/[a-z]+-sepia-full-v2)\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/sculptural-masks-v3\/family-limestone-master-v3\.png$/);
+  assert.match(await page.locator('#room-archivist-portrait').getAttribute('src'),/\/sculptural-masks-v3\/archivist-limestone-master-v3\.png$/);
+  assert.match(await page.locator('.chat .turn[data-role="archivist"] img').first().getAttribute('src'),/\/sculptural-masks-v3\/archivist-limestone-master-v3\.png$/);
+  assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/sculptural-masks-v3\/family-limestone-master-v3\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="worker"] img.persona-illustrated').getAttribute('src'),/\/sculptural-masks-v3\/worker-limestone-master-v3\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="futurist"] img.persona-illustrated').getAttribute('src'),/\/sculptural-masks-v3\/futurist-limestone-master-v3\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="tourist"] img.persona-illustrated').getAttribute('src'),/\/sculptural-masks-v3\/tourist-limestone-master-v3\.png$/);
+  assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/sculptural-masks-v3\/[a-z]+-limestone-master-v3\.png$/);
   // An image failure first falls back to the known v2 Family portrait,
   // then to an inline vector if the secondary CDN request also fails.
   await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
@@ -228,16 +244,16 @@ try {
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/approved-masks\/nested-family-ink-compact-v1\.png$/);
-  // The mobile perspective sheet is always dark and deliberately uses the white mask.
-  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img.persona-illustrated').getAttribute('src'),/\/approved-masks\/nested-family-white-full-v1\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/sculptural-masks-v3\/family-limestone-master-v3\.png$/);
+  // The limestone artwork remains readable in the dark mobile sheet and both themes.
+  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img.persona-illustrated').getAttribute('src'),/\/sculptural-masks-v3\/family-limestone-master-v3\.png$/);
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/approved-masks\/nested-family-white-compact-v1\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/sculptural-masks-v3\/family-limestone-master-v3\.png$/);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),5);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);

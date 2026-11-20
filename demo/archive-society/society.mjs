@@ -16,7 +16,7 @@ import { explainEncounter, conversationEpisode, connectionCaption, visitorFollow
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 import { scriptedScenePlan } from '../../src/scene-performance.mjs';
 import { tagColor, voiceColors } from './conversation-color.mjs';
-import { personaCharacterUrl, personaAssetUrl } from '../../src/persona-cloudinary-assets.mjs';
+import { personaCharacterUrl } from '../../src/persona-cloudinary-assets.mjs';
 import { illustratedPersonaUrl, APPROVED_DECO_MASK_STUDIES, approvedMaskStudyUrl } from '../../src/persona-illustrated-gallery.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
@@ -1839,15 +1839,14 @@ function perspectiveSections(buildChoice){
 
 /** Approved masks remain visible as a separate artwork family without assigning
  *  the three unnamed studies to historical or institutional speakers. */
-/** A single icon grammar across all eleven identities, independent of the
- *  larger portraits and the four unassigned approved mask studies. */
+/** Compact identity marks share the sculptural artwork used by the gallery. */
 function personaIdentityMark(id){
   const mark=node('span',undefined,'perspective-identity-mark');
   mark.setAttribute('aria-hidden','true');
   const image=node('img');
   image.alt='';
   image.dataset.personaMark=id;
-  image.src=personaAssetUrl(id,{tone:'white',variant:'compact',format:'svg'});
+  image.src=illustratedPersonaUrl(id,{tone:'white',variant:'compact'});
   image.onerror=()=>{
     image.onerror=null;
     const card=CARD_BY_ID.get(id);

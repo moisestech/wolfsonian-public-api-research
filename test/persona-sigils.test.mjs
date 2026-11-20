@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {PERSONA_SIGIL_IDS,personaSigilSvg} from '../src/persona-sigils.mjs';
 import {personaAssetUrl,decoStudyUrl,DECO_STUDY_IDS,personaCharacterUrl} from '../src/persona-cloudinary-assets.mjs';
+import {illustratedPersonaUrl} from '../src/persona-illustrated-gallery.mjs';
 import {CARD_BY_ID as CARD_MAP,portraitUrl,portraitFallbackUrl} from '../src/discovery-personas.mjs';
 import {CARD_BY_ID} from '../src/discovery-personas.mjs';
 const manifest=JSON.parse(await readFile(new URL('../docs/design/persona-cloudinary-manifest.json',import.meta.url),'utf8'));
@@ -24,8 +25,8 @@ test('all persona symbols have transparent and theme-aware full and compact asse
        assert.equal(p.size,variant==='compact'?128:512);
        assert.equal(personaAssetUrl(id,{variant,tone}),p.svg);
        assert.equal(personaAssetUrl(id,{variant,tone,format:'png'}),p.png);
-       assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone,source:'cloudinary'}),p.svg);
-       assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone}),p.svg);
+       assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone,source:'cloudinary'}),illustratedPersonaUrl(id,{variant,tone}));
+       assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone}),illustratedPersonaUrl(id,{variant,tone}));
        assert.equal(portraitUrl(CARD_MAP.get(id),{variant,tone,source:'local'}),portraitFallbackUrl(CARD_MAP.get(id),{variant,tone}));
        assert.match(portraitFallbackUrl(CARD_MAP.get(id),{variant,tone}),/^data:image\/svg\+xml/);
      }

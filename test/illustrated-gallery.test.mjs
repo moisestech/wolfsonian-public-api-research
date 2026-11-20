@@ -13,26 +13,10 @@ test('all eleven active personas have independent artwork rather than a symbol a
     for(const variant of ['full','compact']){
       const url=illustratedPersonaUrl(lens.id,{variant});
       assert.equal(url,manifest.gallery[lens.id][variant]);
-      if(manifest.gallery[lens.id].source==='architectural-mask-geometric-v1'){
-        assert.ok(url.includes('/architectural-masks-v1/'));
-        assert.ok(url.includes('/f_png/v'));
-        assert.ok(url.endsWith('.png'));
-        for(const tone of ['white','ink']){
-          const selected=illustratedPersonaUrl(lens.id,{tone,variant});
-          assert.equal(selected,manifest.gallery[lens.id][tone][variant]);
-          assert.ok(selected.includes('/architectural-masks-v1/'));
-        }
-        assert.ok(manifest.gallery[lens.id].priorIllustration.full.includes('/portraits/'));
-      }else if(manifest.gallery[lens.id].source==='approved-nested-family-mask-v1'){
-        assert.equal(lens.id,'family');
-        assert.ok(url.includes('/approved-masks/nested-family-'));
-        for(const tone of ['white','ink']){
-          const selected=illustratedPersonaUrl(lens.id,{tone,variant});
-          assert.equal(selected,manifest.masks['nested-family'][tone][variant]);
-        }
-        assert.ok(manifest.gallery[lens.id].priorIllustration.full.includes('/portraits/'));
-      }else{
-        assert.ok(url.includes('/portraits/'));
+      assert.equal(manifest.gallery[lens.id].source,'sculptural-masks-v3');
+      assert.ok(url.includes('/sculptural-masks-v3/'+lens.id+'-limestone-master-v3.png'));
+      for(const tone of ['white','ink']){
+        assert.equal(illustratedPersonaUrl(lens.id,{tone,variant}),manifest.gallery[lens.id][tone][variant]);
       }
       assert.doesNotMatch(url,/\.svg$/);
     }
@@ -65,7 +49,7 @@ test('desktop and mobile gallery use illustrated artwork at full size and preser
   assert.match(source,/Artist-authored viewpoint; not museum staff/);
 });
 
-test('the visible identity mark is a complete, uniform 11-persona vector family',async()=>{
+test('legacy vectors remain available while visible identity marks use the sculptural family',async()=>{
   const iconManifest=JSON.parse(await readFile(new URL('../docs/design/persona-cloudinary-manifest.json',import.meta.url),'utf8'));
   assert.deepEqual(new Set(PERSONA_ASSET_IDS),new Set(LENSES.map(l=>l.id)));
   assert.equal(iconManifest.counts.personaAssets,44);
@@ -79,7 +63,7 @@ test('the visible identity mark is a complete, uniform 11-persona vector family'
   const js=await readFile(new URL('../demo/archive-society/society.mjs',import.meta.url),'utf8');
   const css=await readFile(new URL('../demo/archive-society/society.css',import.meta.url),'utf8');
   assert.match(js,/function personaIdentityMark\(id\)/);
-  assert.match(js,/personaAssetUrl\(id,\{tone:'white',variant:'compact',format:'svg'\}\)/);
+  assert.match(js,/illustratedPersonaUrl\(id,\{tone:'white',variant:'compact'\}\)/);
   assert.match(js,/button\.append\(img,personaIdentityMark\(lens\.id\),copy\)/);
   assert.match(js,/button\.append\(portrait,personaIdentityMark\(lens\.id\),copy,check\)/);
   assert.match(css,/\.perspective-identity-mark img/);
