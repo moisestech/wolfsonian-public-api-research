@@ -60,6 +60,7 @@ try {
   assert.equal(await page.locator('#zoom-stage .plate.persona img.persona-symbol').count()>0,true);
   // Reset the title clock after waiting for CDN images to decode.
   await page.emulateMedia({reducedMotion:'reduce'});
+  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='Archive dreams in public.');
   await page.emulateMedia({reducedMotion:'no-preference'});
   // The editorial title changes without replacing the accessible archive identity.
   assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
