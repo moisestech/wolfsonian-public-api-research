@@ -2,28 +2,55 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-test('visitor nav has Conversations, Record, Object Lens, Appearance, Info in that order',async()=>{
+test('the top bar is a map selector plus one display menu',async()=>{
   const html=await readFile(new URL('../demo/archive-society/index.html',import.meta.url),'utf8');
   const nav=html.match(/<nav class="top-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
   assert.ok(nav,'a single visitor-facing top navigation must exist');
-  assert.match(nav,/data-panel="conversation"[^>]*>Conversations<\/button>/);
-  assert.match(nav,/data-panel="record"[^>]*>Record<\/button>/);
+  assert.match(nav,/id="map-toggle"/);
+  assert.match(nav,/data-map="conversation"[^>]*>Conversation<\/button>/);
+  assert.match(nav,/data-map="townhall"[^>]*>Townhall<\/button>/);
+  assert.match(nav,/id="display-menu"[^>]*aria-label="Display options"/);
   assert.match(nav,/href="\.\.\/object-lens\/"[^>]*aria-label="Open Object Lens"/);
   assert.match(nav,/id="appearance-toggle"[^>]*aria-label="Switch to light appearance"/);
   assert.match(nav,/id="source-info"[^>]*aria-label="Information about this artwork"/);
-  const indexes=['data-panel="conversation"','data-panel="record"','href="../object-lens/"','id="appearance-toggle"','id="source-info"'].map(s=>nav.indexOf(s));
+  const indexes=['id="map-toggle"','data-map="conversation"','data-map="townhall"','id="display-menu"','href="../object-lens/"','id="appearance-toggle"','id="source-info"'].map(s=>nav.indexOf(s));
   assert.ok(indexes.every(i=>i>=0));
   assert.deepEqual(indexes,[...indexes].sort((a,b)=>a-b));
-  assert.equal((nav.match(/<button\b/g)||[]).length,4);
+  assert.doesNotMatch(nav,/data-panel="conversation"|data-panel="record"/);
+  assert.doesNotMatch(nav,/>Research prompt</);
+  assert.doesNotMatch(html,/Research prompt/i);
   assert.equal((nav.match(/<a\b/g)||[]).length,1);
   assert.doesNotMatch(html,/id="admin-toggle"|aria-label="Settings"[^>]*<svg/);
   assert.doesNotMatch(html,/adminPassword|staffPassword|settingsPassword/i,'do not introduce client-side staff authorization');
 });
-test('top navigation does not wrap its five destinations in phone or desktop layouts',async()=>{
+test('top navigation stays on one row on a phone and on a desktop',async()=>{
   const css=await readFile(new URL('../demo/archive-society/society.css',import.meta.url),'utf8');
   assert.match(css,/\.top-nav\{display:flex;flex-wrap:nowrap/);
-  assert.match(css,/\.top-nav \.tabs\{display:flex;flex:0 1 auto/);
   assert.match(css,/@media\(max-width:700px\)/);
   assert.match(css,/\.top-nav\{width:100%;justify-content:space-between/);
   assert.match(css,/min-height:44px/);
+  assert.match(css,/\.display-menu\{display:inline-flex/);
+  assert.match(css,/\.nav-tools\{display:none/);
+});
+test('paths stay with Conversation and the phone filter holds the data controls',async()=>{
+  const html=await readFile(new URL('../demo/archive-society/index.html',import.meta.url),'utf8');
+  const css=await readFile(new URL('../demo/archive-society/society.css',import.meta.url),'utf8');
+  const js=await readFile(new URL('../demo/archive-society/society.mjs',import.meta.url),'utf8');
+  assert.match(html,/class="tool paths-tool"/);
+  assert.match(html,/id="space-filter"/);
+  assert.match(html,/id="data-filter"/);
+  assert.match(html,/id="filter-looking"/);
+  assert.match(html,/id="filter-categories"/);
+  assert.match(html,/id="filter-paths"/);
+  assert.match(html,/id="filter-layers"/);
+  assert.match(html,/data-map="conversation"/);
+  assert.match(js,/function syncPathsTool\(mode\)/);
+  assert.match(js,/const conversation=mode==='conversation'/);
+  assert.match(js,/function placeDataFilters\(\)/);
+  assert.match(css,/html\[data-map-mode\]:not\(\[data-map-mode="conversation"\]\) \.paths-tool/);
+  assert.match(css,/html\[data-map-mode\]:not\(\[data-map-mode="conversation"\]\) #filter-paths/);
+  assert.match(css,/@media\(max-width:800px\)\{[\s\S]*\.top-nav \.top-map\{display:none/);
+  assert.match(css,/#reading-controls\{display:none!important/);
+  assert.match(css,/grid-template-columns:repeat\(6,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(min-width:801px\)\{#space-bar\.space-bar,#data-filter\{display:none!important\}/);
 });

@@ -135,6 +135,10 @@ test('about explains authored scene, shared motif and imagined comparison outsid
  for(const heading of ['Authored scene','Shared motif','Imagined comparison']){
   assert.ok(about.includes('<h3>'+heading+'</h3>'),heading+' explained in About');
  }
+ assert.match(about,/An unscripted pair is a question, not an authored scene/);
+ assert.doesNotMatch(about,/Research prompt/i);
+ assert.doesNotMatch(js,/Research prompt/i);
+ assert.match(js,/RESEARCH_PROMPT/);
  assert.match(about,/decision to keep or withdraw a network edge belongs to the editorial process/);
  assert.doesNotMatch(js,/meta\.append\(node\('span',episode\.label\)\)/);
  assert.match(js,/\['Conversations',scenes\.filter\(keep\)\]/);
