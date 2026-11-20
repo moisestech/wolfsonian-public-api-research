@@ -20,6 +20,23 @@ try {
   };
   const selectEdge=async index=>{await page.locator('.conversation-edge').nth(index).focus();await page.keyboard.press('Enter');};
   const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
+  const clickMoreQuestions=async()=>{
+    await page.locator('.more-questions-link').evaluate(el=>{
+      const scroller=el.closest('.rail-scroll');
+      const header=document.getElementById('room-header');
+      if(scroller&&header){
+        for(let i=0;i<8;i++){
+          const linkBox=el.getBoundingClientRect();
+          const headerBox=header.getBoundingClientRect();
+          const viewBottom=Math.min(scroller.getBoundingClientRect().bottom,window.innerHeight);
+          const targetTop=headerBox.bottom+16;
+          if(linkBox.top>=targetTop&&linkBox.bottom<=viewBottom-8)break;
+          scroller.scrollTop+=linkBox.top-targetTop;
+        }
+      }
+      el.click();
+    });
+  };
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await open();
   // Every desktop/mobile identity uses and successfully decodes its own v3 artwork.
@@ -64,7 +81,7 @@ try {
   await page.emulateMedia({reducedMotion:'no-preference'});
   // The editorial title changes without replacing the accessible archive identity.
   assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
-  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='Follow a question between objects.',null,{timeout:7500});
+  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='Who kept the household going?',null,{timeout:7500});
   await page.locator('#editorial-phrase').click();
   assert.equal(await page.locator('#editorial-phrase').getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('#editorial-toggle').count(),0);
@@ -343,12 +360,12 @@ try {
   await page.locator('#space-leave').click();
   await page.locator('#timeline-list button').filter({hasText:'Who pays the price of progress?'}).click();
   assert.equal(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
-  await page.getByRole('button',{name:'More questions with these objects'}).click();
+  await clickMoreQuestions();
   assert.equal(await page.locator('#timeline-title').innerText(),'Follow these objects');
   assert.equal(await page.locator('#timeline-list button').filter({hasText:'Who pays the price of progress?'}).count(),0);
   await page.locator('#timeline-list button').filter({hasText:'What does a monument owe the hands that built it?'}).click();
   assert.equal(await page.locator('#room-kind').textContent(),'AI-assisted script');
-  await page.getByRole('button',{name:'More questions with these objects'}).click();
+  await clickMoreQuestions();
   await page.locator('#timeline-list button').filter({hasText:'Who builds the future?'}).click();
   assert.equal(await page.locator('#room-question').innerText(),'Who builds the future?');
   await page.locator('#appearance-toggle').click();

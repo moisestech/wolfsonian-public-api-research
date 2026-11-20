@@ -14,6 +14,7 @@ export const PUBLIC_DIRECTORIES = [
 export const PUBLIC_FILES = [
   'index.html',
   'src/archive-evidence.mjs',
+  'src/archive-location.mjs',
   'src/archive-society.mjs',
   'src/atlas-graph.mjs',
   'src/atlas-scripts.mjs',
