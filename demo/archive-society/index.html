@@ -93,30 +93,6 @@
   <footer class="atlas-footer">
     <div class="dock-controls">
     <div class="command">
-      <div class="tool">
-        <button id="map-toggle" class="choice" type="button" data-sheet="map" aria-haspopup="dialog" aria-expanded="false" aria-controls="map-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="2" fill="currentColor"/><circle cx="17" cy="8" r="2" fill="currentColor"/><circle cx="17" cy="16" r="2" fill="currentColor"/><path d="M9 12h6M15 9.2 9.5 11.4M15 14.8 9.5 12.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="reading-label"><small>Map</small><strong id="map-name">Conversation</strong></span></button>
-        <div id="map-popover" class="tool-popover" hidden role="dialog" aria-label="How the map is grouped">
-          <div class="map-modes" role="radiogroup" aria-label="How the map is grouped">
-            <button type="button" data-map="conversation" role="radio" aria-checked="true">Conversation</button>
-            <button type="button" data-map="geography" role="radio" aria-checked="false">Place</button>
-            <button type="button" data-map="objectType" role="radio" aria-checked="false">Type</button>
-            <button type="button" data-map="style" role="radio" aria-checked="false">Look</button>
-            <button type="button" data-map="theme" role="radio" aria-checked="false">Theme</button>
-            <button type="button" data-map="motif" role="radio" aria-checked="false">Symbol</button>
-          </div>
-        </div>
-      </div>
-      <div class="tool">
-        <button id="theme-toggle" class="choice" type="button" data-sheet="theme" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 12h10M4 16h13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" fill="currentColor"/></svg></span><span class="reading-label"><small>Theme</small><strong id="theme-name">All</strong></span></button>
-        <div id="theme-popover" class="tool-popover" hidden role="dialog" aria-label="Shared thematic category">
-          <div id="theme-choices"></div>
-          <select id="theme" class="lens-native" tabindex="-1" aria-hidden="true"><option value="">All categories</option></select>
-        </div>
-      </div>
-      <div class="tool">
-        <button id="paths-toggle" class="choice" type="button" data-sheet="paths" aria-haspopup="dialog" aria-expanded="false" aria-controls="paths-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 16c2-6 4-6 6 0s4 6 6 0" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="16" r="1.6" fill="currentColor"/><circle cx="18" cy="16" r="1.6" fill="currentColor"/></svg></span><span class="reading-label"><small>Paths</small><strong id="paths-name">Research</strong></span></button>
-        <div id="paths-popover" class="tool-popover" hidden role="dialog" aria-label="Curatorial paths"><div id="path-choices"></div></div>
-      </div>
       <div class="command-layers" role="group" aria-label="Map layers">
         <label class="icon-check" title="Box / storage"><input id="layer-box" type="checkbox" aria-label="Box / storage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8-4 8 4-8 4-8-4zM4 8v8l8 4 8-4V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
         <label class="icon-check" title="Atlas overview"><input id="atlas-mode" type="checkbox" aria-label="Atlas overview"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="9" r="2" fill="currentColor"/><circle cx="16" cy="8" r="2" fill="currentColor"/><circle cx="12" cy="16" r="2" fill="currentColor"/><path d="M9 10l2 4M14 9l-1 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></label>
@@ -133,6 +109,32 @@
   </footer>
 </section>
 <aside class="evidence-rail" aria-label="Conversation, record and services">
+  <div id="reading-controls" class="reading-controls" role="toolbar" aria-label="What the visit is reading">
+    <div class="tool">
+      <button id="map-toggle" class="choice" type="button" data-sheet="map" aria-haspopup="dialog" aria-expanded="false" aria-controls="map-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="2" fill="currentColor"/><circle cx="17" cy="8" r="2" fill="currentColor"/><circle cx="17" cy="16" r="2" fill="currentColor"/><path d="M9 12h6M15 9.2 9.5 11.4M15 14.8 9.5 12.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="reading-label"><small>Map</small><strong id="map-name">Conversation</strong></span></button>
+      <div id="map-popover" class="tool-popover" hidden role="dialog" aria-label="How the map is grouped">
+        <div class="map-modes" role="radiogroup" aria-label="How the map is grouped">
+          <button type="button" data-map="conversation" role="radio" aria-checked="true">Conversation</button>
+          <button type="button" data-map="geography" role="radio" aria-checked="false">Place</button>
+          <button type="button" data-map="objectType" role="radio" aria-checked="false">Type</button>
+          <button type="button" data-map="style" role="radio" aria-checked="false">Look</button>
+          <button type="button" data-map="theme" role="radio" aria-checked="false">Theme</button>
+          <button type="button" data-map="motif" role="radio" aria-checked="false">Symbol</button>
+        </div>
+      </div>
+    </div>
+    <div class="tool">
+      <button id="theme-toggle" class="choice" type="button" data-sheet="theme" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 12h10M4 16h13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" fill="currentColor"/></svg></span><span class="reading-label"><small>Theme</small><strong id="theme-name">All</strong></span></button>
+      <div id="theme-popover" class="tool-popover" hidden role="dialog" aria-label="Shared thematic category">
+        <div id="theme-choices"></div>
+        <select id="theme" class="lens-native" tabindex="-1" aria-hidden="true"><option value="">All categories</option></select>
+      </div>
+    </div>
+    <div class="tool">
+      <button id="paths-toggle" class="choice" type="button" data-sheet="paths" aria-haspopup="dialog" aria-expanded="false" aria-controls="paths-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 16c2-6 4-6 6 0s4 6 6 0" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="16" r="1.6" fill="currentColor"/><circle cx="18" cy="16" r="1.6" fill="currentColor"/></svg></span><span class="reading-label"><small>Paths</small><strong id="paths-name">Research</strong></span></button>
+      <div id="paths-popover" class="tool-popover" hidden role="dialog" aria-label="Curatorial paths"><div id="path-choices"></div></div>
+    </div>
+  </div>
   <div id="path-timeline" class="path-timeline">
     <button type="button" id="questions-back">← Current conversation</button>
     <p id="timeline-title" class="timeline-title"></p>

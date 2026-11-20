@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {EDITORIAL_PHRASES,nextEditorialIndex} from '../demo/archive-society/editorial-headline.mjs';
+import {EDITORIAL_PHRASES,PERSPECTIVE_PHRASES,nextEditorialIndex} from '../demo/archive-society/editorial-headline.mjs';
+import {PERSONAS} from '../src/discovery-graph.mjs';
 
 test('editorial sequence is finite, truthful, and returns to the title',()=>{
   assert.equal(EDITORIAL_PHRASES[0],'Archive dreams in public.');
@@ -13,6 +14,20 @@ test('editorial sequence is finite, truthful, and returns to the title',()=>{
   assert.ok(EDITORIAL_PHRASES.includes('Imagined voices. Real records.'));
   assert.ok(EDITORIAL_PHRASES.includes('Interpretation is not evidence.'));
   assert.equal(nextEditorialIndex(EDITORIAL_PHRASES.length-1),0);
+});
+test('each speaking perspective has its own short lines',()=>{
+  const speaking=PERSONAS.map(persona=>persona.id).filter(id=>id!=='open');
+  assert.deepEqual(Object.keys(PERSPECTIVE_PHRASES).sort(),speaking.sort());
+  for(const lines of Object.values(PERSPECTIVE_PHRASES)){
+    assert.ok(lines.length>=4);
+    assert.equal(new Set(lines).size,lines.length);
+    for(const line of lines){
+      assert.ok(line.length>8&&line.length<=48);
+      assert.match(line,/^[A-Z]/);
+    }
+  }
+  assert.equal(PERSPECTIVE_PHRASES.family[0],'Archive dreams in public.');
+  assert.equal(PERSPECTIVE_PHRASES.museum[1],'This voice is fictional.');
 });
 test('the archive link retains a stable identity and the title itself pauses',async()=>{
   const html=await readFile(new URL('../demo/archive-society/index.html',import.meta.url),'utf8');

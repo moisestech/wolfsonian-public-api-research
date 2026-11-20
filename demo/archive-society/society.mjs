@@ -18,13 +18,16 @@ import { scriptedScenePlan } from '../../src/scene-performance.mjs';
 import { tagColor, voiceColors } from './conversation-color.mjs';
 import { personaCharacterUrl } from '../../src/persona-cloudinary-assets.mjs';
 import { illustratedPersonaUrl, APPROVED_DECO_MASK_STUDIES, approvedMaskStudyUrl } from '../../src/persona-illustrated-gallery.mjs';
+import { parseVisit, serializeVisit } from '../../src/archive-location.mjs';
+import { setEditorialPerspective } from './editorial-headline.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
   mapMode:'conversation',matrixObjects:MATRIX_OBJECTS,matrixRecords:matrixToRecords(MATRIX_OBJECTS),matrixIndex:null,room:null,district:null,
   urls:new Set(),snapshots:new Map(),payload:null,
   background:'./assets/archive-landscape.jpg',scale:1,panX:0,panY:0,
-  playing:false,epoch:0,view:null,conversation:null,episode:null,recordAccession:null,lookupBusy:false,hover:null,researchPath:null};
+  playing:false,epoch:0,view:null,conversation:null,episode:null,recordAccession:null,lookupBusy:false,hover:null,researchPath:null,heldEdge:null,pendingPartner:null};
+let applyingVisit=false;
 let playback=0,voiceAbort=null,currentAudio=null,lookupAbort=null,cancelDeviceSpeech=null;
 const appearanceKey='archive-dreams-appearance';
 function personaTone(){return document.documentElement.dataset.colorTheme==='light'?'ink':'white';}
@@ -314,13 +317,13 @@ function stop(){
   if($('audio-speaker'))$('audio-speaker').textContent='Ready to listen';
   stage.setSpeaking('');
 }
-function changeSeed(id){stop();resetApproval();state.recordAccession=null;
+function changeSeed(id){stop();resetApproval();state.recordAccession=null;state.heldEdge=null;
   if(state.researchPath&&onPreviewPair(id)&&!subjectInSociety(id)){
-    state.seed=id;render();setPanel('conversation');breathDream();return;
+    state.seed=id;render();setPanel('conversation');breathDream();commitVisit('push');return;
   }
   state.researchPath=null;state.seed=subjectInSociety(id)?id:openingSubject();state.edge=null;
   if(state.payload)state.snapshots.set(state.seed,reconcileLookup(state.payload,state.seed,'UNKNOWN_LOCAL_CAPTURE_TIME'));
-  render();setPanel('record');breathDream();}
+  render();setPanel('record');breathDream();commitVisit('push');}
 function subjectInSociety(id){return state.records.some(item=>item.accession===id);}
 function onPreviewPair(id){
   const path=state.researchPath;
@@ -328,10 +331,10 @@ function onPreviewPair(id){
 }
 function openingSubject(){return subjectInSociety('85.4.64.43')?'85.4.64.43':state.records[0]?.accession;}
 function leavePreview(){
-  state.researchPath=null;state.edge=null;state.mapMode='conversation';state.recordAccession=null;
+  state.researchPath=null;state.edge=null;state.heldEdge=null;state.mapMode='conversation';state.recordAccession=null;
   if($('atlas-mode')?.checked)$('atlas-mode').checked=false;
   if(!subjectInSociety(state.seed))state.seed=openingSubject();
-  closeSheet();render();setPanel('conversation');
+  closeSheet();render();setPanel('conversation');commitVisit('push');
 }
 function options(){
   const query=$('search').value.toLowerCase();
@@ -404,7 +407,7 @@ function paintSeedChoices(){
       state.journey=[];
       $('seed').value=item.accession;
       if(state.researchPath&&onPreviewPair(item.accession)){
-        state.seed=item.accession;closeSheet();render();setPanel('conversation');return;
+        state.seed=item.accession;closeSheet();render();setPanel('conversation');commitVisit('push');return;
       }
       changeSeed(item.accession);
       setPanel('conversation');
@@ -472,10 +475,54 @@ function paintPreview(){
   renderStage();renderConversation();renderRecord();
 }
 function shownEdge(){
+  if(state.hover?.kind==='edge')return state.view?.edges.find(e=>e.id===state.hover.id)||null;
+  if(state.hover?.kind==='object'||state.hover?.kind==='identity')return state.view?.edges.find(e=>e.id===state.edge)||state.heldEdge||null;
+  if(state.heldEdge&&!state.researchPath)return state.heldEdge;
   if(!state.view)return null;
-  if(state.hover?.kind==='object'||state.hover?.kind==='identity')return state.view.edges.find(e=>e.id===state.edge)||null;
-  if(state.hover?.kind==='edge')return state.view.edges.find(e=>e.id===state.hover.id)||null;
   return state.view.edges.find(e=>e.id===state.edge)||null;
+}
+function presentationEdge(subject,partner){
+  const pair=PRESENTATION_PAIRS.find(item=>(item.source===subject&&item.target===partner)||(item.source===partner&&item.target===subject));
+  if(!pair)return null;
+  return {
+    id:subject+'::'+partner,
+    source:subject,
+    target:partner,
+    reasons:[{family:pair.family,value:pair.tag}],
+    classification:'shared_staff_metadata',
+    historicalRelationshipEstablished:false,
+  };
+}
+function visibleScreen(){
+  if(document.body.classList.contains('show-timeline'))return relatedQuestions?'related':'townhall';
+  if($('record-panel')&&!$('record-panel').hidden)return 'record';
+  return 'room';
+}
+function currentVisit(){
+  const screen=visibleScreen();
+  const edge=state.researchPath?null:(state.heldEdge||state.view?.edges?.find(item=>item.id===state.edge)||null);
+  let partner=null;
+  if(edge)partner=edge.source===state.seed?edge.target:edge.target===state.seed?edge.source:edge.target;
+  const theme=$('theme')?.value||'';
+  return {
+    screen,
+    subject:state.seed||null,
+    with:partner,
+    path:state.researchPath?.id||null,
+    about:relatedAnchor,
+    record:screen==='record'?(state.recordAccession||state.seed||null):null,
+    lens:state.lens==='family'?null:state.lens,
+    theme:theme||null,
+  };
+}
+function commitVisit(mode){
+  if(applyingVisit||roomMode())return;
+  const next=serializeVisit(currentVisit());
+  const current=location.search||'';
+  if(next===current)return;
+  const url=location.pathname+next+location.hash;
+  if(mode==='push')history.pushState(null,'',url);
+  else history.replaceState(null,'',url);
 }
 function researchPeople(){
   if(!state.researchPath)return [];
@@ -544,6 +591,7 @@ function showEdge(edge){
   if(state.researchPath&&edge.relationshipType==='curatorial_juxtaposition')return;
   stop();resetApproval();
   state.researchPath=null;
+  state.heldEdge=null;
   state.edge=edge.id;
   state.identityEdge=null;
   state.recordAccession=null;
@@ -553,9 +601,10 @@ function showEdge(edge){
   setZoomT(34);
   breathDream();
   startSceneEntrance();
+  commitVisit('push');
 }
 function onGraphSelect(id){
-  if(state.researchPath&&onPreviewPair(id)){state.seed=id;render();setPanel('conversation');return;}
+  if(state.researchPath&&onPreviewPair(id)){state.seed=id;render();setPanel('conversation');commitVisit('push');return;}
   if(roomMode()){stop();resetApproval();state.district=null;state.seed=id;render();setPanel('conversation');return;}
   const edge = state.view?.edges.find(item => item.target === id || item.source === id);
   if (edge && id !== state.seed) { showEdge(edge); return; }
@@ -837,6 +886,7 @@ function openObjectQuestions(accession){
   relatedQuestions=true;
   relatedAnchor=accession;
   setMobileView('timeline');
+  commitVisit('push');
 }
 function themeValues(record){
   const known=state.records.find(item=>item.accession===record?.accession)||record;
@@ -998,15 +1048,25 @@ function addRelatedQuestionsAction(box){
   const onward=node('button','More conversations ↗','more-questions-link');
   onward.type='button';
   onward.setAttribute('aria-label','More questions with these objects');
-  onward.addEventListener('click',()=>{relatedAnchor=null;relatedQuestions=true;setMobileView('timeline');});
+  onward.addEventListener('click',()=>{relatedAnchor=null;relatedQuestions=true;setMobileView('timeline');commitVisit('push');});
   box.append(onward);
+}
+function leaveHallForRail(){
+  if(!document.body.classList.contains('show-timeline')&&!document.body.classList.contains('show-room'))return;
+  document.body.classList.remove('show-timeline','show-space','show-room');
+  if(mobileLayout())document.body.classList.add('show-space');
+  render();
+  setZoomT(34);
+  syncMobileNavigation();
 }
 function openEpisodeRecord(accession){
   // Inspecting evidence interrupts the spectacle, including voice playback.
   if(state.playing)stop();
+  leaveHallForRail();
   state.recordAccession=accession;
   renderRecord();setPanel('record');closeConversationSheet();
   document.querySelector('.rail-scroll').scrollTop=0;
+  commitVisit('push');
 }
 function paintConnection(connection){
   const desc=$('room-description');
@@ -1080,9 +1140,9 @@ function renderRoomHeader(source,target,c){
       hold.type='button';
       hold.setAttribute('aria-label','Make '+p.title+' the subject');
       hold.addEventListener('click',()=>{
-        if(state.researchPath){state.seed=p.accession;render();setPanel('conversation');return;}
-        stop();resetApproval();state.researchPath=null;state.seed=p.accession;state.edge=null;state.recordAccession=null;
-        render();setPanel('conversation');
+        if(state.researchPath){state.seed=p.accession;render();setPanel('conversation');commitVisit('push');return;}
+        stop();resetApproval();state.researchPath=null;state.heldEdge=null;state.seed=p.accession;state.edge=null;state.recordAccession=null;
+        render();setPanel('conversation');commitVisit('push');
       });
       card.append(hold);
     }
@@ -1192,7 +1252,7 @@ function renderConversation(){
     box.append(node('p','A conversation here needs a shared tag. A path preview is a separate authored comparison, and it stays with its two objects.'),node('button','Return to Making the Engine'));
     const back=box.querySelector('button');
     back.type='button';
-    back.addEventListener('click',()=>{state.researchPath=null;state.mapMode='conversation';state.seed=openingSubject();state.edge=null;render();setPanel('conversation');});
+    back.addEventListener('click',()=>{state.researchPath=null;state.heldEdge=null;state.mapMode='conversation';state.seed=openingSubject();state.edge=null;render();setPanel('conversation');commitVisit('push');});
     $('voice-controls').hidden=true;setPlayDisabled(true);return;
   }
   const source=person(edge.source),target=person(edge.target);
@@ -1471,8 +1531,9 @@ function renderResearch(){
 }
 function openResearchPath(id){
   const path=pathById(id);
-  if(!path){state.researchPath=null;render();return;}
+  if(!path){state.researchPath=null;state.heldEdge=null;render();commitVisit('push');return;}
   stop();resetApproval();
+  state.heldEdge=null;
   state.mapMode='conversation';
   state.researchPath=path;
   state.seed=path.source.accession;
@@ -1483,6 +1544,7 @@ function openResearchPath(id){
   setZoomT(34);
   breathDream();
   startSceneEntrance();
+  commitVisit('push');
 }
 function render(){
   clearPoint();
@@ -1505,6 +1567,13 @@ function render(){
   if(!identityVisible){
     state.identityEdge=null;
     if(!state.view.edges.some(edge=>edge.id===state.edge))state.edge=state.view.edges[0]?.id||null;
+  }
+  if(state.pendingPartner){
+    const partner=state.pendingPartner;
+    state.pendingPartner=null;
+    const live=state.view.edges.find(item=>item.target===partner||item.source===partner);
+    if(live){state.edge=live.id;state.heldEdge=null;}
+    else state.heldEdge=presentationEdge(state.seed,partner);
   }
   const identityCount=state.layerView?.relationships.length||0;
   paintCounts([
@@ -1613,7 +1682,7 @@ function saveConversation(){
   const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})),a=node('a');a.href=url;a.download='archive-conversation.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 $('lens').replaceChildren(...LENSES.map(p=>{const o=node('option',p.label);o.value=p.id;return o;}));
-$('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;render();paintReading();});
+$('lens').addEventListener('change',()=>{stop();resetApproval();state.lens=$('lens').value;state.heldEdge=null;render();paintReading();commitVisit('replace');});
 $('room-prompts')?.addEventListener('click',event=>{event.stopPropagation();openPromptSheet(state.lens);});
 $('room-archivist')?.addEventListener('click',event=>{event.stopPropagation();openPromptSheet('archivist');});
 function applyCastOpen(open){
@@ -1674,6 +1743,7 @@ function paintReading(){
     if(toggle)toggle.setAttribute('aria-label','Choose perspective, currently '+card.label+(card.id==='museum'?' (fictional, not museum staff)':''));
   }
   for(const button of document.querySelectorAll('[data-lens]'))button.setAttribute('aria-pressed',String(button.dataset.lens===state.lens));
+  setEditorialPerspective(card.id);
 }
 const PROMPT_EDITS_KEY='archive-dreams-prompt-edits';
 const promptDrafts=new Map();
@@ -1881,7 +1951,7 @@ $('reading-popover').replaceChildren(...perspectiveSections(lens=>{
   img.classList.add('perspective-art');
   const label=lens.id==='museum'?lens.label+' · fictional':lens.label;
   const copy=node('span',undefined,'perspective-card-copy');
-  copy.append(node('strong',label),node('small',lens.question));
+  copy.append(node('span',card.subheading,'perspective-role'),node('strong',label),node('small',lens.question));
   button.append(img,personaIdentityMark(lens.id),copy);
   button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));closeSheet();});
   return button;
@@ -1910,7 +1980,8 @@ $('mobile-perspective-choices')?.replaceChildren(...perspectiveSections(lens=>{
   const portrait=node('img');bindPersonaImage(portrait,card,'full','white','sepia');
   portrait.classList.add('perspective-art');
   const copy=node('span',undefined,'mobile-perspective-copy');
-  copy.append(node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
+  copy.append(node('span',card.subheading,'perspective-role'),
+    node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
     node('small',lens.id==='museum'?'Artist-authored viewpoint; not museum staff.':lens.question));
   const check=node('span','✓','mobile-perspective-selected');check.setAttribute('aria-hidden','true');
   button.append(portrait,personaIdentityMark(lens.id),copy,check);
@@ -1969,10 +2040,56 @@ function resetMore(){
   if(layers)layers.hidden=false;
   if(zoom)zoom.hidden=true;
 }
+function seedColumnCount(count, width, height){
+  const pad=20, gap=8, reserved=54;
+  let bestCols=Math.min(3, Math.max(1, count||1));
+  let best=0;
+  for(let cols=1; cols<=Math.min(4, count||1); cols++){
+    const rows=Math.ceil(count/cols);
+    const cellW=(width-pad-gap*(cols-1))/cols;
+    const cellH=(height-pad-gap*(rows-1))/rows;
+    const image=Math.min(cellW, cellH-reserved);
+    if(image>best){best=image; bestCols=cols;}
+  }
+  return bestCols;
+}
+function fitSeedPopover(panel, button){
+  const rail=document.querySelector('.evidence-rail');
+  if(!rail||!window.matchMedia('(min-width:801px)').matches)return false;
+  const railBox=rail.getBoundingClientRect();
+  const trigger=button.getBoundingClientRect();
+  const header=document.querySelector('.room-header');
+  const pad=header?parseFloat(getComputedStyle(header).paddingLeft)||0:0;
+  const border=parseFloat(getComputedStyle(rail).borderLeftWidth)||0;
+  const left=railBox.left+border+pad;
+  const width=Math.max(240, railBox.right-pad-left);
+  const audio=document.querySelector('#voice-controls');
+  const audioBox=audio&&getComputedStyle(audio).display!=='none'?audio.getBoundingClientRect():null;
+  const top=Math.round(trigger.bottom+8);
+  const limit=audioBox&&audioBox.height>0?audioBox.top-8:Math.min(window.innerHeight, railBox.bottom)-12;
+  const height=Math.max(180, Math.round(limit-top));
+  const count=panel.querySelectorAll('.reading-choice').length;
+  panel.style.left=Math.round(left)+'px';
+  panel.style.top=top+'px';
+  panel.style.bottom='auto';
+  panel.style.width=Math.round(width)+'px';
+  panel.style.height=height+'px';
+  panel.style.maxHeight=height+'px';
+  panel.style.setProperty('--seed-cols', String(seedColumnCount(count, width, height)));
+  return true;
+}
+function clearPanelFrame(panel){
+  panel.style.width='';
+  panel.style.height='';
+  panel.style.maxHeight='';
+  panel.style.removeProperty('--seed-cols');
+}
 function placePanel(name, button){
   button=button||document.querySelector('[data-sheet="'+name+'"]');
   const panel=$(PANELS[name]);
   if(!button||!panel)return;
+  if(name==='seed'&&fitSeedPopover(panel, button))return;
+  clearPanelFrame(panel);
   const width=panel.getBoundingClientRect().width;
   const rect=button.getBoundingClientRect();
   let left=rect.left;
@@ -1986,12 +2103,18 @@ function placePanel(name, button){
     panel.style.top=Math.round(rect.bottom+8)+'px';
   }
 }
+function syncSubjectFocus(){
+  const panel=$('seed-popover');
+  const open=!!(panel&&!panel.hidden&&window.matchMedia('(min-width:801px)').matches);
+  document.body.classList.toggle('subject-picking', open);
+}
 function closeSheet(){
   for(const id of Object.values(PANELS)){const panel=$(id);if(panel)panel.hidden=true;}
   for(const button of document.querySelectorAll('[data-sheet]'))button.setAttribute('aria-expanded','false');
   resetMore();
   closeConversationSheet();
   closePromptSheet();
+  syncSubjectFocus();
 }
 function closeConversationSheet(){
   const sheet=$('conversation-sheet');if(!sheet)return;
@@ -2008,6 +2131,7 @@ function openSheet(name, button){
   const trigger=button||document.querySelector('[data-sheet="'+name+'"]');
   trigger?.setAttribute('aria-expanded','true');
   placePanel(name, trigger);
+  syncSubjectFocus();
 }
 for(const button of document.querySelectorAll('[data-sheet]'))button.addEventListener('click',()=>openSheet(button.dataset.sheet, button));
 $('zoom-open')?.addEventListener('click',()=>{document.querySelector('[data-more="layers"]').hidden=true;document.querySelector('[data-more="zoom"]').hidden=false;placePanel('more');});
@@ -2089,24 +2213,33 @@ $('space-room')?.addEventListener('click',()=>{
   setMobileView('room');
 });
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
-$('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();});
-function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;wakeDream();stage.setSpeaking('');stage.setPairHighlight('','',null);stage.setClusterHighlight([],'');setMobileView('timeline');render();}
+$('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();commitVisit('push');});
+function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;wakeDream();stage.setSpeaking('');stage.setPairHighlight('','',null);stage.setClusterHighlight([],'');setMobileView('timeline');render();commitVisit('push');}
 $('space-feed')?.addEventListener('click',browseAll);
 $('space-conversation')?.addEventListener('click',()=>{
   setPanel('conversation');
   setMobileView('space');
   $('room-question')?.focus({preventScroll:true});
+  commitVisit('push');
 });
 $('space-record')?.addEventListener('click',()=>{
+  if(!state.recordAccession)state.recordAccession=state.seed;
+  leaveHallForRail();
   setPanel('record');
   setMobileView('space');
+  commitVisit('push');
 });
 $('space-leave')?.addEventListener('click',browseAll);
 $('all-directory-questions').addEventListener('click',browseAll);
-$('questions-back')?.addEventListener('click',()=>{setMobileView('space');render();setZoomT(34);});
+$('questions-back')?.addEventListener('click',()=>{setMobileView('space');render();setZoomT(34);commitVisit('push');});
 const mobileMedia=window.matchMedia('(max-width: 800px)');
 mobileMedia.addEventListener('change',syncMobileLayout);
-window.addEventListener('resize',syncMobileLayout);
+window.addEventListener('resize',()=>{
+  syncMobileLayout();
+  const seed=$('seed-popover');
+  if(seed&&!seed.hidden)placePanel('seed');
+  syncSubjectFocus();
+});
 readingScroller()?.addEventListener('scroll',syncMobileRoomStage,{passive:true});
 let stageApi=null;
 const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -2170,9 +2303,17 @@ $('seed').addEventListener('change',()=>{state.journey=[];changeSeed($('seed').v
 $('search').addEventListener('input',()=>{stop();resetApproval();options();render();});
 for(const id of ['layer-box','layer-box-sim'])$(id).addEventListener('change',()=>{stop();resetApproval();state.edge=null;state.identityEdge=null;render();});
 $('atlas-mode').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();render();if($('atlas-mode').checked)stage.fit();else setZoomT(34);});
-$('theme').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();if(townhallGraphOpen())townhallShouldFit=true;render();});
+$('theme').addEventListener('change',()=>{stop();resetApproval();state.researchPath=null;state.edge=null;state.heldEdge=null;state.identityEdge=null;if(!subjectInSociety(state.seed))state.seed=openingSubject();if(townhallGraphOpen())townhallShouldFit=true;render();commitVisit('replace');});
 $('veil').addEventListener('input',renderGraph);
-document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>{setPanel(b.dataset.panel);if(mobileLayout())setMobileView('space');}));
+document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.panel==='record'){
+    if(!state.recordAccession)state.recordAccession=state.seed;
+    leaveHallForRail();
+  }
+  setPanel(b.dataset.panel);
+  if(mobileLayout())setMobileView('space');
+  commitVisit('push');
+}));
 $('voice-mode').addEventListener('change',()=>{stop();resetApproval();$('approval-box').hidden=$('voice-mode').value!=='elevenlabs';});
 $('play').addEventListener('click',()=>{if(state.playing){stop();message('voice-status','Playback stopped.');return;}play();});$('stop').addEventListener('click',()=>{stop();message('voice-status','Playback stopped.');});$('export').addEventListener('click',saveConversation);
 const sourceNote=$('source-note'), sourceInfo=$('source-info');
@@ -2255,14 +2396,67 @@ async function loadLakehouse(){
     for(const [accession,snapshot] of lookupSnapshots(packet,graph.records))state.snapshots.set(accession,snapshot);
   }catch{/* The invented field remains when the local capture is missing. */}
 }
-const requested=new URLSearchParams(location.search).get('accession');
+function restoreVisit(visit){
+  applyingVisit=true;
+  try{
+    state.heldEdge=null;
+    state.pendingPartner=null;
+    state.researchPath=null;
+    state.identityEdge=null;
+    state.recordAccession=null;
+    state.mapMode='conversation';
+    if($('atlas-mode')?.checked)$('atlas-mode').checked=false;
+    const lens=LENSES.some(item=>item.id===visit.lens)?visit.lens:'family';
+    state.lens=lens;
+    if($('lens'))$('lens').value=lens;
+    if($('theme'))$('theme').value=visit.theme||'';
+    paintTheme();
+    relatedQuestions=false;
+    relatedAnchor=null;
+    // Draw the neighborhood before a hall screen covers it. A timeline class
+    // left over from the previous visit would make this render the hall graph.
+    document.body.classList.remove('show-timeline','show-space','show-room');
+    if(visit.path&&pathById(visit.path)){
+      openResearchPath(visit.path);
+      if(visit.subject&&onPreviewPair(visit.subject)){state.seed=visit.subject;render();}
+    }else{
+      if(visit.subject&&subjectInSociety(visit.subject))state.seed=visit.subject;
+      else if(visit.subject)state.seed=openingSubject();
+      state.edge=null;
+      state.pendingPartner=visit.with||null;
+      render();
+      setZoomT(34);
+    }
+    if(visit.screen==='townhall'){
+      relatedQuestions=false;
+      relatedAnchor=null;
+      townhallShouldFit=true;
+      setMobileView('timeline');
+      render();
+    }else if(visit.screen==='related'){
+      relatedQuestions=true;
+      relatedAnchor=visit.about||visit.subject||state.seed;
+      setMobileView('timeline');
+    }else if(mobileLayout())setMobileView('space');
+    else document.body.classList.remove('show-timeline','show-space','show-room');
+    if(visit.screen==='record'){
+      state.recordAccession=visit.record||visit.subject||state.seed;
+      renderRecord();
+      setPanel('record');
+    }else setPanel('conversation');
+    paintReading();
+  }finally{
+    applyingVisit=false;
+  }
+}
+window.addEventListener('popstate',()=>restoreVisit(parseVisit(location.search)));
+const arrival=parseVisit(location.search);
 await loadLakehouse();
 // Preserve a requested public packet identity even when this graph has no source-backed neighbors.
 // Never infer thematic relationships for the fallback record.
-if(requested)state.records=withPublicAnchorFallback(state.records);
-if(requested&&state.records.some(item=>item.accession===requested))state.seed=requested;
-categories();options();render();setZoomT(34);
-const requestedPath=new URLSearchParams(location.search).get('path');
-if(requestedPath&&pathById(requestedPath))openResearchPath(requestedPath);
-else startDream('arrival',ARRIVAL_MS);
-if(requested&&!state.records.some(item=>item.accession===requested))message('import-status','Requested accession is not in the loaded set. No identity was assumed.');
+if(arrival.subject)state.records=withPublicAnchorFallback(state.records);
+categories();options();
+restoreVisit(arrival);
+if(location.search)commitVisit('replace');
+if(!location.search)startDream('arrival',ARRIVAL_MS);
+if(arrival.subject&&!subjectInSociety(arrival.subject)&&!arrival.path)message('import-status','Requested accession is not in the loaded set. No identity was assumed.');
