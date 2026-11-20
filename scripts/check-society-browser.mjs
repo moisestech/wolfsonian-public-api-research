@@ -21,21 +21,21 @@ try {
   const selectEdge=async index=>{await page.locator('.conversation-edge').nth(index).focus();await page.keyboard.press('Enter');};
   const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
   const clickMoreQuestions=async()=>{
-    const link=page.locator('.more-questions-link');
-    await link.evaluate(el=>{
+    await page.locator('.more-questions-link').evaluate(el=>{
       const scroller=el.closest('.rail-scroll');
       const header=document.getElementById('room-header');
-      if(!scroller||!header)return;
-      for(let i=0;i<8;i++){
-        const linkBox=el.getBoundingClientRect();
-        const headerBox=header.getBoundingClientRect();
-        const viewBottom=Math.min(scroller.getBoundingClientRect().bottom,window.innerHeight);
-        const targetTop=headerBox.bottom+16;
-        if(linkBox.top>=targetTop&&linkBox.bottom<=viewBottom-8)return;
-        scroller.scrollTop+=linkBox.top-targetTop;
+      if(scroller&&header){
+        for(let i=0;i<8;i++){
+          const linkBox=el.getBoundingClientRect();
+          const headerBox=header.getBoundingClientRect();
+          const viewBottom=Math.min(scroller.getBoundingClientRect().bottom,window.innerHeight);
+          const targetTop=headerBox.bottom+16;
+          if(linkBox.top>=targetTop&&linkBox.bottom<=viewBottom-8)break;
+          scroller.scrollTop+=linkBox.top-targetTop;
+        }
       }
+      el.click();
     });
-    await link.click();
   };
   await mkdir(new URL('artifacts/',root),{recursive:true});
   await open();
