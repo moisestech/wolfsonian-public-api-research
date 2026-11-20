@@ -58,6 +58,10 @@ try {
   assert.ok(decodeURIComponent(await page.locator('#room-lens-portrait').getAttribute('src')).includes('#ffffff'));
   assert.equal(await page.locator('#reading-popover [data-lens] img.persona-symbol').count(),11);
   assert.equal(await page.locator('#zoom-stage .plate.persona img.persona-symbol').count()>0,true);
+  // Wait for the media-change event before restarting the editorial clock.
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='Archive dreams in public.');
+  await page.emulateMedia({reducedMotion:'no-preference'});
   // The editorial title changes without replacing the accessible archive identity.
   assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
   await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='Follow a question between objects.',null,{timeout:7500});
