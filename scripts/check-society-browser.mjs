@@ -20,6 +20,21 @@ try {
   };
   const selectEdge=async index=>{await page.locator('.conversation-edge').nth(index).focus();await page.keyboard.press('Enter');};
   const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
+  const openTownhall=async()=>{
+    const filter=page.locator('#space-filter');
+    if(await filter.isVisible()){
+      if(await filter.getAttribute('aria-expanded')!=='true')await filter.click();
+      await page.locator('#data-filter [data-map="townhall"]').click();
+      return;
+    }
+    const toggle=page.locator('#map-toggle');
+    if(await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
+    await page.locator('#map-popover [data-map="townhall"]').click();
+  };
+  const revealDisplay=async()=>{
+    const menu=page.locator('#display-menu');
+    if(await menu.isVisible()&&await menu.getAttribute('aria-expanded')!=='true')await menu.click();
+  };
   const clickMoreQuestions=async()=>{
     await page.locator('.more-questions-link').evaluate(el=>{
       const scroller=el.closest('.rail-scroll');
@@ -96,7 +111,7 @@ try {
   assert.equal(await page.locator('#room-description .link-warning').textContent(),'link unproven');
   const openingPair=await page.locator('#stage').getAttribute('data-pair');
   const openingEdges=await page.locator('.conversation-edge').count();
-  await page.locator('#space-leave').click();
+  await openTownhall();
   await page.waitForFunction(()=>document.querySelector('#timeline-title')?.textContent==='Townhall');
   assert.equal((await page.locator('#stage').getAttribute('data-pair'))||'','');
   assert.equal(await page.locator('#stage').getAttribute('data-zoom'),'0');
@@ -183,7 +198,7 @@ try {
     const opening=await page.evaluate(()=>{
       const scroll=document.querySelector('.rail-scroll'),dock=document.querySelector('#space-bar').getBoundingClientRect();
       const cards=[...document.querySelectorAll('#room-participants .object-portrait-media')];
-      const controls=[...document.querySelector('.top-nav').querySelectorAll('button,a')].map(x=>x.getBoundingClientRect());
+      const controls=[...document.querySelector('.top-nav').querySelectorAll('button,a')].filter(el=>el.getClientRects().length).map(x=>x.getBoundingClientRect());
       return {photoHeight:cards[0].getBoundingClientRect().height,images:cards.length,
         title:document.querySelector('#room-question').textContent,
         headerInScroller:document.querySelector('#room-header').parentElement===scroll,
@@ -195,7 +210,7 @@ try {
     assert.equal(opening.images,2,'Two visual object identities at '+width+'px');
     assert.ok(opening.photoHeight>=170,'Large object images on arrival at '+width+'px: '+JSON.stringify(opening));
     assert.ok(opening.headerInScroller,'Heading and dialogue use the same scroll surface');
-    assert.ok(opening.singleRow&&opening.navFits,'Four controls stay in one row at '+width+'px');
+    assert.ok(opening.singleRow&&opening.navFits,'Visible header controls stay in one row at '+width+'px');
     assert.ok(!opening.overflow&&opening.dockVisible,'Mobile viewport has no overflow at '+width+'px');
     await screenshot('room-'+width);
     await page.locator('.rail-scroll').evaluate(el=>{el.scrollTop=300;el.dispatchEvent(new Event('scroll'));});
@@ -259,10 +274,11 @@ try {
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
   assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
 
-  // Five persistent mobile destinations share the original dock space.
-  assert.equal(await page.locator('#space-bar .space-tab').count(),5);
+  // Six phone tabs: five locations plus the data filter. Listen, Record, and Map stay.
+  assert.equal(await page.locator('#space-bar .space-tab').count(),6);
   assert.equal(await page.locator('#space-feed .space-tab-label').innerText(),'Society');
   assert.match(await page.locator('#space-feed').getAttribute('aria-label'),/archive society/);
+  await revealDisplay();
   const appearance=page.locator('#appearance-toggle');
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
@@ -278,7 +294,7 @@ try {
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
   assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/sculptural-masks-v3\/family-limestone-master-v3\.png$/);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
-  assert.equal(await page.locator('#space-bar .space-tab').count(),5);
+  assert.equal(await page.locator('#space-bar .space-tab').count(),6);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
   assert.equal(await page.locator('#space-conversation[aria-current="page"]').count(),1);
   assert.equal(await page.locator('#space-evidence').count(),0,'Evidence is available in the room header, not a redundant dock action');
@@ -331,12 +347,12 @@ try {
     assert.ok(card.y>=picker.y+picker.height-1 && card.width>=width-50,'Full-width record below picker at '+width);
   }
   await screenshot('mobile-record');
-  await page.locator('[data-panel=conversation]').click();
+  await page.locator('#record-return').click();
   await page.locator('#conversation-head').click();
   assert.match(await page.locator('#episode-evidence').innerText(),/not historical speech or live autonomous AI/);
   assert.match(await page.locator('#episode-evidence').innerText(),/85\.4\.64\.43[\s\S]*TD1989\.318\.1/);
   await page.locator('#sheet-close').click();
-  await page.locator('#space-leave').click();
+  await openTownhall();
   assert.equal(await page.locator('#timeline-title').innerText(),'Townhall');
   assert.match(await page.locator('#timeline-list').innerText(),/Conversations/);
   const questionTitles=await page.locator('#timeline-list .question-card-face strong').allTextContents();
@@ -357,7 +373,7 @@ try {
   await screenshot('question-cards-390');
   await page.locator('#timeline-list section').first().locator('button').last().click();
   assert.notEqual(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
-  await page.locator('#space-leave').click();
+  await openTownhall();
   await page.locator('#timeline-list button').filter({hasText:'Who pays the price of progress?'}).click();
   assert.equal(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
   await clickMoreQuestions();
@@ -368,8 +384,10 @@ try {
   await clickMoreQuestions();
   await page.locator('#timeline-list button').filter({hasText:'Who builds the future?'}).click();
   assert.equal(await page.locator('#room-question').innerText(),'Who builds the future?');
+  await revealDisplay();
   await page.locator('#appearance-toggle').click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
+  await revealDisplay();
   await page.locator('#source-info').click();
   await page.waitForURL('**/demo/about/');
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light','About inherits the same appearance preference');
@@ -380,6 +398,7 @@ try {
   for(const term of ['Authored scene','Shared motif','Imagined comparison'])assert.ok(aboutWords.includes(term));
   await screenshot('mobile-about');
   await open();
+  await revealDisplay();
   await page.locator('#appearance-toggle').click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
 
@@ -432,7 +451,7 @@ try {
   assert.equal(await page.locator('#voice-controls').isVisible(),false,'Waveform disappears when playback stops');
   assert.equal(await page.locator('#voice-controls').getAttribute('data-speaker'),'');
   await page.locator('#space-play').click();
-  await page.locator('#space-leave').click();await page.locator('.path-post').nth(1).click();
+  await openTownhall();await page.locator('.path-post').nth(1).click();
   assert.equal(await page.locator('#space-play').getAttribute('aria-pressed'),'false');
   assert.equal(await page.locator('#room-participants .speaking').count(),0);
 

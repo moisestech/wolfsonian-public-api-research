@@ -76,6 +76,8 @@ function applyAppearance(mode){
     toggle.setAttribute('aria-label',action);
     toggle.setAttribute('aria-pressed',String(light));
     toggle.title=action;
+    const tool=toggle.querySelector('.nav-tool-label');
+    if(tool)tool.textContent=light?'Dark theme':'Light theme';
   }
 }
 try { applyAppearance(localStorage.getItem(appearanceKey)==='light'?'light':'dark'); }
@@ -109,6 +111,8 @@ function cancelScriptedPreview(){
 function markPreviewTurn(role,index){
   document.querySelectorAll('#room-participants .room-participant').forEach(
     card=>card.classList.toggle('previewing',card.dataset.speaker===role));
+  document.querySelectorAll('#room-participants .persona-float').forEach(
+    face=>face.classList.toggle('previewing',face.dataset.speaker===role));
   document.querySelectorAll('#conversation-content .chat .turn').forEach(
     (turn,i)=>turn.classList.toggle('previewing',i===index));
   const replay=$('scene-replay');
@@ -119,6 +123,7 @@ function markPreviewTurn(role,index){
   if(role==='objectA'||role==='objectB')stage.setSpeaking(
     role==='objectA'?state.conversation?.source:state.conversation?.target);
   else stage.setSpeaking('');
+  stage.setFieldSpeaker?.(role==='objectA'?'a':role==='objectB'?'b':'');
 }
 function replayScriptedScene(){
   cancelScriptedPreview();
@@ -202,13 +207,65 @@ function roomPair(accession){
     reasons:neighbor.reasons,classification:'shared_staff_metadata',historicalRelationshipEstablished:false,
   }};
 }
-function setMapMode(mode){
-  stop();resetApproval();
-  state.mapMode=mode;state.district=null;state.edge=null;
+function syncPathsTool(mode){
+  const conversation=mode==='conversation';
+  document.documentElement.dataset.mapMode=mode||'conversation';
+  const tool=document.querySelector('.paths-tool');
+  if(tool)tool.hidden=!conversation;
+  const paths=$('filter-paths');
+  if(paths)paths.hidden=!conversation;
+  if(!conversation){
+    const popover=$('paths-popover');
+    if(popover)popover.hidden=true;
+    $('paths-toggle')?.setAttribute('aria-expanded','false');
+  }
+}
+function markMapChoice(mode){
   for(const button of document.querySelectorAll('[data-map]'))button.setAttribute('aria-checked',String(button.dataset.map===mode));
   const chosen=document.querySelector('[data-map="'+mode+'"]');
   if($('map-name')&&chosen)$('map-name').textContent=chosen.textContent;
+  syncPathsTool(mode);
+}
+function closeDataFilter(){
+  const panel=$('data-filter');
+  if(!panel||panel.hidden)return;
+  panel.hidden=true;
+  $('space-filter')?.setAttribute('aria-expanded','false');
+}
+function placeDataFilters(){
+  const modes=document.querySelector('.map-modes');
+  const themes=$('theme-choices');
+  const paths=$('path-choices');
+  const layers=document.querySelector('.command-layers');
+  if(mobileLayout()){
+    if(modes)$('filter-looking')?.append(modes);
+    if(themes)$('filter-categories')?.append(themes);
+    if(paths)$('filter-paths')?.append(paths);
+    if(layers)$('filter-layers')?.append(layers);
+  }else{
+    if(modes)$('map-popover')?.append(modes);
+    if(themes)$('theme-popover')?.prepend(themes);
+    if(paths)$('paths-popover')?.append(paths);
+    if(layers)document.querySelector('.command')?.prepend(layers);
+    closeDataFilter();
+  }
+}
+function leaveOverview(){
+  if(!document.body.classList.contains('show-timeline')&&!document.body.classList.contains('show-room'))return;
+  document.body.classList.remove('show-timeline','show-room');
+  if(mobileLayout())document.body.classList.add('show-space');
+}
+function setMapMode(mode){
+  stop();resetApproval();
   closeSheet();
+  if(mode==='townhall'){
+    markMapChoice('townhall');
+    browseAll();
+    return;
+  }
+  state.mapMode=mode;state.district=null;state.edge=null;
+  markMapChoice(mode);
+  leaveOverview();
   if(mode==='conversation'){
     if(!state.records.some(item=>item.accession===state.seed))state.seed=bestSeed(state.records);
   }else{
@@ -331,7 +388,7 @@ function onPreviewPair(id){
 }
 function openingSubject(){return subjectInSociety('85.4.64.43')?'85.4.64.43':state.records[0]?.accession;}
 function leavePreview(){
-  state.researchPath=null;state.edge=null;state.heldEdge=null;state.mapMode='conversation';state.recordAccession=null;
+  state.researchPath=null;state.edge=null;state.heldEdge=null;state.mapMode='conversation';markMapChoice('conversation');state.recordAccession=null;
   if($('atlas-mode')?.checked)$('atlas-mode').checked=false;
   if(!subjectInSociety(state.seed))state.seed=openingSubject();
   closeSheet();render();setPanel('conversation');commitVisit('push');
@@ -555,6 +612,13 @@ function wrapTitle(text,max=20){
   for(const word of String(text).split(/\s+/)){if((line+' '+word).trim().length>max&&line){lines.push(line);line='';}line+=(line?' ':'')+word;}
   if(line)lines.push(line);return lines.slice(0,2).map((line,i)=>line.length>max||(i===1&&lines.length>2)?line.slice(0,max-1)+'…':line);
 }
+function paintField(colors){
+  const usable=(colors||[]).filter(Boolean);
+  if(!usable.length)return;
+  stage.setFieldColors?.(usable);
+  const host=$('stage');
+  if(host)host.dataset.field=usable.join('|');
+}
 function renderGraph(){
   if (!state.view.edges.some(item => item.id === state.edge)) state.edge = state.view.edges[0]?.id || null;
   const edge = state.view.edges.find(item => item.id === state.edge) || null;
@@ -584,6 +648,8 @@ function renderGraph(){
   $('stage').dataset.theme = $('theme').value;
   stage.setGraph(graph.nodes, graph.links, { layout: $('layer-box').checked ? 'shelf' : 'constellation' });
   if (edge) stage.focusPair(edge.source, edge.target);
+  const voices = edge ? voiceColors(edge.source, edge.target, linkColor) : null;
+  paintField(voices ? [voices.objectA, linkColor, voices.objectB, linkColor] : links.map(item => item.color));
   syncDream();
 }
 function showEdge(edge){
@@ -645,6 +711,7 @@ function markSpeaker(role){
     plate.classList.toggle('speaking',speaking);
     if(speaking)plate.setAttribute('aria-current','true');else plate.removeAttribute('aria-current');
   });
+  stage.setFieldSpeaker?.(role==='objectA'?'a':role==='objectB'?'b':'');
 }
 function renderStage(){
   const box=$('zoom-stage');if(!box||!state.view)return;
@@ -756,6 +823,7 @@ function placeRoomHeader(){
   syncMobileRoomStage();
 }
 function syncMobileLayout(){
+  placeDataFilters();
   placeZoomStage();
   placeRoomHeader();
   if(!mobileLayout()){
@@ -833,6 +901,30 @@ function paintListeners(){
     row.append(button);
   }
 }
+function speakingCast(){
+  const lens=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
+  const guide=CARD_BY_ID.get('archivist');
+  const voices=[];
+  if(lens)voices.push({role:'lens',card:lens,label:lens.id==='museum'?lens.label+' · fictional':lens.label});
+  if(guide&&guide.id!==lens?.id)voices.push({role:'archivist',card:guide,label:guide.label});
+  return voices;
+}
+function personaFloat(voice){
+  const item=node('span',undefined,'persona-float');
+  item.dataset.speaker=voice.role;
+  item.style.setProperty('--persona',voice.card.color||'#e8d5a3');
+  const img=node('img');
+  img.alt='';
+  bindPersonaImage(img,voice.card,'compact',null,'sepia');
+  item.append(img,node('span',voice.label,'persona-float-name'));
+  return item;
+}
+function personaOrbit(){
+  const orbit=node('span',undefined,'persona-orbit');
+  orbit.setAttribute('aria-hidden','true');
+  for(const voice of speakingCast())orbit.append(personaFloat(voice));
+  return orbit;
+}
 function questionCard(episode,objects){
   const button=node('button',undefined,'path-post');
   button.type='button';
@@ -864,7 +956,11 @@ function questionCard(episode,objects){
     image.alt='';image.loading='lazy';image.src=photo(object)||objectBadge(object);
     portraits.append(image);
   }
-  cast.append(portraits,node('span',episode.participants.map(person=>person.shortName).join(' × ')));
+  const cluster=node('span',undefined,'question-cast');
+  cluster.append(portraits,personaOrbit());
+  const voices=speakingCast();
+  cast.append(cluster,node('span',episode.participants.map(person=>person.shortName).join(' × ')));
+  if(voices.length)cast.append(node('span',voices.map(voice=>voice.label).join(' · '),'question-card-voices'));
   face.append(cast);
   const preview=node('span',undefined,'question-card-preview');
   const first=episode.turns[0];
@@ -914,6 +1010,7 @@ function townhallGroups(){
       const entry={episode,objects:[source,target],open:()=>{
         state.seed=accession;
         state.mapMode='conversation';
+        markMapChoice('conversation');
         $('atlas-mode').checked=false;
         $('seed').value=accession;
         showEdge(edge);
@@ -958,6 +1055,8 @@ function renderTownhallGraph(){
   const graph=focusedPairGraph([...nodes.values()],links);
   $('stage').dataset.theme=$('theme')?.value||'';
   stage.setGraph(graph.nodes,graph.links,{layout:$('layer-box')?.checked?'shelf':'constellation'});
+  state.hallColors=links.map(item=>item.color);
+  paintField(state.hallColors);
   if(townhallShouldFit){townhallShouldFit=false;fit();}
 }
 function townhallCluster(source,target,episode){
@@ -995,6 +1094,8 @@ function highlightTownhallPair(source,target,episode){
   const cluster=townhallCluster(source,target,episode);
   stage.setClusterHighlight(cluster.ids,cluster.label,cluster.color);
   stage.setPairHighlight(source.accession,target.accession,{});
+  const voices=voiceColors(source.accession,target.accession,cluster.color);
+  paintField([voices.objectA,cluster.color,voices.objectB,cluster.color]);
   paintClusterBadge(cluster);
 }
 function clearTownhallHover(event){
@@ -1002,6 +1103,7 @@ function clearTownhallHover(event){
   if(next)return;
   stage.setPairHighlight('','',null);
   stage.setClusterHighlight([],'');
+  paintField(state.hallColors);
   paintClusterBadge(null);
 }
 function paintTimeline(){
@@ -1099,7 +1201,7 @@ function renderRoomHeader(source,target,c){
   state.episode=episode;
   const header=$('room-header');header.hidden=false;header.dataset.episode=episode.id;header.dataset.mode=episode.mode;
   $('room-question').textContent=episode.question;
-  $('room-kind').textContent=episode.label==='Authored scene'?'':episode.label;
+  $('room-kind').textContent=episode.label==='Authored scene'||!episode.label?'':episode.label;
   $('room-status-line').hidden=!$('room-kind').textContent;
   // Show the relationship that led to this room, rather than a generic
   // description of its format. Research-proposal detail stays in Evidence.
@@ -1165,7 +1267,7 @@ function renderRoomHeader(source,target,c){
   replay.setAttribute('aria-pressed','false');
   replay.disabled=episode.mode!=='CURATED_SCRIPT';
   replay.addEventListener('click',()=>{if(state.playing)stop();replayScriptedScene();});
-  cast.append(replay);
+  cast.append(replay,personaOrbit());
   syncMobileRoomStage();
   const evidence=$('episode-evidence');
   evidence.replaceChildren(node('h2','Why these two?'),node('p',episode.rationale),
@@ -1189,7 +1291,7 @@ function renderRoomHeader(source,target,c){
     node('p','Source review and image permissions are separate from this imagined exchange.','muted'));
 }
 function paintResearchScene(c){
-  paintSceneLabel('Proposed pairing','#e8d5a3','An artist-written comparison. Not a shared catalog tag, and not proof these objects met.',c.dramaticArc,'RESEARCH PREVIEW · NOT A CATALOG MATCH');
+  paintSceneLabel('Proposed pairing','#e8d5a3','An artist-written comparison. Not a shared catalog tag, and not proof these objects met.',c.dramaticArc,'ARTIST-WRITTEN COMPARISON · NOT A CATALOG MATCH');
 }
 function renderJuxtaposition(box){
   const path=state.researchPath;
@@ -1252,7 +1354,7 @@ function renderConversation(){
     box.append(node('p','A conversation here needs a shared tag. A path preview is a separate authored comparison, and it stays with its two objects.'),node('button','Return to Making the Engine'));
     const back=box.querySelector('button');
     back.type='button';
-    back.addEventListener('click',()=>{state.researchPath=null;state.heldEdge=null;state.mapMode='conversation';state.seed=openingSubject();state.edge=null;render();setPanel('conversation');commitVisit('push');});
+    back.addEventListener('click',()=>{state.researchPath=null;state.heldEdge=null;state.mapMode='conversation';markMapChoice('conversation');state.seed=openingSubject();state.edge=null;render();setPanel('conversation');commitVisit('push');});
     $('voice-controls').hidden=true;setPlayDisabled(true);return;
   }
   const source=person(edge.source),target=person(edge.target);
@@ -1535,6 +1637,8 @@ function openResearchPath(id){
   stop();resetApproval();
   state.heldEdge=null;
   state.mapMode='conversation';
+  markMapChoice('conversation');
+  closeDataFilter();
   state.researchPath=path;
   state.seed=path.source.accession;
   if($('atlas-mode')?.checked)$('atlas-mode').checked=false;
@@ -2013,8 +2117,18 @@ function paintPaths(){
     button.type='button';
     button.dataset.path=path.id;
     button.setAttribute('aria-pressed',String(state.researchPath?.id===path.id));
-    button.setAttribute('aria-label',path.arc+'. '+shortPathTitle(path.source)+' and '+shortPathTitle(path.target)+'. Proposed pairing.');
-    button.append(node('strong',path.arc),node('span',shortPathTitle(path.source)+' × '+shortPathTitle(path.target),'path-objects'),node('span','Proposed pairing','path-kind'));
+    const voices=speakingCast();
+    button.setAttribute('aria-label',path.arc+'. '+shortPathTitle(path.source)+' and '+shortPathTitle(path.target)+'. Proposed pairing. Voices: '+(voices.map(voice=>voice.label).join(', ')||'the selected perspective')+'.');
+    const voiceRow=node('span',undefined,'path-voices');
+    for(const voice of voices){
+      const chip=node('span',undefined,'path-voice');
+      chip.style.setProperty('--persona',voice.card.color||'#e8d5a3');
+      const img=node('img');img.alt='';
+      bindPersonaImage(img,voice.card,'compact',null,'sepia');
+      chip.append(img,node('span',voice.label));
+      voiceRow.append(chip);
+    }
+    button.append(node('strong',path.arc),node('span',shortPathTitle(path.source)+' × '+shortPathTitle(path.target),'path-objects'),voiceRow,node('span','Proposed pairing','path-kind'));
     button.addEventListener('click',()=>openResearchPath(path.id));
     box.append(button);
   }
@@ -2141,7 +2255,8 @@ document.addEventListener('click',event=>{
     document.querySelectorAll('.speaker-menu').forEach(menu=>{menu.hidden=true;});
     document.querySelectorAll('.more-dots').forEach(button=>button.setAttribute('aria-expanded','false'));
   }
-  if(event.target.closest('.tool-popover,.reading-popover,[data-sheet],.rail-head,.conversation-sheet,.prompt-sheet,.speaker-more,#space-bar,#room-back'))return;
+  if(!event.target.closest('#data-filter,#space-filter'))closeDataFilter();
+  if(event.target.closest('.tool-popover,.reading-popover,[data-sheet],.rail-head,.conversation-sheet,.prompt-sheet,.speaker-more,#space-bar,#data-filter,#room-back'))return;
   closeSheet();
 });
 $('conversation-head')?.addEventListener('click',event=>{
@@ -2207,6 +2322,16 @@ $('sheet-close')?.addEventListener('click',event=>{
   closeConversationSheet();
 });
 $('space-play')?.addEventListener('click',()=>$('play').click());
+$('space-filter')?.addEventListener('click',()=>{
+  const panel=$('data-filter');
+  if(!panel)return;
+  const open=panel.hidden;
+  panel.hidden=!open;
+  $('space-filter').setAttribute('aria-expanded',String(open));
+  if(open)$('data-filter-title')?.focus();
+});
+$('data-filter-close')?.addEventListener('click',()=>{closeDataFilter();$('space-filter')?.focus();});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeDataFilter();});
 $('room-rationale')?.addEventListener('click',event=>{event.stopPropagation();$('conversation-head').click();});
 $('space-room')?.addEventListener('click',()=>{
   state.mobileFrom=document.body.classList.contains('show-timeline')?'timeline':'space';
@@ -2214,7 +2339,7 @@ $('space-room')?.addEventListener('click',()=>{
 });
 $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'space'));
 $('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();commitVisit('push');});
-function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;wakeDream();stage.setSpeaking('');stage.setPairHighlight('','',null);stage.setClusterHighlight([],'');setMobileView('timeline');render();commitVisit('push');}
+function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;wakeDream();stage.setSpeaking('');stage.setPairHighlight('','',null);stage.setClusterHighlight([],'');markMapChoice('townhall');setMobileView('timeline');render();commitVisit('push');}
 $('space-feed')?.addEventListener('click',browseAll);
 $('space-conversation')?.addEventListener('click',()=>{
   setPanel('conversation');
@@ -2230,6 +2355,17 @@ $('space-record')?.addEventListener('click',()=>{
   commitVisit('push');
 });
 $('space-leave')?.addEventListener('click',browseAll);
+$('display-menu')?.addEventListener('click',()=>{
+  const nav=$('display-menu').closest('.top-nav');
+  const open=!nav.classList.contains('is-display-open');
+  nav.classList.toggle('is-display-open',open);
+  $('display-menu').setAttribute('aria-expanded',String(open));
+});
+document.addEventListener('click',event=>{
+  if(event.target.closest('#display-menu,#nav-tools'))return;
+  document.querySelector('.top-nav')?.classList.remove('is-display-open');
+  $('display-menu')?.setAttribute('aria-expanded','false');
+});
 $('all-directory-questions').addEventListener('click',browseAll);
 $('questions-back')?.addEventListener('click',()=>{setMobileView('space');render();setZoomT(34);commitVisit('push');});
 const mobileMedia=window.matchMedia('(max-width: 800px)');
@@ -2445,6 +2581,7 @@ function restoreVisit(visit){
       setPanel('record');
     }else setPanel('conversation');
     paintReading();
+    markMapChoice(visit.screen==='townhall'?'townhall':state.mapMode);
   }finally{
     applyingVisit=false;
   }
