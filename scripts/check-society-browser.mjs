@@ -64,7 +64,7 @@ try {
   await page.emulateMedia({reducedMotion:'no-preference'});
   // The editorial title changes without replacing the accessible archive identity.
   assert.equal(await page.locator('#editorial-phrase').textContent(),'Archive dreams in public.');
-  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='Follow a question between objects.',null,{timeout:7500});
+  await page.waitForFunction(()=>document.getElementById('editorial-phrase')?.textContent==='Who kept the household going?',null,{timeout:7500});
   await page.locator('#editorial-phrase').click();
   assert.equal(await page.locator('#editorial-phrase').getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('#editorial-toggle').count(),0);
