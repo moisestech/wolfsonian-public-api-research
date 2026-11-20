@@ -600,8 +600,8 @@ function showEdge(edge){
   if(mobileLayout())setMobileView('space');
   setZoomT(34);
   breathDream();
-  startSceneEntrance();
   commitVisit('push');
+  startSceneEntrance();
 }
 function onGraphSelect(id){
   if(state.researchPath&&onPreviewPair(id)){state.seed=id;render();setPanel('conversation');commitVisit('push');return;}
@@ -1543,8 +1543,8 @@ function openResearchPath(id){
   setMobileView('space');
   setZoomT(34);
   breathDream();
-  startSceneEntrance();
   commitVisit('push');
+  startSceneEntrance();
 }
 function render(){
   clearPoint();
