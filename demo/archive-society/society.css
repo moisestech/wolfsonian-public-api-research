@@ -957,6 +957,7 @@ body.show-timeline .space-view,body.show-timeline #voice-controls{display:none!i
   }
   body.show-space .room-rationale{padding:2px 0;min-height:30px}
   body.show-space .rail-scroll #conversation-panel{margin-top:var(--room-scroll-offset,0px)}
+  body.show-space #conversation-content .more-questions-link{scroll-margin-top:320px}
   body.show-space .room-header.is-compact #room-question{font-size:19px;margin-bottom:3px}
   body.show-space .room-header.is-compact .room-description,
   body.show-space .room-header.is-compact .room-rationale{display:none}
