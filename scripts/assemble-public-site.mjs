@@ -24,6 +24,8 @@ export const PUBLIC_FILES = [
   'src/discovery-personas.mjs',
   'src/persona-sigils.mjs',
   'src/persona-cloudinary-assets.mjs',
+  'src/persona-character-portraits.mjs',
+  'src/persona-illustrated-gallery.mjs',
   'src/force-graph-data.mjs',
   'src/lakehouse-matches.mjs',
   'src/local-image-index.mjs',

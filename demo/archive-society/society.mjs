@@ -17,6 +17,7 @@ import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src
 import { scriptedScenePlan } from '../../src/scene-performance.mjs';
 import { tagColor, voiceColors } from './conversation-color.mjs';
 import { personaCharacterUrl } from '../../src/persona-cloudinary-assets.mjs';
+import { illustratedPersonaUrl, APPROVED_DECO_MASK_STUDIES, approvedMaskStudyUrl } from '../../src/persona-illustrated-gallery.mjs';
 
 const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={records:inventedRecords(),seed:'FICTION-01',lens:'family',edge:null,identityEdge:null,layerView:null,journey:[],
@@ -35,19 +36,31 @@ function bindPersonaImage(image,card,variant='compact',fixedTone=null,palette=nu
   else delete image.dataset.personaTone;
   if(palette)image.dataset.personaPalette=palette;
   else delete image.dataset.personaPalette;
-  image.classList.add('persona-symbol');
-  image.alt=''; // The adjacent visible text identifies the perspective.
+  image.classList.add('persona-symbol','persona-illustrated');
+  image.alt=''; // The adjacent visible name describes this artist-authored persona.
+  image.hidden=false;
+  delete image.dataset.artworkFallback;
   const tone=fixedTone||personaTone();
   image.onerror=()=>{
-    image.onerror=null;
-    image.src=portraitFallbackUrl(card,{tone,variant});
+    const alternate=(palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
+    if(image.dataset.artworkFallback==='1'||alternate===image.src){
+      image.onerror=null;
+      image.src=portraitFallbackUrl(card,{tone,variant}); // Failure-only fallback, never the gallery's primary art.
+      return;
+    }
+    image.dataset.artworkFallback='1';
+    image.src=alternate;
   };
-  image.src=(palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
+  image.src=illustratedPersonaUrl(card.id,{variant,tone})||
+    (palette&&personaCharacterUrl(card.id,{palette,variant}))||portraitUrl(card,{tone,variant});
 }
 function refreshPersonaImages(){
   document.querySelectorAll('img[data-persona-id]').forEach(image=>{
     const card=CARD_BY_ID.get(image.dataset.personaId);
     if(card)bindPersonaImage(image,card,image.dataset.personaVariant||'compact',image.dataset.personaTone||null,image.dataset.personaPalette||null);
+  });
+  document.querySelectorAll('img[data-mask-study]').forEach(image=>{
+    image.src=approvedMaskStudyUrl(image.dataset.maskStudy,{tone:personaTone(),variant:'compact'})||'';
   });
 }
 function applyAppearance(mode){
@@ -1823,16 +1836,56 @@ function perspectiveSections(buildChoice){
     return section;
   });
 }
+
+/** Approved masks remain visible as a separate artwork family without assigning
+ *  the three unnamed studies to historical or institutional speakers. */
+/** Compact identity marks share the sculptural artwork used by the gallery. */
+function personaIdentityMark(id){
+  const mark=node('span',undefined,'perspective-identity-mark');
+  mark.setAttribute('aria-hidden','true');
+  const image=node('img');
+  image.alt='';
+  image.dataset.personaMark=id;
+  image.src=illustratedPersonaUrl(id,{tone:'white',variant:'compact'});
+  image.onerror=()=>{
+    image.onerror=null;
+    const card=CARD_BY_ID.get(id);
+    if(card)image.src=portraitFallbackUrl(card,{tone:'white',variant:'compact'});
+  };
+  mark.append(image);
+  return mark;
+}
+function approvedMasksSection(){
+  const section=node('section',undefined,'approved-mask-studies');
+  section.append(
+    node('h3','Artist-approved mask studies','approved-mask-title'),
+    node('p','Graphic studies informing the characters; not additional speaking perspectives.','approved-mask-note')
+  );
+  const grid=node('div',undefined,'approved-mask-grid');
+  for(const [id,study] of Object.entries(APPROVED_DECO_MASK_STUDIES)){
+    const figure=node('figure',undefined,'approved-mask-tile');
+    const img=node('img');
+    img.dataset.maskStudy=id;img.alt='';
+    img.src=approvedMaskStudyUrl(id,{tone:personaTone(),variant:'compact'});
+    figure.append(img,node('figcaption',study.label));
+    grid.append(figure);
+  }
+  section.append(grid);
+  return section;
+}
 $('reading-popover').replaceChildren(...perspectiveSections(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button');
   button.type='button';button.className='reading-choice';button.dataset.lens=lens.id;
-  const img=node('img');bindPersonaImage(img,card,'compact',null,'sepia');
+  const img=node('img');bindPersonaImage(img,card,'full',null,'sepia');
+  img.classList.add('perspective-art');
   const label=lens.id==='museum'?lens.label+' · fictional':lens.label;
-  button.append(img,node('span',label));
+  const copy=node('span',undefined,'perspective-card-copy');
+  copy.append(node('strong',label),node('small',lens.question));
+  button.append(img,personaIdentityMark(lens.id),copy);
   button.addEventListener('click',()=>{$('lens').value=lens.id;$('lens').dispatchEvent(new Event('change'));closeSheet();});
   return button;
-}));
+}),approvedMasksSection());
 const mobilePerspectiveSheet=$('mobile-perspective-sheet');
 let mobilePerspectiveOpener=null;
 function closeMobilePerspectives(){if(mobilePerspectiveSheet?.open)mobilePerspectiveSheet.close();}
@@ -1854,19 +1907,20 @@ $('mobile-perspective-choices')?.replaceChildren(...perspectiveSections(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button',undefined,'mobile-perspective-choice');
   button.type='button';button.dataset.lens=lens.id;button.setAttribute('aria-pressed',String(lens.id===state.lens));
-  const portrait=node('img');bindPersonaImage(portrait,card,'compact','white','sepia');
+  const portrait=node('img');bindPersonaImage(portrait,card,'full','white','sepia');
+  portrait.classList.add('perspective-art');
   const copy=node('span',undefined,'mobile-perspective-copy');
   copy.append(node('strong',lens.id==='museum'?lens.label+' · fictional':lens.label),
     node('small',lens.id==='museum'?'Artist-authored viewpoint; not museum staff.':lens.question));
   const check=node('span','✓','mobile-perspective-selected');check.setAttribute('aria-hidden','true');
-  button.append(portrait,copy,check);
+  button.append(portrait,personaIdentityMark(lens.id),copy,check);
   button.addEventListener('click',()=>{
     closeMobilePerspectives();
     $('lens').value=lens.id;
     $('lens').dispatchEvent(new Event('change'));
   });
   return button;
-}));
+}),approvedMasksSection());
 document.querySelector('.finder').addEventListener('submit',event=>event.preventDefault());
 function shortPathTitle(record){
   const text=String(record?.title||record?.accession||'');
