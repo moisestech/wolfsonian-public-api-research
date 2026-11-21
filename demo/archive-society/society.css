@@ -1477,7 +1477,7 @@ html[data-color-theme="light"] .record-overlay .evidence-type{color:#d7c4a3}
 .topbar .brand-phrase{max-width:none;font-size:clamp(20px,2.5vw,30px);white-space:nowrap}
 .topbar .brand-name{position:static;width:auto;height:auto;overflow:visible;clip:auto;font-size:9px}
 .topbar .brand-icon,.topbar .brand-icon img{width:42px;height:42px}
-.topbar .top-actions{flex:none;margin:0;max-width:none}
+.topbar .top-actions{flex:none;width:auto;margin:0;max-width:none}
 .topbar .top-nav{width:auto;justify-content:flex-end;position:relative}
 .topbar.is-compact .masthead{height:0;overflow:hidden}
 .topbar.is-compact .masthead-content{opacity:0;visibility:hidden;pointer-events:none}
