@@ -1505,3 +1505,5 @@ html[data-color-theme="light"] .browse-tab[aria-current="page"]::after{backgroun
  .browse-nav .browse-perspective{padding-right:18px}
 }
 @media(prefers-reduced-motion:reduce){.masthead,.masthead-content{transition:none}}
+/* A compact cast uses display:contents, so replay must stay in its flex row. */
+.room-header:not(.is-cast-open) #scene-replay{position:static;transform:none;order:3;flex:none}

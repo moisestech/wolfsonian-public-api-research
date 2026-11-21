@@ -34,6 +34,10 @@ try {
   };
   const revealDisplay=async()=>{
     const menu=page.locator('#display-menu');
+    if(!await menu.isVisible()){
+      await page.locator('.rail-scroll,#path-timeline').evaluateAll(els=>els.forEach(el=>{el.scrollTop=0;el.dispatchEvent(new Event('scroll'));}));
+      await menu.waitFor({state:'visible'});
+    }
     if(await menu.isVisible()&&await menu.getAttribute('aria-expanded')!=='true')await menu.click();
   };
   const clickMoreQuestions=async()=>{
