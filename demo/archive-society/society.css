@@ -1467,3 +1467,46 @@ html[data-color-theme="light"] .record-overlay .evidence-type{color:#d7c4a3}
  .preview-line{font-size:14px}
 }
 @media(prefers-reduced-motion:reduce){.question-card-wave i{animation:none;transform:none}}
+
+/* Two-row masthead: stable horizontal navigation, with space returned on scroll. */
+.topbar{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;position:relative;z-index:45;overflow:visible}
+.masthead{height:80px;flex:none;transition:height .18s ease}
+.masthead-content{height:80px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 20px;transition:opacity .12s ease}
+.topbar .brand-area{width:auto;flex:1;align-self:center;min-width:0}
+.topbar .brand-copy{display:flex!important;min-width:0}
+.topbar .brand-phrase{max-width:none;font-size:clamp(20px,2.5vw,30px);white-space:nowrap}
+.topbar .brand-name{position:static;width:auto;height:auto;overflow:visible;clip:auto;font-size:9px}
+.topbar .brand-icon,.topbar .brand-icon img{width:42px;height:42px}
+.topbar .top-actions{flex:none;width:auto;margin:0;max-width:none}
+.topbar .top-nav{width:auto;justify-content:flex-end;position:relative}
+.topbar.is-compact .masthead{height:0;overflow:hidden}
+.topbar.is-compact .masthead-content{opacity:0;visibility:hidden;pointer-events:none}
+.browse-nav{display:flex;align-items:center;flex:none;gap:6px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:none;padding:0 16px;min-height:56px;border-top:1px solid var(--line,#354844);scroll-padding-inline:16px}
+.browse-nav::-webkit-scrollbar{display:none}
+.browse-nav>.browse-tab,.browse-nav .choice{display:inline-flex;align-items:center;justify-content:center;flex:none;gap:8px;min-height:52px;margin:0;padding:8px 14px;border:0;border-radius:0;background:transparent;color:inherit;white-space:nowrap;font:650 15px/1.2 system-ui,sans-serif;position:relative}
+.browse-nav .browse-tab[aria-current="page"]::after{content:'';position:absolute;bottom:0;left:12px;right:12px;height:3px;border-radius:3px;background:#a6ddc9}
+.browse-nav .top-map{display:block;flex:none}
+.browse-nav .choice-mark{display:none}
+.browse-nav .reading-label,.browse-perspective>span{display:flex;flex-direction:column;text-align:left;gap:2px}
+.browse-nav small{font:500 10px/1.2 system-ui,sans-serif;opacity:.75}
+.browse-nav strong{font:650 14px/1.2 system-ui,sans-serif}
+.browse-perspective img{width:26px;height:26px;object-fit:contain}
+.browse-nav :is(button:focus-visible,a:focus-visible){outline:2px solid currentColor;outline-offset:-4px}
+html[data-color-theme="light"] .browse-tab[aria-current="page"]::after{background:#23654d}
+@media(max-width:800px){
+ .masthead,.masthead-content{height:66px}
+ .masthead-content{gap:10px;padding:8px 12px}
+ .topbar .brand-area{gap:9px}
+ .topbar .brand-phrase{font-size:clamp(16px,4.5vw,22px);max-width:none}
+ .topbar .brand-icon,.topbar .brand-icon img{width:34px;height:34px}
+ .topbar .brand-name{font-size:7px;letter-spacing:.1em}
+ .browse-nav{gap:0;padding:0 8px;min-height:50px;scroll-padding-inline:8px}
+ .browse-nav>.browse-tab,.browse-nav .choice{min-height:50px;padding:7px 12px;font-size:14px}
+ .browse-nav .browse-perspective{padding-right:18px}
+}
+@media(prefers-reduced-motion:reduce){.masthead,.masthead-content{transition:none}}
+/* A compact cast uses display:contents, so replay must stay in its flex row. */
+.room-header:not(.is-cast-open) #scene-replay{position:static;transform:none;order:3;flex:none}
+/* Global browsing controls replace their duplicate in-content triggers. */
+#room-perspective-toggle,#feed-perspective-toggle,#questions-back{display:none!important}
+@media(max-width:800px){body.show-room .atlas-panel{top:var(--archive-header-height,116px)}}

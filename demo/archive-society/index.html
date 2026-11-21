@@ -20,6 +20,7 @@
 </div>
 <a class="skip" href="#atlas">Skip to the atlas</a>
 <header class="topbar">
+ <div class="masthead"><div class="masthead-content">
   <div class="brand-area">
     <a class="wordmark" href="#atlas" aria-label="Archive Dreams in Public — explore conversations"><span class="brand-icon" aria-hidden="true"><img class="brand-mark-on-dark" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981354/archive-dreams/brand/aperture-white-v1.svg" data-local-src="./assets/archive-dreams-aperture-white.svg" width="52" height="52" alt=""><img class="brand-mark-on-light" src="https://res.cloudinary.com/dck5rzi4h/image/upload/v1794981350/archive-dreams/brand/aperture-black-v1.svg" data-local-src="./assets/archive-dreams-aperture-black.svg" width="52" height="52" alt=""></span></a>
     <span class="brand-copy"><span class="brand-name">ARCHIVE DREAMS IN PUBLIC</span><button type="button" id="editorial-phrase" class="brand-phrase" aria-pressed="false" aria-label="Pause rotating title">Archive dreams in public.</button></span>
@@ -27,20 +28,6 @@
   </div>
   <div class="top-actions">
     <nav class="top-nav" aria-label="Explore Archive Dreams">
-      <div class="tool top-map">
-        <button id="map-toggle" class="choice" type="button" data-sheet="map" aria-haspopup="dialog" aria-expanded="false" aria-controls="map-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="2" fill="currentColor"/><circle cx="17" cy="8" r="2" fill="currentColor"/><circle cx="17" cy="16" r="2" fill="currentColor"/><path d="M9 12h6M15 9.2 9.5 11.4M15 14.8 9.5 12.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="reading-label"><small>Map</small><strong id="map-name">Conversation</strong></span></button>
-        <div id="map-popover" class="tool-popover" hidden role="dialog" aria-label="How the map is grouped">
-          <div class="map-modes" role="radiogroup" aria-label="How the map is grouped">
-            <button type="button" data-map="conversation" role="radio" aria-checked="true">Conversation</button>
-            <button type="button" data-map="townhall" role="radio" aria-checked="false">Townhall</button>
-            <button type="button" data-map="geography" role="radio" aria-checked="false">Place</button>
-            <button type="button" data-map="objectType" role="radio" aria-checked="false">Type</button>
-            <button type="button" data-map="style" role="radio" aria-checked="false">Look</button>
-            <button type="button" data-map="theme" role="radio" aria-checked="false">Theme</button>
-            <button type="button" data-map="motif" role="radio" aria-checked="false">Symbol</button>
-          </div>
-        </div>
-      </div>
       <button type="button" id="display-menu" class="display-menu" aria-label="Menu" title="Menu" aria-expanded="false" aria-controls="nav-tools">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
@@ -55,6 +42,26 @@
       </div>
     </nav>
   </div>
+ </div></div>
+ <nav class="browse-nav" aria-label="Views, filters and perspective">
+  <button type="button" id="header-townhall" class="browse-tab">Townhall</button>
+  <button type="button" id="header-conversation" class="browse-tab">Conversation</button>
+      <div class="tool top-map">
+        <button id="map-toggle" class="choice" type="button" data-sheet="map" aria-haspopup="dialog" aria-expanded="false" aria-controls="map-popover"><span class="choice-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="2" fill="currentColor"/><circle cx="17" cy="8" r="2" fill="currentColor"/><circle cx="17" cy="16" r="2" fill="currentColor"/><path d="M9 12h6M15 9.2 9.5 11.4M15 14.8 9.5 12.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="reading-label"><small>Filters</small><strong id="map-name">Conversation</strong></span></button>
+        <div id="map-popover" class="tool-popover" hidden role="dialog" aria-label="How the map is grouped">
+          <div class="map-modes" role="radiogroup" aria-label="How the map is grouped">
+            <button type="button" data-map="conversation" role="radio" aria-checked="true">Conversation</button>
+            <button type="button" data-map="townhall" role="radio" aria-checked="false">Townhall</button>
+            <button type="button" data-map="geography" role="radio" aria-checked="false">Place</button>
+            <button type="button" data-map="objectType" role="radio" aria-checked="false">Type</button>
+            <button type="button" data-map="style" role="radio" aria-checked="false">Look</button>
+            <button type="button" data-map="theme" role="radio" aria-checked="false">Theme</button>
+            <button type="button" data-map="motif" role="radio" aria-checked="false">Symbol</button>
+          </div>
+        </div>
+      </div>
+  <button type="button" id="header-perspective" class="browse-tab browse-perspective" data-sheet="reading" aria-haspopup="dialog" aria-expanded="false" aria-controls="reading-popover"><img id="header-persona-icon" width="26" height="26" alt=""><span><small>Perspective</small><strong id="header-persona-name">Family</strong></span><span aria-hidden="true">⌄</span></button>
+ </nav>
 </header>
 <section id="admin" class="admin" hidden role="dialog" aria-modal="true" aria-labelledby="admin-title">
   <button type="button" id="admin-close" class="close-icon" aria-label="Close settings" title="Close settings">×</button>
@@ -140,7 +147,7 @@
   </div>
   <div id="path-timeline" class="path-timeline">
     <button type="button" id="questions-back">← Current conversation</button>
-    <p id="timeline-title" class="timeline-title"></p>
+    <p id="timeline-title" tabindex="-1" class="timeline-title"></p>
     <button id="feed-perspective-toggle" class="mobile-perspective-trigger" type="button" aria-haspopup="dialog" aria-controls="mobile-perspective-sheet" aria-label="Choose perspective, currently Family">
       <span>Perspective</span><strong id="feed-perspective-name">Family</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>

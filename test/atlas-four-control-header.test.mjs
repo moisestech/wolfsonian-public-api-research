@@ -2,18 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-test('the top bar is a map selector plus one display menu',async()=>{
+test('the masthead has one menu and a second row for views, filters and perspective',async()=>{
   const html=await readFile(new URL('../demo/archive-society/index.html',import.meta.url),'utf8');
   const nav=html.match(/<nav class="top-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
   assert.ok(nav,'a single visitor-facing top navigation must exist');
-  assert.match(nav,/id="map-toggle"/);
-  assert.match(nav,/data-map="conversation"[^>]*>Conversation<\/button>/);
-  assert.match(nav,/data-map="townhall"[^>]*>Townhall<\/button>/);
+  const browse=html.match(/<nav class="browse-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+  assert.ok(browse);
+  for(const id of ['header-townhall','header-conversation','map-toggle','header-perspective'])assert.ok(browse.includes('id="'+id+'"'));
+  assert.match(browse,/id="map-toggle"/);
+  assert.match(browse,/data-map="conversation"[^>]*>Conversation<\/button>/);
+  assert.match(browse,/data-map="townhall"[^>]*>Townhall<\/button>/);
   assert.match(nav,/id="display-menu"[^>]*aria-label="Menu"/);
   assert.match(nav,/href="\.\.\/object-lens\/"[^>]*aria-label="Open Object Lens"/);
   assert.match(nav,/id="appearance-toggle"[^>]*aria-label="Switch to light appearance"/);
   assert.match(nav,/id="source-info"[^>]*aria-label="Information about this artwork"/);
-  const indexes=['id="map-toggle"','data-map="conversation"','data-map="townhall"','id="display-menu"','href="../object-lens/"','id="appearance-toggle"','id="source-info"'].map(s=>nav.indexOf(s));
+  const indexes=['id="display-menu"','href="../object-lens/"','id="appearance-toggle"','id="source-info"'].map(s=>nav.indexOf(s));
   assert.ok(indexes.every(i=>i>=0));
   assert.deepEqual(indexes,[...indexes].sort((a,b)=>a-b));
   assert.doesNotMatch(nav,/data-panel="conversation"|data-panel="record"/);
@@ -23,11 +26,11 @@ test('the top bar is a map selector plus one display menu',async()=>{
   assert.doesNotMatch(html,/id="admin-toggle"|aria-label="Settings"[^>]*<svg/);
   assert.doesNotMatch(html,/adminPassword|staffPassword|settingsPassword/i,'do not introduce client-side staff authorization');
 });
-test('top navigation stays on one row on a phone and on a desktop',async()=>{
+test('second navigation row scrolls horizontally with accessible touch targets',async()=>{
   const css=await readFile(new URL('../demo/archive-society/society.css',import.meta.url),'utf8');
   assert.match(css,/\.top-nav\{display:flex;flex-wrap:nowrap/);
   assert.match(css,/@media\(max-width:700px\)/);
-  assert.match(css,/\.top-nav\{width:100%;justify-content:space-between/);
+  assert.match(css,/\.browse-nav\{[^}]*overflow-x:auto/);
   assert.match(css,/min-height:44px/);
   assert.match(css,/\.display-menu\{display:inline-flex/);
   assert.match(css,/\.nav-tools\{display:none/);
