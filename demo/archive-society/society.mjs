@@ -941,7 +941,14 @@ function questionCard(episode,objects){
   swatch.className='question-card-swatch';
   swatch.setAttribute('aria-hidden','true');
   reasonRow.append(swatch,node('span',reason));
-  face.append(reasonRow);
+  const status=node('span',undefined,'question-card-status');
+  const wave=node('span',undefined,'question-card-wave');
+  wave.setAttribute('aria-hidden','true');
+  for(let bar=0;bar<5;bar++)wave.append(node('i'));
+  status.append(wave,node('span',episode.turns.length?'Conversation':'Open question'));
+  const top=node('span',undefined,'question-card-top');
+  top.append(status,reasonRow);
+  face.append(top);
   if(current){
     const meta=node('span',undefined,'question-card-meta');
     meta.append(node('span','Current room','current-room'));
