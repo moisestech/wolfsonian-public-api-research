@@ -15,7 +15,7 @@ try {
   page.on('pageerror',e=>errors.push(e.message));
   page.on('request',req=>{const url=req.url();if(!url.startsWith(base)&&!url.startsWith('blob:')&&!url.startsWith('data:')&&!url.startsWith('https://res.cloudinary.com/'))external.push(url);if(url.includes('/api/archive-society/voice'))voiceRequests.push(url);});
   const open=async()=>{
-    await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
+    await page.goto(base+'/demo/archive-society/?screen=room',{waitUntil:'networkidle'});
     await page.waitForFunction(()=>document.querySelector('#room-question')?.textContent);
   };
   const selectEdge=async index=>{await page.locator('.conversation-edge').nth(index).focus();await page.keyboard.press('Enter');};
@@ -54,6 +54,15 @@ try {
     });
   };
   await mkdir(new URL('artifacts/',root),{recursive:true});
+  // Fresh visits begin in the full field on desktop and phone; refresh restores it.
+  for(const width of [1280,390]){
+    await page.setViewportSize({width,height:900});
+    await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
+    assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('show-timeline')));
+    await page.reload({waitUntil:'networkidle'});
+    assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('show-timeline')));
+  }
+  await page.setViewportSize({width:1280,height:900});
   await open();
   // Every desktop/mobile identity uses and successfully decodes its own flat circular artwork.
   for(const selector of ['#reading-popover','#mobile-perspective-choices']){

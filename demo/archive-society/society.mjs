@@ -2595,5 +2595,5 @@ if(arrival.subject)state.records=withPublicAnchorFallback(state.records);
 categories();options();
 restoreVisit(arrival);
 if(location.search)commitVisit('replace');
-if(!location.search)startDream('arrival',ARRIVAL_MS);
+// The default Townhall field is available immediately on arrival.
 if(arrival.subject&&!subjectInSociety(arrival.subject)&&!arrival.path)message('import-status','Requested accession is not in the loaded set. No identity was assumed.');

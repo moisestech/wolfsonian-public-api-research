@@ -11,7 +11,7 @@ function clean(value){
 }
 
 export function emptyVisit(){
-  return {screen:'room', subject:null, with:null, path:null, about:null, record:null, lens:null, theme:null};
+  return {screen:'townhall', subject:null, with:null, path:null, about:null, record:null, lens:null, theme:null};
 }
 
 export function parseVisit(search=''){
@@ -22,7 +22,8 @@ export function parseVisit(search=''){
   const partner = path ? null : clean(params.get('with'));
   const lens = clean(params.get('lens'));
   const theme = clean(params.get('theme'));
-  const screen = SCREENS.has(requested) ? requested : 'room';
+  // Unaddressed visits begin with the whole field; object/path links retain their room.
+  const screen = SCREENS.has(requested) ? requested : (subject || path || partner ? 'room' : 'townhall');
   return {
     screen,
     subject,
@@ -44,8 +45,8 @@ export function serializeVisit(visit={}){
   const record = screen === 'record' ? (clean(visit.record) || subject) : null;
   const lens = clean(visit.lens);
   const theme = clean(visit.theme);
-  const bareRoom = screen === 'room' && !subject && !path && !partner && (!lens || lens === 'family') && !theme;
-  if(bareRoom) return '';
+  const bareTownhall = screen === 'townhall' && !subject && !path && !partner && (!lens || lens === 'family') && !theme;
+  if(bareTownhall) return '';
   const params = new URLSearchParams();
   params.set('screen', screen);
   if(subject) params.set('subject', subject);

@@ -31,7 +31,7 @@ test('other conversations keep the map neighborhood and name the hall subject', 
 });
 
 test('townhall and record are their own screens', () => {
-  assert.equal(serializeVisit({screen:'townhall'}), '?screen=townhall');
+  assert.equal(serializeVisit({screen:'townhall'}), '');
   const record = parseVisit('?screen=record&subject=85.4.64.43&with=TD1989.318.1&record=TD1989.318.1');
   assert.equal(record.screen, 'record');
   assert.equal(record.subject, '85.4.64.43');
@@ -41,9 +41,9 @@ test('townhall and record are their own screens', () => {
 });
 
 test('family, an empty theme, and the untouched opening stay out of the bar', () => {
-  assert.equal(serializeVisit({screen:'room', lens:'family', theme:''}), '');
+  assert.equal(serializeVisit({screen:'room', lens:'family', theme:''}), '?screen=room');
   const blank = parseVisit('');
-  assert.equal(blank.screen, 'room');
+  assert.equal(blank.screen, 'townhall');
   assert.equal(blank.subject, null);
   assert.equal(blank.with, null);
   assert.equal(blank.path, null);
@@ -73,4 +73,11 @@ test('a comma accession stays one identity', () => {
   assert.equal(visit.subject, '85.7.383a,b');
   assert.equal(visit.with, '86.17.1');
   assert.equal(parseVisit(serializeVisit(visit)).subject, '85.7.383a,b');
+});
+
+test('unaddressed visits open the field and explicit room URLs survive refresh',()=>{
+  for(const query of ['', '?lens=worker', '?theme=Machines'])assert.equal(parseVisit(query).screen,'townhall');
+  assert.equal(parseVisit('?subject=85.4.64.43&with=TD1989.318.1').screen,'room');
+  assert.equal(parseVisit(serializeVisit({screen:'room'})).screen,'room');
+  assert.equal(parseVisit('?screen=townhall&subject=85.4.64.43').screen,'townhall');
 });
