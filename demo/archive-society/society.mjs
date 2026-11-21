@@ -2489,7 +2489,10 @@ document.addEventListener('pointermove',()=>{
 },{passive:true});
 const stage=mountForceStage($('stage'),{onSelect:id=>onGraphSelect(id),onLink:(source,target)=>onGraphLink(source,target),onDrag:wakeDream,background:'#111111',dream:true});
 // The map tracks space returned by the masthead, including reduced-motion changes.
-new ResizeObserver(()=>stage.resize()).observe(document.querySelector('.topbar'));
+new ResizeObserver(entries=>{
+  document.documentElement.style.setProperty('--archive-header-height',entries[0].target.getBoundingClientRect().height+'px');
+  stage.resize();
+}).observe(document.querySelector('.topbar'));
 stageApi=stage;
 watchPointing($('conversation-content'));
 watchPointing($('room-header'));

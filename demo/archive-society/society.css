@@ -1509,3 +1509,4 @@ html[data-color-theme="light"] .browse-tab[aria-current="page"]::after{backgroun
 .room-header:not(.is-cast-open) #scene-replay{position:static;transform:none;order:3;flex:none}
 /* Global browsing controls replace their duplicate in-content triggers. */
 #room-perspective-toggle,#feed-perspective-toggle,#questions-back{display:none!important}
+@media(max-width:800px){body.show-room .atlas-panel{top:var(--archive-header-height,116px)}}
