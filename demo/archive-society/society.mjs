@@ -791,7 +791,7 @@ function setMobileView(view){
   document.querySelector('.topbar')?.classList.remove('is-compact');
   document.body.classList.remove('show-timeline','show-space','show-room');
   document.body.classList.add('show-'+view);
-  if(view==='timeline'){stop();paintTimeline();$('questions-back').focus();}
+  if(view==='timeline'){stop();paintTimeline();$('timeline-title').focus({preventScroll:true});}
   if(view==='room')requestAnimationFrame(()=>stage.resize());
   syncMobileNavigation();
 }

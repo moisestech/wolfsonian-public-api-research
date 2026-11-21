@@ -180,7 +180,7 @@ try {
   assert.equal(await page.locator('#cluster-badge').isHidden(),true);
   assert.equal(await page.locator('#stage').getAttribute('data-zoom'),'0');
   assert.equal(await page.locator('#stage').getAttribute('data-dream'),'awake');
-  await page.locator('#questions-back').click();
+  await page.locator('#header-conversation').click();
   await page.waitForFunction(()=>document.querySelector('#room-question')?.textContent==='Who pays the price of progress?');
   assert.equal(await page.locator('#stage').getAttribute('data-zoom'),'34');
   assert.equal(await page.locator('[data-stop="34"]').getAttribute('aria-pressed'),'true');
@@ -259,11 +259,11 @@ try {
   await page.locator('.rail-scroll').evaluate(el=>{el.scrollTop=0;el.dispatchEvent(new Event('scroll'));});
   // The perspective is visible in the mobile room and does not rewrite authored dialogue.
   await page.setViewportSize({width:390,height:844});
-  assert.equal(await page.locator('#room-perspective-toggle').isVisible(),true);
-  assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
+  assert.equal(await page.locator('#header-perspective').isVisible(),true);
+  assert.equal(await page.locator('#header-persona-name').innerText(),'Family');
   const authoredDialogue=()=>page.locator('.chat .turn:not(.perspective-turn)').allInnerTexts();
   const originalDialogue=await authoredDialogue();
-  await page.locator('#room-perspective-toggle').click();
+  await page.locator('#header-perspective').click();
   assert.equal(await page.locator('#mobile-perspective-sheet').isVisible(),true);
   assert.equal(await page.locator('#mobile-perspective-choices button').count(),11);
   // Large illustration cards must remain substantial on real narrow phone viewports.
@@ -290,21 +290,21 @@ try {
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img.persona-illustrated').getAttribute('data-persona-variant'),'full');
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img.persona-illustrated').getAttribute('data-persona-tone'),'white');
   await page.locator('#mobile-perspective-choices [data-lens="worker"]').click();
-  assert.equal(await page.locator('#room-perspective-name').innerText(),'Worker');
+  assert.equal(await page.locator('#header-persona-name').innerText(),'Worker');
   assert.equal(await page.locator('#reading-name').innerText(),'Worker');
   assert.deepEqual(await authoredDialogue(),originalDialogue,'Changing perspective does not alter an authored script');
   assert.match(await page.locator('.perspective-turn').innerText(),/Worker/);
-  await page.locator('#room-perspective-toggle').click();
+  await page.locator('#header-perspective').click();
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"]').getAttribute('aria-pressed'),'true');
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
-  assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
-  await page.locator('#room-perspective-toggle').click();
+  assert.equal(await page.locator('#header-persona-name').innerText(),'Family');
+  await page.locator('#header-perspective').click();
   await page.locator('#mobile-perspective-choices [data-lens="novice"]').click();
-  assert.equal(await page.locator('#room-perspective-name').innerText(),'Art novice');
+  assert.equal(await page.locator('#header-persona-name').innerText(),'Art novice');
   assert.deepEqual(await authoredDialogue(),originalDialogue);
-  await page.locator('#room-perspective-toggle').click();
+  await page.locator('#header-perspective').click();
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
-  assert.equal(await page.locator('#room-perspective-name').innerText(),'Family');
+  assert.equal(await page.locator('#header-persona-name').innerText(),'Family');
 
   // Six phone tabs: five locations plus the data filter. Listen, Record, and Map stay.
   assert.equal(await page.locator('#space-bar .space-tab').count(),6);
@@ -335,11 +335,11 @@ try {
   assert.equal(await page.locator('#space-evidence').count(),0,'Evidence is available in the room header, not a redundant dock action');
   await page.locator('#space-feed').click();
   assert.equal(await page.locator('#path-timeline').isVisible(),true);
-  assert.equal(await page.locator('#feed-perspective-toggle').isVisible(),true);
-  await page.locator('#feed-perspective-toggle').click();
+  assert.equal(await page.locator('#header-perspective').isVisible(),true);
+  await page.locator('#header-perspective').click();
   await page.locator('#mobile-perspective-choices [data-lens="futurist"]').click();
-  assert.equal(await page.locator('#feed-perspective-name').innerText(),'Futurist');
-  await page.locator('#feed-perspective-toggle').click();
+  assert.equal(await page.locator('#header-persona-name').innerText(),'Futurist');
+  await page.locator('#header-perspective').click();
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();
   assert.equal(await page.locator('#space-feed[aria-current="page"]').count(),1);
   assert.equal(await page.locator('#space-bar').isVisible(),true,'Bottom navigation stays available in feed');
@@ -367,7 +367,7 @@ try {
   await page.locator('#room-participants .object-more').first().click();
   assert.match(await page.locator('#timeline-title').innerText(),/More conversations with /);
   assert.ok(await page.locator('#timeline-list .path-post').count()>0,'Related room list should not be empty');
-  await page.locator('#questions-back').click();
+  await page.locator('#header-conversation').click();
   assert.equal(await page.locator('#room-question').innerText(),'Who pays the price of progress?');
   assert.equal(await page.locator('#space-room').innerText(),'Map');
   // Exact record inspection is independent of selecting/recentering an episode.
