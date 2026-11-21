@@ -6,15 +6,15 @@ import {illustratedPersonaUrl,ILLUSTRATED_PERSONAS,APPROVED_DECO_MASK_STUDIES,ap
 import { personaAssetUrl, PERSONA_ASSET_IDS } from '../src/persona-cloudinary-assets.mjs';
 const manifest=JSON.parse(await readFile(new URL('../docs/design/illustrated-persona-gallery-manifest.v1.json',import.meta.url),'utf8'));
 
-test('all eleven active personas have independent artwork rather than a symbol as their main visual',()=>{
+test('all eleven active personas have independent flat symbols as their main visual',()=>{
   assert.equal(LENSES.length,11);
   assert.deepEqual(new Set(Object.keys(ILLUSTRATED_PERSONAS)),new Set(LENSES.map(x=>x.id)));
   for(const lens of LENSES){
     for(const variant of ['full','compact']){
       const url=illustratedPersonaUrl(lens.id,{variant});
       assert.equal(url,manifest.gallery[lens.id][variant]);
-      assert.equal(manifest.gallery[lens.id].source,'sculptural-masks-v3');
-      assert.ok(url.includes('/sculptural-masks-v3/'+lens.id+'-limestone-master-v3.png'));
+      assert.equal(manifest.gallery[lens.id].source,'flat-circular-v1');
+      assert.ok(url.includes('/flat-circular-v1/'+lens.id+'-white-master-v1.png'));
       for(const tone of ['white','ink']){
         assert.equal(illustratedPersonaUrl(lens.id,{tone,variant}),manifest.gallery[lens.id][tone][variant]);
       }
@@ -49,7 +49,7 @@ test('desktop and mobile gallery use illustrated artwork at full size and preser
   assert.match(source,/Artist-authored viewpoint; not museum staff/);
 });
 
-test('legacy vectors remain available while visible identity marks use the sculptural family',async()=>{
+test('legacy vectors remain available while visible identity marks use the flat circular family',async()=>{
   const iconManifest=JSON.parse(await readFile(new URL('../docs/design/persona-cloudinary-manifest.json',import.meta.url),'utf8'));
   assert.deepEqual(new Set(PERSONA_ASSET_IDS),new Set(LENSES.map(l=>l.id)));
   assert.equal(iconManifest.counts.personaAssets,44);
@@ -67,4 +67,18 @@ test('legacy vectors remain available while visible identity marks use the sculp
   assert.match(js,/button\.append\(img,personaIdentityMark\(lens\.id\),copy\)/);
   assert.match(js,/button\.append\(portrait,personaIdentityMark\(lens\.id\),copy,check\)/);
   assert.match(css,/\.perspective-identity-mark img/);
+});
+
+// Prevent the delivery map, archived manifest and approved vector sources drifting apart.
+test('flat release preserves all tone mappings and transparent vector masters',async()=>{
+  const flat=JSON.parse(await readFile(new URL('../docs/design/persona-flat-circular-manifest.v1.json',import.meta.url),'utf8'));
+  for(const lens of LENSES)for(const tone of ['white','ink']){
+    const asset=flat.personas[lens.id][tone];
+    assert.equal(illustratedPersonaUrl(lens.id,{tone,variant:'full'}),asset.png['512']);
+    assert.equal(illustratedPersonaUrl(lens.id,{tone,variant:'compact'}),asset.png['128']);
+    const svg=await readFile(new URL('../assets/personas/flat-circular-v1/'+lens.id+'-'+tone+'.svg',import.meta.url),'utf8');
+    assert.match(svg,/viewBox="0 0 512 512"/);
+    assert.match(svg,/<circle cx="256" cy="256" r="222" fill="none"/);
+    assert.doesNotMatch(svg,/<rect|<image/);
+  }
 });

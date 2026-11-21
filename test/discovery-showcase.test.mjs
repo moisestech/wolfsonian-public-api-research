@@ -19,7 +19,7 @@ test('the presentation contains five relatable and six artist-authored personas'
     assert.match(p.prompt,/shared category/i);
     assert.match(p.prompt,/not a historical person/i);
     assert.match(portraitSvg(p),/<svg/);
-    assert.match(portraitUrl(p),/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_1024\/f_auto\/q_auto\/v\d+\/archive-dreams\/brand\/personas\//);
+    assert.match(portraitUrl(p),/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_512\/f_png\/v\d+\/archive-dreams\/brand\/personas\//);
     assert.equal(portraitUrl(p,{source:'local'}),portraitFallbackUrl(p));
     assert.match(portraitFallbackUrl(p),/^data:image\/svg\+xml/);
   }

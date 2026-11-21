@@ -1,0 +1,272 @@
+{
+  "schema": "archive-society/flat-circular-v1",
+  "status": "Artist-approved for production integration on 2026-11-21",
+  "personas": {
+    "novice": {
+      "ink": {
+        "assetId": "719d39bf5f69245681eee403214f1164",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/novice-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286548/archive-dreams/brand/personas/flat-circular-v1/novice-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286548/archive-dreams/brand/personas/flat-circular-v1/novice-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286548/archive-dreams/brand/personas/flat-circular-v1/novice-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286548/archive-dreams/brand/personas/flat-circular-v1/novice-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286548/archive-dreams/brand/personas/flat-circular-v1/novice-ink-master-v1.png"
+        }
+      },
+      "white": {
+        "assetId": "93dc55e5ad2f43110b025e6f4ee6d3aa",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/novice-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286558/archive-dreams/brand/personas/flat-circular-v1/novice-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286558/archive-dreams/brand/personas/flat-circular-v1/novice-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286558/archive-dreams/brand/personas/flat-circular-v1/novice-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286558/archive-dreams/brand/personas/flat-circular-v1/novice-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286558/archive-dreams/brand/personas/flat-circular-v1/novice-white-master-v1.png"
+        }
+      }
+    },
+    "family": {
+      "ink": {
+        "assetId": "9f4f7c0abc10870273d79bde82cf37fa",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/family-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286551/archive-dreams/brand/personas/flat-circular-v1/family-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286551/archive-dreams/brand/personas/flat-circular-v1/family-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286551/archive-dreams/brand/personas/flat-circular-v1/family-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286551/archive-dreams/brand/personas/flat-circular-v1/family-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286551/archive-dreams/brand/personas/flat-circular-v1/family-ink-master-v1.png"
+        }
+      },
+      "white": {
+        "assetId": "84629a2a285d8107dbfe44947b5d8351",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/family-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286555/archive-dreams/brand/personas/flat-circular-v1/family-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286555/archive-dreams/brand/personas/flat-circular-v1/family-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286555/archive-dreams/brand/personas/flat-circular-v1/family-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286555/archive-dreams/brand/personas/flat-circular-v1/family-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286555/archive-dreams/brand/personas/flat-circular-v1/family-white-master-v1.png"
+        }
+      }
+    },
+    "tourist": {
+      "white": {
+        "assetId": "d1ebc04c7aac854ed34cfc113e2d9e5b",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/tourist-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286563/archive-dreams/brand/personas/flat-circular-v1/tourist-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286563/archive-dreams/brand/personas/flat-circular-v1/tourist-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286563/archive-dreams/brand/personas/flat-circular-v1/tourist-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286563/archive-dreams/brand/personas/flat-circular-v1/tourist-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286563/archive-dreams/brand/personas/flat-circular-v1/tourist-white-master-v1.png"
+        }
+      },
+      "ink": {
+        "assetId": "4a42a40fa8fcc2bebdf39cf29b8ae4a9",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/tourist-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286567/archive-dreams/brand/personas/flat-circular-v1/tourist-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286567/archive-dreams/brand/personas/flat-circular-v1/tourist-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286567/archive-dreams/brand/personas/flat-circular-v1/tourist-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286567/archive-dreams/brand/personas/flat-circular-v1/tourist-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286567/archive-dreams/brand/personas/flat-circular-v1/tourist-ink-master-v1.png"
+        }
+      }
+    },
+    "worker": {
+      "white": {
+        "assetId": "d8e17a6d2dac7074d65a4ecfb88756c7",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/worker-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286578/archive-dreams/brand/personas/flat-circular-v1/worker-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286578/archive-dreams/brand/personas/flat-circular-v1/worker-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286578/archive-dreams/brand/personas/flat-circular-v1/worker-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286578/archive-dreams/brand/personas/flat-circular-v1/worker-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286578/archive-dreams/brand/personas/flat-circular-v1/worker-white-master-v1.png"
+        }
+      },
+      "ink": {
+        "assetId": "9f7b3fd1f49863d6deaf6262ef6658c6",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/worker-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286596/archive-dreams/brand/personas/flat-circular-v1/worker-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286596/archive-dreams/brand/personas/flat-circular-v1/worker-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286596/archive-dreams/brand/personas/flat-circular-v1/worker-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286596/archive-dreams/brand/personas/flat-circular-v1/worker-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286596/archive-dreams/brand/personas/flat-circular-v1/worker-ink-master-v1.png"
+        }
+      }
+    },
+    "connoisseur": {
+      "ink": {
+        "assetId": "f3c4fa412c7b9eb9da25bb0eae8a1f28",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/connoisseur-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286581/archive-dreams/brand/personas/flat-circular-v1/connoisseur-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286581/archive-dreams/brand/personas/flat-circular-v1/connoisseur-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286581/archive-dreams/brand/personas/flat-circular-v1/connoisseur-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286581/archive-dreams/brand/personas/flat-circular-v1/connoisseur-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286581/archive-dreams/brand/personas/flat-circular-v1/connoisseur-ink-master-v1.png"
+        }
+      },
+      "white": {
+        "assetId": "0b520743750889e1b4f2f1bc3d32854a",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/connoisseur-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286591/archive-dreams/brand/personas/flat-circular-v1/connoisseur-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286591/archive-dreams/brand/personas/flat-circular-v1/connoisseur-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286591/archive-dreams/brand/personas/flat-circular-v1/connoisseur-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286591/archive-dreams/brand/personas/flat-circular-v1/connoisseur-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286591/archive-dreams/brand/personas/flat-circular-v1/connoisseur-white-master-v1.png"
+        }
+      }
+    },
+    "archivist": {
+      "white": {
+        "assetId": "ab7c5417584fead8e1a2726b5b72399f",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/archivist-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286584/archive-dreams/brand/personas/flat-circular-v1/archivist-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286584/archive-dreams/brand/personas/flat-circular-v1/archivist-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286584/archive-dreams/brand/personas/flat-circular-v1/archivist-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286584/archive-dreams/brand/personas/flat-circular-v1/archivist-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286584/archive-dreams/brand/personas/flat-circular-v1/archivist-white-master-v1.png"
+        }
+      },
+      "ink": {
+        "assetId": "b3472efff6b79b3ce9616cf4155d0565",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/archivist-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286587/archive-dreams/brand/personas/flat-circular-v1/archivist-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286587/archive-dreams/brand/personas/flat-circular-v1/archivist-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286587/archive-dreams/brand/personas/flat-circular-v1/archivist-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286587/archive-dreams/brand/personas/flat-circular-v1/archivist-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286587/archive-dreams/brand/personas/flat-circular-v1/archivist-ink-master-v1.png"
+        }
+      }
+    },
+    "futurist": {
+      "ink": {
+        "assetId": "4f6f06673d467e06927c4b60e838a4de",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/futurist-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286594/archive-dreams/brand/personas/flat-circular-v1/futurist-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286594/archive-dreams/brand/personas/flat-circular-v1/futurist-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286594/archive-dreams/brand/personas/flat-circular-v1/futurist-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286594/archive-dreams/brand/personas/flat-circular-v1/futurist-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286594/archive-dreams/brand/personas/flat-circular-v1/futurist-ink-master-v1.png"
+        }
+      },
+      "white": {
+        "assetId": "9569849e7dfa71903c3d7255de86224f",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/futurist-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286599/archive-dreams/brand/personas/flat-circular-v1/futurist-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286599/archive-dreams/brand/personas/flat-circular-v1/futurist-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286599/archive-dreams/brand/personas/flat-circular-v1/futurist-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286599/archive-dreams/brand/personas/flat-circular-v1/futurist-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286599/archive-dreams/brand/personas/flat-circular-v1/futurist-white-master-v1.png"
+        }
+      }
+    },
+    "museum": {
+      "ink": {
+        "assetId": "0c8e43803d99cb10ed332c973e64355f",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/museum-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286610/archive-dreams/brand/personas/flat-circular-v1/museum-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286610/archive-dreams/brand/personas/flat-circular-v1/museum-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286610/archive-dreams/brand/personas/flat-circular-v1/museum-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286610/archive-dreams/brand/personas/flat-circular-v1/museum-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286610/archive-dreams/brand/personas/flat-circular-v1/museum-ink-master-v1.png"
+        }
+      },
+      "white": {
+        "assetId": "280d95b8df9f2c98b8c7387eef1ec3c6",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/museum-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286623/archive-dreams/brand/personas/flat-circular-v1/museum-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286623/archive-dreams/brand/personas/flat-circular-v1/museum-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286623/archive-dreams/brand/personas/flat-circular-v1/museum-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286623/archive-dreams/brand/personas/flat-circular-v1/museum-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286623/archive-dreams/brand/personas/flat-circular-v1/museum-white-master-v1.png"
+        }
+      }
+    },
+    "mourner": {
+      "ink": {
+        "assetId": "8bb2be76d31d7f78972498ed8c991699",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/mourner-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286613/archive-dreams/brand/personas/flat-circular-v1/mourner-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286613/archive-dreams/brand/personas/flat-circular-v1/mourner-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286613/archive-dreams/brand/personas/flat-circular-v1/mourner-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286613/archive-dreams/brand/personas/flat-circular-v1/mourner-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286613/archive-dreams/brand/personas/flat-circular-v1/mourner-ink-master-v1.png"
+        }
+      },
+      "white": {
+        "assetId": "78fad897ce9df8a9838a4f224cf0f59a",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/mourner-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286634/archive-dreams/brand/personas/flat-circular-v1/mourner-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286634/archive-dreams/brand/personas/flat-circular-v1/mourner-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286634/archive-dreams/brand/personas/flat-circular-v1/mourner-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286634/archive-dreams/brand/personas/flat-circular-v1/mourner-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286634/archive-dreams/brand/personas/flat-circular-v1/mourner-white-master-v1.png"
+        }
+      }
+    },
+    "propagandist": {
+      "white": {
+        "assetId": "aa981ae0e91682510147778d5dd75eda",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/propagandist-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286615/archive-dreams/brand/personas/flat-circular-v1/propagandist-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286615/archive-dreams/brand/personas/flat-circular-v1/propagandist-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286615/archive-dreams/brand/personas/flat-circular-v1/propagandist-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286615/archive-dreams/brand/personas/flat-circular-v1/propagandist-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286615/archive-dreams/brand/personas/flat-circular-v1/propagandist-white-master-v1.png"
+        }
+      },
+      "ink": {
+        "assetId": "934aed051175edf7a2162aa6fdf01c0f",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/propagandist-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286626/archive-dreams/brand/personas/flat-circular-v1/propagandist-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286626/archive-dreams/brand/personas/flat-circular-v1/propagandist-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286626/archive-dreams/brand/personas/flat-circular-v1/propagandist-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286626/archive-dreams/brand/personas/flat-circular-v1/propagandist-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286626/archive-dreams/brand/personas/flat-circular-v1/propagandist-ink-master-v1.png"
+        }
+      }
+    },
+    "counterfeit": {
+      "white": {
+        "assetId": "1794ea85966e6247b4c2d74773953af2",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/counterfeit-white-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286620/archive-dreams/brand/personas/flat-circular-v1/counterfeit-white-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286620/archive-dreams/brand/personas/flat-circular-v1/counterfeit-white-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286620/archive-dreams/brand/personas/flat-circular-v1/counterfeit-white-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286620/archive-dreams/brand/personas/flat-circular-v1/counterfeit-white-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286620/archive-dreams/brand/personas/flat-circular-v1/counterfeit-white-master-v1.png"
+        }
+      },
+      "ink": {
+        "assetId": "24f56a3e93a9e7b73d0769a0ef1642c1",
+        "publicId": "archive-dreams/brand/personas/flat-circular-v1/counterfeit-ink-master-v1",
+        "svg": "https://res.cloudinary.com/dck5rzi4h/image/upload/v1795286631/archive-dreams/brand/personas/flat-circular-v1/counterfeit-ink-master-v1.svg",
+        "png": {
+          "32": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_32/f_png/v1795286631/archive-dreams/brand/personas/flat-circular-v1/counterfeit-ink-master-v1.png",
+          "48": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_48/f_png/v1795286631/archive-dreams/brand/personas/flat-circular-v1/counterfeit-ink-master-v1.png",
+          "128": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/f_png/v1795286631/archive-dreams/brand/personas/flat-circular-v1/counterfeit-ink-master-v1.png",
+          "512": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/f_png/v1795286631/archive-dreams/brand/personas/flat-circular-v1/counterfeit-ink-master-v1.png"
+        }
+      }
+    }
+  },
+  "driveFolder": "https://drive.google.com/drive/folders/1s9gTLSqWiinu3eATDq3A1mAFZudfupHR",
+  "sop": "https://docs.google.com/document/d/1-jYKrhOVNCDuZTTh-7-pt0xJkTCXxIIv_PbsylFbfs8/edit"
+}
