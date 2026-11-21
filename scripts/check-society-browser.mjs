@@ -25,6 +25,7 @@ try {
     if(await filter.isVisible()){
       if(await filter.getAttribute('aria-expanded')!=='true')await filter.click();
       await page.locator('#data-filter [data-map="townhall"]').click();
+      await page.locator('#data-filter-close').click();
       return;
     }
     const toggle=page.locator('#map-toggle');
