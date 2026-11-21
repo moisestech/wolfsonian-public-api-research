@@ -9,7 +9,7 @@ test('the top bar is a map selector plus one display menu',async()=>{
   assert.match(nav,/id="map-toggle"/);
   assert.match(nav,/data-map="conversation"[^>]*>Conversation<\/button>/);
   assert.match(nav,/data-map="townhall"[^>]*>Townhall<\/button>/);
-  assert.match(nav,/id="display-menu"[^>]*aria-label="Display options"/);
+  assert.match(nav,/id="display-menu"[^>]*aria-label="Menu"/);
   assert.match(nav,/href="\.\.\/object-lens\/"[^>]*aria-label="Open Object Lens"/);
   assert.match(nav,/id="appearance-toggle"[^>]*aria-label="Switch to light appearance"/);
   assert.match(nav,/id="source-info"[^>]*aria-label="Information about this artwork"/);
