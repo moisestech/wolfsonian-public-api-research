@@ -231,6 +231,7 @@ function closeDataFilter(){
   if(!panel||panel.hidden)return;
   panel.hidden=true;
   $('space-filter')?.setAttribute('aria-expanded','false');
+  if(mobileLayout())$('map-toggle')?.setAttribute('aria-expanded','false');
 }
 function placeDataFilters(){
   const modes=document.querySelector('.map-modes');
@@ -828,6 +829,8 @@ function placeRoomHeader(){
   syncMobileRoomStage();
 }
 function syncMobileLayout(){
+  $('map-toggle')?.setAttribute('aria-controls',mobileLayout()?'data-filter':'map-popover');
+  $('header-perspective')?.setAttribute('aria-controls',mobileLayout()?'mobile-perspective-sheet':'reading-popover');
   placeDataFilters();
   placeZoomStage();
   placeRoomHeader();
@@ -2345,6 +2348,7 @@ $('space-filter')?.addEventListener('click',()=>{
   const open=panel.hidden;
   panel.hidden=!open;
   $('space-filter').setAttribute('aria-expanded',String(open));
+  $('map-toggle')?.setAttribute('aria-expanded',String(open));
   if(open)$('data-filter-title')?.focus();
 });
 $('data-filter-close')?.addEventListener('click',()=>{closeDataFilter();$('space-filter')?.focus();});
@@ -2370,6 +2374,9 @@ $('map-toggle')?.addEventListener('click',event=>{
 $('space-conversation')?.addEventListener('click',()=>{
   setPanel('conversation');
   setMobileView('space');
+  render();
+  setZoomT(34);
+  markMapChoice(state.mapMode);
   $('room-question')?.focus({preventScroll:true});
   commitVisit('push');
 });
@@ -2481,6 +2488,8 @@ document.addEventListener('pointermove',()=>{
   else if(dreamReason==='awake')armIdle();
 },{passive:true});
 const stage=mountForceStage($('stage'),{onSelect:id=>onGraphSelect(id),onLink:(source,target)=>onGraphLink(source,target),onDrag:wakeDream,background:'#111111',dream:true});
+// The map tracks space returned by the masthead, including reduced-motion changes.
+new ResizeObserver(()=>stage.resize()).observe(document.querySelector('.topbar'));
 stageApi=stage;
 watchPointing($('conversation-content'));
 watchPointing($('room-header'));
