@@ -2013,7 +2013,7 @@ function perspectiveSections(buildChoice){
 
 /** Approved masks remain visible as a separate artwork family without assigning
  *  the three unnamed studies to historical or institutional speakers. */
-/** Compact identity marks share the sculptural artwork used by the gallery. */
+/** Compact identity marks share the flat circular artwork used by the gallery. */
 function personaIdentityMark(id){
   const mark=node('span',undefined,'perspective-identity-mark');
   mark.setAttribute('aria-hidden','true');
@@ -2051,7 +2051,7 @@ $('reading-popover').replaceChildren(...perspectiveSections(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button');
   button.type='button';button.className='reading-choice';button.dataset.lens=lens.id;
-  const img=node('img');bindPersonaImage(img,card,'full',null,'sepia');
+  const img=node('img');bindPersonaImage(img,card,'full','white','sepia');
   img.classList.add('perspective-art');
   const label=lens.id==='museum'?lens.label+' · fictional':lens.label;
   const copy=node('span',undefined,'perspective-card-copy');

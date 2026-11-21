@@ -42,7 +42,7 @@ test('title motion has mobile layout and reduced-motion safeguards',async()=>{
   const js=await readFile(new URL('../demo/archive-society/editorial-headline.mjs',import.meta.url),'utf8');
   assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
   assert.match(css,/\.brand-phrase\.is-changing/);
-  assert.match(css,/\.brand-area\{width:100%/);
+  assert.match(css,/@media\(max-width:800px\)[\s\S]*?\.brand-area\{width:auto;flex:0 1 auto/);
   assert.match(js,/visibilitychange/);
   assert.match(js,/focusin/);
   assert.match(js,/mouseenter/);
