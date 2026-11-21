@@ -773,6 +773,10 @@ function paintScene(c,edge){
 }
 function mobileLayout(){return window.matchMedia('(max-width: 800px)').matches;}
 function syncMobileNavigation(){
+  const hall=document.body.classList.contains('show-timeline');
+  for(const [id,active] of [['header-townhall',hall&&!relatedQuestions],['header-conversation',!hall]]){
+    if(active)$(id)?.setAttribute('aria-current','page');else $(id)?.removeAttribute('aria-current');
+  }
   const view=document.body.classList.contains('show-timeline')?'feed':
     document.body.classList.contains('show-room')?'map':
     document.querySelector('.evidence-rail')?.classList.contains('show-record')?'record':'conversation';
@@ -784,6 +788,7 @@ function syncMobileNavigation(){
   }
 }
 function setMobileView(view){
+  document.querySelector('.topbar')?.classList.remove('is-compact');
   document.body.classList.remove('show-timeline','show-space','show-room');
   document.body.classList.add('show-'+view);
   if(view==='timeline'){stop();paintTimeline();$('questions-back').focus();}
@@ -1829,6 +1834,10 @@ function paintRailLink(color){
 function paintReading(){
   const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   const personaLabel=card.id==='museum'?card.label+' · fictional':card.label;
+  $('header-perspective')?.setAttribute('aria-controls',mobileLayout()?'mobile-perspective-sheet':'reading-popover');
+  if($('header-persona-name'))$('header-persona-name').textContent=personaLabel;
+  $('header-perspective')?.setAttribute('aria-label','Choose perspective, currently '+personaLabel);
+  if($('header-persona-icon'))bindPersonaImage($('header-persona-icon'),card,'compact');
   const dockPortrait=$('reading-portrait');
   if(dockPortrait)bindPersonaImage(dockPortrait,card,'compact');
   if($('reading-name'))$('reading-name').textContent=personaLabel;
@@ -2073,6 +2082,7 @@ function closeMobilePerspectives(){if(mobilePerspectiveSheet?.open)mobilePerspec
 function openMobilePerspectives(opener){
   if(!mobileLayout()||!mobilePerspectiveSheet)return;
   mobilePerspectiveOpener=opener;
+  opener?.setAttribute('aria-expanded','true');
   closeSheet();
   mobilePerspectiveSheet.showModal();
   mobilePerspectiveSheet.querySelector('[data-lens="'+state.lens+'"]')?.focus();
@@ -2083,7 +2093,7 @@ for(const id of ['room','feed']){
 }
 $('mobile-perspective-close')?.addEventListener('click',closeMobilePerspectives);
 mobilePerspectiveSheet?.addEventListener('click',event=>{if(event.target===mobilePerspectiveSheet)closeMobilePerspectives();});
-mobilePerspectiveSheet?.addEventListener('close',()=>{mobilePerspectiveOpener?.focus({preventScroll:true});mobilePerspectiveOpener=null;});
+mobilePerspectiveSheet?.addEventListener('close',()=>{mobilePerspectiveOpener?.setAttribute('aria-expanded','false');mobilePerspectiveOpener?.focus({preventScroll:true});mobilePerspectiveOpener=null;});
 $('mobile-perspective-choices')?.replaceChildren(...perspectiveSections(lens=>{
   const card=CARD_BY_ID.get(lens.id);
   const button=node('button',undefined,'mobile-perspective-choice');
@@ -2348,6 +2358,15 @@ $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'sp
 $('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();commitVisit('push');});
 function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;wakeDream();stage.setSpeaking('');stage.setPairHighlight('','',null);stage.setClusterHighlight([],'');markMapChoice('townhall');setMobileView('timeline');render();commitVisit('push');}
 $('space-feed')?.addEventListener('click',browseAll);
+$('header-townhall')?.addEventListener('click',browseAll);
+$('header-conversation')?.addEventListener('click',()=>$('space-conversation').click());
+// On phones the same Filters control opens the full data sheet.
+$('map-toggle')?.addEventListener('click',event=>{
+  if(!mobileLayout())return;
+  event.stopImmediatePropagation();
+  closeSheet();
+  $('space-filter').click();
+},true);
 $('space-conversation')?.addEventListener('click',()=>{
   setPanel('conversation');
   setMobileView('space');
@@ -2363,6 +2382,7 @@ $('space-record')?.addEventListener('click',()=>{
 });
 $('space-leave')?.addEventListener('click',browseAll);
 $('display-menu')?.addEventListener('click',()=>{
+  document.querySelector('.topbar')?.classList.remove('is-compact');
   const nav=$('display-menu').closest('.top-nav');
   const open=!nav.classList.contains('is-display-open');
   nav.classList.toggle('is-display-open',open);
@@ -2384,6 +2404,30 @@ window.addEventListener('resize',()=>{
   syncSubjectFocus();
 });
 readingScroller()?.addEventListener('scroll',syncMobileRoomStage,{passive:true});
+// Observe the application's actual scrolling panels, not wheel gestures or graph panning.
+const headerScrollPositions=new WeakMap();
+let headerScrollDirection=0,headerScrollDistance=0,headerSettlingUntil=0;
+document.addEventListener('scroll',event=>{
+  const surface=event.target;
+  if(!(surface instanceof HTMLElement)||!surface.matches('.rail-scroll,.path-timeline'))return;
+  const y=Math.max(0,surface.scrollTop),previous=headerScrollPositions.get(surface)??0;
+  headerScrollPositions.set(surface,y);
+  const header=document.querySelector('.topbar');
+  if(y<8){header.classList.remove('is-compact');headerScrollDistance=0;return;}
+  if(performance.now()<headerSettlingUntil||header.querySelector(':focus-visible')||document.querySelector('.is-display-open')||!$('data-filter').hidden)return;
+  const delta=y-previous,direction=Math.sign(delta);
+  if(direction!==headerScrollDirection)headerScrollDistance=0;
+  headerScrollDirection=direction;headerScrollDistance+=Math.abs(delta);
+  if(headerScrollDistance<18)return;
+  const compact=direction>0&&y>48;
+  if(compact!==header.classList.contains('is-compact')){
+    header.classList.toggle('is-compact',compact);
+    headerSettlingUntil=performance.now()+220;
+  }
+  headerScrollDistance=0;
+},{capture:true,passive:true});
+document.querySelector('.browse-nav')?.addEventListener('focusin',event=>event.target.scrollIntoView({block:'nearest',inline:'nearest'}));
+
 let stageApi=null;
 const motionQuery=window.matchMedia('(prefers-reduced-motion: reduce)');
 let dreamReason='awake';

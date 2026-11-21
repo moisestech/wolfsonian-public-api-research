@@ -59,6 +59,24 @@ try {
     await page.setViewportSize({width,height:900});
     await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
     assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('show-timeline')));
+    const header=page.locator('.topbar');
+    const fullHeight=await header.evaluate(el=>el.getBoundingClientRect().height);
+    await page.locator('#path-timeline').evaluate(el=>{el.scrollTop=220;el.dispatchEvent(new Event('scroll'));});
+    await page.waitForFunction(()=>document.querySelector('.topbar').classList.contains('is-compact'));
+    await page.waitForTimeout(250);
+    assert.ok(await header.evaluate(el=>el.getBoundingClientRect().height)<fullHeight-40);
+    assert.ok(await page.locator('.browse-nav').isVisible());
+    await page.locator('#path-timeline').evaluate(el=>{el.scrollTop=60;el.dispatchEvent(new Event('scroll'));});
+    await page.waitForFunction(()=>!document.querySelector('.topbar').classList.contains('is-compact'));
+    await page.waitForTimeout(250);
+    assert.ok(await page.locator('#editorial-phrase').isVisible());
+    if(width===390){
+      assert.ok(await page.locator('.browse-nav').evaluate(el=>el.scrollWidth>el.clientWidth));
+      await page.locator('#header-perspective').scrollIntoViewIfNeeded();
+      await page.locator('#header-perspective').click();
+      assert.ok(await page.locator('#mobile-perspective-sheet').isVisible());
+      await page.locator('#mobile-perspective-close').click();
+    }
     await page.reload({waitUntil:'networkidle'});
     assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('show-timeline')));
   }
