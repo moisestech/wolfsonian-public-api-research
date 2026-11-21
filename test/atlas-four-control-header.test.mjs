@@ -11,7 +11,7 @@ test('the masthead has one menu and a second row for views, filters and perspect
   for(const id of ['header-townhall','header-conversation','map-toggle','header-perspective'])assert.ok(browse.includes('id="'+id+'"'));
   assert.match(browse,/id="map-toggle"/);
   assert.match(browse,/data-map="conversation"[^>]*>Conversation<\/button>/);
-  assert.match(browse,/data-map="townhall"[^>]*>Townhall<\/button>/);
+  assert.doesNotMatch(browse,/data-map="townhall"/);
   assert.match(nav,/id="display-menu"[^>]*aria-label="Menu"/);
   assert.match(nav,/href="\.\.\/object-lens\/"[^>]*aria-label="Open Object Lens"/);
   assert.match(nav,/id="appearance-toggle"[^>]*aria-label="Switch to light appearance"/);
