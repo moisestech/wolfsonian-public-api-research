@@ -373,6 +373,7 @@ try {
     const bounds=await page.locator('.path-post').nth(1).boundingBox();
     assert.ok(bounds.x>=0 && bounds.x+bounds.width<=width+1 && bounds.y+bounds.height<=844,'Two complete rooms fit at '+width);
   }
+  if(await page.locator('#data-filter').isVisible())await page.locator('#data-filter-close').click();
   await screenshot('question-cards-390');
   await page.locator('#timeline-list section').first().locator('button').last().click();
   assert.notEqual(await page.locator('#room-header').getAttribute('data-episode'),episodeId);
