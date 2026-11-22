@@ -5,7 +5,7 @@ import {CURATED_EDGE_SCENES as scenes} from '../src/curated-edge-scenes.mjs';
 import {CURATORIAL_PATHS as paths} from '../src/curatorial-relationships.mjs';
 import {WORLDS_FAIRS_RESEARCH} from '../src/worlds-fairs-research.mjs';
 import {OBJECT_VOICE_DIRECTIONS} from '../src/object-voice-directions.mjs';
-import {notebookProductionManifest,productionAnalytics} from '../src/notebooklm-production.mjs';
+import {notebookProductionManifest,productionAnalytics,sourceResearchQueue} from '../src/notebooklm-production.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
 import {conversationEpisode} from '../src/conversation-orientation.mjs';
 const records=matrixToRecords(MATRIX_OBJECTS);
@@ -24,4 +24,4 @@ const displayQuestions=Object.fromEntries(scenes.map(s=>{
   return [s.id,conversationEpisode({source,target,conversation}).question];
 }));
 const manifest=notebookProductionManifest({scenes,paths,records,publicSources,displayQuestions});
-console.log(JSON.stringify({sourceCommit:process.env.ARCHIVE_EDITORIAL_SOURCE_COMMIT||null,analytics:productionAnalytics(manifest),manifest},null,2));
+console.log(JSON.stringify({sourceCommit:process.env.ARCHIVE_EDITORIAL_SOURCE_COMMIT||null,analytics:productionAnalytics(manifest),sourceResearchQueue:sourceResearchQueue(manifest),manifest},null,2));
