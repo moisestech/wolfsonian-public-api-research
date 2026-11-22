@@ -29,12 +29,12 @@ try{
   // v4 figures are artist-led review studies. These URLs are only public image artwork, not museum records.
   const personaGalleryV4=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/portraits\/(?:tourist|novice|connoisseur|futurist|mourner|propagandist|counterfeit|museum)-sepia-(?:full|compact)-v4\.png$/;
   // Eight new geometric portrait masters, with PNG delivery transforms restricted to pinned versions.
-  const architecturalPortrait=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_(?:384|1024),h_(?:384|1024)\/f_png\/v\d+\/archive-dreams\/brand\/personas\/architectural-masks-v1\/(?:tourist|novice|connoisseur|futurist|mourner|propagandist|counterfeit|museum)-architectural-(?:white|ink)-master-v1\.png$/;
+  const architecturalPortrait=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_(?:384|1024),h_(?:384|1024)\/f_png\/v\d+\/archive-dreams\/brand\/personas\/architectural-masks-v1\/(?:tourist|novice|connoisseur|futurist|mourner|propagandist|counterfeit|museum)-architectural-raster-master-v1\.png$/;
   // The four user-supplied Deco masks are decorative studies, not named speaker roles.
   const approvedMask=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/approved-masks\/(?:nested-family|architectural-deco|tiered-deco|halo-deco)-(?:white|ink)-(?:full|compact)-v1\.png$/;
 
   const sculpturalPortrait=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_(?:192|1024)\/f_auto\/q_auto\/v\d+\/archive-dreams\/brand\/personas\/sculptural-masks-v3\/(?:family|tourist|novice|connoisseur|worker|archivist|futurist|mourner|propagandist|counterfeit|museum)-limestone-master-v3\.png$/;
-  const flatPersona=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_(?:128|512)\/f_png\/v\d+\/archive-dreams\/brand\/personas\/flat-circular-v1\/(?:family|tourist|novice|connoisseur|worker|archivist|futurist|mourner|propagandist|counterfeit|museum)-(?:white|ink)-master-v1\.png$/;
+  const flatPersona=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_(?:128|512)\/(?:co_rgb:142523,e_colorize:100\/)?f_png\/v\d+\/archive-dreams\/brand\/personas\/diffusion-circular-v1\/(?:family|tourist|novice|connoisseur|worker|archivist|futurist|mourner|propagandist|counterfeit|museum)-raster-master-v1\.png$/;
   page.on('request',request=>{
     const url=request.url();
     if(url.startsWith(base)||url.startsWith('blob:')||url.startsWith('data:')||publicPhoto.test(url)||identityMark.test(url)||personaMark.test(url)||personaPortrait.test(url)||personaGalleryV4.test(url)||architecturalPortrait.test(url)||approvedMask.test(url)||sculpturalPortrait.test(url)||flatPersona.test(url))return;

@@ -1,3 +1,19 @@
+# Active artwork correction — 21 November 2026
+
+The active family is `diffusion-circular-v1`: eleven crops from the original artist-selected diffusion boards. The previous `flat-circular-v1` family was a procedural SVG redraw and is archived. A PNG delivery URL alone does not establish original raster provenance.
+
+Preserve the original boards in [Drive](https://drive.google.com/drive/folders/1Y2F2GhmJFsA0clgfOvg9caVyEd4ArTCz). Use `persona-diffusion-circular-manifest.v1.json` for the original board, raster master, asset ID and pinned delivery URLs of each identity. Never substitute a vector redraw or generate new imagery as part of an asset swap without the artist requesting that change.
+
+For this family: crop the existing raster board in Cloudinary, retain alpha and the circular artwork, and deliver 128px/512px PNGs. Ink is a colorized delivery of the same raster; white retains the original pixels. Keep the preceding mapping in `priorIllustration`. Update Airtable's eleven named identities, the shared gallery module and mirrored manifest together. Unassigned studies remain unassigned.
+
+Conversation cards label the two edge endpoints Host. The selected perspective and Archivist are Listening. Host photographs and listener icons share 44px dimensions, with visible labels and names. Object titles are italic; role and perspective names stay upright. The waveform is decorative and does not imply live audio.
+
+Validate all eleven PNG masters and delivery variants, both themes, mobile and desktop labels, card fit and original-source provenance before publishing. Mark Cloudinary assets active only after the production module is verified. Preserve earlier assets for rollback.
+
+---
+
+The following documents the archived SVG release and is retained as history; its drawing instructions do not govern current artwork.
+
 # Wolfsonian persona icon publishing SOP
 
 Owner: Moises Sanabria. Updated: 21 November 2026. Applies to Archive Dreams in Public / Archive Society.
