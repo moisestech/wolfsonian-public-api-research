@@ -36,6 +36,8 @@ export const CARDS=Object.freeze(entries.map(([id,group,subheading,hook,icon,col
       `RHYTHM: ${perspectiveVoice(id).rhythm}`,
       `VOICE LIMIT: ${perspectiveVoice(id).limit}`,
       'OBJECT IDENTITY: A listener perspective changes the question, not the object’s vocabulary or identity. Period language requires a reviewed phrase source.',
+      'TONE: Dry object-based wit, warm everyday banter, occasional absurdity and serious passages are all available. Choose by scene; do not force jokes or every tone into each exchange.',
+      'PRESENT-DAY COMPARISONS: Only listener perspectives introduce contemporary analogies. Keep object speech grounded in its historical context. Label the comparison as interpretation and use separately supplied, cited contemporary context for any present-day factual claim.',
       `ONLY USE: The accession IDs, titles, verified source fields, source-column names and exact shared tags supplied in this encounter.`,
       `ATTEND TO: ${priorities.join(' | ') || 'any explicitly available staff-assigned metadata'}.`,
       'TASK: Describe the metadata overlap in plain language. Offer one question a visitor could investigate. Name one competing reading. Separate observation from interpretation.',

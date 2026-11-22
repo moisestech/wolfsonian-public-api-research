@@ -1,6 +1,15 @@
 /** Editorial directions are authored choices, never additional catalog facts. */
 import { OBJECT_VOICE_DIRECTIONS } from './object-voice-directions.mjs';
 
+// Artist decisions, November 21: vary tone by scene; listeners introduce the present.
+export const CONVERSATION_LANGUAGE_POLICY = Object.freeze({
+  humorPalette: Object.freeze(['dry_object_wit', 'warm_everyday_banter', 'occasional_absurdity', 'serious']),
+  toneSelection: 'Choose the tone that serves this pair and its stakes. A serious scene needs no joke; do not combine every tone in every scene.',
+  presentDayComparisons: 'LISTENER_PERSPECTIVES_ONLY',
+  objectBoundary: 'Keep object speech grounded in its documented material, purpose and historical context. Objects do not introduce present-day platforms, technologies or events, or remember the future.',
+  listenerBoundary: 'A listener perspective may introduce a present-day comparison as a clearly framed interpretation. Use separately supplied, cited contemporary context for factual claims; an analogy is not proof of historical continuity.',
+});
+
 export const accessionKey = value => String(value ?? '').replace(/\s+/g, '').replace(/[–—]/g, '-').toUpperCase();
 const clean = value => String(value ?? '').replace(/\s+/g, ' ').trim();
 const directions = new Map(OBJECT_VOICE_DIRECTIONS.map(item => [accessionKey(item.accession), item]));
@@ -47,6 +56,6 @@ export function objectVoiceProfile(record = {}) {
 }
 
 export function sceneVoiceBrief(source, target, perspectiveId = 'family') {
-  return Object.freeze({ objects: Object.freeze([objectVoiceProfile(source), objectVoiceProfile(target)]), perspective: perspectiveVoice(perspectiveId),
+  return Object.freeze({ objects: Object.freeze([objectVoiceProfile(source), objectVoiceProfile(target)]), perspective: perspectiveVoice(perspectiveId), languagePolicy: CONVERSATION_LANGUAGE_POLICY,
     instruction: 'Preserve each object’s voice across perspectives. Write an actual response, one turn in the argument, and an inspectable evidence hinge. Use only reviewed period phrases; an empty phrase bank means plain authored language.' });
 }

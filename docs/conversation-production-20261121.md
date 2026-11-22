@@ -1,5 +1,11 @@
 # A conversation for every object
 
+## Artist decisions, November 21
+
+Use the full tonal range across the project: dry object-based wit, warm everyday banter, occasional absurdity, and serious passages. Choose the tone for each scene and its stakes; no scene needs a forced joke or all four modes.
+
+Present-day comparisons enter through listener perspectives only. Object speech stays grounded in its documented material, purpose and historical context. A listener may connect that exchange to the present as an explicitly framed interpretation; contemporary factual claims need separately supplied sources. The object does not acquire future knowledge when the listener changes.
+
 Production system, all eleven perspectives and coverage plan • November 21, 2026
 
 The project makes inherited futures available for argument through objects, their records and the visitor’s questions. Its language should make a viewer look again at a specific object. The record must remain able to complicate the story. Personality, humor and surprise serve that encounter.
