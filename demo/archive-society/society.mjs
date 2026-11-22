@@ -1126,6 +1126,7 @@ function paintTimeline(){
   list.replaceChildren();
   if(!document.body.classList.contains('show-timeline'))return;
   const focus=relatedAnchor && (person(relatedAnchor)||state.records.find(record=>record.accession===relatedAnchor));
+  $('timeline-title').dataset.screen=relatedQuestions?'related':'townhall';
   $('timeline-title').textContent=relatedQuestions?(focus?'More conversations with '+(focus.title.length>50?focus.title.slice(0,47)+'…':focus.title):'Follow these objects'):'Townhall';
   $('all-directory-questions').hidden=!relatedQuestions;
   const currentIds=new Set(relatedAnchor?[relatedAnchor]:(state.episode?.participants.map(p=>p.accession)||[]));
