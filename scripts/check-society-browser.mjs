@@ -69,7 +69,7 @@ try {
     const form=await gate.locator('form').boundingBox();
     assert.ok(form.x>=0&&form.x+form.width<=width&&form.y>=0&&form.y+form.height<=844,'Password form fits at '+width);
     assert.equal(await gate.evaluate(el=>getComputedStyle(el,'::before').animationName),'cloud-drift');
-    assert.equal(await gate.evaluate(el=>getComputedStyle(el,'::before').backgroundSize),'auto');
+    assert.ok(await gate.evaluate(el=>getComputedStyle(el,'::before').backgroundSize.split(',').every(size=>size.trim()==='auto')));
     await screenshot('cloud-gate-'+width);
   }
   await page.emulateMedia({reducedMotion:'reduce'});
