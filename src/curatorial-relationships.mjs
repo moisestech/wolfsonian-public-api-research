@@ -6,7 +6,30 @@
  */
 import { PRESENTATION_PAIRS } from './presentation-pairs.mjs';
 import { WORLDS_FAIRS_RESEARCH } from './worlds-fairs-research.mjs';
-import { sceneVoiceBrief } from './conversation-voices.mjs';
+import { sceneVoiceBrief, listenerReflection, accessionKey } from './conversation-voices.mjs';
+
+const PATH_FOLLOW_UP = Object.freeze({
+  'who-narrates-tomorrow':'Follow the Harlem invitation. How does an organizer’s route change the view from above?',
+  'which-future-is-refused':'Look again at the maquette. What does an unbuilt warning ask of the fair’s emblem?',
+  'who-builds-the-future':'Return to the hands in the sculpture. What does the word “skilled” add to that view?',
+  'cost-of-iron':'Change your distance from the tower to the eye. Which detail makes you pause?',
+  'room-for-a-warning':'Compare the two warnings: what can each name, and what answer is missing?',
+  'city-from-a-window':'Follow the hillside house. Where does the grand plan become an ordinary journey?',
+  'terms-of-entry':'Inspect the invitation and the lottery separately. What does each actually offer?',
+  'date-on-tomorrow':'Read 1939 A.D. beside the imagined city. What does that year make you reconsider?',
+  'fair-counts':'Stay with “Harlem” and “tenth.” What kind of public does each word ask you to count?',
+  'heel-and-working-day':'Inspect the heel as an object of commerce. What would be needed to read a working day into it?',
+  'permission-to-rise':'Say “Let” as a request, then as permission. Which reading changes the maquette?',
+  'catalogue-meets-engine':'Open the category “Machine Age” beside the task “Making.” Where does the title stop explaining?',
+  'radio-meets-futurama':'Follow the radio. What is the difference between receiving a voice and choosing the route?',
+  'globe-and-theme-center':'Inspect the edge of the model and the surface of the vase. What does each scale leave outside?',
+  'catalogue-and-globe':'Follow the named design roles on Mappemonde. Which distinctions should survive a broad era label?',
+  'poster-and-theme-center':'Return to the pictured queue. What changes when you treat that crowd as an invitation?',
+  'radio-and-television':'Compare the devices as receivers. What would let a listener or viewer answer back?',
+  'poster-and-program':'Read the program’s “your” against the poster’s crowd. Who is being addressed?',
+  'television-and-booklet':'Follow the booklet. What can be carried away that a picture alone cannot establish?',
+  'program-and-booklet':'Keep the invitation beside the souvenir. When would you say the promise had been kept?',
+});
 
 export const RELATIONSHIP_TYPES = Object.freeze({
   metadata_overlap: Object.freeze({
@@ -88,10 +111,66 @@ function evidenceLinks(path) {
   return Object.freeze([...new Map(links.map(link=>[link.url,Object.freeze(link)])).values()]);
 }
 
+const PATH_LANGUAGE_REVISIONS = Object.freeze({
+  "who-narrates-tomorrow": [
+    "Keep your eyes on the city. The narration will explain the route—unless you have a question?",
+    "We’re doing the inviting from Harlem. Your route may be impressive, but it doesn’t decide where our questions begin.",
+    null
+  ],
+  "which-future-is-refused": [
+    "I was a warning against authoritarian aggression. The fair turned the proposal down. Apparently there wasn’t room.",
+    "I give that fair an emblem. You make me wonder what an emblem fails to show when a warning stays unbuilt.",
+    null
+  ],
+  "who-builds-the-future": [
+    "Admire the height, by all means. I show workers raising the iron of the Eiffel Tower. Look for the hands.",
+    "Skilled Work. I put the compliment into words. You make me ask whether the people doing it get more than a heading.",
+    null
+  ],
+  "catalogue-meets-engine": [
+    "Machine Age. An entire era before you’ve even opened the catalogue. Efficient, isn’t it?",
+    "Making the Engine. A less sweeping title. Somebody still has to do the making.",
+    "Quite. You’ve turned my heading back into a question. Which work would we need to inspect before agreeing about the age?"
+  ],
+  "radio-meets-futurama": [
+    "A voice comes in; a dial gives you a choice. Your narration sounds harder to interrupt.",
+    "My attraction carries visitors above an imagined city. The route and narration do rather a lot of the choosing.",
+    "Then changing the station would only be a start. Who gets to answer the plan?"
+  ],
+  "poster-and-theme-center": [
+    "Quite a queue, isn’t it? Printed in 1937, with the fair still two years away. I can draw a crowd ahead of time.",
+    "And I can give that pictured crowd a destination: the Trylon and Perisphere. Neither of us can name who actually came.",
+    "You’re right. I made an invitation look like an arrival. Let’s keep that difference in view."
+  ],
+  "poster-and-program": [
+    "Look at the line I’ve drawn toward the fair. It makes the invitation seem popular already.",
+    "Your World of Tomorrow. I make it seem personal. A crowd in a picture cannot tell either of us who felt invited.",
+    "Then the people in my picture cannot answer for the public. I’d want to hear from someone who crossed the threshold."
+  ],
+  "television-and-booklet": [
+    "A picture as well as sound. I can make an experience seem close. What do you offer after the display?",
+    "Futurama, in a booklet. Something you could hold. Being able to carry the promise away doesn’t mean it came true.",
+    "No. And I cannot tell you I showed your exhibit. We’d need an actual account of how either experience was received."
+  ],
+  "date-on-tomorrow": [
+    "A city still ahead of the visitor. What year would you put on that entrance sign?",
+    "1939 A.D. I already have a year in my title. It doesn’t settle what your tomorrow will become.",
+    "Leave the sign there a moment. I want to hear how that year sounded to someone living through it."
+  ],
+  "terms-of-entry": [
+    "An invitation to visit the fair. Mind you, an invitation still leaves the journey to be made.",
+    "A chance in a lottery. I leave rather a lot to chance, too. A ticket could be kept without its holder ever seeing the exhibition.",
+    "Then neither piece of paper gets to count as a visit. Whose itinerary could tell us what happened after the invitation?"
+  ]
+});
+
 function scene(path) {
+  const revision=PATH_LANGUAGE_REVISIONS[path.id];
   return Object.freeze({
     ...path,
-    languageRevision: ['radio-and-television','program-and-booklet','catalogue-and-globe','globe-and-theme-center'].includes(path.id) ? 'object-voices-v1' : null,
+    followUp:PATH_FOLLOW_UP[path.id]||path.arc,
+    turns:revision?Object.freeze(path.turns.map((turn,index)=>Object.freeze({...turn,text:revision[index]||turn.text}))):path.turns,
+    languageRevision:revision?'object-voices-v2':['radio-and-television','program-and-booklet','catalogue-and-globe','globe-and-theme-center'].includes(path.id)?'object-voices-v1':null,
     status: 'research_preview',
     relationshipType: 'curatorial_juxtaposition',
     historicalRelationshipEstablished: false,
@@ -382,19 +461,20 @@ export function pathById(id) {
   return CURATORIAL_PATHS.find(path => path.id === id) || null;
 }
 
-export function juxtapositionConversation(path) {
+export function juxtapositionConversation(path, lensId='family') {
   if (!path || path.relationshipType !== 'curatorial_juxtaposition') throw new Error('Select a curatorial juxtaposition.');
   return {
     id: path.id,
     mode: 'CURATORIAL_JUXTAPOSITION',
     relationshipType: 'curatorial_juxtaposition',
     researchPreview: true,
-    aiAssisted: Boolean(path.aiAssisted),
-    voiceBrief: sceneVoiceBrief(path.source,path.target),
+    aiAssisted: Boolean(path.aiAssisted||path.languageRevision),
+    voiceBrief: sceneVoiceBrief(path.source,path.target,lensId),
+    listenerReflection:listenerReflection(path.source,path.target,lensId,path.arc),
     editorialStatus: 'research_preview',
     historicalRelationshipEstablished: false,
     dramaticArc: path.arc,
-    nextPrompt: '',
+    nextPrompt: path.followUp,
     source: path.source.accession,
     target: path.target.accession,
     proposal: path.proposal,
@@ -408,4 +488,21 @@ export function juxtapositionConversation(path) {
       kind: turn.kind,
     })),
   };
+}
+
+/** Onward reading choices share exact object identities, never inferred historical contact. */
+export function pathwayContinuations(pathId, limit=3) {
+  const path=pathById(pathId);
+  if(!path)return [];
+  const ids=[path.source.accession,path.target.accession].map(accessionKey);
+  const candidates=CURATORIAL_PATHS.filter(other=>other.id!==pathId).map(other=>({
+    id:other.id,question:other.arc,
+    sharedAccessions:[other.source.accession,other.target.accession].filter(id=>ids.includes(accessionKey(id))),
+    kind:'ARTIST_AUTHORED_ROUTE',historicalRelationshipEstablished:false,
+  })).filter(other=>other.sharedAccessions.length);
+  // Offer a route through each side before adding more of either side.
+  const chosen=[];
+  for(const id of ids){const next=candidates.find(c=>!chosen.includes(c)&&c.sharedAccessions.some(a=>accessionKey(a)===id));if(next)chosen.push(next);}
+  for(const candidate of candidates)if(!chosen.includes(candidate))chosen.push(candidate);
+  return chosen.slice(0,Math.max(0,Math.min(6,Number.isFinite(limit)?Math.floor(limit):3)));
 }

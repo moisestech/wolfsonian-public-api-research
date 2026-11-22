@@ -1,6 +1,35 @@
 /** Coverage counts pairs, not directions, lenses or synthetic template variants. */
 import { accessionKey, sceneVoiceBrief } from './conversation-voices.mjs';
 
+export function auditDataQuality(records) {
+  const seen=new Set(), duplicates=[];
+  for(const record of records){const key=accessionKey(record.accession);if(seen.has(key))duplicates.push(record.accession);seen.add(key);}
+  return {
+    records:records.length, duplicateAccessions:duplicates,
+    missingTitle:records.filter(r=>!String(r.title||'').trim()).map(r=>r.accession),
+    missingDateContext:records.filter(r=>!String(r.date||r.year||'').trim()).map(r=>r.accession),
+    missingTypeContext:records.filter(r=>!String(r.objectType||'').trim()).map(r=>r.accession),
+    noUsableThemeOrMotif:records.filter(r=>!(r.tags||[]).some(t=>['theme','motif'].includes(t.family)&&t.value&&!/^(unlabeled|unknown|none)$/i.test(t.value.trim()))).map(r=>r.accession),
+    note:'Missing context is a source-research task. It is never filled from a year in a title, an accession number, or an inferred dialect. Untagged packets can still support explicit authored comparisons.',
+  };
+}
+
+/** Lexical signals are review prompts, not automated judgments of literary quality. */
+export function auditInteractionLanguage(scenes, paths) {
+  const rows=[...scenes.map(s=>({id:s.id,kind:'metadata',turns:s.turns,revision:s.languageRevision})),...paths.map(p=>({id:p.id,kind:'pathway',turns:p.turns,revision:p.languageRevision}))].map(item=>({
+    id:item.id,kind:item.kind,languageRevision:item.revision||null,
+    words:item.turns.reduce((n,t)=>n+t.text.trim().split(/\s+/).length,0),
+    recordCentricOpenings:item.turns.filter(t=>/^(my (title|record)|i am (a|titled)|my working record)/i.test(t.text)).length,
+    reviewStatus:'READ_ALOUD_AND_ARTIST_REVIEW_PENDING',
+  }));
+  return {
+    registryScope:'ALL_AUTHORED_SCENES',scenes:rows.length,revisedScenes:rows.filter(r=>r.languageRevision).length,
+    pathwayFollowUps:paths.filter(p=>p.followUp?.trim()).length,
+    pathwaysWithoutOnwardChoices:paths.filter(p=>!paths.some(other=>other.id!==p.id&&[other.source.accession,other.target.accession].some(a=>[p.source.accession,p.target.accession].some(b=>accessionKey(a)===accessionKey(b))))).map(p=>p.id),
+    rows,note:'Revised text and navigation checks do not certify source accuracy, spoken performance or publication approval.',
+  };
+}
+
 export const pairKey = (a, b) => [accessionKey(a), accessionKey(b)].sort().join('::');
 const recordsByKey = records => new Map(records.filter(r => accessionKey(r.accession)).map(r => [accessionKey(r.accession), r]));
 export function authoredPairs(scenes = [], paths = []) {

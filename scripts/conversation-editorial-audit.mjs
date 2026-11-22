@@ -6,7 +6,7 @@ import { CURATORIAL_PATHS } from '../src/curatorial-relationships.mjs';
 import { WORLDS_FAIRS_RESEARCH } from '../src/worlds-fairs-research.mjs';
 import { matrixToRecords } from '../src/matrix-room.mjs';
 import { accessionKey, objectVoiceProfile, PERSPECTIVE_VOICES } from '../src/conversation-voices.mjs';
-import { authoredPairs, auditConversationCoverage, planConversationCoverage } from '../src/conversation-editorial.mjs';
+import { authoredPairs, auditConversationCoverage, planConversationCoverage, auditDataQuality, auditInteractionLanguage } from '../src/conversation-editorial.mjs';
 
 const scope = process.argv.find(arg => arg.startsWith('--scope='))?.split('=')[1] || 'public';
 if (!['public', 'matrix', 'working'].includes(scope)) throw new Error('Use --scope=public, matrix or working.');
@@ -41,6 +41,8 @@ const researchProposals = scope === 'working' ? [
 const profiles = records.map(objectVoiceProfile);
 const result = {
   scope, inputSha256: createHash('sha256').update(JSON.stringify(records)).digest('hex'),
+  dataQuality:auditDataQuality(records),
+  languageAudit:auditInteractionLanguage(CURATED_EDGE_SCENES,CURATORIAL_PATHS),
   counts: { ...auditConversationCoverage(records, pairs), authoredVoiceDirections: profiles.filter(p => p.status === 'AUTHORED_DIRECTION_DRAFT').length, provisionalRecordBriefs: profiles.filter(p => p.status === 'RECORD_BRIEF_AWAITING_AUTHORSHIP').length, perspectives: PERSPECTIVE_VOICES.length },
   plan: { proposedPairs: plan.proposedPairs.length + researchProposals.length, batchesOfFour: Math.ceil((plan.proposedPairs.length + researchProposals.length) / 4), projected: auditConversationCoverage(records,[...pairs,...plan.proposedPairs,...researchProposals]), note: plan.note },
   profiles, perspectives: PERSPECTIVE_VOICES, proposedPairs: [...plan.proposedPairs,...researchProposals],

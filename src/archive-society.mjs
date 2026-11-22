@@ -1,6 +1,6 @@
 import { buildDiscoveryIndex, recommendNeighbors, PERSONAS } from './discovery-graph.mjs';
 import { sceneForConfirmedEdge } from './curated-edge-scenes.mjs';
-import { sceneVoiceBrief } from './conversation-voices.mjs';
+import { sceneVoiceBrief, listenerReflection } from './conversation-voices.mjs';
 
 export const WORLD = Object.freeze({ width: 2000, height: 1125 });
 const clean = value => String(value ?? '').replace(/\s+/g, ' ').trim();
@@ -219,6 +219,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
       languageRevision:curated.languageRevision||null,
       authored:true,
       voiceBrief,
+      listenerReflection:listenerReflection(source,target,lensId,curated.arc),
       mode:'CURATED_EDGE_SCENE',
       editorialStatus:curated.status,
       edgeMode:curated.mode,
@@ -278,6 +279,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
     'Which additional source would change the interpretation of this pair?';
   return {
     id:edge.id+'::'+lens.id,authored:true,mode:'scripted_interpretation',voiceBrief,
+    listenerReflection:listenerReflection(source,target,lens.id),
     editorialStatus:'AUTOMATIC_SOURCE_BOUNDED_FALLBACK',edgeMode,
     dramaticArc:onlyMotif?'Can this connection survive scrutiny?':'What do two differently titled records make visible?',
     nextPrompt,

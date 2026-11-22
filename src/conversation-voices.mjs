@@ -29,6 +29,37 @@ const roles = [
 export const PERSPECTIVE_VOICES = Object.freeze(roles.map(([id, purpose, rhythm, example, limit]) => Object.freeze({ id, purpose, rhythm, example, limit, status: 'ARTIST_AUTHORED_DIRECTION' })));
 export function perspectiveVoice(id) { return PERSPECTIVE_VOICES.find(item => item.id === id) || null; }
 
+const COUNTER_READERS = Object.freeze({ family:'worker', tourist:'mourner', novice:'connoisseur', connoisseur:'novice', worker:'futurist', futurist:'worker', archivist:'counterfeit', counterfeit:'archivist', mourner:'tourist', propagandist:'museum', museum:'propagandist' });
+const CURRENT_QUESTIONS = Object.freeze({
+  family:'If a service promised to make home life easier today, whose daily routine would you ask about first?',
+  tourist:'When a digital tour offers a perfect view today, what would you want to explore outside its route?',
+  novice:'What familiar object today would help you ask a better question about these two, without treating them as the same thing?',
+  connoisseur:'Which design choice in an interface today would you compare with this pair, and where would the resemblance stop?',
+  worker:'If a task were automated today, whose remaining work would you want to make visible?',
+  futurist:'If this kind of promise were made about a new technology today, what would you want to test before believing it?',
+  archivist:'What source would you need before connecting this pair to a present-day claim?',
+  mourner:'When something is replaced today, what account of what was lost would you want to preserve?',
+  propagandist:'When an app or advertisement says “you” today, who gets to decide what that invitation offers?',
+  counterfeit:'Could you make a convincing modern analogy here that the sources would fail to support? Where would you stop it?',
+  museum:'What contemporary comparison could invite disagreement in a public display without becoming a claim of historical continuity?',
+});
+export function listenerReflection(source, target, perspectiveId='family', question='') {
+  if (!source?.accession || !target?.accession) return null;
+  const voice=perspectiveVoice(perspectiveId)||perspectiveVoice('family');
+  const counter=perspectiveVoice(COUNTER_READERS[voice.id]);
+  const name=record=>clean(record.title||record.accession).slice(0,90);
+  const focus=clean(question)||`What changes when “${name(source)}” is placed beside “${name(target)}”?`;
+  return Object.freeze({
+    role:'listener', perspectiveId:voice.id, source:source.accession, target:target.accession,
+    focus, objectQuestion:`Looking at “${name(source)}” beside “${name(target)}”: ${voice.example}`,
+    presentDayQuestion:CURRENT_QUESTIONS[voice.id],
+    counterPerspective:Object.freeze({ id:counter.id, question:`Before settling “${focus}”, consider another question: ${counter.example}` }),
+    kind:'ARTIST_AUTHORED_QUESTIONS', historicalRelationshipEstablished:false,
+    // Listener questions stay outside the fixed object transcript and its audio timing.
+    includedInObjectAudio:false,
+  });
+}
+
 function inheritedDirection(record) {
   const type = clean(record.objectType).toLowerCase();
   if (/poster|advert|catalog cover/.test(type)) return 'Try a public address: invite, warn, sell or persuade. Choose the act only after inspecting this item.';
