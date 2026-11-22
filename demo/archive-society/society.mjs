@@ -1264,7 +1264,7 @@ function renderRoomHeader(source,target,c){
     inspect.setAttribute('aria-label','Inspect collection record: '+p.title+' · '+p.accession);
     const media=node('span',undefined,'object-portrait-media'+(visual.label==='Artist diagram'?' is-diagram':''));
     media.setAttribute('aria-hidden','true');
-    const placeholder=()=>{media.replaceChildren(node('span',p.shortName.slice(0,55),'object-portrait-placeholder'));media.classList.add('is-placeholder');};
+    const placeholder=()=>{const title=objectTitle(p.shortName.slice(0,55),'span');title.classList.add('object-portrait-placeholder');media.replaceChildren(title);media.classList.add('is-placeholder');};
     if(visual.label==='Motif icon')media.classList.add('is-mark');
     if(visual.src){
       const img=node('img');img.src=visual.src;img.alt='';img.loading='lazy';img.decoding='async';
@@ -1315,7 +1315,7 @@ function renderRoomHeader(source,target,c){
   evidence.replaceChildren(node('h2','Why these two?'),node('p',episode.rationale),
     node('p','The voices are artist-authored interpretations, not historical speech or live autonomous AI. Shared tags do not establish contact, influence, or shared storage.'));
   for(const p of episode.participants){
-    const button=node('button',p.title+' · '+p.accession,'evidence-record');button.type='button';
+    const button=node('button',undefined,'evidence-record');button.append(objectTitle(p.title),document.createTextNode(' · '+p.accession));button.type='button';
     button.addEventListener('click',()=>openEpisodeRecord(p.accession));evidence.append(button);
   }
   if(state.researchPath){

@@ -16,6 +16,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309104/archive-dreams/brand/personas/diffusion-circular-v1/family-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309104/archive-dreams/brand/personas/diffusion-circular-v1/family-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "tourist": {
@@ -30,6 +36,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309134/archive-dreams/brand/personas/diffusion-circular-v1/tourist-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309134/archive-dreams/brand/personas/diffusion-circular-v1/tourist-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 724,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "novice": {
@@ -44,6 +56,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309128/archive-dreams/brand/personas/diffusion-circular-v1/novice-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309128/archive-dreams/brand/personas/diffusion-circular-v1/novice-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 1448,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "worker": {
@@ -58,6 +76,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309120/archive-dreams/brand/personas/diffusion-circular-v1/worker-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309120/archive-dreams/brand/personas/diffusion-circular-v1/worker-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "archivist": {
@@ -72,6 +96,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309108/archive-dreams/brand/personas/diffusion-circular-v1/archivist-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309108/archive-dreams/brand/personas/diffusion-circular-v1/archivist-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 724,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "futurist": {
@@ -86,6 +116,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309112/archive-dreams/brand/personas/diffusion-circular-v1/futurist-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309112/archive-dreams/brand/personas/diffusion-circular-v1/futurist-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 1448,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "connoisseur": {
@@ -100,6 +136,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309142/archive-dreams/brand/personas/diffusion-circular-v1/connoisseur-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309142/archive-dreams/brand/personas/diffusion-circular-v1/connoisseur-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "mourner": {
@@ -114,6 +156,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309124/archive-dreams/brand/personas/diffusion-circular-v1/mourner-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309124/archive-dreams/brand/personas/diffusion-circular-v1/mourner-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 724,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "propagandist": {
@@ -128,6 +176,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309116/archive-dreams/brand/personas/diffusion-circular-v1/propagandist-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309116/archive-dreams/brand/personas/diffusion-circular-v1/propagandist-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 1448,
+        "y": 0,
+        "width": 724,
+        "height": 724
       }
     },
     "counterfeit": {
@@ -142,6 +196,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309100/archive-dreams/brand/personas/diffusion-circular-v1/counterfeit-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309100/archive-dreams/brand/personas/diffusion-circular-v1/counterfeit-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 1300,
+        "y": 130,
+        "width": 440,
+        "height": 440
       }
     },
     "museum": {
@@ -156,6 +216,12 @@
       "ink": {
         "full": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_512/co_rgb:142523,e_colorize:100/f_png/v1795309138/archive-dreams/brand/personas/diffusion-circular-v1/museum-raster-master-v1.png",
         "compact": "https://res.cloudinary.com/dck5rzi4h/image/upload/c_scale,w_128/co_rgb:142523,e_colorize:100/f_png/v1795309138/archive-dreams/brand/personas/diffusion-circular-v1/museum-raster-master-v1.png"
+      },
+      "crop": {
+        "x": 1732,
+        "y": 130,
+        "width": 440,
+        "height": 440
       }
     }
   }

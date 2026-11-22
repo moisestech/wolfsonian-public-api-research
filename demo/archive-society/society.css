@@ -2,7 +2,7 @@ html:not(.demo-open) body>*:not(#demo-gate){visibility:hidden}
 #demo-gate{display:none}
 html:not(.demo-open) #demo-gate{display:grid;position:fixed;inset:0;z-index:80;place-items:center;overflow:auto;isolation:isolate;background:#10201f;color:#f4f4f4;padding:24px 0}
 /* Atmospheric gradients: large clouds with transform-only drift, no tiled texture. */
-#demo-gate::before,#demo-gate::after{content:"";position:absolute;inset:-20%;z-index:-1;pointer-events:none;background-repeat:no-repeat;filter:blur(clamp(24px,5vw,72px));transform-origin:center}
+#demo-gate::before,#demo-gate::after{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background-repeat:no-repeat;filter:blur(clamp(24px,5vw,72px));transform-origin:center}
 #demo-gate::before{background:radial-gradient(ellipse 48% 38% at 22% 35%,#71c4b189 0%,#71c4b13d 38%,transparent 76%),radial-gradient(ellipse 46% 42% at 82% 72%,#da9d767d 0%,#da9d7633 42%,transparent 78%),radial-gradient(ellipse 60% 36% at 50% 106%,#798f8766,transparent 80%);animation:cloud-drift 64s ease-in-out infinite alternate}
 #demo-gate::after{background:radial-gradient(ellipse 55% 24% at 72% 20%,#dce4cf66,transparent 78%),radial-gradient(ellipse 58% 28% at 14% 80%,#4c887c99,transparent 80%);animation:cloud-drift 89s ease-in-out -31s infinite alternate-reverse;opacity:.8}
 @keyframes cloud-drift{from{transform:translate3d(-4%,-3%,0) rotate(-8deg) scale(1)}to{transform:translate3d(5%,4%,0) rotate(9deg) scale(1.12)}}
