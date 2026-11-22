@@ -13,7 +13,7 @@ import { mountForceStage } from '../force-stage.mjs';
 import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
 import { explainEncounter, conversationEpisode, connectionCaption, visitorFollowUp } from '../../src/conversation-orientation.mjs';
-import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
+import { CURATORIAL_PATHS, juxtapositionConversation, pathById, pathwayContinuations } from '../../src/curatorial-relationships.mjs';
 import { scriptedScenePlan } from '../../src/scene-performance.mjs';
 import { tagColor, voiceColors } from './conversation-color.mjs';
 import { personaCharacterUrl } from '../../src/persona-cloudinary-assets.mjs';
@@ -1311,7 +1311,7 @@ function paintResearchScene(c){
 }
 function renderJuxtaposition(box){
   const path=state.researchPath;
-  const c=juxtapositionConversation(path);
+  const c=juxtapositionConversation(path,state.lens);
   state.conversation=c;
   paintResearchScene(c);
   const source=path.source,target=path.target;
@@ -1339,6 +1339,19 @@ function renderJuxtaposition(box){
   }
   appendPerspective(chat);
   box.append(chat);
+  if(c.nextPrompt)box.append(node('p',c.nextPrompt,'notice'));
+  const onward=pathwayContinuations(path.id);
+  if(onward.length){
+    const choices=node('div',undefined,'edge-path-actions');
+    choices.setAttribute('aria-label','Continue this question through a shared object');
+    for(const next of onward){
+      const button=node('button',next.question,'quiet');button.type='button';
+      button.dataset.continuePath=next.id;
+      button.addEventListener('click',()=>openResearchPath(next.id));
+      choices.append(button);
+    }
+    box.append(choices);
+  }
   addRelatedQuestionsAction(box);
   $('voice-controls').hidden=$('conversation-panel').hidden;
   setPlayDisabled(state.playing);
@@ -2127,7 +2140,7 @@ function shortPathTitle(record){
 function paintPaths(){
   const box=$('path-choices');if(!box)return;
   box.replaceChildren();
-  box.append(node('p','These '+CURATORIAL_PATHS.length+' paths are proposed pairings: artist-written comparisons between two records. The Townhall holds the other conversations, the ones suggested by a shared catalog tag. A path does not prove the objects met.','path-note'));
+  box.append(node('p','Explore '+CURATORIAL_PATHS.length+' questions. Follow an object into another pairing and see what changes.','path-note'));
   const back=node('button','Leave preview');
   back.type='button';
   back.setAttribute('aria-pressed',String(!state.researchPath));
@@ -2139,7 +2152,7 @@ function paintPaths(){
     button.dataset.path=path.id;
     button.setAttribute('aria-pressed',String(state.researchPath?.id===path.id));
     const voices=speakingCast();
-    button.setAttribute('aria-label',path.arc+'. '+shortPathTitle(path.source)+' and '+shortPathTitle(path.target)+'. Proposed pairing. Voices: '+(voices.map(voice=>voice.label).join(', ')||'the selected perspective')+'.');
+    button.setAttribute('aria-label',path.arc+'. '+shortPathTitle(path.source)+' and '+shortPathTitle(path.target)+'. Proposed pairing. Listening perspectives: '+(voices.map(voice=>voice.label).join(', ')||'the selected perspective')+'.');
     const voiceRow=node('span',undefined,'path-voices');
     for(const voice of voices){
       const chip=node('span',undefined,'path-voice');
@@ -2165,7 +2178,16 @@ function appendPerspective(chat){
   const img=node('img');img.className='avatar';img.alt='';
   bindPersonaImage(img,card,'compact',null,'sepia');
   const say=node('div',undefined,'say');
-  say.append(node('strong',lens.label+' · '+card.subheading),node('p',card.hook));
+  const reflection=state.conversation?.listenerReflection;
+  say.append(node('strong',lens.label+' · listening'),node('p',reflection?.objectQuestion||card.hook));
+  if(reflection){
+    const present=node('details',undefined,'listener-reflection');
+    present.append(node('summary','A question from the present'),node('p',reflection.presentDayQuestion));
+    const counter=CARD_BY_ID.get(reflection.counterPerspective.id);
+    const alternate=node('details',undefined,'listener-reflection');
+    alternate.append(node('summary',(counter?.label||'Another perspective')+' asks'),node('p',reflection.counterPerspective.question));
+    say.append(present,alternate);
+  }
   bubble.append(img,say);
   chat.append(bubble);
 }

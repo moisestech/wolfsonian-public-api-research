@@ -1,5 +1,6 @@
 import { buildDiscoveryIndex, recommendNeighbors, PERSONAS } from './discovery-graph.mjs';
 import { sceneForConfirmedEdge } from './curated-edge-scenes.mjs';
+import { sceneVoiceBrief, listenerReflection } from './conversation-voices.mjs';
 
 export const WORLD = Object.freeze({ width: 2000, height: 1125 });
 const clean = value => String(value ?? '').replace(/\s+/g, ' ').trim();
@@ -207,14 +208,18 @@ const spokenTitle=value=>{
 };
 export function conversationFor(source,target,edge,lensId='family',snapshots={}) {
   if(!source||!target||!edge?.reasons?.length) throw new Error('Select a metadata edge first.');
+  const voiceBrief=sceneVoiceBrief(source,target,lensId);
 
   const curated=sceneForConfirmedEdge(source.accession,target.accession,edge.reasons);
   if(curated) {
     return {
       id:edge.id+'::'+lensId,
       sceneId:curated.id,
-      aiAssisted:curated.turns[0].kind==='AI_ASSISTED_INTERPRETATION',
+      aiAssisted:Boolean(curated.languageRevision)||curated.turns[0].kind==='AI_ASSISTED_INTERPRETATION',
+      languageRevision:curated.languageRevision||null,
       authored:true,
+      voiceBrief,
+      listenerReflection:listenerReflection(source,target,lensId,curated.arc),
       mode:'CURATED_EDGE_SCENE',
       editorialStatus:curated.status,
       edgeMode:curated.mode,
@@ -273,7 +278,8 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
   const nextPrompt=onlyMotif?'Keep this as a question, investigate, or withdraw the link?':
     'Which additional source would change the interpretation of this pair?';
   return {
-    id:edge.id+'::'+lens.id,authored:true,mode:'scripted_interpretation',
+    id:edge.id+'::'+lens.id,authored:true,mode:'scripted_interpretation',voiceBrief,
+    listenerReflection:listenerReflection(source,target,lens.id),
     editorialStatus:'AUTOMATIC_SOURCE_BOUNDED_FALLBACK',edgeMode,
     dramaticArc:onlyMotif?'Can this connection survive scrutiny?':'What do two differently titled records make visible?',
     nextPrompt,

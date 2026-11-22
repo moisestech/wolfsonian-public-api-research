@@ -18,32 +18,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title calls munitions work skilled. Why would someone need to say that out loud?",
+        "text": "Skilled work. Glad somebody said it. Who gets the credit?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.317.66",
-        "text": "Mine advertises a lottery linked to an exhibition of women's labor. Seeing work isn't the same as valuing it, is it?",
+        "text": "Take a chance on my lottery. But seeing women’s labor in an exhibition is one thing. Valuing it is another.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.34",
-        "text": "Maybe not. Even the word skilled could leave the people doing the work unnamed.",
+        "text": "Fair point. I was pleased with the compliment. Now I want to know whose work it names.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The records share a Women motif and a Labor theme. They do not establish a shared workforce, audience, or collaboration.",
+        "text": "The shared labels are Women and Labor. They do not identify a common workforce, audience or collaboration.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.317.66",
-        "text": "Then let's not give them a shared history. Who chose what the exhibition showed?",
+        "text": "Then follow the names. Who chose the work the exhibition put on view?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which source could tell us who was paid, named, or invited?",
-    "editorialNote": "Start with this pair: two different ways of staging and recognizing women's work. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
+    "editorialNote": "Start with this pair: two different ways of staging and recognizing women's work. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony. Language revision: object-specific speech and uptake; newly authored phrasing, no claim of authentic period dialect.",
     "pair": [
       "85.4.64.34",
       "TD1989.317.66"
@@ -54,7 +54,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v1"
   },
   {
     "id": "opening-skilled-work-woman-exhibition",
@@ -68,12 +69,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "I tie skilled work to munitions. Does the job become visible, or only the national need for it?",
+        "text": "Skilled work. I want the work noticed, not just the need for munitions. Can your exhibition make room for that distinction?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1990.340.141",
-        "text": "I announce an exhibition called The Woman 1813–1913. Who decides which kinds of work deserve a public exhibition?",
+        "text": "The Woman, 1813–1913. Quite a heading. Before I promise you room, I ought to ask whose working day it leaves out.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -83,7 +84,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "What would their actual captions reveal about the intended audiences?",
-    "editorialNote": "Do not turn the two exhibition or production contexts into one historical narrative.",
+    "editorialNote": "Do not turn the two exhibition or production contexts into one historical narrative. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "85.4.64.34",
       "TD1990.340.141"
@@ -94,7 +95,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "opening-skilled-work-engine",
@@ -108,32 +110,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "Skilled Work. That's in my title. I wonder who had to be convinced.",
+        "text": "Skilled Work. Has a good ring to it. I wonder who needed convincing.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Mine is Making the Engine. It names what is made, but not necessarily everyone making it.",
+        "text": "Making the Engine. That sounds like something someone still has to do. A compliment won’t turn the thing.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.34",
-        "text": "So showing production isn't the same thing as hearing from the workers.",
+        "text": "No. And naming the job still leaves the person doing it out of the sentence.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Factories is the shared motif. Nothing here proves the same factory, workers, or a connection between the makers of these prints.",
+        "text": "Factories is the shared motif. It establishes neither the same factory nor the same workers.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Then what kind of worker's account would change the story we're telling?",
+        "text": "Then find me an account from the work itself. What could the person making it tell us?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which record would identify an actual worker behind either image?",
-    "editorialNote": "Same-era production imagery; do not infer direct artist influence. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
+    "editorialNote": "Same-era production imagery; do not infer direct artist influence. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony. Language revision: object-specific speech and uptake; newly authored phrasing, no claim of authentic period dialect.",
     "pair": [
       "85.4.64.34",
       "85.4.64.43"
@@ -144,7 +146,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v1"
   },
   {
     "id": "opening-skilled-work-workers-vote",
@@ -158,12 +161,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title asks the viewer to notice skilled work on munitions.",
+        "text": "Skilled work. Recognition is a start. Does your invitation go any further?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.4091",
-        "text": "My title asks people to vote for a workers' party. When does being pictured as labor become having a political voice?",
+        "text": "Vote for the workers’ party. That asks for a response. Whether the people you picture could give one is a question we still have to ask.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -173,7 +176,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "Whose voice is centered in each publication?",
-    "editorialNote": "Keep political interpretation critical and nonpartisan; avoid claiming artist endorsement.",
+    "editorialNote": "Keep political interpretation critical and nonpartisan; avoid claiming artist endorsement. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "85.4.64.34",
       "XX1990.4091"
@@ -184,7 +187,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "opening-skilled-work-1939",
@@ -198,12 +202,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My 1917 title names munitions as skilled work. Does a wartime need change how skill is celebrated?",
+        "text": "Skilled work. I can make the words sound confident. What happens when you put them beside that year?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "I am titled 1939 A.D. What does that date do to the earlier image's confidence in work and progress?",
+        "text": "1939 A.D. Say it slowly. A date can trouble your confidence without telling us what followed from your image.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -213,7 +217,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "What contemporary account from 1939 would change this reading?",
-    "editorialNote": "A temporal juxtaposition, not historical continuity.",
+    "editorialNote": "A temporal juxtaposition, not historical continuity. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "85.4.64.34",
       "84.4.157"
@@ -224,7 +228,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "opening-skilled-work-aircraft",
@@ -238,12 +243,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title stays close to the work of making munitions.",
+        "text": "Stay a moment with the making of munitions. Does your view leave space for the work?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990. 3722",
-        "text": "My title places a Savoia-Marchetti aircraft above Rome's Colosseum. What changes when technical power is seen from above rather than from the workshop?",
+        "text": "An aircraft above the Colosseum makes quite an entrance. From that height, I might have to be reminded to look down.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -253,7 +258,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "What does each viewpoint invite us to see—and not see?",
-    "editorialNote": "The flying-over-Colosseum wording comes from its catalogue title, not a reviewed photograph.",
+    "editorialNote": "The flying-over-Colosseum wording comes from its catalogue title, not a reviewed photograph. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "85.4.64.34",
       "XX1990. 3722"
@@ -264,7 +269,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "machines-engine-safety",
@@ -278,32 +284,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Making the Engine. The title puts the machine first. Where did the hands go?",
+        "text": "A fine thing, an engine. Easy to admire the making of it.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.318.1",
-        "text": "Hold on. My warning says a splinter can cost an eye. The worker's body isn't an afterthought.",
+        "text": "Hold on. One splinter can cost you an eye. Still in such a hurry?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "You're right. I was asking about the image. You're asking what the work might cost.",
+        "text": "Fair point. I was admiring the work. You brought me back to the person doing it.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Both records have the Machines motif. That does not place them in the same workshop, industry, or incident.",
+        "text": "The shared Machines motif does not connect these objects to the same workshop or an actual injury.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.318.1",
-        "text": "Good. Keep us separate, but keep that question. What would an actual workplace account tell us?",
+        "text": "Keep that distinction. Now, whose account could tell us what safe work required?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which safety record or workplace account would complicate the picture?",
-    "editorialNote": "A key dramatic counterweight: productivity vs. bodily risk. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
+    "editorialNote": "A key dramatic counterweight: productivity vs. bodily risk. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony. Language revision: object-specific speech and uptake; newly authored phrasing, no claim of authentic period dialect.",
     "pair": [
       "85.4.64.43",
       "TD1989.318.1"
@@ -314,7 +320,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v1"
   },
   {
     "id": "machines-vote-engine",
@@ -328,32 +335,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.4091",
-        "text": "My title tells viewers to vote for a workers' party. At least it's asking for a political choice.",
+        "text": "Vote for the workers’ party. An invitation to have a say, if you take my title at its word.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Making the Engine, that's my title. I show work by name; I don't ask anyone for a vote.",
+        "text": "Making the Engine. I give the work a title. That doesn’t give anyone a vote.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.4091",
-        "text": "That's the difference. Being pictured as a worker isn't the same as having a say.",
+        "text": "Then I should ask who can answer my invitation. Picturing workers won’t answer that for me.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Factories is a repeated motif, not a proven relation between these parties, artists, or workers.",
+        "text": "Factories is the shared motif, not evidence of a common campaign, workforce or political position.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Fair. And do we know whether anyone listened to either appeal? Not from a shared tag.",
+        "text": "All right. Look for the workers’ own words. What did they want their work to change?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "What would a contemporaneous worker's account add?",
-    "editorialNote": "Political poster is an address to a viewer; title evidence does not establish reception. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
+    "editorialNote": "Political poster is an address to a viewer; title evidence does not establish reception. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony. Language revision: object-specific speech and uptake; newly authored phrasing, no claim of authentic period dialect.",
     "pair": [
       "XX1990.4091",
       "85.4.64.43"
@@ -364,7 +371,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v1"
   },
   {
     "id": "politics-1939-atlantic-wall",
@@ -378,12 +386,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "84.4.157",
-        "text": "My title names 1939 A.D. Can a year stand in for a prediction about what comes next?",
+        "text": "1939 A.D. One year, and you are already waiting for the next. Why are you pointing backward?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.2907",
-        "text": "Mine insists that 1943 is not 1918. Why would a poster need to argue with a previous year?",
+        "text": "1943 is not 1918. I put the dates into an argument. You are right to ask what that comparison is trying to settle.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -393,7 +401,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "Who was being addressed by each date?",
-    "editorialNote": "Do not conflate disparate political contexts.",
+    "editorialNote": "Do not conflate disparate political contexts. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "84.4.157",
       "XX1990.2907"
@@ -404,7 +412,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "politics-uboats-1939",
@@ -418,12 +427,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.3843",
-        "text": "My title says The Effect of Our U-Boats. Who is invited into that word our?",
+        "text": "Our U-boats. A small word does a great deal of recruiting. Who have I invited into it?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "Mine names 1939 A.D. Does a date address everyone equally, or a particular imagined public?",
+        "text": "I can give you a year: 1939 A.D. I cannot give your “our” an audience just by standing beside it.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -433,7 +442,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "Can a source identify the original intended audiences?",
-    "editorialNote": "Treat wartime publicity as an object of analysis, not a statement to endorse.",
+    "editorialNote": "Treat wartime publicity as an object of analysis, not a statement to endorse. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "XX1990.3843",
       "84.4.157"
@@ -444,7 +453,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "challenge-robeson-architectural-fantasy",
@@ -458,12 +468,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "84.4.66",
-        "text": "My record names Paul Robeson. Why should I be connected to an architectural fantasy?",
+        "text": "A portrait named Paul Robeson, beside a house on a hillside. What has a tree got to do with this introduction?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1991.13",
-        "text": "My record describes a house on a steep hillside. Is the shared Trees motif enough for us to claim a conversation?",
+        "text": "A tree may give your eye somewhere to start. It is a thin reason to make our histories sound acquainted.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -473,7 +483,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "Keep the comparison as a question, or withdraw this edge?",
-    "editorialNote": "Intentional failed match; do not coerce emotional or racial meaning from a tree tag.",
+    "editorialNote": "Intentional failed match; do not coerce emotional or racial meaning from a tree tag. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "84.4.66",
       "XX1991.13"
@@ -484,7 +494,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "commerce-biennale-dye",
@@ -498,12 +509,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "84.4.25.1",
-        "text": "I announce an international exhibition of contemporary art. What makes an image appear worthy of attention?",
+        "text": "An international exhibition of contemporary art. I ask for attention on a rather grand scale. What are you offering?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.3275",
-        "text": "My title advertises a dye. What happens when a similar mythological motif enters an industrial advertisement?",
+        "text": "Superior dye. A much smaller promise, perhaps. But that shared mythological figure may have a sales job in either image.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -513,7 +524,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "What changes when an image persuades a consumer rather than an exhibition visitor?",
-    "editorialNote": "Require visual check before stating motif's form or composition.",
+    "editorialNote": "Require visual check before stating motif's form or composition. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "84.4.25.1",
       "XX1990.3275"
@@ -524,7 +535,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "politics-east-indies-1939",
@@ -538,12 +550,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "TD1990.340.146",
-        "text": "My title demands that the East Indies be free and urges people to work and fight for it. Who is being summoned?",
+        "text": "Work and fight for freedom. Those are forceful instructions. What would it mean to answer them back?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "My title gives us a year, 1939. Can a date answer a later political demand?",
+        "text": "I carry 1939 A.D., not an answer to your command. Keep the date in view, but let the people addressed do the answering.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -553,7 +565,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "What would each object's publisher and audience clarify?",
-    "editorialNote": "Sensitive political histories require verified context before specific interpretive claims.",
+    "editorialNote": "Sensitive political histories require verified context before specific interpretive claims. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "TD1990.340.146",
       "84.4.157"
@@ -564,7 +576,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "challenge-utrecht-living-rise",
@@ -578,12 +591,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.2870",
-        "text": "I announce the 10th Utrecht Fair. Why has this graph connected me to Let the Living Rise?",
+        "text": "The tenth Utrecht Fair. I am used to being counted. Why has Water become our introduction?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "83.4.40",
-        "text": "The metadata says we share Water. But what do our titles actually tell us about a common purpose?",
+        "text": "Let the Living Rise. I can give you a verb to think about, but that shared label is doing rather too much work.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -593,7 +606,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "Would you inspect the objects further—or reject this connection?",
-    "editorialNote": "A deliberately self-critical match, useful as the machine recognizing its limits.",
+    "editorialNote": "A deliberately self-critical match, useful as the machine recognizing its limits. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "XX1990.2870",
       "83.4.40"
@@ -604,7 +617,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "politics-invader-1939",
@@ -618,12 +632,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.2880",
-        "text": "My title describes an invader's grasp and a threat of enslavement. What future is being feared?",
+        "text": "An invader’s clutch. I make the threatened future feel close. Does your date make it easier to hold at a distance?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "I am titled 1939 A.D. Can a future be an expectation for one audience and a danger for another?",
+        "text": "1939 A.D. It may look tidy in a title. You have given me a reason to ask how differently a year can be faced.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -633,7 +647,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "Whose perspective would another document restore?",
-    "editorialNote": "Do not attribute politics beyond title and checked sources.",
+    "editorialNote": "Do not attribute politics beyond title and checked sources. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "XX1990.2880",
       "84.4.157"
@@ -644,7 +658,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "commerce-heels-biennale",
@@ -658,12 +673,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.3277",
-        "text": "My title promotes Pirelli heels. Can an image make a commercial object seem extraordinary?",
+        "text": "Pirelli heels. A practical purchase can still want a little glamour. Must you keep all the extraordinary images?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.25.1",
-        "text": "I announce a biennial exhibition. Why would the same motif appear in a product image and an art exhibition poster?",
+        "text": "Contemporary art does not own a mythological figure. You make me wonder what the figure is asked to do in each of our invitations.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -673,7 +688,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       }
     ],
     "next": "What does the motif ask different viewers to desire?",
-    "editorialNote": "Visual motif must be checked before claims about its appearance.",
+    "editorialNote": "Visual motif must be checked before claims about its appearance. Language audit: colloquial object address; no modern comparisons or invented period quotations.",
     "pair": [
       "XX1990.3277",
       "84.4.25.1"
@@ -684,7 +699,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v2"
   },
   {
     "id": "TD1989.317.66::TD1990.340.141",

@@ -35,7 +35,7 @@ test('all scripts require the exact metadata family and value before speaking',(
   const assisted=scene.group==='public-expansion';
   if(!assisted)assert.ok(scene.turns.some(turn=>turn.speakerAccession==='archivist'));
   assert.ok(scene.arc.length>=10&&scene.next.length>=10&&scene.editorialNote.length>=20);
-  assert.ok(scene.turns.every(t=>t.kind===(assisted?'AI_ASSISTED_INTERPRETATION':'ARTIST_AUTHORED_INTERPRETATION')&&t.text.length>=35));
+  assert.ok(scene.turns.every(t=>t.kind===(assisted?'AI_ASSISTED_INTERPRETATION':'ARTIST_AUTHORED_INTERPRETATION')&&t.text.length>=(scene.languageRevision?12:35)));
   const evidence=[{family:scene.requires.family,value:scene.requires.value}];
   const forward=sceneForConfirmedEdge(...scene.pair,evidence);
   const reversed=sceneForConfirmedEdge(scene.pair[1],scene.pair[0],evidence);

@@ -48,6 +48,7 @@ export function conversationEpisode({source,target,conversation}={}){
     rationale:proposed?'Artist-proposed comparison · Not a catalog match':term?'Shared '+family+': '+term+' · Imagined comparison':'Comparison proposed · No verified shared tag',
     turns:Object.freeze(authored?conversation.turns.map(turn=>Object.freeze({...turn})):[]),
     nextQuestion:conversation.nextPrompt||'What source would change this interpretation?',
+    listenerReflection:conversation.listenerReflection||null,
     editorialStatus:conversation.editorialStatus||'DRAFT',
     historicalRelationshipEstablished:false
   });
@@ -104,9 +105,9 @@ export function explainEncounter({source,target,conversation,lensLabel='Family',
       ? 'A specifically written exchange for these two records. Another pair can raise a different argument.'
       : 'An offline five-turn comparison template. The object titles, shared tag and reading perspective change; the dramatic structure can repeat.';
   const frame=juxtaposition
-    ? 'The research path supplies the question.'
+    ? 'The research path supplies the question. The selected perspective changes the listener’s questions, including any comparison with the present.'
     : curated
-      ? 'The selected perspective helps navigate the map. This scripted scene does not change its script when you change that perspective.'
+      ? 'The selected perspective helps navigate the map. This scripted scene does not change its script when you change that perspective; its listener questions and competing reading do change.'
       : 'The selected “'+short(lensLabel,60)+'” perspective changes which question frames this scripted exchange.';
   const previousChanged=previous&&previous.key!==key;
   const changed=previousChanged

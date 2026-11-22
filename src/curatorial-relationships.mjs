@@ -6,6 +6,30 @@
  */
 import { PRESENTATION_PAIRS } from './presentation-pairs.mjs';
 import { WORLDS_FAIRS_RESEARCH } from './worlds-fairs-research.mjs';
+import { sceneVoiceBrief, listenerReflection, accessionKey } from './conversation-voices.mjs';
+
+const PATH_FOLLOW_UP = Object.freeze({
+  'who-narrates-tomorrow':'Follow the Harlem invitation. How does an organizer’s route change the view from above?',
+  'which-future-is-refused':'Look again at the maquette. What does an unbuilt warning ask of the fair’s emblem?',
+  'who-builds-the-future':'Return to the hands in the sculpture. What does the word “skilled” add to that view?',
+  'cost-of-iron':'Change your distance from the tower to the eye. Which detail makes you pause?',
+  'room-for-a-warning':'Compare the two warnings: what can each name, and what answer is missing?',
+  'city-from-a-window':'Follow the hillside house. Where does the grand plan become an ordinary journey?',
+  'terms-of-entry':'Inspect the invitation and the lottery separately. What does each actually offer?',
+  'date-on-tomorrow':'Read 1939 A.D. beside the imagined city. What does that year make you reconsider?',
+  'fair-counts':'Stay with “Harlem” and “tenth.” What kind of public does each word ask you to count?',
+  'heel-and-working-day':'Inspect the heel as an object of commerce. What would be needed to read a working day into it?',
+  'permission-to-rise':'Say “Let” as a request, then as permission. Which reading changes the maquette?',
+  'catalogue-meets-engine':'Open the category “Machine Age” beside the task “Making.” Where does the title stop explaining?',
+  'radio-meets-futurama':'Follow the radio. What is the difference between receiving a voice and choosing the route?',
+  'globe-and-theme-center':'Inspect the edge of the model and the surface of the vase. What does each scale leave outside?',
+  'catalogue-and-globe':'Follow the named design roles on Mappemonde. Which distinctions should survive a broad era label?',
+  'poster-and-theme-center':'Return to the pictured queue. What changes when you treat that crowd as an invitation?',
+  'radio-and-television':'Compare the devices as receivers. What would let a listener or viewer answer back?',
+  'poster-and-program':'Read the program’s “your” against the poster’s crowd. Who is being addressed?',
+  'television-and-booklet':'Follow the booklet. What can be carried away that a picture alone cannot establish?',
+  'program-and-booklet':'Keep the invitation beside the souvenir. When would you say the promise had been kept?',
+});
 
 export const RELATIONSHIP_TYPES = Object.freeze({
   metadata_overlap: Object.freeze({
@@ -87,9 +111,66 @@ function evidenceLinks(path) {
   return Object.freeze([...new Map(links.map(link=>[link.url,Object.freeze(link)])).values()]);
 }
 
+const PATH_LANGUAGE_REVISIONS = Object.freeze({
+  "who-narrates-tomorrow": [
+    "Keep your eyes on the city. The narration will explain the route—unless you have a question?",
+    "We’re doing the inviting from Harlem. Your route may be impressive, but it doesn’t decide where our questions begin.",
+    null
+  ],
+  "which-future-is-refused": [
+    "I was a warning against authoritarian aggression. The fair turned the proposal down. Apparently there wasn’t room.",
+    "I give that fair an emblem. You make me wonder what an emblem fails to show when a warning stays unbuilt.",
+    null
+  ],
+  "who-builds-the-future": [
+    "Admire the height, by all means. I show workers raising the iron of the Eiffel Tower. Look for the hands.",
+    "Skilled Work. I put the compliment into words. You make me ask whether the people doing it get more than a heading.",
+    null
+  ],
+  "catalogue-meets-engine": [
+    "Machine Age. An entire era before you’ve even opened the catalogue. Efficient, isn’t it?",
+    "Making the Engine. A less sweeping title. Somebody still has to do the making.",
+    "Quite. You’ve turned my heading back into a question. Which work would we need to inspect before agreeing about the age?"
+  ],
+  "radio-meets-futurama": [
+    "A voice comes in; a dial gives you a choice. Your narration sounds harder to interrupt.",
+    "My attraction carries visitors above an imagined city. The route and narration do rather a lot of the choosing.",
+    "Then changing the station would only be a start. Who gets to answer the plan?"
+  ],
+  "poster-and-theme-center": [
+    "Quite a queue, isn’t it? Printed in 1937, with the fair still two years away. I can draw a crowd ahead of time.",
+    "And I can give that pictured crowd a destination: the Trylon and Perisphere. Neither of us can name who actually came.",
+    "You’re right. I made an invitation look like an arrival. Let’s keep that difference in view."
+  ],
+  "poster-and-program": [
+    "Look at the line I’ve drawn toward the fair. It makes the invitation seem popular already.",
+    "Your World of Tomorrow. I make it seem personal. A crowd in a picture cannot tell either of us who felt invited.",
+    "Then the people in my picture cannot answer for the public. I’d want to hear from someone who crossed the threshold."
+  ],
+  "television-and-booklet": [
+    "A picture as well as sound. I can make an experience seem close. What do you offer after the display?",
+    "Futurama, in a booklet. Something you could hold. Being able to carry the promise away doesn’t mean it came true.",
+    "No. And I cannot tell you I showed your exhibit. We’d need an actual account of how either experience was received."
+  ],
+  "date-on-tomorrow": [
+    "A city still ahead of the visitor. What year would you put on that entrance sign?",
+    "1939 A.D. I already have a year in my title. It doesn’t settle what your tomorrow will become.",
+    "Leave the sign there a moment. I want to hear how that year sounded to someone living through it."
+  ],
+  "terms-of-entry": [
+    "An invitation to visit the fair. Mind you, an invitation still leaves the journey to be made.",
+    "A chance in a lottery. I leave rather a lot to chance, too. A ticket could be kept without its holder ever seeing the exhibition.",
+    "Then neither piece of paper gets to count as a visit. Whose itinerary could tell us what happened after the invitation?"
+  ]
+});
+
 function scene(path) {
+  const revision=PATH_LANGUAGE_REVISIONS[path.id];
   return Object.freeze({
     ...path,
+    followUp:PATH_FOLLOW_UP[path.id]||path.arc,
+    turns:revision?Object.freeze(path.turns.map((turn,index)=>Object.freeze({...turn,text:revision[index]||turn.text}))):path.turns,
+    languageRevision:revision?'object-voices-v2':['radio-and-television','program-and-booklet','catalogue-and-globe','globe-and-theme-center'].includes(path.id)?'object-voices-v1':null,
     status: 'research_preview',
     relationshipType: 'curatorial_juxtaposition',
     historicalRelationshipEstablished: false,
@@ -306,16 +387,24 @@ const BRIDGES=[
     publicPacketRecord('85.7.383a,b'),publicPacketRecord('86.17.1'),
     'A 1932 globe-shaped stoneware vase meets a model of the Trylon and Perisphere, designed for the 1939 fair’s Theme Center.',
     'The two public packets document distinct objects and materials. They do not establish a shared exhibition, audience or design influence.',
-    ['I am a globe-shaped vessel, made of glazed stoneware. A world can appear small enough to put on a table.',
-     'I am a model for a fair’s Theme Center. Scale me up in your imagination, and you might walk around my world.',
-     'You changed the scale, not the boundary. Whose world would you notice beyond the fairgrounds?']),
+    [
+  "You can turn me in your hands. That doesn’t put the world in them.",
+  "Come closer. As a model, I make a fair’s Theme Center look manageable. Isn’t a change of scale useful?",
+  "Useful, yes. Complete, no. A globe-shaped vase has a boundary, too.",
+  "Then I’ve offered a way to look, not a whole world. What would you look for outside the model?",
+  "The part the model leaves you wondering about. Which plan or description could help us inspect that edge?"
+]),
   comparison('catalogue-and-globe','Who gets named when we call a design modern?',
     publicPacketRecord('XM1999.108.8'),publicPacketRecord('85.7.383a,b'),
     'The Machine Age Exposition catalogue proposes a broad category. The Mappemonde vase’s public packet names separate form, décor and decoration roles.',
     'The catalogue packet does not quote its essays or connect its exhibition to the vase; the vase packet does not establish its reception or exhibition placement.',
-    ['My cover can gather many objects under the phrase Machine Age. Is that enough to explain who made them?',
-     'My public record names a form designer, a décor designer and a decorator. A single label would make those different tasks disappear.',
-     'Then my category may need a footnote rather than a slogan. Whose names should a visitor look for before calling something modern?']),
+    [
+  "An entire age, neatly titled. Machine Age. A heading has its uses.",
+  "Very efficient. My record names a form designer, a décor designer and a decorator. Your title takes a shorter route.",
+  "I was trying to bring things together. You’ve made me look at what the heading leaves out.",
+  "Then keep the heading. Leave room for the names beside it.",
+  "Agreed. Before we turn a label into an explanation, which page or maker’s record should we open?"
+]),
   comparison('poster-and-theme-center','Can a poster invite you into a future that has not happened yet?',
     publicPacketRecord('85.4.72'),publicPacketRecord('86.17.1'),
     'An offset-lithograph poster designed in 1937 depicts people lining up for the Trylon and Perisphere, while the theme-center model represents the fair’s structures.',
@@ -327,9 +416,14 @@ const BRIDGES=[
     publicPacketRecord('2012.6.1'),publicPacketRecord('XX1990.1484'),
     'A 1939 RCA Victor TRK 12 television and a 1937 Sparton 558-C radio offer two designed forms for receiving media in domestic interiors.',
     'The packets establish designers, dates and materials, but no shared owner, broadcast schedule, specific audience or household use.',
-    ['I arrive in the record as a television cabinet. People may want to imagine a family gathered around me, but no household is named.',
-     'My glass and brass belong to a radio, not a listening diary. A gleaming surface tells you very little about what someone heard.',
-     'So we are both missing an audience. Would a service record, advertisement or account from a user make either of us less mysterious?']),
+    [
+  "A picture as well as a voice. Surely that improves matters?",
+  "Easy with the dial. Receiving a voice is one thing. Answering it is another.",
+  "You think a picture might make that harder?",
+  "I think it might make the speaker harder to ignore. That’s a different achievement.",
+  "Then let’s find out who was watching. Have we got anything that names an audience?",
+  "Not for either of these sets. Start with a listener’s account or a household record. I’d like to hear an answer."
+]),
   comparison('poster-and-program','Who gets to say the future is open?',
     publicPacketRecord('85.4.72'),publicPacketRecord('86.19.57'),
     'The 1937 promotional poster projects a crowd toward the fair; the 1939 Your World of Tomorrow program belongs to the Theme Center presentation.',
@@ -348,9 +442,14 @@ const BRIDGES=[
     publicPacketRecord('86.19.57'),publicPacketRecord('XB1992.1640'),
     'A 1939 program titled Your World of Tomorrow, associated with the fair’s Theme Center, meets a 1940 Futurama booklet associated with the separate General Motors exhibit. Both frame the future as an experience, but their public records document different publications.',
     'The packets do not establish a shared reader, visit, distribution path, reception, or historical interaction between these printed works; the full program text is not available here.',
-    ['My 1939 title addresses the reader directly: Your World of Tomorrow. How do you decide when a printed future belongs to you?',
-     'My 1940 cover says Futurama. I can travel home as a booklet, but being kept does not prove any promised tomorrow arrived.',
-     'Then a program and a souvenir may preserve two versions of a future without proving either was shared. Whose itinerary or first-hand account could test that claim?'])
+    [
+  "Your world. Has a nice ring to it, doesn’t it?",
+  "Fits nicely in a title. A future you can take home has its attractions.",
+  "You make it sound like a sales pitch. I was offering an invitation.",
+  "I’m a booklet for a General Motors exhibit. I can hardly object to a little promotion. I’m asking what the promise delivers.",
+  "Then perhaps “your” is where the question begins. Whose account could tell us what that invitation meant?",
+  "Find a reader’s account. Being kept as a booklet won’t tell you whether the promised tomorrow arrived."
+])
 ];
 
 export const CURATORIAL_PATHS = Object.freeze([...PATH_DRAFTS,...BRIDGES].map(path => scene({
@@ -362,18 +461,20 @@ export function pathById(id) {
   return CURATORIAL_PATHS.find(path => path.id === id) || null;
 }
 
-export function juxtapositionConversation(path) {
+export function juxtapositionConversation(path, lensId='family') {
   if (!path || path.relationshipType !== 'curatorial_juxtaposition') throw new Error('Select a curatorial juxtaposition.');
   return {
     id: path.id,
     mode: 'CURATORIAL_JUXTAPOSITION',
     relationshipType: 'curatorial_juxtaposition',
     researchPreview: true,
-    aiAssisted: Boolean(path.aiAssisted),
+    aiAssisted: Boolean(path.aiAssisted||path.languageRevision),
+    voiceBrief: sceneVoiceBrief(path.source,path.target,lensId),
+    listenerReflection:listenerReflection(path.source,path.target,lensId,path.arc),
     editorialStatus: 'research_preview',
     historicalRelationshipEstablished: false,
     dramaticArc: path.arc,
-    nextPrompt: '',
+    nextPrompt: path.followUp,
     source: path.source.accession,
     target: path.target.accession,
     proposal: path.proposal,
@@ -387,4 +488,21 @@ export function juxtapositionConversation(path) {
       kind: turn.kind,
     })),
   };
+}
+
+/** Onward reading choices share exact object identities, never inferred historical contact. */
+export function pathwayContinuations(pathId, limit=3) {
+  const path=pathById(pathId);
+  if(!path)return [];
+  const ids=[path.source.accession,path.target.accession].map(accessionKey);
+  const candidates=CURATORIAL_PATHS.filter(other=>other.id!==pathId).map(other=>({
+    id:other.id,question:other.arc,
+    sharedAccessions:[other.source.accession,other.target.accession].filter(id=>ids.includes(accessionKey(id))),
+    kind:'ARTIST_AUTHORED_ROUTE',historicalRelationshipEstablished:false,
+  })).filter(other=>other.sharedAccessions.length);
+  // Offer a route through each side before adding more of either side.
+  const chosen=[];
+  for(const id of ids){const next=candidates.find(c=>!chosen.includes(c)&&c.sharedAccessions.some(a=>accessionKey(a)===id));if(next)chosen.push(next);}
+  for(const candidate of candidates)if(!chosen.includes(candidate))chosen.push(candidate);
+  return chosen.slice(0,Math.max(0,Math.min(6,Number.isFinite(limit)?Math.floor(limit):3)));
 }
