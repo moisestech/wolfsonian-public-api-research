@@ -775,7 +775,7 @@ function paintScene(c,edge){
 function mobileLayout(){return window.matchMedia('(max-width: 800px)').matches;}
 function syncMobileNavigation(){
   const hall=document.body.classList.contains('show-timeline');
-  for(const [id,active] of [['header-townhall',hall&&!relatedQuestions],['header-conversation',!hall]]){
+  for(const [id,active] of [['header-conversation',!hall]]){
     if(active)$(id)?.setAttribute('aria-current','page');else $(id)?.removeAttribute('aria-current');
   }
   const view=document.body.classList.contains('show-timeline')?'feed':
@@ -2362,7 +2362,6 @@ $('room-back')?.addEventListener('click',()=>setMobileView(state.mobileFrom||'sp
 $('record-return')?.addEventListener('click',()=>{setPanel('conversation');$('room-question').focus();commitVisit('push');});
 function browseAll(){relatedQuestions=false;relatedAnchor=null;townhallShouldFit=true;wakeDream();stage.setSpeaking('');stage.setPairHighlight('','',null);stage.setClusterHighlight([],'');markMapChoice('townhall');setMobileView('timeline');render();commitVisit('push');}
 $('space-feed')?.addEventListener('click',browseAll);
-$('header-townhall')?.addEventListener('click',browseAll);
 $('header-conversation')?.addEventListener('click',()=>$('space-conversation').click());
 // On phones the same Filters control opens the full data sheet.
 $('map-toggle')?.addEventListener('click',event=>{

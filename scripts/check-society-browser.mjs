@@ -21,9 +21,17 @@ try {
   const selectEdge=async index=>{await page.locator('.conversation-edge').nth(index).focus();await page.keyboard.press('Enter');};
   const screenshot=async name=>page.screenshot({path:new URL('artifacts/archive-society-'+name+'.png',root).pathname,fullPage:true});
   const openTownhall=async()=>{
-    if(await page.locator('#data-filter').isVisible())await page.locator('#data-filter-close').click();
-    await page.locator('#header-townhall').click();
-    assert.equal(await page.locator('[data-map="townhall"]').count(),0);
+    assert.equal(await page.locator('#header-townhall').count(),0);
+    const filter=page.locator('#space-filter');
+    if(await filter.isVisible()){
+      if(await filter.getAttribute('aria-expanded')!=='true')await filter.click();
+      await page.locator('#data-filter [data-map="townhall"]').click();
+      await page.locator('#data-filter-close').click();
+      return;
+    }
+    const toggle=page.locator('#map-toggle');
+    if(await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
+    await page.locator('#map-popover [data-map="townhall"]').click();
   };
   const revealDisplay=async()=>{
     const menu=page.locator('#display-menu');
@@ -68,7 +76,7 @@ try {
     await page.waitForTimeout(250);
     assert.ok(await page.locator('#editorial-phrase').isVisible());
     if(width===390){
-      assert.ok(await page.locator('.browse-nav').evaluate(el=>el.scrollWidth>el.clientWidth));
+      assert.ok(await page.locator('.browse-nav').evaluate(el=>getComputedStyle(el).overflowX==='auto'));
       await page.locator('#header-perspective').scrollIntoViewIfNeeded();
       await page.locator('#header-perspective').click();
       assert.ok(await page.locator('#mobile-perspective-sheet').isVisible());
