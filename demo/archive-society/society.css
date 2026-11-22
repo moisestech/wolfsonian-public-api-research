@@ -1363,7 +1363,7 @@ html[data-color-theme="light"] .record-overlay .evidence-type{color:#d7c4a3}
   font:650 11px/1.2 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#e8d5a3
 }
 #reading-popover .perspective-card-copy strong,
-#mobile-perspective-choices .mobile-perspective-copy strong{font:400 clamp(40px,4vw,52px)/1.12 Georgia,serif;color:#f8f3e6}
+#mobile-perspective-choices .mobile-perspective-copy strong{font:400 clamp(20px,2.2vw,28px)/1.18 Georgia,serif;color:#f8f3e6;display:block;width:100%;max-width:100%;min-width:0;white-space:normal;overflow-wrap:anywhere;text-wrap:pretty}
 #reading-popover .perspective-card-copy small,
 #mobile-perspective-choices .mobile-perspective-copy small{
   font:400 15px/1.45 system-ui,sans-serif;color:#e7f0e8;white-space:normal
@@ -1510,3 +1510,8 @@ html[data-color-theme="light"] .browse-tab[aria-current="page"]::after{backgroun
 /* Global browsing controls replace their duplicate in-content triggers. */
 #room-perspective-toggle,#feed-perspective-toggle,#questions-back{display:none!important}
 @media(max-width:800px){body.show-room .atlas-panel{top:var(--archive-header-height,116px)}}
+
+/* The selected filter names Townhall on phones; retain its accessible context. */
+@media(max-width:800px){
+ #timeline-title[data-screen="townhall"]{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+}

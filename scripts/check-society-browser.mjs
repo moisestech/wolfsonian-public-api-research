@@ -60,7 +60,7 @@ try {
   };
   await mkdir(new URL('artifacts/',root),{recursive:true});
   // Fresh visits begin in the full field on desktop and phone; refresh restores it.
-  for(const width of [1280,390]){
+  for(const width of [1280,390,320]){
     await page.setViewportSize({width,height:900});
     await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
     assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('show-timeline')));
@@ -84,6 +84,19 @@ try {
     }
     await page.reload({waitUntil:'networkidle'});
     assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('show-timeline')));
+    const heading=await page.locator('#timeline-title').boundingBox();
+    assert.ok(width<=800?heading.height<=1:heading.height>1,'Only mobile omits the repeated Townhall heading');
+    await page.locator('#header-perspective').click();
+    const picker=width<=800?'#mobile-perspective-choices':'#reading-popover';
+    const names=await page.locator(picker+' [data-lens] strong').evaluateAll(els=>els.map(el=>{
+      const title=el.getBoundingClientRect(),card=el.closest('[data-lens]').getBoundingClientRect();
+      return {name:el.textContent,fits:el.scrollWidth<=el.clientWidth+1&&title.left>=card.left&&title.right<=card.right+1};
+    }));
+    assert.equal(names.length,11);
+    assert.ok(names.every(name=>name.fits),'All perspective names fit at '+width+': '+JSON.stringify(names));
+    if(width<=800)await page.locator('#mobile-perspective-close').click();
+    else await page.locator('#header-perspective').click();
+
   }
   await page.setViewportSize({width:1280,height:900});
   await open();
