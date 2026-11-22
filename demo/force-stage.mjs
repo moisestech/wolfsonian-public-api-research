@@ -296,6 +296,7 @@ export function mountForceStage(host, { onSelect, onLink, onDrag, background = '
       button.className = 'graph-node' + (node.neighbor ? ' conversation-edge' : '') + (node.emphasized ? ' emphasized' : '') + (node.focused ? ' selected' : '') + (node.schematic ? ' schematic' : '');
       button.dataset.accession = node.id;
       button.textContent = node.label || node.id;
+      if(!node.schematic)button.style.fontStyle='italic';
       button.addEventListener('click', () => onSelect?.(node.id));
       if (typeof node.image === 'string' && node.image.startsWith('blob:')) {
         const image = document.createElement('img');

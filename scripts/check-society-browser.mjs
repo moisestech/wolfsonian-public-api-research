@@ -59,6 +59,22 @@ try {
     });
   };
   await mkdir(new URL('artifacts/',root),{recursive:true});
+  // Preview the gate locally without changing the production password flow.
+  await page.goto(base+'/demo/archive-society/',{waitUntil:'networkidle'});
+  await page.evaluate(()=>document.documentElement.classList.remove('demo-open'));
+  for(const width of [1280,390,320]){
+    await page.setViewportSize({width,height:844});
+    const gate=page.locator('#demo-gate');
+    assert.ok(await gate.isVisible());
+    const form=await gate.locator('form').boundingBox();
+    assert.ok(form.x>=0&&form.x+form.width<=width&&form.y>=0&&form.y+form.height<=844,'Password form fits at '+width);
+    assert.equal(await gate.evaluate(el=>getComputedStyle(el,'::before').animationName),'cloud-drift');
+    assert.ok(await gate.evaluate(el=>getComputedStyle(el,'::before').backgroundSize.split(',').every(size=>size.trim()==='auto')));
+    await screenshot('cloud-gate-'+width);
+  }
+  await page.emulateMedia({reducedMotion:'reduce'});
+  assert.equal(await page.locator('#demo-gate').evaluate(el=>getComputedStyle(el,'::before').animationName),'none');
+  await page.emulateMedia({reducedMotion:'no-preference'});
   // Fresh visits begin in the full field on desktop and phone; refresh restores it.
   for(const width of [1280,390,320]){
     await page.setViewportSize({width,height:900});
@@ -106,27 +122,27 @@ try {
     assert.equal(await portraits.count(),11);
     for(const portrait of await portraits.all()){
       const id=await portrait.getAttribute('data-persona-id');
-      assert.ok((await portrait.getAttribute('src')).endsWith('/'+id+'-white-master-v1.png'));
+      assert.ok((await portrait.getAttribute('src')).endsWith('/'+id+'-raster-master-v1.png'));
       await portrait.evaluate(img=>img.decode());
       assert.ok(await portrait.evaluate(img=>img.naturalWidth>0));
     }
     for(const mark of await page.locator(selector+' img[data-persona-mark]').all()){
       const id=await mark.getAttribute('data-persona-mark');
-      assert.ok((await mark.getAttribute('src')).endsWith('/'+id+'-white-master-v1.png'));
+      assert.ok((await mark.getAttribute('src')).endsWith('/'+id+'-raster-master-v1.png'));
       await mark.evaluate(img=>img.decode());
     }
   }
   // Cloudinary-backed persona marks preserve the intended small/large roles.
   assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-id'),'family');
   assert.equal(await page.locator('#room-lens-portrait').getAttribute('data-persona-variant'),'compact');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/flat-circular-v1\/family-(?:white|ink)-master-v1\.png$/);
-  assert.match(await page.locator('#room-archivist-portrait').getAttribute('src'),/\/flat-circular-v1\/archivist-(?:white|ink)-master-v1\.png$/);
-  assert.match(await page.locator('.chat .turn[data-role="archivist"] img').first().getAttribute('src'),/\/flat-circular-v1\/archivist-(?:white|ink)-master-v1\.png$/);
-  assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/flat-circular-v1\/family-(?:white|ink)-master-v1\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="worker"] img.persona-illustrated').getAttribute('src'),/\/flat-circular-v1\/worker-(?:white|ink)-master-v1\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="futurist"] img.persona-illustrated').getAttribute('src'),/\/flat-circular-v1\/futurist-(?:white|ink)-master-v1\.png$/);
-  assert.match(await page.locator('#reading-popover [data-lens="tourist"] img.persona-illustrated').getAttribute('src'),/\/flat-circular-v1\/tourist-(?:white|ink)-master-v1\.png$/);
-  assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/flat-circular-v1\/[a-z]+-(?:white|ink)-master-v1\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/diffusion-circular-v1\/family-raster-master-v1\.png$/);
+  assert.match(await page.locator('#room-archivist-portrait').getAttribute('src'),/\/diffusion-circular-v1\/archivist-raster-master-v1\.png$/);
+  assert.match(await page.locator('.chat .turn[data-role="archivist"] img').first().getAttribute('src'),/\/diffusion-circular-v1\/archivist-raster-master-v1\.png$/);
+  assert.match(await page.locator('.perspective-turn img').getAttribute('src'),/\/diffusion-circular-v1\/family-raster-master-v1\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="worker"] img.persona-illustrated').getAttribute('src'),/\/diffusion-circular-v1\/worker-raster-master-v1\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="futurist"] img.persona-illustrated').getAttribute('src'),/\/diffusion-circular-v1\/futurist-raster-master-v1\.png$/);
+  assert.match(await page.locator('#reading-popover [data-lens="tourist"] img.persona-illustrated').getAttribute('src'),/\/diffusion-circular-v1\/tourist-raster-master-v1\.png$/);
+  assert.match(await page.locator('#zoom-stage .plate.persona img').first().getAttribute('src'),/\/diffusion-circular-v1\/[a-z]+-raster-master-v1\.png$/);
   // An image failure first falls back to the known v2 Family portrait,
   // then to an inline vector if the secondary CDN request also fails.
   await page.locator('#room-lens-portrait').evaluate(img=>img.dispatchEvent(new Event('error')));
@@ -291,14 +307,14 @@ try {
     const src=await image.getAttribute('src');
     const id=await image.getAttribute('data-persona-mark');
     assert.ok(src.includes('/c_scale,w_128/'));
-    assert.ok(src.endsWith('/'+id+'-white-master-v1.png'));
+    assert.ok(src.endsWith('/'+id+'-raster-master-v1.png'));
   }
 
   for(const [id,label] of [['tourist','Tourist'],['novice','Art novice'],['connoisseur','Art connoisseur'],['futurist','Futurist'],['mourner','Mourner']]){
     const choice=page.locator('#mobile-perspective-choices [data-lens="'+id+'"]');
     assert.equal(await choice.count(),1,'Perspective choice exists: '+label);
     assert.match(await choice.innerText(),new RegExp(label));
-    assert.match(await choice.locator('img.persona-illustrated').getAttribute('src'),new RegExp('/flat-circular-v1/'+id+'-(?:white|ink)-master-v1[.]png$'));
+    assert.match(await choice.locator('img.persona-illustrated').getAttribute('src'),new RegExp('/diffusion-circular-v1/'+id+'-raster-master-v1[.]png$'));
   }
   assert.equal(await page.locator('#mobile-perspective-choices .perspective-choice-group-title').count(),3);
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"] img.persona-illustrated').getAttribute('data-persona-variant'),'full');
@@ -329,19 +345,19 @@ try {
   assert.equal(await appearance.getAttribute('aria-pressed'),'false');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/family-ink-master-v1[.]png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/co_rgb:142523,e_colorize:100/);
   for(const selector of ['#reading-popover','#mobile-perspective-choices'])
-    assert.match(await page.locator(selector+' [data-lens="family"] img.persona-illustrated').getAttribute('src'),/family-white-master-v1[.]png$/);
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/flat-circular-v1\/family-(?:white|ink)-master-v1\.png$/);
+    assert.match(await page.locator(selector+' [data-lens="family"] img.persona-illustrated').getAttribute('src'),/family-raster-master-v1[.]png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/diffusion-circular-v1\/family-raster-master-v1\.png$/);
   // The flat circular artwork remains readable in the dark mobile sheet and both themes.
-  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img.persona-illustrated').getAttribute('src'),/\/flat-circular-v1\/family-(?:white|ink)-master-v1\.png$/);
+  assert.match(await page.locator('#mobile-perspective-choices [data-lens="family"] img.persona-illustrated').getAttribute('src'),/\/diffusion-circular-v1\/family-raster-master-v1\.png$/);
   assert.equal(await appearance.getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('.brand-mark-on-light').isVisible(),true);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),false);
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(246, 244, 235)');
   await appearance.click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'dark');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/flat-circular-v1\/family-(?:white|ink)-master-v1\.png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/\/diffusion-circular-v1\/family-raster-master-v1\.png$/);
   assert.equal(await page.locator('.brand-mark-on-dark').isVisible(),true);
   assert.equal(await page.locator('#space-bar .space-tab').count(),6);
   assert.equal(await page.locator('#space-bar[aria-label="Mobile archive navigation"]').count(),1);
@@ -413,6 +429,14 @@ try {
     'Browse cards should emphasize artwork and actual spoken questions rather than editorial terminology');
   const card=page.locator('.path-post').first();
   assert.equal(await card.locator('.question-card-portraits img').count(),2);
+  assert.equal(await card.locator('.question-card-host .card-person-role').allTextContents().then(labels=>labels.join(',')),'Host,Host');
+  assert.equal(await card.locator('.question-card-listeners>.card-person-role').innerText(),'Listening');
+  assert.equal(await card.locator('.question-card-listener-cast img').count(),2);
+  assert.equal(await card.locator('.question-card-host .object-title').count(),2);
+  for(const image of await card.locator('.question-card-portraits img,.question-card-listener-cast img').all()){
+    const size=await image.boundingBox();assert.equal(size.width,44);assert.equal(size.height,44);
+  }
+  for(const name of await card.locator('.persona-float-name').all())assert.ok(await name.isVisible());
   assert.ok(await card.locator('.preview-line').innerText());
   for(const width of [320,390]){
     await page.setViewportSize({width,height:844});
@@ -437,9 +461,9 @@ try {
   await revealDisplay();
   await page.locator('#appearance-toggle').click();
   assert.equal(await page.locator('html').getAttribute('data-color-theme'),'light');
-  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/-ink-master-v1[.]png$/);
+  assert.match(await page.locator('#room-lens-portrait').getAttribute('src'),/co_rgb:142523,e_colorize:100/);
   for(const selector of ['#reading-popover','#mobile-perspective-choices'])
-    assert.match(await page.locator(selector+' [data-lens="family"] img.persona-illustrated').getAttribute('src'),/family-white-master-v1[.]png$/);
+    assert.match(await page.locator(selector+' [data-lens="family"] img.persona-illustrated').getAttribute('src'),/family-raster-master-v1[.]png$/);
   await revealDisplay();
   await page.locator('#source-info').click();
   await page.waitForURL('**/demo/about/');

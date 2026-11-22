@@ -1,22 +1,21 @@
 html:not(.demo-open) body>*:not(#demo-gate){visibility:hidden}
 #demo-gate{display:none}
-html:not(.demo-open) #demo-gate{display:grid;position:fixed;inset:0;z-index:80;place-items:center;overflow:hidden;background:#111;color:#f4f4f4}
-#demo-gate::before,#demo-gate::after{content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none}
-#demo-gate::before{background-image:radial-gradient(circle,rgba(218,157,118,.5) .75px,transparent 1px);background-size:9px 9px;animation:dream-drift 34s linear infinite}
-#demo-gate::after{background-image:radial-gradient(ellipse at 50% 42%,transparent 0%,#111 76%),radial-gradient(circle,rgba(113,196,177,.42) .7px,transparent .95px);background-size:100% 100%,9px 9px;background-repeat:no-repeat,repeat;background-position:center,3px 2px;animation:dream-ink 42s linear infinite}
-@keyframes dream-drift{to{transform:translate3d(-36px,-28px,0)}}
-@keyframes dream-ink{to{background-position:center,-33px -26px}}
-#demo-gate form{position:relative;z-index:1;width:min(22rem,calc(100% - 32px));padding:28px 24px 22px;background:#111;border:1px solid #354844}
-#demo-gate h1{font:400 56px/1.15 Georgia,serif;margin:0 0 16px}
-#demo-gate button{width:100%;margin-top:8px}
-html[data-color-theme="light"] #demo-gate{background:#f6f4eb;color:#142523}
-html[data-color-theme="light"] #demo-gate form{background:#f6f4eb;border-color:#c5d4c7}
+html:not(.demo-open) #demo-gate{display:grid;position:fixed;inset:0;z-index:80;place-items:center;overflow:auto;isolation:isolate;background:#10201f;color:#f4f4f4;padding:24px 0}
+/* Atmospheric gradients: large clouds with transform-only drift, no tiled texture. */
+#demo-gate::before,#demo-gate::after{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background-repeat:no-repeat;filter:blur(clamp(24px,5vw,72px));transform-origin:center}
+#demo-gate::before{background:radial-gradient(ellipse 48% 38% at 22% 35%,#71c4b189 0%,#71c4b13d 38%,transparent 76%),radial-gradient(ellipse 46% 42% at 82% 72%,#da9d767d 0%,#da9d7633 42%,transparent 78%),radial-gradient(ellipse 60% 36% at 50% 106%,#798f8766,transparent 80%);animation:cloud-drift 64s ease-in-out infinite alternate}
+#demo-gate::after{background:radial-gradient(ellipse 55% 24% at 72% 20%,#dce4cf66,transparent 78%),radial-gradient(ellipse 58% 28% at 14% 80%,#4c887c99,transparent 80%);animation:cloud-drift 89s ease-in-out -31s infinite alternate-reverse;opacity:.8}
+@keyframes cloud-drift{from{transform:translate3d(-4%,-3%,0) rotate(-8deg) scale(1)}to{transform:translate3d(5%,4%,0) rotate(9deg) scale(1.12)}}
+#demo-gate form{position:relative;z-index:1;box-sizing:border-box;width:min(26rem,calc(100% - 40px));padding:32px 28px 26px;background:#10201ff2;border:1px solid #80978d80;border-radius:18px;box-shadow:0 20px 80px #0004}
+#demo-gate h1{font:400 clamp(38px,8vw,56px)/1.1 Georgia,serif;margin:0 0 24px;overflow-wrap:break-word}
+#demo-gate button{width:100%;margin-top:12px}
+html[data-color-theme="light"] #demo-gate{background:#eeeadd;color:#142523}
+html[data-color-theme="light"] #demo-gate form{background:#f6f4ebf5;border-color:#96ad9e}
 html[data-color-theme="light"] #demo-gate label{color:#26443a}
-html[data-color-theme="light"] #demo-gate::before{background-image:radial-gradient(circle,rgba(20,37,35,.22) .55px,transparent 1px);background-size:14px 14px}
-html[data-color-theme="light"] #demo-gate::after{background-image:radial-gradient(ellipse at 50% 42%,transparent 0%,#f6f4eb 78%),radial-gradient(circle,rgba(184,92,56,.28) .55px,transparent .9px)}
+html[data-color-theme="light"] #demo-gate::before{opacity:.65}
+html[data-color-theme="light"] #demo-gate::after{opacity:.5}
 @media(prefers-reduced-motion:reduce){
   #demo-gate::before,#demo-gate::after{animation:none}
-  #demo-gate::after{background-position:center,0 0}
 }
 #gate-error{color:#f0c7b0}
 @layer app {
@@ -1514,4 +1513,31 @@ html[data-color-theme="light"] .browse-tab[aria-current="page"]::after{backgroun
 /* The selected filter names Townhall on phones; retain its accessible context. */
 @media(max-width:800px){
  #timeline-title[data-screen="townhall"]{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+}
+
+/* Objects host the conversation; selected perspectives listen beside them. */
+.object-title{font-style:italic}
+.question-card-cast{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+.question-card-portraits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0}
+.question-card-host{display:flex;align-items:center;gap:8px;min-width:0}
+.question-card-person-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.card-person-role{font:650 10px/1.2 system-ui,sans-serif;letter-spacing:.04em;color:#425d50}
+.question-card-host .object-title{font:italic 500 13px/1.2 Georgia,serif;overflow-wrap:anywhere}
+.question-card-portraits .question-card-host img,.question-card-listener-cast .persona-float img{width:44px;height:44px;flex:none;object-fit:contain;border-radius:50%;margin:0;border:1px solid #617f6b;background:#142523;box-shadow:none}
+.question-card-portraits .question-card-host img{object-fit:cover}
+.question-card-listeners{display:flex;align-items:center;gap:10px;padding-top:10px;border-top:1px solid rgba(20,37,28,.14)}
+.question-card-listener-cast{display:flex;flex-wrap:wrap;gap:12px;min-width:0}
+.question-card-listener-cast .persona-float{display:flex;align-items:center;gap:6px;min-width:0}
+.question-card-listener-cast .persona-float-name{position:static;display:block;width:auto;height:auto;clip:auto;overflow:visible;white-space:normal;font:500 12px/1.25 system-ui,sans-serif;color:#243e30}
+#reading-popover img.perspective-art,#mobile-perspective-choices img.perspective-art{border-radius:50%!important}
+@media(max-width:420px){
+ .question-card-face{padding:10px 12px}
+ .question-card-face strong{font-size:21px;margin-bottom:9px}
+ .question-card-cast{gap:8px}
+ .question-card-listeners{padding-top:7px;gap:7px;align-items:flex-start}
+ .question-card-listener-cast{gap:8px}
+ .question-card-listener-cast .persona-float{flex-direction:column;align-items:flex-start;gap:3px}
+ .question-card-host{gap:6px}
+ .question-card-host .object-title{font-size:12px}
+ .question-card-preview{padding:8px 12px}
 }

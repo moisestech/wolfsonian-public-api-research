@@ -174,7 +174,27 @@ function startSceneEntrance(){
 }
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
 function svg(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
-const message=(id,text)=>{const el=$(id);el.textContent=text;if(id==='voice-status')el.hidden=!text;};
+const objectTitle=(text,tag='em')=>node(tag,text,'object-title');
+function objectProse(tag,text,records=[],cls){
+  const element=node(tag,undefined,cls),value=String(text??'');
+  const names=[...new Set(records.flatMap(record=>[record?.title,record?.shortName]).filter(title=>typeof title==='string'&&title.length>=4))].sort((a,b)=>b.length-a.length);
+  if(!names.length){element.textContent=value;return element;}
+  const escaped=names.map(name=>name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+  const pattern=new RegExp('(?<![\\p{L}\\p{N}])(?:'+escaped.join('|')+')(?![\\p{L}\\p{N}])','giu');
+  let from=0;
+  for(const match of value.matchAll(pattern)){
+    element.append(document.createTextNode(value.slice(from,match.index)),objectTitle(match[0]));
+    from=match.index+match[0].length;
+  }
+  element.append(document.createTextNode(value.slice(from)));
+  return element;
+}
+const message=(id,text)=>{
+  const el=$(id);
+  if(['atlas-title','visitor-object','audio-speaker'].includes(id))el.replaceChildren(...objectProse('span',text,[...state.records,...(state.episode?.participants||[])]).childNodes);
+  else el.textContent=text;
+  if(id==='voice-status')el.hidden=!text;
+};
 function countIcon(draw){
   const icon=svg('svg',{viewBox:'0 0 24 24','aria-hidden':'true'});
   draw(icon);
@@ -439,7 +459,7 @@ function watchPointing(root){
 }
 function paintChoices(){
   const current=viewingRecords().find(item=>item.accession===state.seed)||state.records.find(item=>item.accession===state.seed);
-  if($('seed-name'))$('seed-name').textContent=current?.title||state.seed;
+  if($('seed-name'))$('seed-name').replaceChildren(objectTitle(current?.title||state.seed));
   const portrait=$('object-focus-portrait')||$('seed-portrait');
   if(portrait&&current)portrait.src=photo(current)||objectBadge(current);
   paintTheme();
@@ -460,7 +480,7 @@ function paintSeedChoices(){
     button.setAttribute('aria-pressed',String(item.accession===state.seed));
     button.title=item.title;button.setAttribute('aria-label',item.title);
     const image=node('img');image.alt='';image.src=photo(item)||objectBadge(item);
-    button.append(image,node('span',item.title));
+    button.append(image,objectTitle(item.title));
     button.addEventListener('click',()=>{
       state.journey=[];
       $('seed').value=item.accession;
@@ -689,7 +709,7 @@ function stagePlate(rec, kind, speaker){
   const chosenCard=!photo(rec)&&lensMatch(rec)?CARD_BY_ID.get(state.lens):null;
   if(chosenCard){fig.classList.add('persona');bindPersonaImage(img,chosenCard);}
   else img.src=avatarFor(rec);
-  fig.append(img,node('figcaption',rec.title));
+  fig.append(img,objectTitle(rec.title,'figcaption'));
   return fig;
 }
 function personaPlate(card,speaker){
@@ -904,7 +924,7 @@ function paintListeners(){
     if(!source||!target)continue;
     const button=node('button',undefined,'listener');
     button.type='button';
-    button.append(node('strong',target.title),node('span',edgeCategory(edge)));
+    button.append(objectTitle(target.title,'strong'),node('span',edgeCategory(edge)));
     button.addEventListener('click',()=>followObject(target.accession));
     row.append(button);
   }
@@ -962,20 +982,22 @@ function questionCard(episode,objects){
     meta.append(node('span','Current room','current-room'));
     face.append(meta);
   }
-  face.append(node('strong',episode.question));
+  face.append(objectProse('strong',episode.question,[...objects,...episode.participants]));
   const cast=node('span',undefined,'question-card-cast');
   const portraits=node('span',undefined,'question-card-portraits');
-  portraits.setAttribute('aria-hidden','true');
-  for(const object of objects){
-    const image=node('img');
-    image.alt='';image.loading='lazy';image.src=photo(object)||objectBadge(object);
-    portraits.append(image);
+  for(const [index,object] of objects.entries()){
+    const host=node('span',undefined,'question-card-host');
+    const image=node('img');image.alt='';image.loading='lazy';image.src=photo(object)||objectBadge(object);
+    const copy=node('span',undefined,'question-card-person-copy');
+    copy.append(node('span','Host','card-person-role'),objectTitle(episode.participants[index]?.shortName||object.title));
+    host.append(image,copy);portraits.append(host);
   }
-  const cluster=node('span',undefined,'question-cast');
-  cluster.append(portraits,personaOrbit());
-  const voices=speakingCast();
-  cast.append(cluster,node('span',episode.participants.map(person=>person.shortName).join(' × ')));
-  if(voices.length)cast.append(node('span',voices.map(voice=>voice.label).join(' · '),'question-card-voices'));
+  cast.append(portraits);
+  const listeners=node('span',undefined,'question-card-listeners');
+  listeners.append(node('span','Listening','card-person-role'));
+  const listenerCast=node('span',undefined,'question-card-listener-cast');
+  for(const voice of speakingCast())listenerCast.append(personaFloat(voice));
+  listeners.append(listenerCast);cast.append(listeners);
   face.append(cast);
   const preview=node('span',undefined,'question-card-preview');
   const first=episode.turns[0];
@@ -984,8 +1006,11 @@ function questionCard(episode,objects){
   const unanswered=connectionTerm
     ?'Both records contain “'+connectionTerm+'”. Does that make a meaningful connection?'
     :'What could examining both records reveal?';
-  preview.append(node('span',first?(speaker?.shortName||first.speaker):'Open question','preview-speaker'),
-    node('span',first?'“'+first.text+'”':unanswered,'preview-line'));
+  const speakerLabel=first?(speaker?.shortName||first.speaker):'Open question';
+  const speakerName=node('span',undefined,'preview-speaker');
+  speakerName.append(speaker?objectTitle(speakerLabel):document.createTextNode(speakerLabel));
+  preview.append(speakerName,
+    objectProse('span',first?'“'+first.text+'”':unanswered,[...objects,...episode.participants],'preview-line'));
   button.append(face,preview);
   return button;
 }
@@ -1127,7 +1152,8 @@ function paintTimeline(){
   if(!document.body.classList.contains('show-timeline'))return;
   const focus=relatedAnchor && (person(relatedAnchor)||state.records.find(record=>record.accession===relatedAnchor));
   $('timeline-title').dataset.screen=relatedQuestions?'related':'townhall';
-  $('timeline-title').textContent=relatedQuestions?(focus?'More conversations with '+(focus.title.length>50?focus.title.slice(0,47)+'…':focus.title):'Follow these objects'):'Townhall';
+  if(relatedQuestions&&focus)$('timeline-title').replaceChildren(document.createTextNode('More conversations with '),objectTitle(focus.title.length>50?focus.title.slice(0,47)+'…':focus.title));
+  else $('timeline-title').textContent=relatedQuestions?'Follow these objects':'Townhall';
   $('all-directory-questions').hidden=!relatedQuestions;
   const currentIds=new Set(relatedAnchor?[relatedAnchor]:(state.episode?.participants.map(p=>p.accession)||[]));
   for(const [label,group] of townhallGroups()){
@@ -1238,7 +1264,7 @@ function renderRoomHeader(source,target,c){
     inspect.setAttribute('aria-label','Inspect collection record: '+p.title+' · '+p.accession);
     const media=node('span',undefined,'object-portrait-media'+(visual.label==='Artist diagram'?' is-diagram':''));
     media.setAttribute('aria-hidden','true');
-    const placeholder=()=>{media.replaceChildren(node('span',p.shortName.slice(0,55),'object-portrait-placeholder'));media.classList.add('is-placeholder');};
+    const placeholder=()=>{const title=objectTitle(p.shortName.slice(0,55),'span');title.classList.add('object-portrait-placeholder');media.replaceChildren(title);media.classList.add('is-placeholder');};
     if(visual.label==='Motif icon')media.classList.add('is-mark');
     if(visual.src){
       const img=node('img');img.src=visual.src;img.alt='';img.loading='lazy';img.decoding='async';
@@ -1249,7 +1275,7 @@ function renderRoomHeader(source,target,c){
     const metadata=node('span',undefined,'object-portrait-meta');
     const arrow=node('span','↗','object-open-arrow');
     arrow.setAttribute('aria-hidden','true');
-    metadata.append(node('strong',p.shortName),arrow);
+    metadata.append(objectTitle(p.shortName,'strong'),arrow);
     inspect.append(media,metadata);
     inspect.addEventListener('click',()=>openEpisodeRecord(p.accession));
     card.append(inspect);
@@ -1289,7 +1315,7 @@ function renderRoomHeader(source,target,c){
   evidence.replaceChildren(node('h2','Why these two?'),node('p',episode.rationale),
     node('p','The voices are artist-authored interpretations, not historical speech or live autonomous AI. Shared tags do not establish contact, influence, or shared storage.'));
   for(const p of episode.participants){
-    const button=node('button',p.title+' · '+p.accession,'evidence-record');button.type='button';
+    const button=node('button',undefined,'evidence-record');button.append(objectTitle(p.title),document.createTextNode(' · '+p.accession));button.type='button';
     button.addEventListener('click',()=>openEpisodeRecord(p.accession));evidence.append(button);
   }
   if(state.researchPath){
@@ -1334,7 +1360,7 @@ function renderJuxtaposition(box){
     const img=node('img');img.className='avatar';img.alt='';
     if(face.persona)bindPersonaImage(img,face.persona,'compact',null,'sepia');
     else img.src=face.src;
-    const say=node('div',undefined,'say');say.append(node('strong',face.name),node('p',turn.text));
+    const say=node('div',undefined,'say');say.append(face.persona?node('strong',face.name):objectTitle(face.name,'strong'),objectProse('p',turn.text,[source,target,...(state.episode?.participants||[])]));
     bubble.append(img,say);chat.append(bubble);
   }
   appendPerspective(chat);
@@ -1405,9 +1431,9 @@ function renderConversation(){
     else img.src=face.src;
     const say=node('div',undefined,'say');
     const line=node('span',undefined,'speaker-line');
-    line.append(node('strong',face.name));
+    line.append(face.persona?node('strong',face.name):objectTitle(face.name,'strong'));
     if(turn.role==='objectA'&&c.mode!=='CURATED_EDGE_SCENE')line.append(promptMenu());
-    say.append(line,node('p',turn.text));
+    say.append(line,objectProse('p',turn.text,[source,target,...(state.episode?.participants||[])]));
     bubble.append(img,say);chat.append(bubble);
   }
   if(state.episode.mode==='CURATED_SCRIPT')appendPerspective(chat);
@@ -1497,7 +1523,7 @@ function renderRecord(){
     const picker=node('div',undefined,'record-object-picker');
     picker.setAttribute('role','group');picker.setAttribute('aria-label','Choose an object record');
     for(const p of state.episode.participants){
-      const button=node('button',p.shortName);button.type='button';button.setAttribute('aria-pressed',String(p.accession===r.accession));
+      const button=node('button');button.append(objectTitle(p.shortName));button.type='button';button.setAttribute('aria-pressed',String(p.accession===r.accession));
       button.addEventListener('click',()=>openEpisodeRecord(p.accession));picker.append(button);
     }
     box.append(picker);
@@ -1508,7 +1534,7 @@ function renderRecord(){
   if(r.researchOnly)overlay.append(node('p','Published checklist record. No approved photograph and no Lakehouse match.','muted'));
   if(r.source!=='lakehouse')overlay.append(node('span',r.source==='invented'?'INVENTED EXAMPLE':r.source==='public-packet'?'PUBLIC PACKET · IDENTITY ONLY':r.source==='research-preview'?'PUBLISHED CHECKLIST · RESEARCH PREVIEW':r.source==='presentation'?'PUBLIC PRESENTATION RECORD':r.source==='matrix'?'PHOTOGRAPHED MATRIX':'LOCAL CSV · SOURCE INPUT','evidence-type'));
   if(r.source==='public-packet')overlay.append(node('p','This packet identifies an accession and title only. No direct historical relationship, source-linked image, or staff-tag neighbor has been established for it in this view.','muted'));
-  overlay.append(node('h2',r.title));
+  overlay.append(objectTitle(r.title,'h2'));
   const list=node('dl',undefined,'record-facts');
   pair(list,'Accession',r.accession);pair(list,'Creator',r.creator);pair(list,'Date',r.date);
   pair(list,'Categories',(r.tags||[]).filter(t=>t.family==='theme').map(t=>t.value).join(' · '));
@@ -2149,7 +2175,7 @@ function paintPaths(){
       chip.append(img,node('span',voice.label));
       voiceRow.append(chip);
     }
-    button.append(node('strong',path.arc),node('span',shortPathTitle(path.source)+' × '+shortPathTitle(path.target),'path-objects'),voiceRow,node('span','Proposed pairing','path-kind'));
+    button.append(node('strong',path.arc),objectProse('span',shortPathTitle(path.source)+' × '+shortPathTitle(path.target),[{title:shortPathTitle(path.source)},{title:shortPathTitle(path.target)}],'path-objects'),voiceRow,node('span','Proposed pairing','path-kind'));
     button.addEventListener('click',()=>openResearchPath(path.id));
     box.append(button);
   }

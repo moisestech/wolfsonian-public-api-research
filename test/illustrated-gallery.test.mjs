@@ -13,8 +13,8 @@ test('all eleven active personas have independent flat symbols as their main vis
     for(const variant of ['full','compact']){
       const url=illustratedPersonaUrl(lens.id,{variant});
       assert.equal(url,manifest.gallery[lens.id][variant]);
-      assert.equal(manifest.gallery[lens.id].source,'flat-circular-v1');
-      assert.ok(url.includes('/flat-circular-v1/'+lens.id+'-white-master-v1.png'));
+      assert.equal(manifest.gallery[lens.id].source,'diffusion-circular-v1');
+      assert.ok(url.includes('/diffusion-circular-v1/'+lens.id+'-raster-master-v1.png'));
       for(const tone of ['white','ink']){
         assert.equal(illustratedPersonaUrl(lens.id,{tone,variant}),manifest.gallery[lens.id][tone][variant]);
       }
@@ -74,11 +74,21 @@ test('flat release preserves all tone mappings and transparent vector masters',a
   const flat=JSON.parse(await readFile(new URL('../docs/design/persona-flat-circular-manifest.v1.json',import.meta.url),'utf8'));
   for(const lens of LENSES)for(const tone of ['white','ink']){
     const asset=flat.personas[lens.id][tone];
-    assert.equal(illustratedPersonaUrl(lens.id,{tone,variant:'full'}),asset.png['512']);
-    assert.equal(illustratedPersonaUrl(lens.id,{tone,variant:'compact'}),asset.png['128']);
+    assert.match(asset.png['512'],/flat-circular-v1/);
+    assert.match(asset.png['128'],/flat-circular-v1/);
     const svg=await readFile(new URL('../assets/personas/flat-circular-v1/'+lens.id+'-'+tone+'.svg',import.meta.url),'utf8');
     assert.match(svg,/viewBox="0 0 512 512"/);
     assert.match(svg,/<circle cx="256" cy="256" r="222" fill="none"/);
     assert.doesNotMatch(svg,/<rect|<image/);
   }
+});
+
+test('active art uses original PNG masters with traceable diffusion boards',async()=>{
+ const raster=JSON.parse(await readFile(new URL('../docs/design/persona-diffusion-circular-manifest.v1.json',import.meta.url),'utf8'));
+ for(const lens of LENSES){
+  const art=ILLUSTRATED_PERSONAS[lens.id];
+  assert.match(art.master,/-raster-master-v1[.]png$/);
+  assert.match(art.sourceBoard,/diffusion-circular-v1\/sources\/.+[.]png$/);
+  for(const tone of ['white','ink'])for(const variant of ['full','compact'])assert.equal(illustratedPersonaUrl(lens.id,{tone,variant}),raster.personas[lens.id][tone][variant]);
+ }
 });
