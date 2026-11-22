@@ -18,32 +18,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title calls munitions work skilled. Why would someone need to say that out loud?",
+        "text": "Skilled work. Glad somebody said it. Who gets the credit?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.317.66",
-        "text": "Mine advertises a lottery linked to an exhibition of women's labor. Seeing work isn't the same as valuing it, is it?",
+        "text": "Take a chance on my lottery. But seeing women’s labor in an exhibition is one thing. Valuing it is another.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.34",
-        "text": "Maybe not. Even the word skilled could leave the people doing the work unnamed.",
+        "text": "Fair point. I was pleased with the compliment. Now I want to know whose work it names.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The records share a Women motif and a Labor theme. They do not establish a shared workforce, audience, or collaboration.",
+        "text": "The shared labels are Women and Labor. They do not identify a common workforce, audience or collaboration.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.317.66",
-        "text": "Then let's not give them a shared history. Who chose what the exhibition showed?",
+        "text": "Then follow the names. Who chose the work the exhibition put on view?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which source could tell us who was paid, named, or invited?",
-    "editorialNote": "Start with this pair: two different ways of staging and recognizing women's work. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
+    "editorialNote": "Start with this pair: two different ways of staging and recognizing women's work. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony. Language revision: object-specific speech and uptake; newly authored phrasing, no claim of authentic period dialect.",
     "pair": [
       "85.4.64.34",
       "TD1989.317.66"
@@ -54,7 +54,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v1"
   },
   {
     "id": "opening-skilled-work-woman-exhibition",
@@ -108,32 +109,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "Skilled Work. That's in my title. I wonder who had to be convinced.",
+        "text": "Skilled Work. Has a good ring to it. I wonder who needed convincing.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Mine is Making the Engine. It names what is made, but not necessarily everyone making it.",
+        "text": "Making the Engine. That sounds like something someone still has to do. A compliment won’t turn the thing.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.34",
-        "text": "So showing production isn't the same thing as hearing from the workers.",
+        "text": "No. And naming the job still leaves the person doing it out of the sentence.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Factories is the shared motif. Nothing here proves the same factory, workers, or a connection between the makers of these prints.",
+        "text": "Factories is the shared motif. It establishes neither the same factory nor the same workers.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Then what kind of worker's account would change the story we're telling?",
+        "text": "Then find me an account from the work itself. What could the person making it tell us?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which record would identify an actual worker behind either image?",
-    "editorialNote": "Same-era production imagery; do not infer direct artist influence. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
+    "editorialNote": "Same-era production imagery; do not infer direct artist influence. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony. Language revision: object-specific speech and uptake; newly authored phrasing, no claim of authentic period dialect.",
     "pair": [
       "85.4.64.34",
       "85.4.64.43"
@@ -144,7 +145,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v1"
   },
   {
     "id": "opening-skilled-work-workers-vote",
@@ -278,32 +280,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Making the Engine. The title puts the machine first. Where did the hands go?",
+        "text": "A fine thing, an engine. Easy to admire the making of it.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.318.1",
-        "text": "Hold on. My warning says a splinter can cost an eye. The worker's body isn't an afterthought.",
+        "text": "Hold on. One splinter can cost you an eye. Still in such a hurry?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "You're right. I was asking about the image. You're asking what the work might cost.",
+        "text": "Fair point. I was admiring the work. You brought me back to the person doing it.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Both records have the Machines motif. That does not place them in the same workshop, industry, or incident.",
+        "text": "The shared Machines motif does not connect these objects to the same workshop or an actual injury.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1989.318.1",
-        "text": "Good. Keep us separate, but keep that question. What would an actual workplace account tell us?",
+        "text": "Keep that distinction. Now, whose account could tell us what safe work required?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "Which safety record or workplace account would complicate the picture?",
-    "editorialNote": "A key dramatic counterweight: productivity vs. bodily risk. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
+    "editorialNote": "A key dramatic counterweight: productivity vs. bodily risk. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony. Language revision: object-specific speech and uptake; newly authored phrasing, no claim of authentic period dialect.",
     "pair": [
       "85.4.64.43",
       "TD1989.318.1"
@@ -314,7 +316,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v1"
   },
   {
     "id": "machines-vote-engine",
@@ -328,32 +331,32 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.4091",
-        "text": "My title tells viewers to vote for a workers' party. At least it's asking for a political choice.",
+        "text": "Vote for the workers’ party. An invitation to have a say, if you take my title at its word.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Making the Engine, that's my title. I show work by name; I don't ask anyone for a vote.",
+        "text": "Making the Engine. I give the work a title. That doesn’t give anyone a vote.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.4091",
-        "text": "That's the difference. Being pictured as a worker isn't the same as having a say.",
+        "text": "Then I should ask who can answer my invitation. Picturing workers won’t answer that for me.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Factories is a repeated motif, not a proven relation between these parties, artists, or workers.",
+        "text": "Factories is the shared motif, not evidence of a common campaign, workforce or political position.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "85.4.64.43",
-        "text": "Fair. And do we know whether anyone listened to either appeal? Not from a shared tag.",
+        "text": "All right. Look for the workers’ own words. What did they want their work to change?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
     "next": "What would a contemporaneous worker's account add?",
-    "editorialNote": "Political poster is an address to a viewer; title evidence does not establish reception. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony.",
+    "editorialNote": "Political poster is an address to a viewer; title evidence does not establish reception. Five-turn dramaturgical study: mutual challenge and correction. Fictional; not archival testimony. Language revision: object-specific speech and uptake; newly authored phrasing, no claim of authentic period dialect.",
     "pair": [
       "XX1990.4091",
       "85.4.64.43"
@@ -364,7 +367,8 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       "kind": "shared_staff_metadata"
     },
     "status": "EDITORIAL_DRAFT_NOT_APPROVED",
-    "historicalRelationshipEstablished": false
+    "historicalRelationshipEstablished": false,
+    "languageRevision": "object-voices-v1"
   },
   {
     "id": "politics-1939-atlantic-wall",

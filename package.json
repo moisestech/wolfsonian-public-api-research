@@ -5,6 +5,7 @@
   "description": "Independent research notebook and Research Demo 001 for Wolfsonian public-record institutional-memory simulation.",
   "type": "module",
   "scripts": {
+    "editorial:audit": "node scripts/conversation-editorial-audit.mjs",
     "ping": "node scripts/ping.mjs",
     "search": "node scripts/search.mjs",
     "item": "node scripts/item.mjs",

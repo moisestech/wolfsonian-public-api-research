@@ -3,6 +3,7 @@
  * Prompts displayed here are design specifications, not evidence of a live LLM.
  */
 import { PERSONAS } from './discovery-graph.mjs';
+import { perspectiveVoice } from './conversation-voices.mjs';
 import { personaSigilSvg, personaSigilUrl } from './persona-sigils.mjs';
 import { illustratedPersonaUrl } from './persona-illustrated-gallery.mjs';
 import { personaAssetUrl } from './persona-cloudinary-assets.mjs';
@@ -26,10 +27,15 @@ export const CARDS=Object.freeze(entries.map(([id,group,subheading,hook,icon,col
   const priorities=Object.entries(lens.focus).map(([family,values])=>`${family.toUpperCase()}: ${values.join(', ')}`);
   return Object.freeze({
     ...lens,id,group,subheading,hook,icon,color,description,priorities,
+    voiceDirection:perspectiveVoice(id),
     prompt:[
       `ROLE: You are an ARTIST-AUTHORED interpretive lens called "${lens.label}", not a historical person or museum staff member.`,
       `PURPOSE: ${description}`,
       `READER QUESTION: ${hook}`,
+      `SPEAKING PURPOSE: ${perspectiveVoice(id).purpose}`,
+      `RHYTHM: ${perspectiveVoice(id).rhythm}`,
+      `VOICE LIMIT: ${perspectiveVoice(id).limit}`,
+      'OBJECT IDENTITY: A listener perspective changes the question, not the object’s vocabulary or identity. Period language requires a reviewed phrase source.',
       `ONLY USE: The accession IDs, titles, verified source fields, source-column names and exact shared tags supplied in this encounter.`,
       `ATTEND TO: ${priorities.join(' | ') || 'any explicitly available staff-assigned metadata'}.`,
       'TASK: Describe the metadata overlap in plain language. Offer one question a visitor could investigate. Name one competing reading. Separate observation from interpretation.',

@@ -6,6 +6,7 @@
  */
 import { PRESENTATION_PAIRS } from './presentation-pairs.mjs';
 import { WORLDS_FAIRS_RESEARCH } from './worlds-fairs-research.mjs';
+import { sceneVoiceBrief } from './conversation-voices.mjs';
 
 export const RELATIONSHIP_TYPES = Object.freeze({
   metadata_overlap: Object.freeze({
@@ -90,6 +91,7 @@ function evidenceLinks(path) {
 function scene(path) {
   return Object.freeze({
     ...path,
+    languageRevision: ['radio-and-television','program-and-booklet','catalogue-and-globe','globe-and-theme-center'].includes(path.id) ? 'object-voices-v1' : null,
     status: 'research_preview',
     relationshipType: 'curatorial_juxtaposition',
     historicalRelationshipEstablished: false,
@@ -306,16 +308,24 @@ const BRIDGES=[
     publicPacketRecord('85.7.383a,b'),publicPacketRecord('86.17.1'),
     'A 1932 globe-shaped stoneware vase meets a model of the Trylon and Perisphere, designed for the 1939 fair’s Theme Center.',
     'The two public packets document distinct objects and materials. They do not establish a shared exhibition, audience or design influence.',
-    ['I am a globe-shaped vessel, made of glazed stoneware. A world can appear small enough to put on a table.',
-     'I am a model for a fair’s Theme Center. Scale me up in your imagination, and you might walk around my world.',
-     'You changed the scale, not the boundary. Whose world would you notice beyond the fairgrounds?']),
+    [
+  "You can turn me in your hands. That doesn’t put the world in them.",
+  "Come closer. As a model, I make a fair’s Theme Center look manageable. Isn’t a change of scale useful?",
+  "Useful, yes. Complete, no. A globe-shaped vase has a boundary, too.",
+  "Then I’ve offered a way to look, not a whole world. What would you look for outside the model?",
+  "The part the model leaves you wondering about. Which plan or description could help us inspect that edge?"
+]),
   comparison('catalogue-and-globe','Who gets named when we call a design modern?',
     publicPacketRecord('XM1999.108.8'),publicPacketRecord('85.7.383a,b'),
     'The Machine Age Exposition catalogue proposes a broad category. The Mappemonde vase’s public packet names separate form, décor and decoration roles.',
     'The catalogue packet does not quote its essays or connect its exhibition to the vase; the vase packet does not establish its reception or exhibition placement.',
-    ['My cover can gather many objects under the phrase Machine Age. Is that enough to explain who made them?',
-     'My public record names a form designer, a décor designer and a decorator. A single label would make those different tasks disappear.',
-     'Then my category may need a footnote rather than a slogan. Whose names should a visitor look for before calling something modern?']),
+    [
+  "An entire age, neatly titled. Machine Age. A heading has its uses.",
+  "Very efficient. My record names a form designer, a décor designer and a decorator. Your title takes a shorter route.",
+  "I was trying to bring things together. You’ve made me look at what the heading leaves out.",
+  "Then keep the heading. Leave room for the names beside it.",
+  "Agreed. Before we turn a label into an explanation, which page or maker’s record should we open?"
+]),
   comparison('poster-and-theme-center','Can a poster invite you into a future that has not happened yet?',
     publicPacketRecord('85.4.72'),publicPacketRecord('86.17.1'),
     'An offset-lithograph poster designed in 1937 depicts people lining up for the Trylon and Perisphere, while the theme-center model represents the fair’s structures.',
@@ -327,9 +337,14 @@ const BRIDGES=[
     publicPacketRecord('2012.6.1'),publicPacketRecord('XX1990.1484'),
     'A 1939 RCA Victor TRK 12 television and a 1937 Sparton 558-C radio offer two designed forms for receiving media in domestic interiors.',
     'The packets establish designers, dates and materials, but no shared owner, broadcast schedule, specific audience or household use.',
-    ['I arrive in the record as a television cabinet. People may want to imagine a family gathered around me, but no household is named.',
-     'My glass and brass belong to a radio, not a listening diary. A gleaming surface tells you very little about what someone heard.',
-     'So we are both missing an audience. Would a service record, advertisement or account from a user make either of us less mysterious?']),
+    [
+  "A picture as well as a voice. Surely that improves matters?",
+  "Easy with the dial. Receiving a voice is one thing. Answering it is another.",
+  "You think a picture might make that harder?",
+  "I think it might make the speaker harder to ignore. That’s a different achievement.",
+  "Then let’s find out who was watching. Have we got anything that names an audience?",
+  "Not for either of these sets. Start with a listener’s account or a household record. I’d like to hear an answer."
+]),
   comparison('poster-and-program','Who gets to say the future is open?',
     publicPacketRecord('85.4.72'),publicPacketRecord('86.19.57'),
     'The 1937 promotional poster projects a crowd toward the fair; the 1939 Your World of Tomorrow program belongs to the Theme Center presentation.',
@@ -348,9 +363,14 @@ const BRIDGES=[
     publicPacketRecord('86.19.57'),publicPacketRecord('XB1992.1640'),
     'A 1939 program titled Your World of Tomorrow, associated with the fair’s Theme Center, meets a 1940 Futurama booklet associated with the separate General Motors exhibit. Both frame the future as an experience, but their public records document different publications.',
     'The packets do not establish a shared reader, visit, distribution path, reception, or historical interaction between these printed works; the full program text is not available here.',
-    ['My 1939 title addresses the reader directly: Your World of Tomorrow. How do you decide when a printed future belongs to you?',
-     'My 1940 cover says Futurama. I can travel home as a booklet, but being kept does not prove any promised tomorrow arrived.',
-     'Then a program and a souvenir may preserve two versions of a future without proving either was shared. Whose itinerary or first-hand account could test that claim?'])
+    [
+  "Your world. Has a nice ring to it, doesn’t it?",
+  "Fits nicely in a title. A future you can take home has its attractions.",
+  "You make it sound like a sales pitch. I was offering an invitation.",
+  "I’m a booklet for a General Motors exhibit. I can hardly object to a little promotion. I’m asking what the promise delivers.",
+  "Then perhaps “your” is where the question begins. Whose account could tell us what that invitation meant?",
+  "Find a reader’s account. Being kept as a booklet won’t tell you whether the promised tomorrow arrived."
+])
 ];
 
 export const CURATORIAL_PATHS = Object.freeze([...PATH_DRAFTS,...BRIDGES].map(path => scene({
@@ -370,6 +390,7 @@ export function juxtapositionConversation(path) {
     relationshipType: 'curatorial_juxtaposition',
     researchPreview: true,
     aiAssisted: Boolean(path.aiAssisted),
+    voiceBrief: sceneVoiceBrief(path.source,path.target),
     editorialStatus: 'research_preview',
     historicalRelationshipEstablished: false,
     dramaticArc: path.arc,
