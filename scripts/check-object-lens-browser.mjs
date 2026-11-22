@@ -29,7 +29,7 @@ try{
   // v4 figures are artist-led review studies. These URLs are only public image artwork, not museum records.
   const personaGalleryV4=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/portraits\/(?:tourist|novice|connoisseur|futurist|mourner|propagandist|counterfeit|museum)-sepia-(?:full|compact)-v4\.png$/;
   // Eight new geometric portrait masters, with PNG delivery transforms restricted to pinned versions.
-  const architecturalPortrait=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_(?:384|1024),h_(?:384|1024)\/f_png\/v\d+\/archive-dreams\/brand\/personas\/architectural-masks-v1\/(?:tourist|novice|connoisseur|futurist|mourner|propagandist|counterfeit|museum)-architectural-raster-master-v1\.png$/;
+  const architecturalPortrait=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/c_scale,w_(?:384|1024),h_(?:384|1024)\/f_png\/v\d+\/archive-dreams\/brand\/personas\/architectural-masks-v1\/(?:tourist|novice|connoisseur|futurist|mourner|propagandist|counterfeit|museum)-architectural-(?:white|ink)-master-v1\.png$/;
   // The four user-supplied Deco masks are decorative studies, not named speaker roles.
   const approvedMask=/^https:\/\/res\.cloudinary\.com\/dck5rzi4h\/image\/upload\/v\d+\/archive-dreams\/brand\/personas\/approved-masks\/(?:nested-family|architectural-deco|tiered-deco|halo-deco)-(?:white|ink)-(?:full|compact)-v1\.png$/;
 
