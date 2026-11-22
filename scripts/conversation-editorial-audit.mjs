@@ -1,4 +1,5 @@
 import { readFile, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { MATRIX_OBJECTS as publicObjects } from '../src/public-matrix-objects.mjs';
 import { CURATED_EDGE_SCENES } from '../src/curated-edge-scenes.mjs';
 import { CURATORIAL_PATHS } from '../src/curatorial-relationships.mjs';
@@ -39,7 +40,7 @@ const researchProposals = scope === 'working' ? [
   basis:'Inspect the two exact records before accepting this artist-proposed comparison. No shared tag or historical contact is claimed.'})) : [];
 const profiles = records.map(objectVoiceProfile);
 const result = {
-  scope, sourceRevision: '89b2abc5c5031b35425257c0362fe4dc68b5d5ea',
+  scope, inputSha256: createHash('sha256').update(JSON.stringify(records)).digest('hex'),
   counts: { ...auditConversationCoverage(records, pairs), authoredVoiceDirections: profiles.filter(p => p.status === 'AUTHORED_DIRECTION_DRAFT').length, provisionalRecordBriefs: profiles.filter(p => p.status === 'RECORD_BRIEF_AWAITING_AUTHORSHIP').length, perspectives: PERSPECTIVE_VOICES.length },
   plan: { proposedPairs: plan.proposedPairs.length + researchProposals.length, batchesOfFour: Math.ceil((plan.proposedPairs.length + researchProposals.length) / 4), projected: auditConversationCoverage(records,[...pairs,...plan.proposedPairs,...researchProposals]), note: plan.note },
   profiles, perspectives: PERSPECTIVE_VOICES, proposedPairs: [...plan.proposedPairs,...researchProposals],
