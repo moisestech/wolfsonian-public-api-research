@@ -219,6 +219,7 @@ export function conversationFor(source,target,edge,lensId='family',snapshots={})
       editorialStatus:curated.status,
       edgeMode:curated.mode,
       scriptBasis:{family:curated.requires.family,value:curated.requires.value},
+      openingQuestion:curated.openingQuestion,
       dramaticArc:curated.arc,
       nextPrompt:curated.next,
       source:source.accession,target:target.accession,lens:lensId,

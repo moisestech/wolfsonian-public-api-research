@@ -104,6 +104,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "motif",
     "tag": "Factories",
     "arc": "What does making hide?",
+    "openingQuestion": "Whose work makes the machine?",
     "mode": "contest",
     "turns": [
       {
@@ -154,16 +155,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "motif",
     "tag": "Factories",
     "arc": "Representation versus agency",
+    "openingQuestion": "What changes when a print asks workers to vote?",
     "mode": "contest",
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title asks the viewer to notice skilled work on munitions.",
+        "text": "My title asks you to notice the skill it takes to make munitions. What happens after you've noticed?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.4091",
-        "text": "My title asks people to vote for a workers' party. When does being pictured as labor become having a political voice?",
+        "text": "I'd ask you to vote. Looking at workers and asking them to make a choice are two different invitations.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -194,16 +196,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "theme",
     "tag": "Labor",
     "arc": "A future separated by twenty-two years",
+    "openingQuestion": "What happens to the idea of progress between 1917 and 1939?",
     "mode": "contest",
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My 1917 title names munitions as skilled work. Does a wartime need change how skill is celebrated?",
+        "text": "My 1917 title calls making munitions skilled work. When the work is for war, what counts as progress?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "I am titled 1939 A.D. What does that date do to the earlier image's confidence in work and progress?",
+        "text": "My title, 1939 A.D., gives you another year to look from. Does that word progress sound as confident twenty-two years later?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -234,16 +237,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "theme",
     "tag": "War / Military",
     "arc": "From production floor to aerial spectacle",
+    "openingQuestion": "What does power look like from a workshop and from the air?",
     "mode": "contest",
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "My title stays close to the work of making munitions.",
+        "text": "My title brings you close to the work of making munitions. That's where I'd look to see how power is made.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990. 3722",
-        "text": "My title places a Savoia-Marchetti aircraft above Rome's Colosseum. What changes when technical power is seen from above rather than from the workshop?",
+        "text": "My title puts a Savoia-Marchetti aircraft above Rome's Colosseum. From up there, how much of the work that gets you into the air can you still see?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -274,6 +278,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "motif",
     "tag": "Machines",
     "arc": "The machine meets the body",
+    "openingQuestion": "Who pays the price of progress?",
     "mode": "contest",
     "turns": [
       {
@@ -324,6 +329,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "motif",
     "tag": "Factories",
     "arc": "Labor as political address",
+    "openingQuestion": "Does being seen mean having a say?",
     "mode": "contest",
     "turns": [
       {
@@ -374,16 +380,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "motif",
     "tag": "Political symbols",
     "arc": "Dates deployed as arguments",
+    "openingQuestion": "How can a year become an argument?",
     "mode": "contest",
     "turns": [
       {
         "speakerAccession": "84.4.157",
-        "text": "My title names 1939 A.D. Can a year stand in for a prediction about what comes next?",
+        "text": "My title is 1939 A.D. Put a year in a title and people start asking what comes next.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.2907",
-        "text": "Mine insists that 1943 is not 1918. Why would a poster need to argue with a previous year?",
+        "text": "I put two years in mine. I insist that 1943 is not 1918. My argument depends on what you remember about the earlier year.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -494,16 +501,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "motif",
     "tag": "Mythological figures",
     "arc": "Images move between art and commerce",
+    "openingQuestion": "What changes when a myth helps sell a dye?",
     "mode": "contest",
     "turns": [
       {
         "speakerAccession": "84.4.25.1",
-        "text": "I announce an international exhibition of contemporary art. What makes an image appear worthy of attention?",
+        "text": "I announce an international exhibition of contemporary art. My invitation is to come and look. What do you want the same kind of motif to do?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1990.3275",
-        "text": "My title advertises a dye. What happens when a similar mythological motif enters an industrial advertisement?",
+        "text": "My title advertises a dye. A look is a start. I'd like you to remember what you can buy.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -614,16 +622,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "motif",
     "tag": "Flags",
     "arc": "Future promised or threatened",
+    "openingQuestion": "How can the future be a promise to one person and a threat to another?",
     "mode": "contest",
     "turns": [
       {
         "speakerAccession": "XX1990.2880",
-        "text": "My title describes an invader's grasp and a threat of enslavement. What future is being feared?",
+        "text": "My title warns about an invader's grasp and the threat of enslavement. The future I ask you to imagine is one to fear.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "I am titled 1939 A.D. Can a future be an expectation for one audience and a danger for another?",
+        "text": "My title is 1939 A.D. Until you spoke, I heard a year someone might look forward to. A year can sound different depending on who's waiting for it.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -654,16 +663,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "family": "motif",
     "tag": "Mythological figures",
     "arc": "A shared figure, two kinds of attention",
+    "openingQuestion": "Can a myth make a pair of heels look extraordinary?",
     "mode": "contest",
     "turns": [
       {
         "speakerAccession": "XX1990.3277",
-        "text": "My title promotes Pirelli heels. Can an image make a commercial object seem extraordinary?",
+        "text": "My title promotes Pirelli heels. If a myth can make you look twice, why shouldn't I use it to make a pair of heels seem extraordinary?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.25.1",
-        "text": "I announce a biennial exhibition. Why would the same motif appear in a product image and an art exhibition poster?",
+        "text": "I announce a biennial exhibition. I'd like a second look too, though I'm asking you to look at art. When you look twice, do you see the heels or the story?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
