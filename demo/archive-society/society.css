@@ -1196,6 +1196,7 @@ html[data-color-theme="light"] :is(.evidence-rail .bubble .say,.evidence-rail .b
 html[data-color-theme="light"] .evidence-rail .bubble.side-guide .say{border-color:color-mix(in srgb,var(--speaker) 42%,#c5d4c7)}
 html[data-color-theme="light"] .evidence-rail .bubble strong{color:color-mix(in srgb,var(--speaker) 48%,#142523)}
 html[data-color-theme="light"] .evidence-rail .bubble p{color:#182b23}
+html[data-color-theme="light"] .evidence-rail .notice{color:#3d5248}
 html[data-color-theme="light"] :is(.room-participant,.room-participant .object-inspect){background:#e6eae2;color:#19372c;border-color:var(--speaker,#b9c7b8)}
 html[data-color-theme="light"] .room-participant .object-inspect:hover{background:#dbe4da}
 html[data-color-theme="light"] .room-participant .object-portrait-meta strong{color:#18372b}
