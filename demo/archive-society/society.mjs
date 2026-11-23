@@ -1363,8 +1363,7 @@ function renderJuxtaposition(box){
     const say=node('div',undefined,'say');say.append(face.persona?node('strong',face.name):objectTitle(face.name,'strong'),objectProse('p',turn.text,[source,target,...(state.episode?.participants||[])]));
     bubble.append(img,say);chat.append(bubble);
   }
-  appendPerspective(chat);
-  box.append(chat);
+  box.append(chat,listenerQuestion());
   addRelatedQuestionsAction(box);
   $('voice-controls').hidden=$('conversation-panel').hidden;
   setPlayDisabled(state.playing);
@@ -1436,14 +1435,16 @@ function renderConversation(){
     say.append(line,objectProse('p',turn.text,[source,target,...(state.episode?.participants||[])]));
     bubble.append(img,say);chat.append(bubble);
   }
-  if(state.episode.mode==='CURATED_SCRIPT')appendPerspective(chat);
-  if(state.episode.turns.length)box.append(chat);
+  if(state.episode.mode==='CURATED_SCRIPT')box.append(chat,listenerQuestion());
   if(state.episode.mode==='RESEARCH_PROMPT'){
     state.conversation=null;
     box.append(townhallPanel(source,target,edge));
   }
-  if(c.mode!=='CURATED_EDGE_SCENE'&&state.episode.mode!=='RESEARCH_PROMPT'&&c.dramaticArc)box.append(node('p',c.dramaticArc,'notice'));
-  if(state.episode.mode!=='RESEARCH_PROMPT'&&c.nextPrompt)box.append(node('p',visitorFollowUp(c),'notice'));
+  if(state.episode.mode==='CURATED_SCRIPT'&&c.nextPrompt){
+    const followUp=node('p',undefined,'notice');
+    followUp.append(node('strong','Research follow-up'),document.createTextNode(' · '+visitorFollowUp(c)));
+    box.append(followUp);
+  }
   // A narrative edge can become a new starting object. Make this an explicit
   // visitor action; graph connectivity is never inferred from the dialogue.
   const actions=node('div',undefined,'edge-path-actions');
@@ -1878,7 +1879,6 @@ function paintReading(){
     lens.style.setProperty('--persona',card.color);
     const portrait=$('room-lens-portrait');
     if(portrait)bindPersonaImage(portrait,card,'compact',null,'sepia');
-    $('room-lens-hook').textContent=card.hook;
     const guide=CARD_BY_ID.get('archivist');
     const archivist=$('room-archivist');
     if(archivist&&guide){
@@ -2181,19 +2181,19 @@ function paintPaths(){
   }
   if($('paths-name'))$('paths-name').textContent=state.researchPath?'Proposed':'Research';
 }
-function appendPerspective(chat){
-  const lens=LENSES.find(item=>item.id===state.lens)||LENSES[0];
-  const card=CARD_BY_ID.get(lens.id)||CARD_BY_ID.get('family');
-  const bubble=node('article',undefined,'bubble turn perspective-turn side-guide');
-  bubble.dataset.role='perspective';
-  bubble.dataset.point='perspective';
-  bubble.style.setProperty('--speaker',card?.color||'#d7c4a3');
-  const img=node('img');img.className='avatar';img.alt='';
+function listenerQuestion(){
+  const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
+  const section=node('section',undefined,'listener-question');
+  section.setAttribute('aria-labelledby','listener-question-heading');
+  const heading=node('h2','Listener’s question');
+  heading.id='listener-question-heading';
+  const img=node('img');
+  img.alt='';
   bindPersonaImage(img,card,'compact',null,'sepia');
-  const say=node('div',undefined,'say');
-  say.append(node('strong',lens.label+' · '+card.subheading),node('p',card.hook));
-  bubble.append(img,say);
-  chat.append(bubble);
+  const copy=node('div');
+  copy.append(heading,node('p',card.label+(card.id==='museum'?' · fictional':''),'listener-question-name'),node('p',card.hook));
+  section.append(img,copy);
+  return section;
 }
 const PANELS={map:'map-popover',reading:'reading-popover',seed:'seed-popover',theme:'theme-popover',paths:'paths-popover'};
 function resetMore(){

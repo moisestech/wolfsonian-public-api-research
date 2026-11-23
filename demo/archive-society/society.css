@@ -336,7 +336,6 @@ html[data-color-theme="light"] .reading-controls .reading-label strong{color:#17
 html[data-map-mode]:not([data-map-mode="conversation"]) .paths-tool,
 html[data-map-mode]:not([data-map-mode="conversation"]) #filter-paths{display:none!important}
 .command-layers .layer-name{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.perspective-turn .say{border:1px solid color-mix(in srgb,var(--speaker,#d7c4a3) 55%,#14211e)}
 .evidence-rail .count-chip{font-size:22px;gap:3px}
 .evidence-rail .count-chip svg{width:13px;height:13px}
 .count-chip{display:inline-flex;align-items:center;gap:4px;color:#d7d7d7;font:24px/1 system-ui,sans-serif}
@@ -622,7 +621,6 @@ html[data-color-theme="light"] .room-lens-trigger{background:transparent;color:i
 .room-lens-copy{min-width:0;flex:1}
 .room-lens-copy span{display:block;font:650 11px/1.2 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,var(--persona,#e8d5a3) 78%,#f6f0db)}
 .room-lens-copy strong{display:block;margin-top:3px;font:400 18px/1.15 Georgia,serif;color:#f6f1e4}
-.room-lens-copy p{margin:6px 0 0;font:400 14px/1.4 system-ui,sans-serif;color:#d5e4da}
 .room-archivist{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;flex:none;width:auto;min-width:48px;min-height:0;padding:0;border:0;border-radius:8px;background:transparent;color:inherit;font:600 11px/1.1 system-ui,sans-serif}
 .room-archivist:hover,.room-archivist:focus-visible{background:transparent}
 .room-archivist img{width:48px;height:56px;object-fit:contain;border-radius:8px;box-shadow:0 0 0 2px #75B8E3;background:#111}
@@ -655,6 +653,11 @@ html[data-color-theme="light"] .room-lens-trigger{background:transparent;color:i
 .evidence-rail .bubble p{font:400 24px/1.4 system-ui,sans-serif;overflow-wrap:anywhere}
 .evidence-rail .turn.speaking .say{outline:2px solid var(--speaker);outline-offset:2px}
 .evidence-rail .notice,.research-prompt-copy{display:block;font:400 15px/1.5 system-ui,sans-serif;margin:16px 0;color:#d2ded6}
+.listener-question{display:flex;align-items:flex-start;gap:12px;margin:12px 0 16px;padding:14px 8px 2px;border-top:1px solid color-mix(in srgb,currentColor 22%,transparent)}
+.listener-question img{flex:none;width:40px;height:40px;border-radius:50%;object-fit:contain}
+.listener-question h2{margin:0;font:650 15px/1.3 system-ui,sans-serif}
+.listener-question p{margin:5px 0 0;font:400 16px/1.45 system-ui,sans-serif}
+.listener-question .listener-question-name{font-size:13px;opacity:.8}
 .townhall{display:flex;flex-direction:column;gap:16px;margin:4px 0 8px}
 .townhall-kicker{margin:0 0 8px;font:700 12px/1.3 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#d7c4a3}
 .townhall-hosts,.townhall-grid{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:14px 12px}
@@ -1178,7 +1181,6 @@ html[data-color-theme="light"] .evidence-rail :is(.room-kicker,.room-description
   color:#102018
 }
 html[data-color-theme="light"] .room-lens-copy strong{color:#17352b}
-html[data-color-theme="light"] .room-lens-copy p{color:#3d5248}
 html[data-color-theme="light"] .room-lens-copy span{color:color-mix(in srgb,var(--persona,#8a5a28) 70%,#4a3018)}
 html[data-color-theme="light"] .atlas-panel{background:#dbe4da}
 html[data-color-theme="light"] :is(.brand-phrase,.wordmark,.icon-button,.icon-link,.brand-name,.room-kicker,.room-description,.room-rationale,#room-kind,#room-question,.rail-head button){

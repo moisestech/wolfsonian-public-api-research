@@ -12,18 +12,15 @@ const ROOM_NAMES=new Map([
   ['TD1989.317.66',"Women's Labor lottery"],
   ['XX1990.4091','Workers’ party poster']
 ]);
-const ROOM_QUESTIONS=new Map([
-  ['machines-engine-safety','Who pays the price of progress?'],
-  ['opening-skilled-work-lottery','Who gets credit for labor?'],
-  ['opening-skilled-work-engine','Whose work makes the machine?'],
-  ['machines-vote-engine','Does being seen mean having a say?']
-]);
 const RESEARCH_QUESTIONS=new Map([
   ['TD1989.317.66::TD1990.340.141','Who gets to represent women’s work?'],
   ['XX1990.2907::XX1990.3843','What does a war poster ask us to believe?'],
   ['XX1990.3275::XX1990.3277','What can a myth sell?'],
   ['TD1990.340.146::XX1990.2880','Who is invited to stand behind a flag?']
 ]);
+const openingQuestion=conversation=>conversation.openingQuestion||
+  (conversation.dramaticArc?.endsWith('?')?conversation.dramaticArc:'What happens when we compare these records?');
+
 export function conversationEpisode({source,target,conversation}={}){
   if(!source?.accession||!target?.accession||!conversation)throw Error('A selected source, target and conversation are required.');
   const authored=['CURATED_EDGE_SCENE','CURATORIAL_JUXTAPOSITION'].includes(conversation.mode);
@@ -33,9 +30,8 @@ export function conversationEpisode({source,target,conversation}={}){
   const term=short(reason?.value,80);
   const names=[source,target].map(item=>ROOM_NAMES.get(item.accession)||short(item.title.match(/\[([^\]]{3,65})\]/)?.[1]||item.title,65));
   const pairId=[source.accession,target.accession].sort().join('::');
-  const question=ROOM_QUESTIONS.get(conversation.sceneId)||
-    (authored?(conversation.dramaticArc?.endsWith('?')?conversation.dramaticArc:conversation.nextPrompt):
-      RESEARCH_QUESTIONS.get(pairId)||'What could “'+term+'” connect—and what might it miss?')||'What happens when we compare these records?';
+  const question=authored?openingQuestion(conversation):
+    RESEARCH_QUESTIONS.get(pairId)||'What could “'+term+'” connect—and what might it miss?';
   return Object.freeze({
     // A reading lens does not change the identity of a hand-written scene.
     id:conversation.sceneId||pairId,
@@ -97,16 +93,17 @@ export function explainEncounter({source,target,conversation,lensLabel='Family',
     : tag
       ? 'Both records are indexed under '+family+' “'+tag+'”. This is a reason to compare them, not proof they met.'
       : 'No verified shared-tag relationship is provided for this artistic comparison.';
-  const question=short(conversation.dramaticArc||conversation.nextPrompt||'What happens when we compare these records?',200);
+  const question=short(curated||juxtaposition?openingQuestion(conversation):
+    conversation.dramaticArc||conversation.nextPrompt||'What happens when we compare these records?',200);
   const form=juxtaposition
     ? 'A specifically written curatorial juxtaposition: the works were selected to challenge one another.'
     : curated
       ? 'A specifically written exchange for these two records. Another pair can raise a different argument.'
       : 'An offline five-turn comparison template. The object titles, shared tag and reading perspective change; the dramatic structure can repeat.';
   const frame=juxtaposition
-    ? 'The research path supplies the question.'
+    ? 'The research path supplies the opening question. The selected listener adds a separate question after the exchange.'
     : curated
-      ? 'The selected perspective helps navigate the map. This scripted scene does not change its script when you change that perspective.'
+      ? 'The selected perspective helps navigate the map and adds a listener’s question. This scene does not change its script when you change that perspective.'
       : 'The selected “'+short(lensLabel,60)+'” perspective changes which question frames this scripted exchange.';
   const previousChanged=previous&&previous.key!==key;
   const changed=previousChanged

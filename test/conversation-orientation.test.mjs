@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {explainEncounter,conversationEpisode,connectionCaption,visitorFollowUp} from '../src/conversation-orientation.mjs';
 import {CURATED_EDGE_SCENES} from '../src/curated-edge-scenes.mjs';
+import {CURATORIAL_PATHS,juxtapositionConversation} from '../src/curatorial-relationships.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
 const rec=(id,title)=>({accession:id,title,source:'synthetic'});
 const edge=(a,b,family,value)=>({
@@ -88,6 +89,30 @@ test('one episode carries an exact pair, editorial question and truthful source 
  assert.equal(family.historicalRelationshipEstablished,false);
  assert.match(family.editorialStatus,/NOT_APPROVED/);
 });
+test('every authored room takes its opening question from the scene instead of the research follow-up',()=>{
+ const curated=CURATED_EDGE_SCENES.map(scene=>{
+   const [source,target]=scene.pair.map(accession=>rec(accession,accession));
+   const link=edge(source.accession,target.accession,scene.requires.family,scene.requires.value);
+   return {source,target,conversation:conversationFor(source,target,link),question:scene.openingQuestion||scene.arc};
+ });
+ const proposed=CURATORIAL_PATHS.map(path=>({
+   source:path.source,target:path.target,conversation:juxtapositionConversation(path),question:path.arc
+ }));
+ for(const room of [...curated,...proposed]){
+   const episode=conversationEpisode(room);
+   assert.match(room.question,/\?$/,episode.id);
+   assert.equal(episode.question,room.question,episode.id);
+   assert.notEqual(episode.question,episode.nextQuestion,episode.id);
+   assert.notEqual(episode.question,visitorFollowUp(room.conversation),episode.id);
+ }
+});
+test('an authored scene with a missing opening question does not move the follow-up into its headline',()=>{
+ const source=rec('A','First'),target=rec('B','Second');
+ const conversation={mode:'CURATED_EDGE_SCENE',dramaticArc:'Working title',nextPrompt:'Which source could we inspect?',turns:[]};
+ const episode=conversationEpisode({source,target,conversation});
+ assert.equal(episode.question,'What happens when we compare these records?');
+ assert.equal(episode.nextQuestion,conversation.nextPrompt);
+});
 test('a template becomes an unvoiced research prompt; a tag never verifies a catalog relationship',()=>{
  const source={...rec('A','Object A'),source:'matrix'},target={...rec('B','Object B'),source:'matrix'};
  const c=conversationFor(source,target,edge('A','B','motif','Trees'),'worker');
@@ -100,7 +125,7 @@ test('a template becomes an unvoiced research prompt; a tag never verifies a cat
 });
 test('artist proposals remain separate from shared tags and verified identities',()=>{
  const source=rec('A','First'),target=rec('B','Second');
- const episode=conversationEpisode({source,target,conversation:{mode:'CURATORIAL_JUXTAPOSITION',relationshipType:'curatorial_juxtaposition',turns:[],nextPrompt:'Who is absent?'}});
+ const episode=conversationEpisode({source,target,conversation:{mode:'CURATORIAL_JUXTAPOSITION',relationshipType:'curatorial_juxtaposition',turns:[],dramaticArc:'Who is absent?'}});
  assert.equal(episode.sourceStatus,'ARTIST_PROPOSAL');
  assert.equal(episode.question,'Who is absent?');
  assert.equal(episode.relationship.type,'ARTIST_COMPARISON');
