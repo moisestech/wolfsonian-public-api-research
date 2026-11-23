@@ -11,7 +11,6 @@ export const RADIO_TV_PACKETS = Object.freeze([
 export const RADIO_TV_INTENTS = Object.freeze(['compare', 'inspect', 'limits']);
 
 const PUBLIC_FIELDS = Object.freeze(['title', 'accessionNumber', 'date', 'creator', 'materials']);
-const ACCESSION_BY_PACKET = new Map(RADIO_TV_PACKETS.map(item => [item.packetId, item.accession]));
 const error = code => Object.assign(new Error(code), { code });
 
 function assertRoom(room) {
