@@ -1,0 +1,71 @@
+# Casting and producing a conversation
+
+**Proposed pilot.** Start with *When does a promise become a souvenir?* Search existing exports for `program-and-booklet` and the lab alias `02-promise-souvenir`. Record an actual file and its source revision if found. Listen to the device reading alongside a performed version of the same text and a short source discussion. Run the same comparison on `poster-and-program` next so the program can be heard with a new partner.
+
+## Voices to audition
+
+Assign the performance by accession. A small recurring cast can play several objects while each object keeps its own delivery direction and versioned assignment. Across the current forty rooms, none of the eight objects in the audition table shares its proposed voice with its scene partner. Recheck the complete edge list when adding assignments or rooms. Resolve a collision in casting and record the new revision. The selected perspective stays a listener. The recurring fictional Archivist voice is reserved for lines actually written for it.
+
+These are audition candidates for the first five pilots. Their official samples and the project's authored directions are linked below. Workspace availability, allowed use and the result of listening on a phone still need to be recorded before assigning any candidate.
+
+| Speaker | ElevenLabs audition candidate | What to listen for |
+| --- | --- | --- |
+| *Your World of Tomorrow*, `86.19.57` | Alicia | A public invitation that singles out one person. Let “your” land once, then make room for the reply. Reuse this casting when the fair poster addresses the program. |
+| *Futurama* booklet, `XB1992.1640` | Warren | Begin like someone offering a future you can take home. Let the assurance drain out when the program asks whether it arrived. |
+| *Sparton* radio, `XX1990.1484` | Finley | Warm, slightly vain broadcast phrasing. Leave enough air for the television to interrupt. |
+| *RCA Victor TRK 12*, `2012.6.1` | Lawrence | A quick, bright demonstration that hesitates when the listener asks who was watching. |
+| *Mappemonde*, `85.7.383a,b` | Darian | Measured and tactile, with dry humor. Check “Mappemonde” against a reviewed pronunciation note. |
+| *Trylon and Perisphere*, `86.17.1` | Alicia | As an architectural guide, draw attention outward, then slow down at the limits of the model. |
+| *In 1939* fair poster, `85.4.72` | Lawrence | An impatient call to the crowd, distinct from the program's individual invitation. |
+| *Machine Age* catalogue, `XM1999.108.8` | Finley | A brisk editor who revises a sweeping claim mid-thought. |
+| Fictional Archivist | Talia | Even, attentive and precise about the limits of the source. Audition separately or on a scene with an authored Archivist turn. |
+
+Audition the existing provider previews first. Use one short approved exchange for candidate comparisons, at the same listening volume, on headphones and a phone. Record whether a new listener can identify the two objects without looking, whether the pause changes the meaning of the reply, and whether any pronunciation obscures the title. Reject a take that adds words or makes an unsupported factual claim. The six named candidates are from ElevenLabs' published replacement roster. The provider lists 31 December 2026 as the retirement date for its old Default voices. Record actual workspace availability and terms with the audition. [ElevenLabs voice roster](https://elevenlabs.io/docs/help-center/product/voices/my-voices/what-are-default-voices) · [List voices and existing previews](https://elevenlabs.io/docs/api-reference/voices/search) · [Object directions in PR #97](https://github.com/moisestech/wolfsonian-public-api-research/blob/a79b3a95746fccabb33d325f88752d119d2316cb/src/object-voice-directions.mjs)
+
+Keep an access-controlled casting registry with `speakerKey`, language, performance direction, stable project voice alias, casting revision, provider binding, model compatibility, pronunciation revision, audition reference, rights scope and reviewer/date. Keep the credential in server/worker secrets. Published visitor records use the project speaker key. A retired provider voice can be replaced after audition while existing cleared masters retain their recorded sound. A change to the performance cast affects future performance renders for that speaker. Device voices are chosen from what is installed, and NotebookLM host voices are selected by the overview service.
+
+## Three production paths
+
+| Edition | Inputs and generation | What gets stored |
+| --- | --- | --- |
+| Device | On explicit Play, read the current authored turns with an available local voice. Prefer the selected language. Bind to utterance events for progress. | The canonical text already in the app. No media artifact or render job. |
+| ElevenLabs | A private operator freezes the spoken text, speaker sequence, approved voice bindings, pronunciation settings and model. Submit the ordered turns together to the dialogue endpoint. Start the audition with a dialogue-capable model such as `eleven_v3` after checking the workspace. Using the timestamps response, map `dialogue_input_index` back to the submitted turn, convert seconds to milliseconds and listen against the final edited file. Keep delivery notes separate from spoken words. | Private source request, original output, actual settings and alignment. Release a versioned MP3 and reviewed cues. If edits shift timings, align again against the release bytes. [ElevenLabs dialogue](https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert) · [Dialogue with timestamps](https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert-with-timestamps) |
+| NotebookLM | One notebook per conversation. Use the scene's reviewed brief, its cleared public sources and the current host-focus prompt. The proposed first language is English. Use a two-host Debate for the program/booklet and Deep Dive where the brief calls for it. Start with an exported take where available, otherwise produce a private Studio export. Treat 45–90 seconds as an editorial target. Listen for whether the discussion actually works at that length. | Private original export, notebook reference, source snapshots, exact prompt and take history. Release an edited MP3 and its independently checked, host-labeled transcript with source links. Chapters are optional. Enterprise automation is a later adapter if the project's account supports it. [Audio Overview and downloads](https://support.google.com/notebooklm/answer/16212820?hl=en) · [Enterprise API scope](https://docs.cloud.google.com/gemini/enterprise/notebooklm-enterprise/docs/api-audio-overview) |
+
+For the first release, use the app's chosen transcript as the script for Device and ElevenLabs. Selected listener questions can remain visually available. An editor can explicitly author an Archivist line into a future revision. Review the NotebookLM discussion against the underlying sources at each factual claim and preserve its interpretive questions as such. The 1940 `XB1992.1640` booklet and the 1939 `83.2.19` book spread must retain separate identities.
+
+At the pilot listening session, Frank Luca could check the pronunciation of names and point to a catalogue page or exhibition record behind a disputed claim. Record any personal recollection with its own attribution and permission before adding it to a source brief.
+
+## Storage and versioning
+
+| Location | Responsibility |
+| --- | --- |
+| GitHub | Version scripts, stable identities, this contract, source references and the small published release manifest. Use the existing public build allowlist for only the released manifest and its accessible discussion texts during implementation. |
+| Private project Drive / local audio lab | Keep cleared generation inputs, original exports, listening copies, edit notes, timing review and release sign-off. Use a private registry to link the file IDs and provider job references. A review copy belongs here until cleared for its intended audience. |
+| Cloudinary | Serve only release-cleared media from the project cloud. Upload audio as `resource_type=video` and pin the returned version. Use `archive-dreams/audio/reviewed/<sceneId>/<edition>/<language>/<basisRevision>/<takeId>` as the public ID. New takes get new IDs. Store the hash and measured duration of the delivery bytes. [Cloudinary audio delivery](https://cloudinary.com/documentation/audio_transformations) |
+| Production job ledger | For the pilot, a private operator can reserve and reconcile a single job at a time. Before concurrent batches, use a durable store with atomic unique keys and shared budget reservations. The existing per-process request guard cannot coordinate paid jobs across workers. |
+
+**Private records.** Each take records scene, edition, language, basis revision, render recipe revision, take ID, source-processing permission, voice-use scope where applicable, provider/model or Studio format, operator, status, actual cost when available, raw master reference, edited master checksum, review notes and audience/publication decision. Voice IDs and private notebook links stay in the production records. The editor tracks `planned → reserved → rendering/importing → private review → release approved → published`, with `source hold`, `needs reconciliation`, `rejected` and `withdrawn` as explicit outcomes.
+
+**Render identity and cost.** Construct a private scope key from scene, edition, language and `basisRevision`. For a performance the basis is the script digest. For a discussion use SHA-256 of UTF-8 `JSON.stringify(["archive-society/audio-brief/v1", sceneId, language, briefSha256, sourcePairs, focusPrompt, format])`. Each pair is `[url, snapshotSha256]`, sorted by exact URL then digest in Unicode code-unit order. Hash the approved brief and retained source snapshots so an edit at the same URL is detectable. The performance recipe additionally pins cast bindings, model, supported settings, pronunciation revision and delivery notes. The discussion recipe pins import/generation settings and source revision. Keep the recipe hash and delivered media hash separately.
+
+Reserve one take number atomically within each scope across all recipes. Attach the operator request ID and recipe hash to the reservation. Resubmitting that request returns the existing job. An intentional retake or cast change receives the next number, even when the basis stays the same. Identical inputs can produce different performances. Immutable take IDs keep either performance available for review and rollback.
+
+A dry run reports characters and unresolved casting or source decisions before generation. The offline planner's character count excludes delivery tags and serves as an estimate. The paid worker must quote the selected plan/model and reserve both project and batch credits before a call. Record observed usage and reconcile unused reservations after completion. A visitor's replay reads the same stored file. A network timeout after submission can mean the provider already billed the job. Preserve the reservation and reconcile the provider result before retrying. When a retry is safe, use bounded attempts and backoff. When the result is unknown, put the job into operator review.
+
+**Release and rollback.** Inspect the exact inputs for external-processing clearance separately from authorization to publish the result. Keep staff matrix text, private Lakehouse extracts, restricted media and voice credentials out of provider payloads and public artifacts. Before release, an editor checks exact words or source claims, cast permission, pronunciations, the accessible transcript, media duration and delivery. Publish reviewed bytes and text first, verify both, then atomically switch the manifest entry. A failed publish leaves the previous eligible take selected. Removing an entry withdraws it from the player. A rights withdrawal also requires disabling or invalidating the media URL and verifying its delivery state.
+
+Keep institution-only listening on access-controlled storage even when the app has a password. Reserve public Cloudinary URLs for recordings cleared for direct download.
+
+## Release contract
+
+The [JSON Schema](release.schema.json) describes only the public projection. The initial valid manifest is `{"schemaVersion":1,"recordings":[]}`. An installed device voice is discovered in the browser and needs no recording row. Each published track includes `sceneId`, `edition`, `language`, `basisRevision`, `takeId` and `media`. Look up one active take per scene, edition and language. For ElevenLabs, the room's current script digest must match. For NotebookLM, compare with the currently reviewed source-brief revision.
+
+Beyond structural validation the publisher must enforce the following relationships.
+
+- Match the scene, edition, language, basis and take in the Cloudinary URL to the entry. Verify checksum, codec, measured duration, Range playback, accessible transcript path and hash before exposing it.
+- Validate recorded `turnCues` against that revision's turn IDs and resolved accession/Archivist. Use `0 ≤ startMs < endMs ≤ durationMs`. Keep cues ordered, allow gaps, and publish exclusive verified cues for v1. At a genuinely overlapping or unverified passage, use neutral highlighting for that interval. Omit all cues via `[]` when timing has not been verified.
+- Require the NotebookLM file's own discussion transcript and source URLs. If chapters are supplied, validate monotonic, in-range times against the edited file. The schema rejects object turn cues on a discussion and private production fields in either edition.
+- Exclude stale, held or withdrawn takes when building the release. Test every combination of the two recorded editions being present/absent, with and without a local device voice. A media failure or source mismatch cannot trigger external generation.
+
+**Decisions for Moises.** Confirm the casting policy and the program/booklet pair after listening. Set the maximum ElevenLabs credits and allowed retakes for the pilot. Confirm first-release language and whether a reviewed performance should be preselected in Listen. Until selected, the proposal assumes English, an object-specific assignment drawn from a recurring cast, and an explicit Play action.

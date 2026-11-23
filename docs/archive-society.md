@@ -56,6 +56,8 @@ The displayed-script preview and external-processing approval are required even 
 
 Both provider routes fail closed unless explicitly enabled and authenticated. They validate origin, input length and server-owned endpoint/voice configuration, return no-store responses and expose no upstream body/credentials on errors. Per-process request guards limit a local demo (6 lookups/minute, 12 voice turns/minute); they are **not a durable quota across Vercel instances**. Before public service exposure, use deployment protection and a durable provider budget/rate limit. Keys remain server-only.
 
+The proposed visitor player has three listening choices. Its specification covers voice casting, a first listening comparison, and release criteria for stored recordings. [Conversation audio editions](design/conversation-audio/README.md)
+
 ## Three separate layers
 
 | Layer | What it means |
