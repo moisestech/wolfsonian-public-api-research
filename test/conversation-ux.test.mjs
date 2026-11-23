@@ -83,7 +83,7 @@ test('each room gives its two objects a large visual stage and separate ways to 
  assert.match(js,/function openObjectQuestions\(accession\)/);
  assert.match(js,/const currentIds=new Set\(relatedAnchor/);
  assert.match(js,/other\.addEventListener\('click',\(\)=>openObjectQuestions\(p\.accession\)\)/);
- assert.match(js,/box\.append\(chat,listenerQuestion\(\)\)/);
+ assert.match(js,/box\.append\(chat,listenerQuestion\(c\.id\)\)/);
  assert.match(css,/\.room-participant \.object-inspect/);
  assert.match(css,/\.object-portrait-media/);
  assert.match(css,/@media\(max-width:360px\)/);

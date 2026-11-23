@@ -1,3 +1,4 @@
+import { conversationListenerQuestion } from '../../src/conversation-listeners.mjs';
 import { buildDiscoveryIndex, parseMatrixCsv, recommendNeighbors } from '../../src/discovery-graph.mjs';
 import { inventedRecords, societyView, conversationFor, LENSES, WORLD, categoryIconUrl, objectMarkUrl, district, deviceCast } from '../../src/archive-society.mjs';
 import { CARD_BY_ID, portraitUrl, portraitFallbackUrl } from '../../src/discovery-personas.mjs';
@@ -1363,7 +1364,7 @@ function renderJuxtaposition(box){
     const say=node('div',undefined,'say');say.append(face.persona?node('strong',face.name):objectTitle(face.name,'strong'),objectProse('p',turn.text,[source,target,...(state.episode?.participants||[])]));
     bubble.append(img,say);chat.append(bubble);
   }
-  box.append(chat,listenerQuestion());
+  box.append(chat,listenerQuestion(c.id));
   addRelatedQuestionsAction(box);
   $('voice-controls').hidden=$('conversation-panel').hidden;
   setPlayDisabled(state.playing);
@@ -1435,7 +1436,7 @@ function renderConversation(){
     say.append(line,objectProse('p',turn.text,[source,target,...(state.episode?.participants||[])]));
     bubble.append(img,say);chat.append(bubble);
   }
-  if(state.episode.mode==='CURATED_SCRIPT')box.append(chat,listenerQuestion());
+  if(state.episode.mode==='CURATED_SCRIPT')box.append(chat,listenerQuestion(c.sceneId));
   if(state.episode.mode==='RESEARCH_PROMPT'){
     state.conversation=null;
     box.append(townhallPanel(source,target,edge));
@@ -2181,7 +2182,7 @@ function paintPaths(){
   }
   if($('paths-name'))$('paths-name').textContent=state.researchPath?'Proposed':'Research';
 }
-function listenerQuestion(){
+function listenerQuestion(sceneId){
   const card=CARD_BY_ID.get(state.lens)||CARD_BY_ID.get('family');
   const section=node('section',undefined,'listener-question');
   section.setAttribute('aria-labelledby','listener-question-heading');
@@ -2191,7 +2192,8 @@ function listenerQuestion(){
   img.alt='';
   bindPersonaImage(img,card,'compact',null,'sepia');
   const copy=node('div');
-  copy.append(heading,node('p',card.label+(card.id==='museum'?' · fictional':''),'listener-question-name'),node('p',card.hook));
+  const question=conversationListenerQuestion(sceneId,card.id)||card.hook;
+  copy.append(heading,node('p',card.label+(card.id==='museum'?' · fictional':''),'listener-question-name'),node('p',question));
   section.append(img,copy);
   return section;
 }

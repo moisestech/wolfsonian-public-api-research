@@ -4,8 +4,26 @@ import {readFile} from 'node:fs/promises';
 import {explainEncounter,conversationEpisode,connectionCaption,visitorFollowUp} from '../src/conversation-orientation.mjs';
 import {CURATED_EDGE_SCENES} from '../src/curated-edge-scenes.mjs';
 import {CURATORIAL_PATHS,juxtapositionConversation} from '../src/curatorial-relationships.mjs';
+import {CARDS} from '../src/discovery-personas.mjs';
+import {conversationListenerQuestion} from '../src/conversation-listeners.mjs';
 import {conversationFor} from '../src/archive-society.mjs';
 const rec=(id,title)=>({accession:id,title,source:'synthetic'});
+
+test('all authored rooms supply distinct questions for all eleven listeners',()=>{
+ const scenes=[...CURATED_EDGE_SCENES,...CURATORIAL_PATHS];
+ const allQuestions=new Set();
+ for(const scene of scenes){
+  for(const card of CARDS){
+   const question=conversationListenerQuestion(scene.id,card.id);
+   assert.ok(question?.endsWith('?'),scene.id+' / '+card.id);
+   assert.notEqual(question,card.hook);
+   assert.ok(!allQuestions.has(question),question);
+   allQuestions.add(question);
+  }
+ }
+ assert.equal(allQuestions.size,scenes.length*CARDS.length);
+ assert.equal(conversationListenerQuestion('future-scene','worker'),undefined);
+});
 const edge=(a,b,family,value)=>({
  id:a+'::'+b,
  reasons:[{family,value,sourceColumns:['Thematic Category 1'],targetColumns:['Thematic Category 2']}]
