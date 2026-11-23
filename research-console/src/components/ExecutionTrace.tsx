@@ -4,16 +4,16 @@ type ExecutionTraceProps = {
   steps: ExecutionStep[];
 };
 
-/** Lightweight Trace stand-in scoped to operations that actually ran. */
+/** Legacy authored lookup outline. Genuine tool events are emitted by the source-gated runner and will be wired into the console in the next PR. */
 export function ExecutionTrace({ steps }: ExecutionTraceProps) {
   if (!steps.length) return null;
   return (
     <article className="card trace-card">
-      <p className="eyebrow">Execution trace</p>
+      <p className="eyebrow">Guided research outline · not a live execution trace</p>
       <ol>
         {steps.map((step) => (
           <li key={step.id}>
-            <span className="trace-status">{step.status}</span> {step.label}
+            <span className="trace-status">guide</span> {step.label}
           </li>
         ))}
       </ol>
