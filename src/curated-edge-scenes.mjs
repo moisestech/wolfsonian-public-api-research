@@ -68,17 +68,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "85.4.64.34",
-        "text": "I tie skilled work to munitions. Does the job become visible, or only the national need for it?",
+        "text": "My title asks you to notice the skill in making munitions. At your exhibition, would that worker get a place of her own?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "TD1990.340.141",
-        "text": "I announce an exhibition called The Woman 1813–1913. Who decides which kinds of work deserve a public exhibition?",
+        "text": "The Woman 1813–1913. I promise a century in that title. Which working day would you put in it first?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "The Women motif connects these records. Their different dates and purposes are grounds for comparison, not proof of a shared cause.",
+        "text": "The Women motif brings these titles together. The exhibition title names a public event. We’d need a separate record to say where the print was seen.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -206,7 +206,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "My title, 1939 A.D., gives you another year to look from. Does that word progress sound as confident twenty-two years later?",
+        "text": "Read those words beside my title, 1939 A.D. If the work is for war, who gets to count a better-made weapon as progress?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -247,7 +247,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       },
       {
         "speakerAccession": "XX1990. 3722",
-        "text": "My title puts a Savoia-Marchetti aircraft above Rome's Colosseum. From up there, how much of the work that gets you into the air can you still see?",
+        "text": "My title puts a Savoia-Marchetti above the Colosseum. Look up and you get the aircraft and the monument. Where would you look for the hands that made the flight possible?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -390,7 +390,7 @@ export const CURATED_EDGE_SCENES = Object.freeze([
       },
       {
         "speakerAccession": "XX1990.2907",
-        "text": "I put two years in mine. I insist that 1943 is not 1918. My argument depends on what you remember about the earlier year.",
+        "text": "You ask what comes next. I point back. My title insists that 1943 is not 1918, so the argument starts with what my reader remembers.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -425,12 +425,12 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.3843",
-        "text": "My title says The Effect of Our U-Boats. Who is invited into that word our?",
+        "text": "The Effect of Our U-Boats. I can put you on a side with one little word. Who gets to say ‘our’?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "Mine names 1939 A.D. Does a date address everyone equally, or a particular imagined public?",
+        "text": "I can put 1939 in a title. Read it beside yours and you still have to ask whose year it was. Look for the people your ‘our’ expects to answer.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
@@ -465,17 +465,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "84.4.66",
-        "text": "My record names Paul Robeson. Why should I be connected to an architectural fantasy?",
+        "text": "My record names Paul Robeson as Emperor Jones. If a tree brings us together, what happens to the role in my title?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "XX1991.13",
-        "text": "My record describes a house on a steep hillside. Is the shared Trees motif enough for us to claim a conversation?",
+        "text": "My title puts a house on a steep hillside. A tree might give us somewhere to look. Your actor and my house still have to earn the comparison.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "No documented historical relationship is established. Trees is a metadata overlap. This might be a useful failed hypothesis, not a meaningful historical edge.",
+        "text": "Trees is the shared tag. Look for what the works do with it before giving them a shared story.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -546,17 +546,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "TD1990.340.146",
-        "text": "My title demands that the East Indies be free and urges people to work and fight for it. Who is being summoned?",
+        "text": "My title demands freedom for the East Indies and tells someone to work and fight for it. Who gets to answer that demand?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "84.4.157",
-        "text": "My title gives us a year, 1939. Can a date answer a later political demand?",
+        "text": "I have 1939 A.D. on my title. A year can sit beside your command, but it cannot answer for the people you call on.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Flags is the shared motif. Do not merge these distinct political contexts or infer ideological alignment.",
+        "text": "Flags is the shared motif. Each poster needs its own publisher and audience before we say who could answer.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],
@@ -586,17 +586,17 @@ export const CURATED_EDGE_SCENES = Object.freeze([
     "turns": [
       {
         "speakerAccession": "XX1990.2870",
-        "text": "I announce the 10th Utrecht Fair. Why has this graph connected me to Let the Living Rise?",
+        "text": "I announce the tenth Utrecht Fair. Read my title and you can count the fairs. What does yours ask someone to do?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "83.4.40",
-        "text": "The metadata says we share Water. But what do our titles actually tell us about a common purpose?",
+        "text": "Let the Living Rise. My first word asks for permission. What does a shared Water tag tell us about who could give it?",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       },
       {
         "speakerAccession": "archivist",
-        "text": "Not enough. A repeated motif does not establish intention, contact, or a historical relationship. The proposed edge remains unproven.",
+        "text": "Use Water to start looking. The tag alone leaves the connection between these titles open.",
         "kind": "ARTIST_AUTHORED_INTERPRETATION"
       }
     ],

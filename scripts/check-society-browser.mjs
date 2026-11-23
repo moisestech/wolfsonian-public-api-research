@@ -231,6 +231,7 @@ try {
   assert.equal(await page.locator('.turn').count(),5);
   const listenerSection=page.getByRole('region',{name:'Listener’s question'});
   assert.match(await listenerSection.innerText(),/Family/);
+  assert.match(await listenerSection.innerText(),/actually had to do the grinding/);
   assert.equal(await page.locator('#conversation-content>.chat+.listener-question').count(),1);
   assert.equal(await listenerSection.locator('.turn').count(),0);
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
@@ -327,6 +328,7 @@ try {
   assert.equal(await page.locator('#reading-name').innerText(),'Worker');
   assert.deepEqual(await authoredDialogue(),originalDialogue,'Changing perspective does not alter an authored script');
   assert.match(await listenerSection.innerText(),/Worker/);
+  assert.match(await listenerSection.innerText(),/one splinter could cost an eye/);
   await page.locator('#header-perspective').click();
   assert.equal(await page.locator('#mobile-perspective-choices [data-lens="worker"]').getAttribute('aria-pressed'),'true');
   await page.locator('#mobile-perspective-choices [data-lens="family"]').click();

@@ -58,14 +58,15 @@ test('curatorial juxtapositions cannot pass the metadata gate and establish no h
     assert.notEqual(spoken.mode, 'CURATED_EDGE_SCENE');
     assert.equal(spoken.relationshipType, 'curatorial_juxtaposition');
     assert.equal(spoken.historicalRelationshipEstablished, false);
-    assert.equal(spoken.turns.length, 3);
+    assert.equal(spoken.turns.length, path.id==='radio-and-television'?6:3);
     if(path.aiAssisted){
       assert.ok([path.source,path.target].every(r=>r.researchOnly||['presentation','public-packet'].includes(r.source)));
       assert.equal(path.sourceUrl,[path.source,path.target].some(r=>r.researchOnly)?CHECKLIST:null);
       assert.ok(path.sourceLinks.length>=1);
       assert.ok(path.sourceLinks.every(link=>link.label&&new URL(link.url).protocol==='https:'));
       assert.equal(spoken.aiAssisted,true);
-      assert.deepEqual(spoken.turns.map(t=>t.role),['objectA','objectB','objectA']);
+      assert.deepEqual(spoken.turns.map(t=>t.role),
+        Array.from({length:spoken.turns.length},(_,i)=>i%2?'objectB':'objectA'));
       assert.ok(spoken.turns.every(t=>t.kind==='AI_ASSISTED_INTERPRETATION'));
       continue;
     }

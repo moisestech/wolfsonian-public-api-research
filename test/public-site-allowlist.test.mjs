@@ -11,6 +11,7 @@ test('public site allowlist omits the staff matrix and saved Lakehouse capture',
   await assemblePublicSite(out);
   await access(join(out, 'index.html'));
   await access(join(out, 'demo/archive-society/index.html'));
+  await access(join(out, 'src/conversation-listeners.mjs'));
   await access(join(out, 'demo/object-lens/index.html'));
   await access(join(out, 'src/object-lens-core.mjs'));
   await access(join(out, 'src/persona-character-portraits.mjs'));
