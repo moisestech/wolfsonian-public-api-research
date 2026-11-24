@@ -1,0 +1,61 @@
+name: Radio TV research integration verification
+
+on:
+  push:
+    branches:
+      - 'feat/radio-tv-console-live-traces-*'
+  pull_request:
+    branches:
+      - main
+      - 'feat/radio-tv-source-gated-traces-*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  radio-tv-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install root dependencies
+        run: npm ci
+      - name: Install Chromium for existing browser regressions
+        run: npx playwright install --with-deps chromium
+      - name: Run repository and source-gate tests
+        run: npm test
+      - name: Build the public site including React research console
+        run: npm run build:public
+      - name: 'Browser smoke: real receipts, trace, blocked citation and mobile'
+        run: node scripts/check-radio-tv-browser.mjs
+      - name: Run actual deterministic investigation
+        run: node scripts/demo-radio-tv-research.mjs compare
+      - name: Require bogus citation to fail closed
+        run: |
+          set +e
+          node scripts/demo-radio-tv-research.mjs compare --bad-citation > /tmp/radio-tv-blocked.txt
+          code=$?
+          set -e
+          cat /tmp/radio-tv-blocked.txt
+          test "$code" -eq 2
+          grep -q '"outcome": "blocked"' /tmp/radio-tv-blocked.txt
+          grep -q '"errorCode": "UNKNOWN_EVIDENCE_REF"' /tmp/radio-tv-blocked.txt
+      - name: Inspect public-only console assets
+        run: |
+          test -f public-site/research-console/dist/index.html
+          test -f research-console/public/data/radio-tv/room.json
+          test -f research-console/public/data/radio-tv/WOLF-008.json
+          test -f research-console/public/data/radio-tv/WOLF-002.json
+
+      - name: Save actual console screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radio-tv-console-review
+          path: artifacts/radio-tv-console-*.png
+          if-no-files-found: ignore

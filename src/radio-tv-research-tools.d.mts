@@ -1,0 +1,80 @@
+export type RadioTvIntent = 'compare' | 'inspect' | 'limits';
+export type RadioTvEvent = {
+  schemaVersion: 'wolfsonian.operation.v1';
+  runId: string;
+  eventId: string;
+  sequence: number;
+  occurredAt: string;
+  kind: string;
+  status: 'started' | 'completed' | 'blocked' | 'failed';
+  mode: 'deterministic_public_only';
+  toolName?: string;
+  resourceId?: string;
+  durationMs?: number;
+  errorCode?: string;
+  roomId?: string;
+  intent?: string;
+  evidenceIds?: string[];
+};
+export type RadioTvField = {
+  evidenceId: string;
+  packetId: string;
+  accession: string;
+  field: string;
+  value: string | string[];
+  sourceUrl: string;
+  retrievedAt: string;
+  packetSha256: string;
+  classification: 'public';
+};
+export type RadioTvRecord = {
+  packetId: string;
+  accession: string;
+  title: string;
+  date: string;
+  creator: string[];
+  materials: string[];
+  sourceUrl: string;
+  retrievedAt: string;
+  packetSha256: string;
+  notEstablished: string[];
+  fields: RadioTvField[];
+};
+export type RadioTvRoom = {
+  id: 'radio-and-television';
+  relationshipType: 'curatorial_juxtaposition';
+  historicalRelationshipEstablished: false;
+  source: { accession: '2012.6.1'; packet: 'WOLF-008' };
+  target: { accession: 'XX1990.1484'; packet: 'WOLF-002' };
+  proposal: string;
+  limits: string;
+};
+export type RadioTvResult = {
+  status: 'completed' | 'blocked' | 'failed';
+  runId: string;
+  roomId: string;
+  intent: string;
+  events: RadioTvEvent[];
+  answer?: string;
+  errorCode?: string;
+  records?: RadioTvRecord[];
+  comparison?: {
+    relation: 'curatorial_juxtaposition';
+    proposal: string;
+    limitations: string;
+    historicalRelationshipEstablished: false;
+    participants: string[];
+  };
+  evidence?: RadioTvField[];
+  citationCheck?: string;
+};
+export const RADIO_TV_ROOM_ID: 'radio-and-television';
+export const RADIO_TV_INTENTS: readonly RadioTvIntent[];
+export const RADIO_TV_PACKETS: readonly { packetId: string; accession: string }[];
+export function runRadioTvResearch(input: {
+  intent: RadioTvIntent | string;
+  room: RadioTvRoom;
+  loadPublicPacket: (packetId: string) => Promise<unknown>;
+  claimedCitationIds?: string[];
+  onEvent?: (event: RadioTvEvent) => void;
+}): Promise<RadioTvResult>;
