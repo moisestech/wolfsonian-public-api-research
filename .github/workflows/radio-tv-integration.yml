@@ -31,7 +31,7 @@ jobs:
         run: npm test
       - name: Build the public site including React research console
         run: npm run build:public
-      - name: Browser smoke: real receipts, trace, blocked citation and mobile
+      - name: 'Browser smoke: real receipts, trace, blocked citation and mobile'
         run: node scripts/check-radio-tv-browser.mjs
       - name: Run actual deterministic investigation
         run: node scripts/demo-radio-tv-research.mjs compare
