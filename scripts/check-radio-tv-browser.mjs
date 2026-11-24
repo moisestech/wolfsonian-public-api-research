@@ -51,6 +51,7 @@ try {
   await page.getByRole('button', { name: 'Why are Radio and Television paired?' }).click();
   await page.locator('.source-card').first().waitFor({ timeout: 12000 });
   assert.equal(await page.locator('.source-card').count(), 2);
+  await page.locator('.source-card summary').first().click();
   const sources = (await page.locator('.source-card').allInnerTexts()).join(' | ');
   assert.match(sources, /2012\.6\.1/);
   assert.match(sources, /XX1990\.1484/);
