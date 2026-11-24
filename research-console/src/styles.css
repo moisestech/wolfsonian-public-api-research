@@ -202,3 +202,31 @@ dd {
     transition: none !important;
   }
 }
+
+/* Radio × Television · inspectable public research, isolated from the Pixi world */
+.radio-tv-intro { margin-bottom: 1.25rem; }
+.radio-tv-intro p { margin: 0.35rem 0 0.65rem; }
+.radio-tv-shell .thread { margin-top: 1rem; }
+.source-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,270px),1fr)); gap: .75rem; }
+.source-card h3 { font-size: 1.05rem; line-height: 1.25; margin: 0 0 .8rem; }
+.source-card a { display: inline-block; margin: .8rem 0; text-decoration-thickness: 1px; text-underline-offset: .15rem; }
+.source-card details, .operation-trace details { margin-top: .75rem; }
+.source-card summary, .operation-trace summary { cursor: pointer; font-weight: 600; }
+.source-fields { padding-left: 1.25rem; font-size: .83rem; overflow-wrap: anywhere; }
+.source-fields li { margin: .35rem 0; }
+.digest { overflow-wrap: anywhere; font-size: .82rem; }
+.operation-trace { border-color: #75958b; }
+.trace-events { padding-left: 1.2rem; margin: .65rem 0; }
+.trace-events li { margin-bottom: .35rem; overflow-wrap: anywhere; font-size: .84rem; }
+.trace-event-title { font-weight: 600; }
+.event--completed { color: #1f5d3b; }
+.event--blocked, .event--failed, .trace-error { color: #7a2430; }
+.trace-note { font-size: .79rem; color: #4d5a61; overflow-wrap: anywhere; }
+.radio-tv-shell button:focus-visible,
+.radio-tv-shell a:focus-visible,
+.radio-tv-shell summary:focus-visible { outline: 3px solid #39766a; outline-offset: 3px; }
+@media (max-width: 640px) {
+  .radio-tv-shell .top { flex-direction: column; }
+  .source-grid { grid-template-columns: 1fr; }
+  .radio-tv-shell { width: min(100% - 1rem, 920px); }
+}
