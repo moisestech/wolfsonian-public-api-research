@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { RadioTvApp } from './RadioTvApp';
 import {
   AssistantRuntimeProvider,
   ThreadPrimitive,
@@ -86,7 +87,7 @@ function ResearchSession({
  * Deterministic research console on assistant-ui LocalRuntime + ChatModelAdapter.
  * Answers only guided questions against the approved public packet (no live LLM).
  */
-export default function App() {
+function LegacySpartonApp() {
   const parsed = useMemo(() => parseHandoffFromLocation(), []);
   const [packet, setPacket] = useState<PublicPacket | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -149,4 +150,10 @@ export default function App() {
   }
 
   return <ResearchSession packet={packet} handoff={handoff} />;
+}
+
+/** Keep the existing Sparton/World handoff unchanged. Radio/TV is opt-in by room ID. */
+export default function App() {
+  const request = new URLSearchParams(window.location.search);
+  return request.has('roomId') ? <RadioTvApp /> : <LegacySpartonApp />;
 }
