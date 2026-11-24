@@ -31,6 +31,8 @@ jobs:
         run: npm test
       - name: Build the public site including React research console
         run: npm run build:public
+      - name: Browser smoke: real receipts, trace, blocked citation and mobile
+        run: node scripts/check-radio-tv-browser.mjs
       - name: Run actual deterministic investigation
         run: node scripts/demo-radio-tv-research.mjs compare
       - name: Require bogus citation to fail closed
@@ -49,3 +51,11 @@ jobs:
           test -f research-console/public/data/radio-tv/room.json
           test -f research-console/public/data/radio-tv/WOLF-008.json
           test -f research-console/public/data/radio-tv/WOLF-002.json
+
+      - name: Save actual console screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radio-tv-console-review
+          path: artifacts/radio-tv-console-*.png
+          if-no-files-found: ignore
