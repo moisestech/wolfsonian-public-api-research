@@ -44,7 +44,7 @@ export function createRadioTvChatAdapter(
       ).map(part => part.text).join('\n').trim() || '';
       const request = matchRequest(text);
       const events: RadioTvEvent[] = [];
-      let result: RadioTvResult | null = null;
+      const resultBox: { current: RadioTvResult | null } = { current: null };
       let settled = false;
       let wake: (() => void) | null = null;
       const signal = () => {
@@ -64,7 +64,7 @@ export function createRadioTvChatAdapter(
           signal();
         },
       }).then(value => {
-        result = value;
+        resultBox.current = value;
         settled = true;
         signal();
       }).catch(() => {
@@ -89,7 +89,7 @@ export function createRadioTvChatAdapter(
         };
       }
       await task;
-      const finished: RadioTvResult | null = result;
+      const finished = resultBox.current;
       yield {
         content: [
           { type: 'text', text: finished?.answer ??
