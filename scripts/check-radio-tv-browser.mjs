@@ -62,7 +62,7 @@ try {
   assert.match(trace, /run.completed/);
   assert.match(trace, /ms measured/);
   const relation = await page.locator('.status--not_established').last().innerText();
-  assert.match(relation, /Historical relationship NOT ESTABLISHED/);
+  assert.match(relation, /historical relationship not established/i);
   await mkdir(resolve(project, 'artifacts'), { recursive: true });
   await page.screenshot({ path: resolve(project, 'artifacts/radio-tv-console-desktop.png'), fullPage: true });
 
