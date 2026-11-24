@@ -1328,6 +1328,14 @@ function renderRoomHeader(source,target,c){
       if(!url)continue;
       const link=node('a',label,'evidence-record');link.href=url;link.target='_blank';link.rel='noopener noreferrer';evidence.append(link);
     }
+    if(state.researchPath.id==='radio-and-television'){
+      const investigate=node('a','Investigate public sources and tool activity ↗','evidence-record');
+      investigate.href='/research-console/?roomId=radio-and-television';
+      investigate.target='_blank';
+      investigate.rel='noopener noreferrer';
+      investigate.setAttribute('aria-label','Open Radio and Television public-source research in a new tab');
+      evidence.append(investigate,node('p','Public-only deterministic research · opens in a new tab so this conversation remains here.','muted'));
+    }
   }
   const lens=LENSES.find(item=>item.id===state.lens);
   evidence.append(node('p',explainEncounter({source,target,conversation:c,lensLabel:lens?.label}).frame),
