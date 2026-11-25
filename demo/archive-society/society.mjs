@@ -103,7 +103,7 @@ function clearPreviewTyping(){
 }
 function resetPreviewAudio(){
   const bar=$('voice-controls');
-  bar?.classList.remove('previewing');
+  bar?.classList.remove('previewing','paused');
   if(!state.playing){
     if(bar)bar.dataset.speaker='';
     if($('audio-speaker'))$('audio-speaker').textContent='Ready to listen';
@@ -233,6 +233,7 @@ function toggleScriptedPause(){
   const pause=$('scene-performance-pause');
   if(session.paused){
     session.paused=false;
+    $('voice-controls')?.classList.remove('paused');
     session.startedAt=performance.now()-session.elapsed;
     $('scene-performance').dataset.state='running';
     $('scene-performance-status').textContent=session.activeIndex<0?'Preparing authored scene':previewSpeakerName(session.turns[session.activeIndex].role)+' · scripted turn';
@@ -241,6 +242,7 @@ function toggleScriptedPause(){
   }else{
     session.elapsed=Math.min(session.duration,performance.now()-session.startedAt);
     session.paused=true;
+    $('voice-controls')?.classList.add('paused');
     cancelAnimationFrame(previewFrame);previewFrame=0;
     $('scene-performance').dataset.state='paused';
     $('scene-performance-status').textContent='Scripted performance paused';
