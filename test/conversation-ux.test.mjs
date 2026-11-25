@@ -167,7 +167,7 @@ test('silent scene preview uses a separate role state from actual audio playback
  const css=await readFile(new URL(repoUrl+'society.css',import.meta.url),'utf8');
  assert.match(app,/import \{ scriptedScenePlan \}/);
  assert.match(app,/function replayScriptedScene\(\)/);
- assert.match(app,/function cancelScriptedPreview\(\)/);
+ assert.match(app,/function cancelScriptedPreview\(completed=false\)/);
  assert.match(app,/const replay=node\('button','↻','object-cast-link'\)/);
  assert.match(app,/replay\.setAttribute\('aria-label','Replay scripted exchange without audio'\)/);
  assert.match(app,/replay\.disabled=episode\.mode!=='CURATED_SCRIPT'/);
