@@ -1642,3 +1642,9 @@ html[data-color-theme="light"] #conversation-content .bubble.turn.previewing .sa
   .scene-typing-overlay::after{animation:none!important}
   .scene-performance-glow{transition:none!important}
 }
+
+/* Pausing the scripted score must also pause its purely decorative waveform. */
+.audio-bar.previewing.paused .bars i,
+.scene-performance[data-state="paused"] .scene-performance-indicator{
+  animation-play-state:paused!important;
+}
