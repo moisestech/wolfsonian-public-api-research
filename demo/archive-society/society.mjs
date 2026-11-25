@@ -15,7 +15,8 @@ import { nearestZoomStop } from '../../src/zoom-stops.mjs';
 import { visitorGuide } from '../../src/visitor-guide.mjs';
 import { explainEncounter, conversationEpisode, connectionCaption, visitorFollowUp } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
-import { scriptedScenePlan, performedScenePlan } from '../../src/scene-performance.mjs';
+import { scriptedScenePlan } from '../../src/scene-performance.mjs';
+import { performedScenePlan } from '../../src/scene-performance.mjs';
 import { tagColor, voiceColors } from './conversation-color.mjs';
 import { personaCharacterUrl } from '../../src/persona-cloudinary-assets.mjs';
 import { illustratedPersonaUrl, APPROVED_DECO_MASK_STUDIES, approvedMaskStudyUrl } from '../../src/persona-illustrated-gallery.mjs';
@@ -249,6 +250,7 @@ function toggleScriptedPause(){
 function replayScriptedScene(){
   cancelScriptedPreview();
   if(state.playing||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(!scriptedScenePlan(state.episode).length)return;
   const plan=performedScenePlan(state.episode);
   if(!plan.length||!state.conversation)return;
   const turns=plan.filter(cue=>cue.kind==='turn');
