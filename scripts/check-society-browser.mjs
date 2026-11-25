@@ -237,16 +237,43 @@ try {
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
   assert.equal(voiceRequests.length,0,'No autoplay or unsolicited provider calls');
   assert.equal(await page.locator('#conversation-content .chat .turn').count(),5,'Complete authored transcript remains in DOM');
-  // The preview is user-triggered and silent; it does not fake a live model or
-  // hide lines to produce artificial streaming.
+  // A performed, silent copy reveals characters visually. The full source
+  // paragraph is always present in the DOM; this is not model generation.
   await page.locator('#scene-replay').click();
   await page.waitForFunction(()=>document.querySelector('#scene-replay')?.getAttribute('aria-pressed')==='true');
-  await page.waitForFunction(()=>document.querySelector('#conversation-content .turn.previewing'));
+  await page.locator('#scene-performance').waitFor({state:'visible'});
+  assert.match(await page.locator('.scene-performance-tag').innerText(),/SCRIPTED · SILENT PERFORMANCE/);
   assert.equal(await page.locator('#play').getAttribute('aria-pressed'),'false');
-  assert.equal(voiceRequests.length,0,'Silent choreography must not send audio requests');
+  await page.waitForFunction(()=>document.querySelector('#conversation-content .turn.previewing'));
+  await page.waitForFunction(()=>document.querySelector('.scene-typing-overlay')?.textContent.length>=3);
+  assert.equal(await page.locator('.scene-typing-overlay').getAttribute('aria-hidden'),'true');
+  assert.ok(await page.locator('.turn.previewing .say p.scene-typing').evaluate(p=>
+    p.childNodes.length>1&&p.textContent.length>p.querySelector('.scene-typing-overlay').textContent.length),
+    'The original transcript is never deleted for typing animation');
+  assert.equal(await page.locator('#voice-controls').getAttribute('data-speaker'),'objectA');
+  assert.match(await page.locator('#audio-speaker').innerText(),/silent scene/);
+  assert.equal(voiceRequests.length,0,'Silent performance must not send audio requests');
   assert.equal(await page.locator('#conversation-content .chat .turn').count(),5);
+  await page.locator('#scene-performance-pause').click();
+  assert.equal(await page.locator('#scene-performance').getAttribute('data-state'),'paused');
+  const freeze=await page.locator('#scene-performance-progress').evaluate(el=>el.value);
+  await page.waitForTimeout(280);
+  assert.equal(await page.locator('#scene-performance-progress').evaluate(el=>el.value),freeze,
+    'Paused performance holds its progress');
+  await page.locator('#scene-performance-pause').click();
+  assert.equal(await page.locator('#scene-performance').getAttribute('data-state'),'running');
   await page.waitForFunction(()=>document.querySelector('#scene-replay')?.getAttribute('aria-pressed')==='false');
   assert.equal(await page.locator('.room-participant.previewing, .turn.previewing').count(),0);
+  assert.equal(await page.locator('.scene-typing-overlay').count(),0);
+  assert.equal(await page.locator('#scene-performance').getAttribute('data-state'),'completed');
+  assert.equal(await page.locator('#scene-performance-progress').evaluate(el=>el.value),100);
+  await page.locator('#scene-performance-why').click();
+  assert.equal(await page.locator('#conversation-sheet').isVisible(),true);
+  await page.locator('#sheet-close').click();
+  await page.locator('#scene-performance-perspective').click();
+  assert.equal(await page.locator('#prompt-sheet').isVisible(),true);
+  await page.locator('#prompt-close').click();
+  await screenshot('scripted-performance');
 
   assert.equal(await page.locator('.encounter-orientation').count(),0);
   assert.equal(await page.locator('#conversation-content>details').count(),0);

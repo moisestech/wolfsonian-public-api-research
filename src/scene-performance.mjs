@@ -22,3 +22,27 @@ export function scriptedScenePlan(episode){
     {kind:'complete',at:SCENE_TURN_DELAY_MS+episode.turns.length*SCENE_TURN_INTERVAL_MS}
   ];
 }
+
+/**
+ * A readable visual-only score for the original authored words.
+ * "Duration" is editorial presentation timing, NOT a claim about model
+ * processing speed, an audio recording, or a historically spoken utterance.
+ */
+export const PERFORMANCE_LEAD_MS=360;
+export const PERFORMANCE_MIN_TURN_MS=1550;
+export const PERFORMANCE_MAX_TURN_MS=3500;
+export const PERFORMANCE_CHAR_MS=27;
+
+export function performedScenePlan(episode){
+  if(!scriptedScenePlan(episode).length)return [];
+  if(episode.turns.some(turn=>typeof turn.text!=='string'||!turn.text.trim()))return [];
+  let cursor=PERFORMANCE_LEAD_MS;
+  const turns=episode.turns.map((turn,index)=>{
+    const count=Array.from(turn.text).length;
+    const duration=Math.max(PERFORMANCE_MIN_TURN_MS,Math.min(PERFORMANCE_MAX_TURN_MS,count*PERFORMANCE_CHAR_MS+350));
+    const cue={kind:'turn',role:turn.role,index,at:cursor,duration};
+    cursor+=duration;
+    return cue;
+  });
+  return [{kind:'convene',at:0},...turns,{kind:'complete',at:cursor}];
+}

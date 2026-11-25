@@ -200,6 +200,22 @@
     <div id="room-participants" class="room-participants" aria-label="Object speakers"></div>
     <button type="button" id="room-rationale" class="room-rationale" aria-label="Why these two? Open evidence"></button>
     </div>
+    <section id="scene-performance" class="scene-performance" data-state="idle" hidden aria-label="Scripted conversation performance">
+      <div class="scene-performance-heading">
+        <span class="scene-performance-tag"><span aria-hidden="true" class="scene-performance-indicator"></span> SCRIPTED · SILENT PERFORMANCE</span>
+        <span id="scene-performance-status" class="scene-performance-status" aria-live="polite">Ready to replay</span>
+      </div>
+      <div class="scene-performance-motion" aria-hidden="true"><span class="scene-performance-glow"></span></div>
+      <progress id="scene-performance-progress" max="100" value="0" aria-label="Scripted exchange progress"></progress>
+      <div class="scene-performance-footer">
+        <span id="scene-performance-turn" class="scene-performance-turn">An authored scene, not live AI reasoning</span>
+        <div class="scene-performance-actions">
+          <button id="scene-performance-pause" type="button" aria-label="Pause scripted performance">Pause</button>
+          <button id="scene-performance-why" type="button">Why these two?</button>
+          <button id="scene-performance-perspective" type="button">Perspective</button>
+        </div>
+      </div>
+    </section>
   </section>
   <div id="space-stage"></div>
   <div id="listener-row" class="listener-row" aria-label="Other conversation paths"></div>

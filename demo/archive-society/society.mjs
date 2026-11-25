@@ -16,6 +16,7 @@ import { visitorGuide } from '../../src/visitor-guide.mjs';
 import { explainEncounter, conversationEpisode, connectionCaption, visitorFollowUp } from '../../src/conversation-orientation.mjs';
 import { CURATORIAL_PATHS, juxtapositionConversation, pathById } from '../../src/curatorial-relationships.mjs';
 import { scriptedScenePlan } from '../../src/scene-performance.mjs';
+import { performedScenePlan } from '../../src/scene-performance.mjs';
 import { tagColor, voiceColors } from './conversation-color.mjs';
 import { personaCharacterUrl } from '../../src/persona-cloudinary-assets.mjs';
 import { illustratedPersonaUrl, APPROVED_DECO_MASK_STUDIES, approvedMaskStudyUrl } from '../../src/persona-illustrated-gallery.mjs';
@@ -90,15 +91,33 @@ $('appearance-toggle')?.addEventListener('click',()=>{
   syncDream();
 });
 
-// The archived transcript remains present and inspectable before, during and
-// after any choreography. A silent scene preview is NOT narrated speech or AI
-// "thinking": it runs only the five author-approved speaking roles.
-let previewEpoch=0,previewTimers=[];
-function cancelScriptedPreview(){
+// All words remain in the actual authored transcript at every moment.
+// Only a duplicate, aria-hidden *visual layer* reveals letters. This is
+// performed writing, never model streaming or a historical utterance.
+let previewEpoch=0,previewTimers=[],previewFrame=0,previewSession=null,previewTyping=null;
+function clearPreviewTyping(){
+  if(!previewTyping)return;
+  previewTyping.overlay.remove();
+  previewTyping.paragraph.classList.remove('scene-typing');
+  previewTyping=null;
+}
+function resetPreviewAudio(){
+  const bar=$('voice-controls');
+  bar?.classList.remove('previewing','paused');
+  if(!state.playing){
+    if(bar)bar.dataset.speaker='';
+    if($('audio-speaker'))$('audio-speaker').textContent='Ready to listen';
+    if($('audio-elapsed'))$('audio-elapsed').textContent='Ready to play';
+  }
+}
+function cancelScriptedPreview(completed=false){
   previewEpoch++;
   for(const timer of previewTimers)clearTimeout(timer);
   previewTimers=[];
-  document.querySelectorAll('#room-participants .room-participant.previewing, #conversation-content .turn.previewing')
+  if(previewFrame)cancelAnimationFrame(previewFrame);
+  previewFrame=0;previewSession=null;
+  clearPreviewTyping();
+  document.querySelectorAll('#room-participants .room-participant.previewing, #room-participants .persona-float.previewing, #conversation-content .turn.previewing')
     .forEach(element=>element.classList.remove('previewing'));
   const replay=$('scene-replay');
   if(replay){
@@ -108,6 +127,53 @@ function cancelScriptedPreview(){
   }
   if($('room-header'))$('room-header').removeAttribute('data-scene-preview');
   if(typeof stage!=='undefined'&&!state.playing)stage.setSpeaking('');
+  stage.setFieldSpeaker?.('');
+  resetPreviewAudio();
+  const dock=$('scene-performance');
+  if(dock){
+    dock.hidden=!completed;
+    dock.dataset.state=completed?'completed':'idle';
+    if(!completed){
+      dock.style.setProperty('--performance-progress','0%');
+      $('scene-performance-progress').value=0;
+    }else{
+      dock.style.setProperty('--performance-progress','100%');
+      $('scene-performance-progress').value=100;
+      $('scene-performance-status').textContent='Performance complete';
+      $('scene-performance-turn').textContent='The original dialogue remains available to inspect';
+    }
+    const pause=$('scene-performance-pause');
+    if(pause){pause.disabled=true;pause.textContent='Pause';pause.setAttribute('aria-label','Pause scripted performance');}
+  }
+}
+function startPreviewTyping(index){
+  clearPreviewTyping();
+  const turn=document.querySelectorAll('#conversation-content .chat .turn')[index];
+  const paragraph=turn?.querySelector('.say p');
+  if(!paragraph)return;
+  const characters=Array.from(paragraph.textContent||'');
+  if(!characters.length)return;
+  const overlay=document.createElement('span');
+  overlay.className='scene-typing-overlay';
+  overlay.setAttribute('aria-hidden','true');
+  paragraph.append(overlay);
+  paragraph.classList.add('scene-typing');
+  previewTyping={paragraph,overlay,characters,count:-1};
+}
+function advancePreviewTyping(fraction){
+  if(!previewTyping)return;
+  const progress=Math.max(0,Math.min(1,fraction/0.86));
+  const count=Math.min(previewTyping.characters.length,Math.ceil(progress*previewTyping.characters.length));
+  if(count!==previewTyping.count){
+    previewTyping.overlay.textContent=previewTyping.characters.slice(0,count).join('');
+    previewTyping.count=count;
+  }
+  if(progress>=1)clearPreviewTyping();
+}
+function previewSpeakerName(role){
+  if(role==='archivist')return 'Archivist · fictional';
+  return state.episode?.participants?.find(person=>person.role===role)?.shortName
+    ||(role==='objectA'?'First object':'Second object');
 }
 function markPreviewTurn(role,index){
   document.querySelectorAll('#room-participants .room-participant').forEach(
@@ -125,22 +191,86 @@ function markPreviewTurn(role,index){
     role==='objectA'?state.conversation?.source:state.conversation?.target);
   else stage.setSpeaking('');
   stage.setFieldSpeaker?.(role==='objectA'?'a':role==='objectB'?'b':'');
+  const speaker=previewSpeakerName(role);
+  const bar=$('voice-controls');
+  if(bar){bar.classList.add('previewing');bar.dataset.speaker=role;}
+  if($('audio-speaker'))$('audio-speaker').textContent=speaker+' · silent scene';
+  if($('audio-elapsed'))$('audio-elapsed').textContent='Turn '+(index+1)+' of '+state.episode.turns.length;
+  const dock=$('scene-performance');
+  if(dock){
+    const participant=document.querySelector('#room-participants .room-participant[data-speaker="'+role+'"]');
+    const accent=role==='archivist'?'#adbcf0':participant?.style.getPropertyValue('--speaker')||'#a7dbc2';
+    dock.style.setProperty('--performance-accent',accent);
+    $('scene-performance-status').textContent=speaker+' · scripted turn';
+    $('scene-performance-turn').textContent='Turn '+(index+1)+' / '+state.episode.turns.length+' · No audio playing';
+  }
+  startPreviewTyping(index);
+}
+function tickScriptedPreview(now){
+  const session=previewSession;
+  if(!session||session.epoch!==previewEpoch||session.paused||state.playing)return;
+  session.elapsed=Math.max(0,now-session.startedAt);
+  const fraction=Math.min(1,session.elapsed/session.duration);
+  const dock=$('scene-performance');
+  if(dock){
+    dock.style.setProperty('--performance-progress',Math.round(fraction*1000)/10+'%');
+    $('scene-performance-progress').value=Math.round(fraction*100);
+  }
+  if(session.elapsed>=session.duration){cancelScriptedPreview(true);return;}
+  const cue=session.turns.findLast(turn=>session.elapsed>=turn.at);
+  if(cue){
+    if(session.activeIndex!==cue.index){
+      session.activeIndex=cue.index;
+      markPreviewTurn(cue.role,cue.index);
+    }
+    advancePreviewTyping((session.elapsed-cue.at)/cue.duration);
+  }
+  previewFrame=requestAnimationFrame(tickScriptedPreview);
+}
+function toggleScriptedPause(){
+  const session=previewSession;
+  if(!session)return;
+  const pause=$('scene-performance-pause');
+  if(session.paused){
+    session.paused=false;
+    $('voice-controls')?.classList.remove('paused');
+    session.startedAt=performance.now()-session.elapsed;
+    $('scene-performance').dataset.state='running';
+    $('scene-performance-status').textContent=session.activeIndex<0?'Preparing authored scene':previewSpeakerName(session.turns[session.activeIndex].role)+' · scripted turn';
+    if(pause){pause.textContent='Pause';pause.setAttribute('aria-label','Pause scripted performance');}
+    previewFrame=requestAnimationFrame(tickScriptedPreview);
+  }else{
+    session.elapsed=Math.min(session.duration,performance.now()-session.startedAt);
+    session.paused=true;
+    $('voice-controls')?.classList.add('paused');
+    cancelAnimationFrame(previewFrame);previewFrame=0;
+    $('scene-performance').dataset.state='paused';
+    $('scene-performance-status').textContent='Scripted performance paused';
+    if(pause){pause.textContent='Resume';pause.setAttribute('aria-label','Resume scripted performance');}
+  }
 }
 function replayScriptedScene(){
   cancelScriptedPreview();
   if(state.playing||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const plan=scriptedScenePlan(state.episode);
+  if(!scriptedScenePlan(state.episode).length)return;
+  const plan=performedScenePlan(state.episode);
   if(!plan.length||!state.conversation)return;
-  const current=previewEpoch;
+  const turns=plan.filter(cue=>cue.kind==='turn');
+  const duration=plan.at(-1).at;
+  previewSession={epoch:previewEpoch,turns,duration,activeIndex:-1,paused:false,elapsed:0,startedAt:performance.now()};
   $('room-header').dataset.scenePreview='scripted';
   $('scene-replay')?.setAttribute('aria-pressed','true');
-  for(const cue of plan){
-    previewTimers.push(setTimeout(()=>{
-      if(current!==previewEpoch||state.playing)return;
-      if(cue.kind==='turn')markPreviewTurn(cue.role,cue.index);
-      else if(cue.kind==='complete')cancelScriptedPreview();
-    },cue.at));
+  const dock=$('scene-performance');
+  if(dock){
+    dock.hidden=false;dock.dataset.state='running';
+    dock.style.setProperty('--performance-accent','#a7dbc2');
+    $('scene-performance-status').textContent='Preparing authored scene';
+    $('scene-performance-turn').textContent='Visual performance · No audio · Not live AI';
+    $('scene-performance-progress').value=0;
+    const pause=$('scene-performance-pause');
+    if(pause){pause.disabled=false;pause.textContent='Pause';pause.setAttribute('aria-label','Pause scripted performance');}
   }
+  previewFrame=requestAnimationFrame(tickScriptedPreview);
 }
 // Scripted room entrance: staged theater, never an assertion that AI is thinking.
 // The written transcript remains in the DOM from the first frame.
@@ -2383,6 +2513,9 @@ $('space-filter')?.addEventListener('click',()=>{
 $('data-filter-close')?.addEventListener('click',()=>{closeDataFilter();$('space-filter')?.focus();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeDataFilter();});
 $('room-rationale')?.addEventListener('click',event=>{event.stopPropagation();$('conversation-head').click();});
+$('scene-performance-why')?.addEventListener('click',event=>{event.stopPropagation();$('conversation-head')?.click();});
+$('scene-performance-perspective')?.addEventListener('click',event=>{event.stopPropagation();openPromptSheet(state.lens);});
+$('scene-performance-pause')?.addEventListener('click',event=>{event.stopPropagation();toggleScriptedPause();});
 $('space-room')?.addEventListener('click',()=>{
   state.mobileFrom=document.body.classList.contains('show-timeline')?'timeline':'space';
   setMobileView('room');
